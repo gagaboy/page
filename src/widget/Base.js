@@ -2,9 +2,10 @@
  * Created by qianqianyi on 15/4/23.
  */
 
-require(["../Factory"], function (factory) {
+define([], function () {
     var Base = new Class({
         Implements: [Events, Options],
+
         initialize: function (opts) {
             this.setOptions(opts);
         },
@@ -12,6 +13,6 @@ require(["../Factory"], function (factory) {
 
         }
     });
-    factory.add("base", Base);
+    Base.xtype = 'base';
     return Base;
 });
