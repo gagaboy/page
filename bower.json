@@ -1,0 +1,21 @@
+{
+  "name": "page",
+  "version": "0.0.0",
+  "homepage": "https://github.com/userya/page",
+  "authors": [
+    "userya <ctg47@qq.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "avalon": "~1.4.2",
+    "requirejs": "~2.1.17",
+    "mootools": "~1.5.1"
+  }
+}
