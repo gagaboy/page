@@ -2,18 +2,21 @@
  *
  */
 var componentAlias = [
+    "src/Manager",
     "src/widget/Base",
     "src/widget/form/BaseFormWidget",
-    "src/widget/form/InputWidget",
+    "src/widget/form/input/InputWidget",
     "src/widget/layout/BaseLayout"
 ];
 
 
 define(componentAlias, function () {
     var allComps = arguments;
+
     var Factory = new Class({
         initialize: function () {
             this.classMap = {};
+            this.manager = new allComps[0]();
         },
         add: function (xtype, clazz) {
             this.classMap[xtype] = clazz;
@@ -26,7 +29,10 @@ define(componentAlias, function () {
                 //error
                 return;
             }
-            return new this.classMap[xtype](config)
+            var instance = new this.classMap[xtype](config);
+            var id = instance.getId();
+            this.manager.add(id, instance);
+            return instance;
         }
     });
     //**********************************

@@ -20,11 +20,15 @@ require.config({
 })
 
 
-require(["./src/Factory"], function (factory) {
+require(["./src/Factory","./lib/mmPromise"], function (factory) {
     var allclass = factory.getAll();
     console.log(allclass);
-
-    var inp = factory.create("input")
-
+    var inp = factory.create("input", {
+        //onValueChange: function (vm) {
+        //    console.log(vm.value);
+        //}
+    });
+    inp.render();
     console.log(inp);
+    window['JOT'] = factory;
 });
