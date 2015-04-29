@@ -28,7 +28,8 @@ require(["./src/Factory","./lib/mmPromise"], function (factory) {
             onValueChange: function (vm) {
                 console.log(vm.value);
             },
-            $parentId:'container'
+            $parentId:'container',
+            value:'@@！！！@'
         });
         inp.render();
     }

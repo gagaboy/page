@@ -8,10 +8,7 @@ define(['../BaseFormWidget'], function (BaseFormWidget) {
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            $fullName: fullName,
-            value: "aa",
-            label:"姓名",
-            message:"message"
+            $fullName: fullName
         }
     });
     InputWidget.xtype = "input";

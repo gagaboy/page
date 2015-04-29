@@ -9,7 +9,7 @@
 <body>
 <br><br>
 
-<div class="container" id="container">
+<div class="container" >
     <div class="row">
         <div class="col-md-6">
             <div class="input" avalonctrl="input57913922541774818387733427807689">
@@ -20,8 +20,9 @@
                             <span style="color: red">*</span>
                             姓名
                         </td>
-                        <td class="">
-                            <input class="form-control" placeholder="aa">
+                        <td class="has-feedback">
+                            <input class="form-control" placeholder="aa" style="pointer-events:none; ">
+
                         </td>
                         <td class="form-icon-container">
                             <span class="glyphicon glyphicon-ok"></span>
@@ -82,14 +83,16 @@
                             <span style="color: red">*</span>
                             学院
                         </td>
-                        <td class="has-error">
-                                <table class="form-control">
-                                    <tr>
-                                        <td style="width: 100%;">text</td>
-                                        <td style=""><span class="caret" style=""></span></td>
-                                    </tr>
-                                </table>
+                        <td class="has-error has-feedback">
+                                <!--<table class="form-control">-->
+                                    <!--<tr>-->
+                                        <!--<td style="width: 100%;">text</td>-->
+                                        <!--<td style=""><span class="caret" style=""></span></td>-->
+                                    <!--</tr>-->
+                                <!--</table>-->
                             <!--<input class="form-control">-->
+                            <input type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+                            <span class="glyphicon glyphicon-menu-down form-control-feedback" aria-hidden="true" style="pointer-events:auto; " onclick="alert('dropdown')"></span>
                         </td>
                         <td class="form-icon-container">
                             <span class="glyphicon glyphicon-ok"></span>
@@ -887,6 +890,9 @@
 
             </table>
         </div>
+    </div>
+    <div class="row" id="container">
+
     </div>
 </div>
 <br><br><br><br><br><br><br><br><br><br><br><br>

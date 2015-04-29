@@ -24,7 +24,7 @@ define([], function () {
         initialize: function (opts) {
             this.setOptions(opts);
             if (!this.options || this.options.$id == "") {
-                this.options.$id = (this.options.$xtype + Math.random() + Math.random()).replace(/0\./g, "")
+                this.options.$id = this.options.$xtype + String.uniqueID();
             }
             var that = this;
             this.vmodel = avalon.define(this.options);
@@ -64,8 +64,10 @@ define([], function () {
         },
 
         refresh: function () {
-
+            this.element = null;
+            render();
         },
+
         getTemplate: function () {
             var $this = this;
             return new Promise(function (resolve) {
