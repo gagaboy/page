@@ -29,7 +29,7 @@ require(["./src/Factory","./lib/mmPromise"], function (factory) {
                 console.log(vm.value);
             },
             $parentId:'container',
-            value:'@@！！！@'
+            value:''
         });
         inp.render();
     }

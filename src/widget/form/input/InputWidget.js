@@ -9,6 +9,15 @@ define(['../BaseFormWidget'], function (BaseFormWidget) {
         options: {
             $xtype: xtype,
             $fullName: fullName
+        },
+        _valueChange: function (value) {
+            this.setAttr("display", value);
+        },
+        focus: function () {
+            var input = this.getElement()[0].getElement("input.form-widget-to-focus-class");
+            setTimeout(function(){
+                input.focus();
+            },200);
         }
     });
     InputWidget.xtype = "input";

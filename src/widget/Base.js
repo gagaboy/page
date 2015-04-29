@@ -29,7 +29,7 @@ define([], function () {
             var that = this;
             this.vmodel = avalon.define(this.options);
             this.vmodel.$watch("$all", function (name, value) {
-                that.setAttr(name,value);
+                that.setAttr(name, value);
             });
         },
         getId: function () {
@@ -39,11 +39,17 @@ define([], function () {
             return this.vmodel[key];
         },
         setAttr: function (key, value) {
+            var oldValue = this.vmodel[key];
             this.vmodel[key] = value;
-            this.fireEvent(key + "Change", [this.vmodel]);
+            var privateMethod2Invoke = '_' + key + "Change";
+            if (this[privateMethod2Invoke]) {
+                this[privateMethod2Invoke](value, oldValue, this.vmodel.model);
+                // old value, new value, vm.model
+            }
+            this.fireEvent(key + "Change", [value, oldValue, this.vmodel.model]);
             return this;
         },
-        setAttrs:function(opts){
+        setAttrs: function (opts) {
             //todo
         },
         render: function () {

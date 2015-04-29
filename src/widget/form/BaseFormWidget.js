@@ -12,6 +12,8 @@ define(['../Base'], function (Base) {
             status: 'default',//default = edit |edit|readonly
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             initValue: '',// 初始值
+            initDisplay: '',
+
             value: '', // 值
             display: '',//显示值
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,6 +23,7 @@ define(['../Base'], function (Base) {
             message: '',
             showMessage: true,
             hasError: false,
+            glyphicon: '',//eg:glyphicon-ok
             required: false,
             validationRules: []
         },
@@ -44,7 +47,7 @@ define(['../Base'], function (Base) {
                 this.setAttr("value", value);
                 this.setAttr("display", value);
             } else if (typeOf(value) == 'object') {
-                if (value['value']) {
+                if (value['value'] != undefined) {
                     this.setAttr("value", value['value']);
                     if (value['display']) {
                         this.setAttr("display", value['display']);
@@ -56,11 +59,17 @@ define(['../Base'], function (Base) {
                 window.console.log('set value error,unknown structure ...' + value);
             }
         },
+        getInitValue: function () {
+            return this.getAttr("initValue");
+        },
+        getInitDisplay: function () {
+            return this.getAttr("initDisplay");
+        },
         reset: function () {
             var that = this;
             this.setValue({
-                value: that.getValue(),
-                display: that.getDisplay()
+                value: that.getInitValue(),
+                display: that.getInitDisplay()
             })
         },
         focus: function () {

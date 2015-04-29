@@ -28,6 +28,10 @@
 
 }
 
+.form-required {
+    color:red;
+}
+
 .form-horizontal-table .form-horizontal-message {
     height: 17px;
 }

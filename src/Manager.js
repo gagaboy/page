@@ -11,7 +11,7 @@ define([], function () {
         initialize: function (opts) {
             this.setOptions(opts);
             if (!this.options || this.options.$id == "") {
-                this.options.$id = new Date().getTime(); //TODO
+                this.options.$id = String.uniqueID();
             }
             this.components = {};
         },

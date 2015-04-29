@@ -1,14 +1,14 @@
 <table class="form-horizontal-table">
     <tr>
         <td class="form-label col-md-4">
-            <span class="form-required">*</span>
+            <span class="form-required" ms-visible="required">*</span>
             {{label}}
         </td>
-        <td class="has-error">
-            <input class="form-control" ms-duplex="value" ms-attr-placeholder="{{value}}"/>
+        <td class="">
+            <input class="form-control form-widget-to-focus-class" ms-duplex="value"/>
         </td>
         <td class="form-icon-container">
-            <span class="glyphicon glyphicon-ok"></span>
+            <span ms-class="glyphicon {{glyphicon}}"></span>
         </td>
     </tr>
     <tr class="form-horizontal-message">
