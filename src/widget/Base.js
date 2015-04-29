@@ -24,12 +24,12 @@ define([], function () {
         initialize: function (opts) {
             this.setOptions(opts);
             if (!this.options || this.options.$id == "") {
-                this.options.$id = new Date().getTime(); //TODO
+                this.options.$id = (this.options.$xtype + Math.random() + Math.random()).replace(/0\./g, "")
             }
             var that = this;
             this.vmodel = avalon.define(this.options);
             this.vmodel.$watch("$all", function (name, value) {
-                that.options[name] = value;
+                that.setAttr(name,value);
             });
         },
         getId: function () {
@@ -42,6 +42,9 @@ define([], function () {
             this.vmodel[key] = value;
             this.fireEvent(key + "Change", [this.vmodel]);
             return this;
+        },
+        setAttrs:function(opts){
+            //todo
         },
         render: function () {
             this.fireEvent("beforeRender", [this.vmodel]);
@@ -63,7 +66,6 @@ define([], function () {
         refresh: function () {
 
         },
-
         getTemplate: function () {
             var $this = this;
             return new Promise(function (resolve) {

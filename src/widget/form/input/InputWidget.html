@@ -1,3 +1,23 @@
-<div>
-    <input ms-duplex="value">
-</div>
+<table class="form-horizontal-table">
+    <tr>
+        <td class="form-label col-md-4">
+            <span style="color: red">*</span>
+            {{label}}
+        </td>
+        <td class="has-error">
+            <input class="form-control" ms-duplex="value" ms-attr-placeholder="{{value}}"/>
+        </td>
+        <td class="form-icon-container">
+           <span class="glyphicon glyphicon-ok"></span>
+        </td>
+    </tr>
+    <tr class="form-horizontal-message">
+        <td></td>
+        <td class="text-muted">
+            {{message}}
+        </td>
+        <td>
+
+        </td>
+    </tr>
+</table>

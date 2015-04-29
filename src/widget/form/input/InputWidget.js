@@ -9,7 +9,9 @@ define(['../BaseFormWidget'], function (BaseFormWidget) {
         options: {
             $xtype: xtype,
             $fullName: fullName,
-            value: "aa"
+            value: "aa",
+            label:"姓名",
+            message:"message"
         }
     });
     InputWidget.xtype = "input";

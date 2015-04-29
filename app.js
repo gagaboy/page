@@ -23,12 +23,17 @@ require.config({
 require(["./src/Factory","./lib/mmPromise"], function (factory) {
     var allclass = factory.getAll();
     console.log(allclass);
-    var inp = factory.create("input", {
-        //onValueChange: function (vm) {
-        //    console.log(vm.value);
-        //}
-    });
-    inp.render();
+    for(var i=0; i<10; i++){
+        var inp = factory.create("input", {
+            onValueChange: function (vm) {
+                console.log(vm.value);
+            },
+            $parentId:'container'
+        });
+        inp.render();
+    }
+
     console.log(inp);
+
     window['JOT'] = factory;
 });
