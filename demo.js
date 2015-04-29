@@ -9,8 +9,8 @@ require(["./src/Factory", "./lib/mmPromise"], function (factory) {
         //glyphicon: 'glyphicon-ok',
         message: '请输入用户名',
         label: '用户名',
-        $id: 'username',
-        value: 'init'
+        $id: 'username'//,
+        //value: 'init'
     });
     inp.render();
     console.log(inp);

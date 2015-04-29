@@ -14,10 +14,11 @@ define(['../BaseFormWidget'], function (BaseFormWidget) {
             this.setAttr("display", value);
         },
         focus: function () {
+            //console to invoke this method is not ok...
             var input = this.getElement()[0].getElement("input.form-widget-to-focus-class");
-            setTimeout(function(){
+            avalon.nextTick(function(){
                 input.focus();
-            },200);
+            });
         }
     });
     InputWidget.xtype = "input";
