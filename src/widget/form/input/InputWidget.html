@@ -1,23 +1,20 @@
-<table class="form-horizontal-table">
+<table class="form-horizontal-table" ms-visible="show">
     <tr>
-        <td class="form-label col-md-4">
-            <span class="form-required" ms-visible="required">*</span>
+        <td class="form-label" ms-class="col-md-{{labelSpan}}" ms-if="showLabel">
+            <span class="form-required" ms-visible="required && showRequired">*</span>
             {{label}}
         </td>
-        <td class="">
-            <input class="form-control form-widget-to-focus-class" ms-duplex="value" id="abc" name="abc"/>
+        <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
+            <input class="form-control form-widget-to-focus-class" ms-duplex="value" ms-attr-readonly="status=='readonly'" ms-class="form-text:status=='readonly'"/>
         </td>
         <td class="form-icon-container">
-            <span ms-class="glyphicon {{glyphicon}}"></span>
+            <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
         </td>
     </tr>
     <tr class="form-horizontal-message">
-        <td></td>
-        <td class="text-muted">
-            {{message}}
-        </td>
-        <td>
-
+        <td ms-if="showLabel"></td>
+        <td class="text-muted" ms-class="form-error-message:showErrorMessage" colspan="2" ms-css-padding="controlPadding">
+           <span ms-visible="showMessage"> {{message}} </span> <span ms-visible="showErrorMessage">{{errorMessage}}</span>
         </td>
     </tr>
 </table>

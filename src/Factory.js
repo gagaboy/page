@@ -6,6 +6,7 @@ var componentAlias = [
     "src/widget/Base",
     "src/widget/form/BaseFormWidget",
     "src/widget/form/input/InputWidget",
+    "src/widget/form/combobox/ComboboxWidget",
     "src/widget/layout/BaseLayout"
 ];
 

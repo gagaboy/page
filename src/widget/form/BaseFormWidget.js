@@ -9,23 +9,37 @@ define(['../Base'], function (Base) {
         options: {
             $xtype: xtype,
             $fullName: fullName,
-            status: 'default',//default = edit |edit|readonly
+            status: 'edit',//default = edit |edit|readonly
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             initValue: '',// 初始值
             initDisplay: '',
 
             value: '', // 值
             display: '',//显示值
+
+            valueChanged:false, //初始值发生了变化
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             label: '未设置标题', //标题
             showLabel: true,
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             message: '',
             showMessage: true,
-            hasError: false,
+
+            errorMessage: '',
+            showErrorMessage: false,
+
             glyphicon: '',//eg:glyphicon-ok
+            showGlyphicon: false,
+
             required: false,
-            validationRules: []
+            showRequired: true,
+
+            validationRules: [],
+
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            labelSpan: 4,
+            controlPadding: '0'
+
         },
         initialize: function (opts) {
             if (opts['display'] == undefined) {
@@ -46,6 +60,7 @@ define(['../Base'], function (Base) {
             if (typeOf(value) == 'string') {
                 this.setAttr("value", value);
                 this.setAttr("display", value);
+                this.setAttr("valueChanged", true);
             } else if (typeOf(value) == 'object') {
                 if (value['value'] != undefined) {
                     this.setAttr("value", value['value']);
@@ -55,6 +70,7 @@ define(['../Base'], function (Base) {
                         this.setAttr("display", value['value']);
                     }
                 }
+                this.setAttr("valueChanged", true);
             } else {
                 window.console.log('set value error,unknown structure ...' + value);
             }
@@ -71,6 +87,29 @@ define(['../Base'], function (Base) {
                 value: that.getInitValue(),
                 display: that.getInitDisplay()
             })
+        },
+        switchStatus: function (status) {
+            //readonly | edit | ready2edit ?
+            var that = this;
+            if (status == 'edit') {
+                this.setAttrs({
+                    status:status,
+                    showErrorMessage: false,
+                    showMessage: true,
+                    showRequired: that.getAttr("required")
+                });
+            } else if (status == 'readonly') {
+                this.setAttrs({
+                    status:status,
+                    showErrorMessage: false,
+                    showMessage: false,
+                    showRequired: false
+                });
+            } else if (status == 'ready2edit') {
+
+            } else {
+                window.console.error("unknown status, it should be in edit|readonly|ready2edit");
+            }
         },
         focus: function () {
             //todo every form widget to extend

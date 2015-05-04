@@ -1,14 +1,21 @@
 /**
- * Created by qianqianyi on 15/4/23.
+ * Created by JKYANG on 15/4/23.
  */
 define(['../BaseFormWidget'], function (BaseFormWidget) {
-    var xtype = "input";
-    var fullName = "form/input/InputWidget";
+    var xtype = "combobox";
+    var fullName = "form/combobox/ComboboxWidget";
     var InputWidget = new Class({
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            $fullName: fullName
+            $fullName: fullName,
+            showPulldown: false,
+            pullDownDisplay:"",
+            select: function (vid, span) {
+                var vm = avalon.vmodels[vid];
+                vm.showPulldown = !vm.showPulldown;
+                vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
+            }
         },
         _valueChange: function (value) {
             this.setAttr("display", value);

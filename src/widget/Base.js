@@ -16,6 +16,8 @@ define([], function () {
         Implements: [Events, Options],
         options: {
             $id: "",
+            vid:"",
+            uuid:"",
             $xtype: xtype,
             $fullName: fullName,
             $parentId: null,
@@ -26,12 +28,19 @@ define([], function () {
             if (!this.options || this.options.$id == "") {
                 this.options.$id = this.options.$xtype + String.uniqueID();
             }
+            if(this.options.vid == '') {
+                this.options.vid = this.options.$id;
+            }
+            if(this.options.uuid == '') {
+                this.options.uuid = String.uniqueID();
+            }
             var that = this;
             this.vmodel = avalon.define(this.options);
             this.vmodel.$watch("$all", function (name, value) {
                 that.setAttr(name, value);
             });
         },
+
         getId: function () {
             return this.vmodel.$id;
         },
@@ -51,6 +60,9 @@ define([], function () {
         },
         setAttrs: function (opts) {
             //todo
+            for (var o in opts) {
+                this.setAttr(o, opts[o]);
+            }
         },
         render: function () {
             this.fireEvent("beforeRender", [this.vmodel]);
