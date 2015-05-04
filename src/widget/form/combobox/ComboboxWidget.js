@@ -11,10 +11,12 @@ define(['../BaseFormWidget'], function (BaseFormWidget) {
             $fullName: fullName,
             showPulldown: false,
             pullDownDisplay:"",
+            data:[{value:'1', display:'333'},{value:'2', display:'2'}],
             select: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.showPulldown = !vm.showPulldown;
                 vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
+                var width = $(span).parentNode.getStyle("width");
             }
         },
         _valueChange: function (value) {

@@ -12,10 +12,11 @@
                       style="pointer-events:auto; cursor: pointer" ms-on-click="select(vid, this)"></span>
             </div>
             <ul class="dropdown-menu" role="menu" style="margin-top:0; min-width: 100%" ms-css-display="pullDownDisplay">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">Action</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else hereSomething </a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                <li role="presentation" ms-repeat="data">
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+                        {{el.display}}
+                    </a>
+                </li>
             </ul>
         </td>
         <td class="form-icon-container">
