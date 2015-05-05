@@ -16,11 +16,12 @@ define([], function () {
         Implements: [Events, Options],
         options: {
             $id: "",
-            vid:"",
-            uuid:"",
+            vid: "",
+            uuid: "",
             $xtype: xtype,
             $fullName: fullName,
             $parentId: null,
+            $appendEl: null,
             show: true
         },
         initialize: function (opts) {
@@ -28,10 +29,10 @@ define([], function () {
             if (!this.options || this.options.$id == "") {
                 this.options.$id = this.options.$xtype + String.uniqueID();
             }
-            if(this.options.vid == '') {
+            if (this.options.vid == '') {
                 this.options.vid = this.options.$id;
             }
-            if(this.options.uuid == '') {
+            if (this.options.uuid == '') {
                 this.options.uuid = String.uniqueID();
             }
             var that = this;
