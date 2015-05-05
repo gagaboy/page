@@ -13,7 +13,8 @@
  * 返回数据
  *     过滤过，扩展过的数据
  *
- *  哪些组件会用DataSource 例如：grid, form, charts, combobox
+ *  哪些组件会用DataSource 例如：grid, form, charts, combobox, tree etc..
+ *  可以被扩展
  */
 define([], function () {
     var DataSource = new Class({
