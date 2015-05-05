@@ -14,7 +14,7 @@ define(['../Base'], function (Base) {
             initValue: '',// 初始值
             initDisplay: '',
 
-            value: '', // 值
+            value: '', // 具体值
             display: '',//显示值
 
             valueChanged:false, //初始值发生了变化
