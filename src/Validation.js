@@ -1,8 +1,9 @@
 /**
  * Created by qianqianyi on 15/5/6.
  */
-define([],function(){
+define([], function () {
     var Validation = new Class({
+
 
     });
 

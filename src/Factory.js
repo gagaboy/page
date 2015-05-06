@@ -2,24 +2,29 @@
  *
  */
 var componentAlias = [
-    "src/Manager",
-    "src/Validation",
-    "src/widget/Base",
-    "src/widget/form/BaseFormWidget",
-    "src/widget/form/input/InputWidget",
-    "src/widget/form/combobox/ComboboxWidget",
-    "src/widget/layout/BaseLayout"
+    "./Manager",
+    "./Validation",
+    "./Utils",
+    "./widget/Base",
+    "./widget/form/BaseFormWidget",
+    "./widget/form/input/InputWidget",
+    "./widget/form/combobox/ComboboxWidget",
+    "./widget/layout/BaseLayout"
 ];
 
 
 define(componentAlias, function () {
     var allComps = arguments;
-
+    var named = "Page";
     var Factory = new Class({
+
+        named: named,
+
         initialize: function () {
             this.classMap = {};
             this.manager = new allComps[0]();
             this.validation = new allComps[1]();
+            this.utils = new allComps[2]();
         },
         add: function (xtype, clazz) {
             this.classMap[xtype] = clazz;

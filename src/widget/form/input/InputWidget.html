@@ -5,7 +5,8 @@
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
-            <input class="form-control form-widget-to-focus-class" ms-duplex="value" ms-attr-readonly="status=='readonly'" ms-class="form-text:status=='readonly'"/>
+            <input class="form-control form-widget-to-focus-class" ms-duplex="value"
+                   ms-attr-readonly="status=='readonly'" ms-class="form-text:status=='readonly'"/>
         </td>
         <td class="form-icon-container">
             <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
@@ -13,8 +14,10 @@
     </tr>
     <tr class="form-horizontal-message">
         <td ms-if="showLabel"></td>
-        <td class="text-muted" ms-class="form-error-message:showErrorMessage" colspan="2" ms-css-padding="controlPadding">
-           <span ms-visible="showMessage"> {{message}} </span> <span ms-visible="showErrorMessage">{{errorMessage}}</span>
+        <td class="text-muted" ms-class="form-error-message:showErrorMessage" colspan="2"
+            ms-css-padding="controlPadding">
+            <span ms-visible="showMessage"> {{message}} </span> <span
+                ms-visible="showErrorMessage">{{errorMessage}}</span>
         </td>
     </tr>
 </table>

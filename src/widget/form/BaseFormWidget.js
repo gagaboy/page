@@ -17,7 +17,7 @@ define(['../Base'], function (Base) {
             value: '', // 具体值
             display: '',//显示值
 
-            valueChanged:false, //初始值发生了变化
+            valueChanged: false, //初始值发生了变化
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             label: '未设置标题', //标题
             showLabel: true,
@@ -93,14 +93,14 @@ define(['../Base'], function (Base) {
             var that = this;
             if (status == 'edit') {
                 this.setAttrs({
-                    status:status,
+                    status: status,
                     showErrorMessage: false,
                     showMessage: true,
                     showRequired: that.getAttr("required")
                 });
             } else if (status == 'readonly') {
                 this.setAttrs({
-                    status:status,
+                    status: status,
                     showErrorMessage: false,
                     showMessage: false,
                     showRequired: false

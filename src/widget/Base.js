@@ -11,7 +11,7 @@
 define([], function () {
     var xtype = "base";
     var fullName = "Base";
-    var baseURL = "./src/widget/";
+    var baseURL = "./widget/";
     var Base = new Class({
         Implements: [Events, Options],
         options: {

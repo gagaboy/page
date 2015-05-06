@@ -14,7 +14,7 @@ define(['../BaseFormWidget'], function (BaseFormWidget) {
             data: [{value: '1', display: '333'}, {value: '2', display: '2'}],
             select: function (vid, span) {
                 var vm = avalon.vmodels[vid];
-                var obj = JOT.manager.components[vid];
+                var obj = Page.manager.components[vid];
                 vm.showPulldown = !vm.showPulldown;
                 vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
                 var width = $(span).parentNode.getStyle("width");

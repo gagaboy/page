@@ -60,7 +60,32 @@
 <script>
     $.noConflict();
 </script>
-<script src="bower_components/avalon/avalon.js" data-main="demo"></script>
+<script src="bower_components/avalon/avalon.js" ></script>
+<script src="src/Bootstrap.js"></script>
+<script>
+    require(["./Bootstrap"], function(){
+        var inp = Page.create("input", {
+            $parentId: 'inputContainer',
+            value: '',
+            required: false,
+            glyphicon: 'glyphicon-ok',
+            message: '请输入用户名',
+            label: '用户名',
+            hasError:false,
+            $id: 'username'//,
+            //value: 'init'
+        });
+        inp.render();
+        console.log(inp);
+        var combo = Page.create('combobox',{
+            $parentId:'comboboxContainer',
+            $id:'sex',
+            label:'性别'
+        })
+        combo.render();
+    });
 
+
+</script>
 </body>
 </html>
