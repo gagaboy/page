@@ -8,7 +8,7 @@
         "css-builder": 'bower_components/require-css/css-builder',
         "normalize":"bower_components/require-css/normalize"
     },
-    name: "src/Bootstrap",
+    name: "demo",
     out: 'dist/page-build.js'
 })
 
