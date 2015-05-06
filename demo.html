@@ -61,8 +61,12 @@
     $.noConflict();
 </script>
 <script src="bower_components/avalon/avalon.js"></script>
-<script src="src/Bootstrap.js"></script>
+<!--<script src="lib/mmPromise.js"></script>-->
+<!--<script src="dist/page-build.js"></script>-->
 <script>
+    require.config({
+        baseUrl: "src"
+    })
     require(["./Bootstrap"], function () {
         var inp = Page.create("input", {
             $parentId: 'inputContainer',

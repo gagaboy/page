@@ -2,7 +2,7 @@
  * 直接暴露的接口有
  * factory & manager {vmodels & component} & utils{ validation etc}
  */
-require(["./src/Factory", "./lib/mmPromise"], function (factory) {
+require(["./src/Factory"], function (factory) {
     var allclass = factory.getAll();
     console.log(allclass);
     var inp = factory.create("input", {

@@ -3,12 +3,10 @@
  */
 define(['../Base'], function (Base) {
     var xtype = "baseFormWidget";
-    var fullName = "BaseFormWidget";
     var BaseFormWidget = new Class({
         Extends: Base,
         options: {
             $xtype: xtype,
-            $fullName: fullName,
             status: 'edit',//default = edit |edit|readonly
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             initValue: '',// 初始值
