@@ -27,5 +27,5 @@ require(["./src/Factory", "./lib/mmPromise"], function (factory) {
         label:'性别'
     })
     combo.render();
-    window['JOT'] = factory;
+    window['Page'] = factory;
 });

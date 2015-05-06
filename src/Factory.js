@@ -3,6 +3,7 @@
  */
 var componentAlias = [
     "src/Manager",
+    "src/Validation",
     "src/widget/Base",
     "src/widget/form/BaseFormWidget",
     "src/widget/form/input/InputWidget",
@@ -18,6 +19,7 @@ define(componentAlias, function () {
         initialize: function () {
             this.classMap = {};
             this.manager = new allComps[0]();
+            this.validation = new allComps[1]();
         },
         add: function (xtype, clazz) {
             this.classMap[xtype] = clazz;
