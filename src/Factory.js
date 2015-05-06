@@ -1,6 +1,6 @@
 /**
  *
- */
+
 var componentAlias = [
     "./Manager",
     "./Validation",
@@ -11,9 +11,18 @@ var componentAlias = [
     "./widget/form/combobox/ComboboxWidget",
     "./widget/layout/BaseLayout"
 ];
+ */
 
-
-define(componentAlias, function () {
+define([
+    "./Manager",
+    "./Validation",
+    "./Utils",
+    "./widget/Base",
+    "./widget/form/BaseFormWidget",
+    "./widget/form/input/InputWidget",
+    "./widget/form/combobox/ComboboxWidget",
+    "./widget/layout/BaseLayout"
+], function () {
     var allComps = arguments;
 
     var Factory = new Class({

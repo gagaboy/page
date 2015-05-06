@@ -2,7 +2,12 @@
  * Created by qianqianyi on 15/5/6.
  */
 ({
-
+    paths: {
+        text: 'bower_components/text/text',
+        css: 'bower_components/require-css/css',
+        "css-builder": 'bower_components/require-css/css-builder',
+        "normalize":"bower_components/require-css/normalize"
+    },
     name: "src/Bootstrap",
     out: 'dist/page-build.js'
 })
@@ -20,7 +25,7 @@
  *
  *   按照顺序合并Css(if exists)
  *
- *   
+ *
  *
  *
  *
