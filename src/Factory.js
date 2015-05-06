@@ -15,10 +15,9 @@ var componentAlias = [
 
 define(componentAlias, function () {
     var allComps = arguments;
-    var named = "Page";
+
     var Factory = new Class({
 
-        named: named,
 
         initialize: function () {
             this.classMap = {};
