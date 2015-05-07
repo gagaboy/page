@@ -1,0 +1,18 @@
+<div class="table-responsive">
+    <table class="table table-striped" ms-attr-id="{{id}}">
+        <thead>
+        <tr>
+            <th ms-if="checkbox">
+                <input type="checkbox" name="chkAll">
+            </th>
+            <th ms-repeat="cols">{{el.CNAME}}</th>
+        </tr>
+        </thead>
+        <tr ms-repeat-data="datas" ms-data-data="data" ms-attr-key="data[keyName]">
+            <td ms-if="checkbox">
+                <input type="checkbox" name="chk" ms-duplex-checked="data['checked']">
+            </td>
+            <td ms-repeat-col="cols">{{data[col.ENAME + '_DISP'] || data[col.ENAME]}}</td>
+        </tr>
+    </table>
+</div>
