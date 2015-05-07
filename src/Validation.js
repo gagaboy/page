@@ -179,6 +179,7 @@ define([], function () {
              ]
          }
          */
+
         validateObject: function (obj,valRules) {
             if(valRules&& valRules.keyset()){
                 //调用各工具方法
