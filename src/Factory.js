@@ -17,6 +17,7 @@ define([
     "./Manager",
     "./Validation",
     "./Utils",
+    "./DataSet",
     "./widget/Base",
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
@@ -26,8 +27,6 @@ define([
     var allComps = arguments;
 
     var Factory = new Class({
-
-
         initialize: function () {
             this.classMap = {};
             this.manager = new allComps[0]();
