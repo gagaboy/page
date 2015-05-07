@@ -1,6 +1,25 @@
 /**
  * Grid控件封装
  * mengbin
+ *
+ * options :
+ * id : 控件ID,如果不传则自动为控件生成一个ID,该ID会绑定在父元素上作为controller.
+ * datas : [{}] 数据集合,形如: [{ZGH : '01113200','XM': '孟斌',XB : '1',XB_DISP : '男'},...]
+ * cols : [{}] 数据列信息,形如:[{ENAME : 'ZGH',CNAME : '职工号'},{ENAME : 'XM',CNAME : '姓名'},...]
+ * checkbox : true/false 是否显示复选框
+ *
+ * methods :
+ * getSelected() : [{}] 返回选中的数据集合
+ * select(pos/key,checked) : 根据索引或者主键选中或取消记录
+ * selectAll(checked) : 全选或全不选
+ * add(datas) : 添加记录,可以传递对象或者对象数组
+ * remove(pos/key) : 移除记录
+ * update(datas) : 更新记录,可以传递对象或者对象数组
+ *
+ * events :
+ * onSelectAll(checked) : 全选时触发
+ * onSelect(checked,data) : 选择时触发
+ *
  */
 !function($){
     var Grid = function(element,options){
@@ -167,8 +186,15 @@
         // 全选按钮绑定
         var $cont = $(grid.container);
         $cont.delegate("[name='chkAll']","change",function(){
-           $cont.find("[name='chk']").prop("checked",this.checked);
+            $cont.find("[name='chk']").prop("checked",this.checked);
+            if(grid.options.onSelectAll){
+                grid.options.onSelectAll(this.checked); // 触发全选事件,传递选择状态
+            }
         }).delegate("[name='chk']","change",function(){
+            if(grid.options.onSelect){
+                var data = $(this).closest("tr").get(0)["data-data"];
+                grid.options.onSelect(this.checked,data);  // 触发选中某行记录事件,传递选择状态以及当前数据
+            }
             if(this.checked &&
                 ($cont.find("[name='chk']:checked").size() == $cont.find("[name='chk']").size())){
                 // 判断是否所有都选中
