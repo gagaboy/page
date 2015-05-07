@@ -4,8 +4,10 @@
 define([], function () {
     var Validation = new Class({
         options: {
-            defaultRules:{},
-            customRules:{}
+            defaultRules:{},//预置规则
+            customRules:{},//扩展规则
+            onlyError:false,//只返回第一个错误，用于validateValue方法
+            errInterval:";"//错误间的分隔符
         },
         initialize: function (opts) {
             this.options.defaultRules = {
@@ -99,7 +101,6 @@ define([], function () {
         },
         checkLength: function (value,maxLen,minLen) {
             var fieldLength = value?String(value).length:0;
-
             if ((minLen&&fieldLength < minLen) || (maxLen&&fieldLength > maxLen)) {
                 return {"result":false,"errorMsg":"长度不符合要求"};
             }else{
@@ -162,17 +163,20 @@ define([], function () {
                     min: 18
                 }
             },
-            @obj: {
-                equal: {
-                    fields: [
-                        "pass",
-                        "repass"
-                    ]
-                },timeAfter: {
-                    field1: "startTime",
-                    field2: "endTime"
-                }
-            }
+            "@obj": [
+                 {
+                     "ruleId": "equal",
+                     "fields": [
+                         "pass",
+                         "repass"
+                     ]
+                 },
+                 {
+                     "ruleId": "timeAfter",
+                     "field1": "startTime",
+                     "field2": "endTime"
+                 }
+             ]
          }
          */
         validateObject: function (obj,valRules) {
@@ -199,8 +203,12 @@ define([], function () {
             }else{
                 return {"result":true};
             }
-        }
+        },
+        //＝＝＝＝＝＝＝＝＝＝＝＝＝＝以下为私有方法＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
+        _getErrMsg:function(){
+            //return this.
+        }
     });
     Validation.xtype = "validation";
     return Validation;

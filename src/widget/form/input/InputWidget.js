@@ -8,7 +8,6 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
         options: {
             $xtype: xtype
         },
-
         getTemplate: function () {
             return template;
         },
@@ -36,11 +35,15 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
         validate:function() {
             //var valRes = Page.validation.validateValue(this.getValue(),this.getAttr("validationRules"));
             var validateTool = Page.create("validation");//后续由系统统一创建，只需调用即可
-            if(validateTool&&this.getAttr("validationRules")){
+            if(this.getAttr("required")){//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue());
+            }else if(this.getAttr("validationRules")){//再判断校验规则
                 valRes = validateTool.validateValue(this.getValue(),this.getAttr("validationRules"));
             }
-            if(!valRes.result){
+            if(!valRes.result){//将错误信息赋值给属性
               this.setAttr("errorMessage", valRes.errorMsg);
+            }else {
+                this.setAttr("errorMessage", "");
             }
         }
 

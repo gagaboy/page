@@ -43,9 +43,7 @@
                     <div class="col-md-4" id="inputContainer">
 
                     </div>
-                    <div class="col-md-4" id="comboboxContainer">
 
-                    </div>
                     <div class="col-md-4" id="">
 
                     </div>
@@ -70,19 +68,12 @@
             glyphicon: 'glyphicon-ok',
             message: '请输入用户名',
             label: '用户名',
-            //hasError: false,
             showErrorMessage:true,
-            $id: 'username'//,
-            //value: 'init'
+            $id: 'username',//,
+            value: 'init'
         });
         inp.render();
         console.log(inp);
-        var combo = Page.create('combobox', {
-            $parentId: 'comboboxContainer',
-            $id: 'sex',
-            label: '性别'
-        })
-        combo.render();
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
