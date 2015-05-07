@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="lib/bootstrap/css/animate.css" rel="stylesheet">
-    <link href="lib/bootstrap/css/style.css" rel="stylesheet">
-    <link href="src/css/page.css" rel="stylesheet">
+    <link href="/page1/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/page1/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/page1/lib/bootstrap/css/animate.css" rel="stylesheet">
+    <link href="/page1/lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="/page1/src/css/page.css" rel="stylesheet">
 </head>
 <body>
 <br>
@@ -43,27 +43,40 @@
                     <div class="col-md-4" id="inputContainer">
 
                     </div>
-                    <div class="col-md-4" id="comboboxContainer">
 
-                    </div>
-                    <div class="col-md-4" id="a">
+                    <div class="col-md-4" id="">
 
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-
-</div>
-<script src="bower_components/mootools/dist/mootools-core.js"></script>
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
+<script src="/page1/bower_components/mootools/dist/mootools-core.js"></script>
+<script src="/page1/bower_components/jquery/dist/jquery.js"></script>
 <script>
     $.noConflict();
 </script>
-<!--<script src="bower_components/avalon/avalon.js" data-main="demo.js"></script>-->
-<script src="bower_components/avalon/avalon.js"></script>
-<script src="dist/page-build.js" data-main="demo.js"></script>
+<script src="/page1/bower_components/avalon/avalon.js"></script>
+<script>
+    require(["../../../page1/src/Bootstrap"], function () {
+        var inp = Page.create("input", {
+            $parentId: 'inputContainer',
+            value: '',
+            required: true,
+            glyphicon: 'glyphicon-ok',
+            message: '请输入用户名',
+            label: '用户名',
+            showErrorMessage:true,
+            $id: 'username',//,
+            value: 'init'
+        });
+        inp.render();
+        console.log(inp);
+    });
+</script>
+<!--<script src="bower_components/avalon/avalon.js" ></script>-->
+<!--<script src="dist/page-build.js" data-main="demo.js"></script>-->
 </body>
 </html>
