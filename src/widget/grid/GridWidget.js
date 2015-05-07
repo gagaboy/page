@@ -31,7 +31,8 @@
     Grid.prototype.constructor = Grid;
     Grid.prototype.DEFAULTS = {
         keyName : 'WID',
-        checkbox : false
+        checkbox : false,
+        pagination : false
     };
     $.fn.grid = function(){
         var option = arguments[0];
@@ -210,7 +211,16 @@
 
     // 使用avalon绑定数据和模板
     function parseTemplate(grid,template,model) {
-        $(grid.container).html(template).attr("ms-controller", grid.options["$id"]);// 设置容器为监听器
+        var opts = grid.options;
+        $(grid.container).html(template).attr("ms-controller", opts["$id"]);// 设置容器为监听器
+        // 处理分页
+        if(opts.pagination == true && opts.pages > 1){
+            var $pages = [];
+            for(var i=1;i<=opts.pages;i++){
+                $pages.push(i);
+            }
+            opts["$pages"] = $pages;
+        }
         grid.vModel = avalon.define(model);
         avalon.scan(grid.container); // 扫描监听容器
     }
