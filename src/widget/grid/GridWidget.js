@@ -1,30 +1,30 @@
 /**
- * Grid¿Ø¼ş·â×°
+ * Gridæ§ä»¶å°è£…
  * mengbin
  *
  * options :
- * id : ¿Ø¼şID,Èç¹û²»´«Ôò×Ô¶¯Îª¿Ø¼şÉú³ÉÒ»¸öID,¸ÃID»á°ó¶¨ÔÚ¸¸ÔªËØÉÏ×÷Îªcontroller.
- * datas : [{}] Êı¾İ¼¯ºÏ,ĞÎÈç: [{ZGH : '01113200','XM': 'ÃÏ±ó',XB : '1',XB_DISP : 'ÄĞ'},...]
- * cols : [{}] Êı¾İÁĞĞÅÏ¢,ĞÎÈç:[{ENAME : 'ZGH',CNAME : 'Ö°¹¤ºÅ'},{ENAME : 'XM',CNAME : 'ĞÕÃû'},...]
- * checkbox : true/false ÊÇ·ñÏÔÊ¾¸´Ñ¡¿ò
+ * id : æ§ä»¶ID,å¦‚æœä¸ä¼ åˆ™è‡ªåŠ¨ä¸ºæ§ä»¶ç”Ÿæˆä¸€ä¸ªID,è¯¥IDä¼šç»‘å®šåœ¨çˆ¶å…ƒç´ ä¸Šä½œä¸ºcontroller.
+ * datas : [{}] æ•°æ®é›†åˆ,å½¢å¦‚: [{ZGH : '01113200','XM': 'å­Ÿæ–Œ',XB : '1',XB_DISP : 'ç”·'},...]
+ * cols : [{}] æ•°æ®åˆ—ä¿¡æ¯,å½¢å¦‚:[{ENAME : 'ZGH',CNAME : 'èŒå·¥å·'},{ENAME : 'XM',CNAME : 'å§“å'},...]
+ * checkbox : true/false æ˜¯å¦æ˜¾ç¤ºå¤é€‰æ¡†
  *
  * methods :
- * getSelected() : [{}] ·µ»ØÑ¡ÖĞµÄÊı¾İ¼¯ºÏ
- * select(pos/key,checked) : ¸ù¾İË÷Òı»òÕßÖ÷¼üÑ¡ÖĞ»òÈ¡Ïû¼ÇÂ¼
- * selectAll(checked) : È«Ñ¡»òÈ«²»Ñ¡
- * add(datas) : Ìí¼Ó¼ÇÂ¼,¿ÉÒÔ´«µİ¶ÔÏó»òÕß¶ÔÏóÊı×é
- * remove(pos/key) : ÒÆ³ı¼ÇÂ¼
- * update(datas) : ¸üĞÂ¼ÇÂ¼,¿ÉÒÔ´«µİ¶ÔÏó»òÕß¶ÔÏóÊı×é
+ * getSelected() : [{}] è¿”å›é€‰ä¸­çš„æ•°æ®é›†åˆ
+ * select(pos/key,checked) : æ ¹æ®ç´¢å¼•æˆ–è€…ä¸»é”®é€‰ä¸­æˆ–å–æ¶ˆè®°å½•
+ * selectAll(checked) : å…¨é€‰æˆ–å…¨ä¸é€‰
+ * add(datas) : æ·»åŠ è®°å½•,å¯ä»¥ä¼ é€’å¯¹è±¡æˆ–è€…å¯¹è±¡æ•°ç»„
+ * remove(pos/key) : ç§»é™¤è®°å½•
+ * update(datas) : æ›´æ–°è®°å½•,å¯ä»¥ä¼ é€’å¯¹è±¡æˆ–è€…å¯¹è±¡æ•°ç»„
  *
  * events :
- * onSelectAll(checked) : È«Ñ¡Ê±´¥·¢
- * onSelect(checked,data) : Ñ¡ÔñÊ±´¥·¢
+ * onSelectAll(checked) : å…¨é€‰æ—¶è§¦å‘
+ * onSelect(checked,data) : é€‰æ‹©æ—¶è§¦å‘
  *
  */
 !function($){
     var Grid = function(element,options){
-        this.options = options; // ÅäÖÃĞÅÏ¢
-        this.container = element; // ÈİÆ÷½Úµã
+        this.options = options; // é…ç½®ä¿¡æ¯
+        this.container = element; // å®¹å™¨èŠ‚ç‚¹
         initUI(this);
         initEvents(this);
     };
@@ -52,11 +52,11 @@
         return result;
     };
 
-    // ¶¨Òå¹«¿ª·½·¨
+    // å®šä¹‰å…¬å¼€æ–¹æ³•
     $.extend(Grid.prototype,{
         /**
-         * »ñÈ¡Ñ¡ÖĞµÄ¼ÇÂ¼
-         * @returns ·µ»Ø¶ÔÏóÊı×é
+         * è·å–é€‰ä¸­çš„è®°å½•
+         * @returns è¿”å›å¯¹è±¡æ•°ç»„
          */
         getSelected : function(){
             return $.map($(this.container).find("[name='chk']:checked"),function(item){
@@ -65,25 +65,25 @@
             });
         },
         /**
-         * Ñ¡ÖĞÄ³Ò»ĞĞ¼ÇÂ¼
-         * @param data ¿ÉÒÔ´«µİÏÂ±êË÷Òı(´Ó0¿ªÊ¼),Ò²¿ÉÒÔ´«µİ¼ÇÂ¼µÄÖ÷¼üÖµ
-         * @param checked ÊÇ·ñÑ¡ÖĞ true/false
+         * é€‰ä¸­æŸä¸€è¡Œè®°å½•
+         * @param data å¯ä»¥ä¼ é€’ä¸‹æ ‡ç´¢å¼•(ä»0å¼€å§‹),ä¹Ÿå¯ä»¥ä¼ é€’è®°å½•çš„ä¸»é”®å€¼
+         * @param checked æ˜¯å¦é€‰ä¸­ true/false
          */
         select : function(data,checked){
             if(checked !== true && checked !== false){
                 return;
             }
             if($.type(data) == 'number'){
-                // ¸ù¾İË÷ÒıÑ¡Ôñ
+                // æ ¹æ®ç´¢å¼•é€‰æ‹©
                 $(this.container).find("[name='chk']:eq(" + data + ")").prop("checked",checked).trigger("change");
             }else{
-                // ¸ù¾İÖ÷¼üÑ¡Ôñ
+                // æ ¹æ®ä¸»é”®é€‰æ‹©
                 $(this.container).find("tr[key='" + data + "']").find("[name='chk']").prop("checked",checked).trigger("change");
             }
         },
         /**
-         * Ñ¡ÖĞËùÓĞ¼ÇÂ¼
-         * @param checked ÊÇ·ñÑ¡ÖĞ true/false
+         * é€‰ä¸­æ‰€æœ‰è®°å½•
+         * @param checked æ˜¯å¦é€‰ä¸­ true/false
          */
         selectAll : function(checked){
             if(checked !== true && checked !== false){
@@ -92,8 +92,8 @@
             $(this.container).find("[name='chkAll']").prop("checked",checked).trigger("change");
         },
         /**
-         * Ìí¼Ó¼ÇÂ¼
-         * @param data ¿ÉÒÔ´«µİµ¥¸ö¶ÔÏó,Ò²¿ÉÒÔ´«µİ¶ÔÏóÊı×é
+         * æ·»åŠ è®°å½•
+         * @param data å¯ä»¥ä¼ é€’å•ä¸ªå¯¹è±¡,ä¹Ÿå¯ä»¥ä¼ é€’å¯¹è±¡æ•°ç»„
          */
         add : function(data){
             var datas = [];
@@ -108,19 +108,19 @@
             }
         },
         /**
-         * É¾³ıÄ³Ò»ĞĞ¼ÇÂ¼
-         * @param data ¿ÉÒÔ´«µİÏÂ±êË÷Òı(´Ó0¿ªÊ¼),Ò²¿ÉÒÔ´«µİ¼ÇÂ¼µÄÖ÷¼üÖµ
+         * åˆ é™¤æŸä¸€è¡Œè®°å½•
+         * @param data å¯ä»¥ä¼ é€’ä¸‹æ ‡ç´¢å¼•(ä»0å¼€å§‹),ä¹Ÿå¯ä»¥ä¼ é€’è®°å½•çš„ä¸»é”®å€¼
          */
         remove : function(data){
             if(!data){
-                // ÒÆ³ıËùÓĞ
+                // ç§»é™¤æ‰€æœ‰
                 this.vModel.datas.removeAll();
             }else{
                 if($.type(data) == 'number'){
-                    // ¸ù¾İË÷ÒıÑ¡Ôñ
+                    // æ ¹æ®ç´¢å¼•é€‰æ‹©
                     this.vModel.datas.removeAt(data);
                 }else{
-                    // ¸ù¾İÖ÷¼üÑ¡Ôñ
+                    // æ ¹æ®ä¸»é”®é€‰æ‹©
                     var datas = this.vModel.datas;
                     if(datas){
                         for(var i=0;i<datas.size();i++){
@@ -134,8 +134,8 @@
             }
         },
         /**
-         * ¸üĞÂ¼ÇÂ¼
-         * @param data ¿ÉÒÔ´«µİµ¥¸ö¶ÔÏó,Ò²¿ÉÒÔ´«µİ¶ÔÏóÊı×é,¶ÔÏóÖĞ±ØĞë±£Ö¤ÓĞÖ÷¼üÏî,·ñÔò²»¸üĞÂ
+         * æ›´æ–°è®°å½•
+         * @param data å¯ä»¥ä¼ é€’å•ä¸ªå¯¹è±¡,ä¹Ÿå¯ä»¥ä¼ é€’å¯¹è±¡æ•°ç»„,å¯¹è±¡ä¸­å¿…é¡»ä¿è¯æœ‰ä¸»é”®é¡¹,å¦åˆ™ä¸æ›´æ–°
          */
         update : function(data){
             var datas = [];
@@ -153,7 +153,7 @@
                 }
                 for(var j=0;j<vmDatas.size();j++){
                     if(vmDatas[j][this.options.keyName] === key){
-                        // Æ¥Åä
+                        // åŒ¹é…
                         $.extend(vmDatas[j],_data);
                         break;
                     }
@@ -162,45 +162,45 @@
         }
     });
 
-    // ³õÊ¼»¯UI
+    // åˆå§‹åŒ–UI
     function initUI(grid){
-        var options = grid.options; // ´«ÈëµÄÊôĞÔ
+        var options = grid.options; // ä¼ å…¥çš„å±æ€§
         if(!options.id){
-            options.id = "_" + new Date().getTime(); // Èç¹ûÃ»ÓĞ´«ÈëIDÔòËæ»úÉú³ÉÒ»¸ö
+            options.id = "_" + new Date().getTime(); // å¦‚æœæ²¡æœ‰ä¼ å…¥IDåˆ™éšæœºç”Ÿæˆä¸€ä¸ª
         }
-        options["$id"] = options.id + "-controller"; // controllerÄ¬ÈÏ¹¹Ôì¹æÔò,id-controller
-        var template = Grid.prototype.template; // ¿Ø¼şÄ£°å
+        options["$id"] = options.id + "-controller"; // controlleré»˜è®¤æ„é€ è§„åˆ™,id-controller
+        var template = Grid.prototype.template; // æ§ä»¶æ¨¡æ¿
         if(!template) {
-            // »ñÈ¡¿Ø¼şÄ£°å
+            // è·å–æ§ä»¶æ¨¡æ¿
             $.get("/page/src/widget/grid/GridWidget.html", function (html) {
-                Grid.prototype.template = html; // »º´æ¿Ø¼şÄ£°å
+                Grid.prototype.template = html; // ç¼“å­˜æ§ä»¶æ¨¡æ¿
                 parseTemplate(grid,html,options);
-            });
+            },'html');
         }else{
             parseTemplate(grid,template,options);
         }
     }
 
-    // ³õÊ¼»¯ÊÂ¼ş
+    // åˆå§‹åŒ–äº‹ä»¶
     function initEvents(grid){
-        // È«Ñ¡°´Å¥°ó¶¨
+        // å…¨é€‰æŒ‰é’®ç»‘å®š
         var $cont = $(grid.container);
         $cont.delegate("[name='chkAll']","change",function(){
             $cont.find("[name='chk']").prop("checked",this.checked);
             if(grid.options.onSelectAll){
-                grid.options.onSelectAll(this.checked); // ´¥·¢È«Ñ¡ÊÂ¼ş,´«µİÑ¡Ôñ×´Ì¬
+                grid.options.onSelectAll(this.checked); // è§¦å‘å…¨é€‰äº‹ä»¶,ä¼ é€’é€‰æ‹©çŠ¶æ€
             }
         }).delegate("[name='chk']","change",function(){
             if(grid.options.onSelect){
                 var data = $(this).closest("tr").get(0)["data-data"];
-                grid.options.onSelect(this.checked,data);  // ´¥·¢Ñ¡ÖĞÄ³ĞĞ¼ÇÂ¼ÊÂ¼ş,´«µİÑ¡Ôñ×´Ì¬ÒÔ¼°µ±Ç°Êı¾İ
+                grid.options.onSelect(this.checked,data);  // è§¦å‘é€‰ä¸­æŸè¡Œè®°å½•äº‹ä»¶,ä¼ é€’é€‰æ‹©çŠ¶æ€ä»¥åŠå½“å‰æ•°æ®
             }
             if(this.checked &&
                 ($cont.find("[name='chk']:checked").size() == $cont.find("[name='chk']").size())){
-                // ÅĞ¶ÏÊÇ·ñËùÓĞ¶¼Ñ¡ÖĞ
+                // åˆ¤æ–­æ˜¯å¦æ‰€æœ‰éƒ½é€‰ä¸­
                 $cont.find("[name='chkAll']").prop("checked",true);
             }else{
-                // ÅĞ¶ÏÊÇ·ñËùÓĞ¶¼Î´Ñ¡ÖĞ
+                // åˆ¤æ–­æ˜¯å¦æ‰€æœ‰éƒ½æœªé€‰ä¸­
                 if($cont.find("[name='chk']:checked").size() != $cont.find("[name='chk']").size()){
                     $cont.find("[name='chkAll']").prop("checked",false);
                 }
@@ -208,10 +208,10 @@
         });
     }
 
-    // Ê¹ÓÃavalon°ó¶¨Êı¾İºÍÄ£°å
+    // ä½¿ç”¨avalonç»‘å®šæ•°æ®å’Œæ¨¡æ¿
     function parseTemplate(grid,template,model) {
-        $(grid.container).html(template).attr("ms-controller", grid.options["$id"]);// ÉèÖÃÈİÆ÷Îª¼àÌıÆ÷
+        $(grid.container).html(template).attr("ms-controller", grid.options["$id"]);// è®¾ç½®å®¹å™¨ä¸ºç›‘å¬å™¨
         grid.vModel = avalon.define(model);
-        avalon.scan(grid.container); // É¨Ãè¼àÌıÈİÆ÷
+        avalon.scan(grid.container); // æ‰«æç›‘å¬å®¹å™¨
     }
 }(window.jQuery);
