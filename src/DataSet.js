@@ -29,23 +29,11 @@ define([], function () {
             syncUrl: '',
             defaultArg: {}
         },
-        ajax: function (url, params, success, fail) {
-            jQuery.ajax({
-                url: url,
-                data: params,
-                dataType: 'json',
-                cache: false,
-                success: function (data) {
-                    //TODO
-                    success(data);
-                },
-                error: fail
-            });
-        },
         fetch: function (callback) {
             var $this = this;
             var params = {};
-            this.ajax(this.options.readUrl, params, function (data) {
+
+            Page.utils.ajax(this.options.readUrl, params, function (data) {
                 $this.data = data;
                 //TODO
                 callback()
@@ -54,7 +42,7 @@ define([], function () {
         sync: function (callback) {
             var $this = this;
             var params = {};
-            this.ajax(this.options.syncUrl, params, function (data) {
+            Page.utils.ajax(this.options.syncUrl, params, function (data) {
                 //TODO
                 callback()
             }, null);
