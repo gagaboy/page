@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div ms-class-table-responsive="responsive">
     <table class="table table-striped" ms-attr-id="{{id}}">
         <thead>
         <tr>
@@ -15,9 +15,19 @@
             <td ms-repeat-col="cols">{{data[col.ENAME + '_DISP'] || data[col.ENAME]}}</td>
         </tr>
     </table>
-    <ul ms-if="pagination && pager.pages > 1" class="pagination pagination-sm">
-        <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex > 1 ?pager.pageIndex - 1 : 0">上一页</a></li>
-        <li ms-repeat="$pages" ms-class-active="pager.pageIndex == el"><a href="javascript:;" ms-attr-data-index="el">{{el}}</a></li>
-        <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex >= pager.pages ? 0 : pager.pageIndex + 1">下一页</a></li>
-    </ul>
+    <div class="row" ms-if="pagination && pager.pages > 1">
+        <div class="col-md-4">
+            <div class="dataTables_info">
+                显示{{(pager.pageIndex - 1 ) * pager.pageSize}}到{{pager.pageIndex * pager.pageSize}} 条
+                共 {{pager.total}} 条
+            </div>
+        </div>
+        <div class="col-md-8">
+            <ul class="pagination pagination-sm pull-right" style="margin:0">
+                <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex > 1 ?pager.pageIndex - 1 : 0">上一页</a></li>
+                <li ms-repeat="$pages" ms-class-active="pager.pageIndex == el"><a href="javascript:;" ms-attr-data-index="el">{{el}}</a></li>
+                <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex >= pager.pages ? 0 : pager.pageIndex + 1">下一页</a></li>
+            </ul>
+        </div>
+    </div>
 </div>

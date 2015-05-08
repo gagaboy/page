@@ -6,7 +6,13 @@
  * id : 控件ID,如果不传则自动为控件生成一个ID,该ID会绑定在父元素上作为controller.
  * datas : [{}] 数据集合,形如: [{ZGH : '01113200','XM': '孟斌',XB : '1',XB_DISP : '男'},...]
  * cols : [{}] 数据列信息,形如:[{ENAME : 'ZGH',CNAME : '职工号'},{ENAME : 'XM',CNAME : '姓名'},...]
+ * keyName : 数据集主键字段
+ * responsive : true/false 是否响应式表格
+ * loadOnInit : true/false 是否初始化时加载数据
  * checkbox : true/false 是否显示复选框
+ * pagination : 是否分页
+ * pager : {} 分页信息, 形如: {pageSize : 10,pageIndex : 2, total : 100, pages : 10}
+ * pageBlockSize : 分页条显示大小
  *
  * methods :
  * getSelected() : [{}] 返回选中的数据集合
@@ -33,6 +39,9 @@
         keyName : 'WID',
         checkbox : false,
         pagination : false,
+        responsive : false,
+        loadOnInit : true,
+        pageBlockSize : 3,
         datas : [],
         cols : [],
         pager : {
@@ -269,10 +278,15 @@
     // 解析选项,生成avalon数据模型
     function prepareOptions(grid){
         var opts = grid.options;
-        // 分页处理
+        // 分页处理,显示当前页的前3条与后3条
         if(opts.pagination == true && opts.pager.pages > 1){
             var $pages = [];
-            for(var i=1;i<=opts.pager.pages;i++){
+            var curPage = opts.pager.pageIndex;
+            var pages = opts.pager.pages;
+            for(var i=curPage;(i>=1)&&(curPage - i <= 3);i--){
+                $pages.unshift(i);
+            }
+            for(var i=curPage + 1;(i <= pages) && (i - curPage <= 3);i++){
                 $pages.push(i);
             }
             opts["$pages"] = $pages;
