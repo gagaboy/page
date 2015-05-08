@@ -27,7 +27,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 }
                 vm.allChecked = all;
             },
-            opColumn:{}
+            opColumn: {}
         },
         initialize: function (opts) {
             var d = opts.data;

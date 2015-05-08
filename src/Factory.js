@@ -54,7 +54,9 @@ define([
     //**********************************
     var factory = new Factory();
     Array.each(allComps, function (c, index) {
-        factory.add(c.xtype, c);
+        if(c.xtype) {
+            factory.add(c.xtype, c);
+        }
     });
     return factory;
 });

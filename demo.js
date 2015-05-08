@@ -7,6 +7,15 @@
 //    var r = Page.manager.components.grid.getAttr('data')[index].$model;
 //    window.console.log(r);
 //}
+avalon.config({loader: false});
+require.config({
+    paths: {
+        text : "bower_components/text/text",
+        css:"bower_components/require-css/css"
+    }
+});
+
+
 require(["./src/Bootstrap"], function () {
     var inp = Page.create("input", {
         $parentId: 'inputContainer',
