@@ -17,10 +17,11 @@
             jQuery("#grid1Cont").grid({
                id : 'grid1',
                checkbox : true,
-//               loadOnInit : true,
+                hideCols : ["WID"],
+               loadOnInit : true,
                pagination : true,
                url : "/page/src/widget/grid/test.json"
-           }).grid("reload") ;
+           });
         });
     </script>
 </head>
@@ -29,6 +30,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div id="grid1Cont"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
             </div>
         </div>
     </div>
