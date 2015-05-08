@@ -6,7 +6,11 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
     var InputWidget = new Class({
         Extends: BaseFormWidget,
         options: {
-            $xtype: xtype
+            $xtype: xtype,
+            labelClick: function (vid) {
+                var cmp = Page.manager.components[vid];
+                cmp.fireEvent('labelClick', cmp);
+            }
         },
         getTemplate: function () {
             return template;
@@ -32,20 +36,20 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
                 input.blur();
             });
         },
-        validate:function() {
+        validate: function () {
             //var valRes = Page.validation.validateValue(this.getValue(),this.getAttr("validationRules"));
-            var validateTool = Page.create("validation",{onlyError:true});//后续由系统统一创建，只需调用即可
+            var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
 
             var valRes = null;
-            if(this.getAttr("required")){//先判断是否必填
-                valRes = validateTool.checkRequired(this.getValue(),1);
+            if (this.getAttr("required")) {//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue(), 1);
             }
-            if((!valRes||valRes.result)&&this.getAttr("validationRules")){//再判断校验规则
-                valRes = validateTool.validateValue(this.getValue(),this.getAttr("validationRules"));
+            if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
+                valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
             }
-            if(valRes&&!valRes.result){//将错误信息赋值给属性
+            if (valRes && !valRes.result) {//将错误信息赋值给属性
                 this.setAttr("errorMessage", valRes.errorMsg);
-            }else {//清空错误信息
+            } else {//清空错误信息
                 this.setAttr("errorMessage", "");
             }
         }

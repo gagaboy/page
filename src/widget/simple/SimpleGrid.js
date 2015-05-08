@@ -49,6 +49,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             //var ds = this.getAttr('data');
             //return arr;
         }
+
     });
     SimpleGridWidget.xtype = xtype;
     return SimpleGridWidget;

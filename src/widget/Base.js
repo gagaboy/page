@@ -71,22 +71,20 @@ define([], function () {
             var $this = this;
             //mmPromise
             /*
-            Promise.all([this.getTemplate()]).then(function (element) {
-                $this.getParentElement().adopt(element);
-                $this.element = element;
-                $this.fireEvent("afterRender", [this.vmodel]);
-            });
-            */
+             Promise.all([this.getTemplate()]).then(function (element) {
+             $this.getParentElement().adopt(element);
+             $this.element = element;
+             $this.fireEvent("afterRender", [this.vmodel]);
+             });
+             */
             var tmp = this.getTemplate();
             var e = new Element("div." + $this.getAttr('$xtype'));
             e.set("ms-controller", $this.getId());
             e.appendHTML(tmp);
-            avalon.scan(e);
-
             $this.getParentElement().adopt(e);
+            avalon.scan(e);
             $this.element = e;
             $this.fireEvent("afterRender", [this.vmodel]);
-
             return this;
         },
 
@@ -100,24 +98,24 @@ define([], function () {
         },
 
         /*
-        getTemplate: function () {
-            var $this = this;
-            return new Promise(function (resolve) {
-                if (!$this.element) {
-                    $this.element = new Element("div." + $this.getAttr('$xtype'));
-                    $this.element.set("ms-controller", $this.getId());
-                    //TODO 合并后代码模版获取方式可能发生变化
-                    require(['text!' + baseURL + $this.getAttr('$fullName') + ".html", 'css!' + baseURL + $this.getAttr('$fullName') + ".css"], function (template) {
-                        $this.element.appendHTML(template);
-                        avalon.scan($this.element);
-                        resolve($this.element);
-                    });
-                } else {
-                    resolve($this.element);
-                }
-            });
-        },
-        */
+         getTemplate: function () {
+         var $this = this;
+         return new Promise(function (resolve) {
+         if (!$this.element) {
+         $this.element = new Element("div." + $this.getAttr('$xtype'));
+         $this.element.set("ms-controller", $this.getId());
+         //TODO 合并后代码模版获取方式可能发生变化
+         require(['text!' + baseURL + $this.getAttr('$fullName') + ".html", 'css!' + baseURL + $this.getAttr('$fullName') + ".css"], function (template) {
+         $this.element.appendHTML(template);
+         avalon.scan($this.element);
+         resolve($this.element);
+         });
+         } else {
+         resolve($this.element);
+         }
+         });
+         },
+         */
         getParentElement: function () {
             if (this.options.$parentId == null) {
                 return $$(document.body);
