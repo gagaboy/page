@@ -10,14 +10,14 @@
         </thead>
         <tr ms-repeat-data="datas" ms-data-data="data" ms-attr-key="data[keyName]">
             <td ms-if="checkbox">
-                <input type="checkbox" name="chk" ms-duplex-checked="data['checked']">
+                <input type="checkbox" name="chk">
             </td>
             <td ms-repeat-col="cols">{{data[col.ENAME + '_DISP'] || data[col.ENAME]}}</td>
         </tr>
     </table>
-    <ul ms-if="pagination && pages > 1" class="pagination pagination-sm">
-        <li><a href="#">上一页</a></li>
-        <li ms-repeat="$pages" ms-class-active="pageIndex == el"><a href="#">{{el}}</a></li>
-        <li><a href="#">下一页</a></li>
+    <ul ms-if="pagination && pager.pages > 1" class="pagination pagination-sm">
+        <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex > 1 ?pager.pageIndex - 1 : 0">上一页</a></li>
+        <li ms-repeat="$pages" ms-class-active="pager.pageIndex == el"><a href="javascript:;" ms-attr-data-index="el">{{el}}</a></li>
+        <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex >= pager.pages ? 0 : pager.pageIndex + 1">下一页</a></li>
     </ul>
 </div>

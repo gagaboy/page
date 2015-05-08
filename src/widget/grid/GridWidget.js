@@ -32,7 +32,14 @@
     Grid.prototype.DEFAULTS = {
         keyName : 'WID',
         checkbox : false,
-        pagination : false
+        pagination : false,
+        datas : [],
+        cols : [],
+        pager : {
+            pages : 1,
+            pageIndex : 1,
+            pageSize : 10
+        }
     };
     $.fn.grid = function(){
         var option = arguments[0];
@@ -160,6 +167,39 @@
                     }
                 }
             }
+        },
+        /**
+         * 重新加载数据,会根据条件进行查询
+         * @param opts
+         */
+        reload : function(opts){
+            opts = $.extend({},this.options,opts);
+            var url = opts.url;
+            if(!url){
+                return;
+            }
+            var fields = ["datas","cols","pager"];
+            $.ajax({
+                async : false,
+                url : url,
+                data : opts.param || "",
+                dataType : 'text',
+                type : 'POST',
+                success : function(resp){
+                    resp = eval("(" + resp + ")");
+                    for(var i=0;i<fields.length;i++){
+                        opts[fields[i]] = resp[fields[i]];
+                    }
+                }
+            });
+            if(this.vModel){
+                for(var i=0;i<fields.length;i++) {
+                    this.vModel[fields[i]] = opts[fields[i]];
+                }
+            }
+            this.options = opts;
+            // 重置复选框
+            $(this.container).find(":checkbox").prop("checked",false);
         }
     });
 
@@ -170,15 +210,18 @@
             options.id = "_" + new Date().getTime(); // 如果没有传入ID则随机生成一个
         }
         options["$id"] = options.id + "-controller"; // controller默认构造规则,id-controller
+        if(options.loadOnInit == true){
+            grid.reload(options);
+        }
         var template = Grid.prototype.template; // 控件模板
         if(!template) {
             // 获取控件模板
             $.get("/page/src/widget/grid/GridWidget.html", function (html) {
                 Grid.prototype.template = html; // 缓存控件模板
-                parseTemplate(grid,html,options);
+                parseTemplate(grid,html,grid.options);
             },'html');
         }else{
-            parseTemplate(grid,template,options);
+            parseTemplate(grid,template,grid.options);
         }
     }
 
@@ -207,20 +250,40 @@
                 }
             }
         });
+
+        // 分页事件
+        $cont.delegate("ul.pagination [data-index]","click",function(){
+            var $obj = $(this);
+            var index = $obj.data("index");
+            if(index == 0){
+                return;
+            }
+            grid.reload({
+                pager : {
+                    pageIndex : index
+                }
+            })
+        });
     }
 
-    // 使用avalon绑定数据和模板
-    function parseTemplate(grid,template,model) {
+    // 解析选项,生成avalon数据模型
+    function prepareOptions(grid){
         var opts = grid.options;
-        $(grid.container).html(template).attr("ms-controller", opts["$id"]);// 设置容器为监听器
-        // 处理分页
-        if(opts.pagination == true && opts.pages > 1){
+        // 分页处理
+        if(opts.pagination == true && opts.pager.pages > 1){
             var $pages = [];
-            for(var i=1;i<=opts.pages;i++){
+            for(var i=1;i<=opts.pager.pages;i++){
                 $pages.push(i);
             }
             opts["$pages"] = $pages;
         }
+        return opts;
+    }
+
+    // 使用avalon绑定数据和模板
+    function parseTemplate(grid,template,model) {
+        var opts = prepareOptions(grid);
+        $(grid.container).html(template).attr("ms-controller", opts["$id"]);// 设置容器为监听器
         grid.vModel = avalon.define(model);
         avalon.scan(grid.container); // 扫描监听容器
     }
