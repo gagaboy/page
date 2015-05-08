@@ -4,6 +4,7 @@
 define([], function () {
 
     var Validation = new Class({
+        Implements: [Options],
         options: {
             defaultRules:{},//预置规则
             customRules:{},//扩展规则
@@ -12,45 +13,41 @@ define([], function () {
         },
         allRules:{},//用于存放全部规则的临时变量
         initialize: function (opts) {
-            var that = this;
-            this.vmodel = avalon.define(this.options);
-            this.vmodel.$watch("$all", function (name, value) {
-                that.setAttr(name, value);
-            });
-            var priRules = {
+            this.setOptions(opts);
+            this.options.defaultRules = {
                 //单值校验
                 "regex": {
-                    "validateFunc": this._valRegex,
+                    "validateFunc": "_valRegex",
                     "errMsg": "* 格式必须满足正则表达式"
                 },
                 "required": {
-                    "validateFunc": this._valRequired,
+                    "validateFunc": this.checkRequired,
                     "errMsg": "* 非空选项."
                 },
                 "length": {
-                    "validateFunc": this._valLength,
+                    "validateFunc": "_valLength",
                     "errMsg": "* 长度必须为 "
                 },
                 "limit": {
-                    "validateFunc": this._valLimit,
+                    "validateFunc": "_valLimit",
                     "errMsg1": "* 大小必须在 ",
                     "errMsg2": " 至 ",
                     "errMsg3": " 之间."
                 },
                 "funCall":{
-                    "validateFunc": this._valFunCall,
+                    "validateFunc": "_valFunCall",
                     "errMsg": "* 校验失败 "
                 },
                 "ajax":{
-                    "validateFunc": this._valAjax,
+                    "validateFunc": "_valAjax",
                     "errMsg": "* 服务端校验失败 "
                 },
                 "equalValue": {
-                    "validateFunc": this._valEqualValue,
+                    "validateFunc": "_valEqualValue",
                     "errMsg": "* 输入错误,请重新输入."
                 },
                 "notEqualsValue": {
-                    "validateFunc": this._valNotEqualValue,
+                    "validateFunc": "_valNotEqualValue",
                     "errMsg": "* 输入内容被排除,请重新输入."
                 },
                 "telephone": {
@@ -86,23 +83,14 @@ define([], function () {
                     "errMsg": "* 请输入中文."
                 },//联合校验
                 "equalsField": {
-                    "validateFunc": this._valEqualField,
+                    "validateFunc": "_valEqualField",
                     "errMsg": "* 两次输入不一致,请重新输入."
                 }
             };
-            this.setAttr("defaultRules",priRules);
-            jQuery.extend(this.allRules,this.getAttr("defaultRules"));
+            jQuery.extend(this.allRules,this.options.defaultRules);
         },
         getId:function(){
             return String.uniqueID();
-        },
-        getAttr: function (key) {
-            return this.vmodel[key];
-        },
-        setAttr: function (key, value) {
-            var oldValue = this.vmodel[key];
-            this.vmodel[key] = value;
-            return this;
         },
         //基本校验工具方法
         checkRequired: function (value) {
@@ -112,7 +100,7 @@ define([], function () {
                 return {"result":true};
             }
         },
-        checkLength: function (value,maxLen,minLen) {
+        checkLength: function (value,minLen,maxLen) {
             var fieldLength = value?String(value).length:0;
             if ((minLen&&fieldLength < minLen) || (maxLen&&fieldLength > maxLen)) {
                 return {"result":false,"errorMsg":"长度不符合要求"};
@@ -121,9 +109,11 @@ define([], function () {
             }
         },
         checkRegex: function(value,regexStr){
-            var regPattern = eval(regexStr);
-            if (!regPattern.test(value)) {
-                return {"result":false,"errorMsg":"格式必须满足正则表达式："+regexStr};
+            if(regexStr){
+                var regPattern = eval(regexStr);
+                if (!regPattern.test(value)) {
+                    return {"result":false,"errorMsg":"格式不正确"};
+                }
             }
             return {"result":true};
         },
@@ -153,22 +143,29 @@ define([], function () {
             }
          */
         validateValue: function (value,valRules) {
-            if(valRules&&typeof(valRules) == " object "){
+            if(valRules&&typeof(valRules) == "object"){
                 var errMsg = "";
                 //调用各工具方法
                 //错误信息组合（；区隔）
                 for(var p in valRules) {
-                    if(valRules[p]&&this.allRules[valRules[p]]){
-                        var valRule = this.allRules[valRules[p]];
-                        var valRes = null;
+                    var valRes = null;
+                    if(valRules[p]&&this.allRules[p]){
+                        var valRule = this.allRules[p];
                         if(valRule.validateFunc){
-                            valRes = valRule.validateFunc(value,valRules[p]);
+                            if(typeof(valRule.validateFunc) == "string"&&this[valRule.validateFunc]){
+                                valRes = this[valRule.validateFunc](value,valRules[p]);
+                            }else if(typeof(valRule.validateFunc) == "function"){
+                                valRes = valRule.validateFunc(value,valRules[p]);
+                            }
                         }else if(valRule.regex){
                             valRes = this.checkRegex(value,valRule.regex);
                         }
                     }
                     if(valRes&&!valRes.result){
-                        errMsg += (valRes.errorMsg+this.getAttr("errInterval"));
+                        errMsg += (valRes.errorMsg+(this.options.onlyError?"":this.options.errInterval));
+                        if(this.options.onlyError&&errMsg){
+                            return {"result":false,"errorMsg":errMsg};
+                        }
                     }
                 }
                 if(errMsg){
@@ -231,10 +228,10 @@ define([], function () {
          * }
          */
         addCustomRule: function (ruleName,ruleSetting) {
-            if (this.getAttr("defaultRules") && this.getAttr("defaultRules")[ruleName]) {
+            if (this.options.defaultRules&& this.options.defaultRules[ruleName]) {
                 return {"result": false, "errorMsg": "系统预置规则中已有同名规则" + ruleName};//预置规则不容许重写
             }else{
-                this.getAttr("customRules")[ruleName] = ruleSetting;//自定义规则可被重写
+                this.options.customRules[ruleName] = ruleSetting;//自定义规则可被重写
                 this.allRules[ruleName] = ruleSetting;//同样刷新全部集合中的定义
                 return {"result":true};
             }
@@ -246,8 +243,10 @@ define([], function () {
             }
             return {"result":true};
         },
-        _valRequired:function(value,params){
-            return this.checkRequired(value);
+        _valRequired:function(value,isOpen){
+            if(isOpen){ //支持关闭
+                return this.checkRequired(value);
+            }
         },
         _valLength:function(value,params){
             if(value&&(params.minLen||params.maxLen)){
