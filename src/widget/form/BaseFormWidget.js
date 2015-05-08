@@ -32,7 +32,7 @@ define(['../Base'], function (Base) {
             required: false,
             showRequired: true,
 
-            validationRules: [],
+            validationRules: {},
 
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             labelSpan: 4,
