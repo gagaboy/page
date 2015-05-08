@@ -40,11 +40,11 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4" id="inputContainer">
+                    <div class="col-md-4" id="nameContainer">
 
                     </div>
 
-                    <div class="col-md-4" id="">
+                    <div class="col-md-4" id="phoneContainer">
 
                     </div>
                 </div>
@@ -62,18 +62,42 @@
 <script>
     require(["../../../page1/src/Bootstrap"], function () {
         var inp = Page.create("input", {
-            $parentId: 'inputContainer',
+            $parentId: 'nameContainer',
             value: '',
-            required: true,
+            required: false,
             glyphicon: 'glyphicon-ok',
-            message: '请输入用户名',
-            label: '用户名',
+            message: '请输入2-5个汉字',
+            label: '您的姓名',
+            validationRules: {
+                required:true,//options中为false时，此处可重开启校验
+                length: {
+                    maxLen: 5,
+                    minLen: 2
+                },
+                regex: {
+                    regexStr: "/^[\u4e00-\u9fa5]+$/"
+                }
+            },
             showErrorMessage:true,
-            $id: 'username',//,
-            value: 'init'
+            $id: 'username'//,
         });
         inp.render();
-        console.log(inp);
+        var inq = Page.create("input", {
+            $parentId: 'phoneContainer',
+            value: '',
+            required: false,
+            glyphicon: 'glyphicon-ok',
+            message: '请输入手机号',
+            label: '联系方式',
+            validationRules: {
+                required:true,//设置为false可关闭校验
+                mobilePhone:true
+            },
+            showErrorMessage:true,
+            $id: 'phone'//
+        });
+        inq.render();
+        console.log(inq);
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
