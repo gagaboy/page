@@ -22,7 +22,8 @@ define([
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
     "./widget/form/combobox/ComboboxWidget",
-    "./widget/layout/BaseLayout"
+    "./widget/layout/BaseLayout",
+    "./widget/simple/SimpleGrid"
 ], function () {
     var allComps = arguments;
 
