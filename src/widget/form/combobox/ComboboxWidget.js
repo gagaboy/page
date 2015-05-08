@@ -9,7 +9,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             $xtype: xtype,
             showPulldown: false,
             pullDownDisplay: "",
-            data: [{value: '1', display: '333'}, {value: '2', display: '2'}],
+            data1: [{value: '1', display: '333'}, {value: '2', display: '2'}],
             select: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 var obj = Page.manager.components[vid];
