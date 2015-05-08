@@ -82,10 +82,18 @@ define([], function () {
         },
         addRecord: function (record) {
             var re = record;
+            re[status] = add;
             this.options.data.push(re);
         },
         updateRecord: function (record) {
-
+            var re = record;
+            if (re[status] && re[status] != add) {
+                re[status] = update;
+            }
+            var r = this.options._dataMap[record[this.options.model.id]];
+            if(r) {
+                Object.merge(r, record);
+            }
         }
     });
     return DataSet;

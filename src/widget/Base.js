@@ -85,6 +85,9 @@ define([], function () {
             avalon.scan(e);
             $this.element = e;
             $this.fireEvent("afterRender", [this.vmodel]);
+            if(this["_afterRender"]){
+                this["_afterRender"](this.vmodel);
+            }
             return this;
         },
 
