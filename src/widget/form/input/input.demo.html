@@ -76,7 +76,7 @@
         var formRules = {};
         formRules.username =  comps.username.getAttr("validationRules");
         formRules.phone =  comps.phone.getAttr("validationRules");
-        formRules._global =   [
+        formRules._global = [//_global 为固定
             {
                 "ruleId": "notEqualField",
                 "field1": "username",
