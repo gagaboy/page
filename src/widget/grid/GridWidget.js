@@ -24,6 +24,8 @@
  * remove(pos/key) : 移除记录
  * update(datas) : 更新记录,可以传递对象或者对象数组
  * showCol(ename,show) : 是否显示某列
+ * showPagination(show) : 是否显示分页条
+ * showCheckbox(show) : 是否显示复选框
  *
  * events :
  * onSelectAll(checked) : 全选时触发
@@ -247,6 +249,26 @@
             }else{
                 hideCols.ensure(ename);
             }
+        },
+        /**
+         * 显示复选框
+         * @param show
+         */
+        showCheckbox : function(show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            this.vModel.checkbox = show;
+        },
+        /**
+         * 是否显示分页
+         * @param show
+         */
+        showPagination : function(show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            this.vModel.pagination = show;
         }
     });
 
