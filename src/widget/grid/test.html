@@ -30,7 +30,11 @@
             var args = []; // 获取参数数组
             for(var i=1;i<10;i++){
                 if(params["arg" + i] != undefined){
-                    args.push(params["arg" + i]);
+                    var arg = params["arg" + i];
+                    if(typeof arg == "string" && (arg.charAt(0) == "{" || arg.charAt(0) == "[")){
+                        arg = eval("(" + arg + ")");
+                    }
+                    args.push(arg);
                 }else{
                     break;
                 }
@@ -78,7 +82,9 @@
         <div class="row" style="margin-top : 10px;">
             <div class="col-md-12 methods">
                 <button type="button" class="btn btn-success" data-method="getSelected">获取选中行数据</button>
+                <button type="button" class="btn btn-success" data-method="getData" data-arg1="0">获取第一行数据</button>
                 <button type="button" class="btn btn-success" data-method="remove" data-arg1="1">删除第二行</button>
+                <button type="button" class="btn btn-success" data-method="add" data-arg1="{ZGH : 'zhangsan',XM : '张三'}">添加一行</button>
             </div>
         </div>
     </div>
