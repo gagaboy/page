@@ -24,13 +24,13 @@ require(["./src/Bootstrap"], function () {
 
     var datepicker = Page.create("datepicker", {
         $parentId: 'datepickerContainer',
-        $id: 'datepicker123456',
-        timer: 'true',
-        watermark:false,
+        value:'2015-05-09 12:27',
+        watermark:true,
         onSelect: function(date, vmodel, data) {
             avalon.log("选中日期后的用户回调");
             avalon.log(arguments);
         }
+
     });
     datepicker.render();
 });

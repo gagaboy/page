@@ -30,7 +30,6 @@ define(['../BaseFormWidget',
         stepMonths: 1, //@config 当点击next、prev链接时应该跳过几个月份, 默认一个月份
         toggle: false, //@config 设置日历的显示或者隐藏，false隐藏，true显示
         separator: "-", //@config 日期格式的分隔符,默认“-”，可以配置为"/"，而且默认日期格式必须是yyyy-mm-dd
-        calendarLabel: "选择日期", //@config 日历组件的说明label
         watermark: true, //@config 是否显示水印文字
         zIndex: -1, //@config设置日历的z-index
         timer: false, //@config 是否在组件中可选择时间
@@ -40,50 +39,38 @@ define(['../BaseFormWidget',
          * @param vmodel {Object} 当前日期组件对应的Vmodel
          * @param data {Object} 绑定组件的元素的data属性组成的集合
          */
-        onSelect: function (date, vmodel, data) {
-            var cmp = Page.manager.components["datepicker123456"];
-            cmp.fireEvent('onSelect', arguments);
-        },
+        onSelect: avalon.noop,
         /**
          * @config {Function} 日历关闭的回调
          * @param date {Object} 当前日期
          * @param vmodel {Object} 当前日期组件对应的Vmodel
          */
-        onClose: function(date,vmodel){
-            var cmp = Page.manager.components["datepicker123456"];
-            cmp.fireEvent('onSelect', arguments);
-        },
+        onClose: avalon.noop,
         /**
          * @config {Function} 在设置了timer为true时，选择日期、时间后的回调
          * @param vmodel {Object} 当前日期组件对应的Vmodel
          */
-        onSelectTime: function(vmodel){
-            var cmp = Page.manager.components["datepicker123456"];
-            cmp.fireEvent('onSelect', arguments);
-        },
+        onSelectTime: avalon.noop,
         /**
          * @config {Function} 将符合日期格式要求的字符串解析为date对象并返回，不符合格式的字符串返回null,用户可以根据自己需要自行配置解析过程
          * @param str {String} 要解析的日期字符串
          * @returns {Date} Date格式的日期
          */
-        parseDate: function(str){
-            return new Date(str);
-        },
+        parseDate: avalon.noop,
         /**
          * @config {Function} 将日期对象转换为符合要求的日期字符串
          * @param date {Date} 要格式化的日期对象
          * @returns {String} 格式化后的日期
          */
-        formatDate: function (date) {
-            return null;
-        }
+        formatDate: avalon.noop
     };
 
     //定义日期组件
     var DatepickerWidget = new Class({
         Extends: BaseFormWidget,
         options: {
-            $xtype: xtype
+            $xtype: xtype,
+            $fullName: 'emap.widget.form.datepicker'
         },
         initialize: function (opts) {
             this.options.$opts=mergeUserConfigs(opts);
