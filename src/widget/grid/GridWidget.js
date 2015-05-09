@@ -146,7 +146,7 @@
          * @param data 可以传递下标索引(从0开始),也可以传递记录的主键值
          */
         remove : function(data){
-            if(!data){
+            if(data == undefined){
                 // 移除所有
                 this.vModel.datas.removeAll();
             }else{
