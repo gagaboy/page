@@ -26,6 +26,7 @@
  * showCol(ename,show) : 是否显示某列
  * showPagination(show) : 是否显示分页条
  * showCheckbox(show) : 是否显示复选框
+ * showResponsive(show) : 响应式表格
  *
  * events :
  * onSelectAll(checked) : 全选时触发
@@ -258,7 +259,7 @@
             if($.type(show) != 'boolean'){
                 return;
             }
-            this.vModel.checkbox = show;
+            this.setOpts({checkbox : show});
         },
         /**
          * 是否显示分页
@@ -268,7 +269,13 @@
             if($.type(show) != 'boolean'){
                 return;
             }
-            this.vModel.pagination = show;
+            this.setOpts({pagination : show});
+        },
+        showResponsive : function(show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            this.setOpts({responsive : show});
         }
     });
 

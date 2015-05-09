@@ -23,6 +23,20 @@
                url : "/page/src/widget/grid/test.json"
            });
         });
+
+        jQuery(function(){
+            jQuery(".tools").delegate("[toggle]","click",function(){
+                var method = jQuery(this).data("method");
+                var arg = jQuery(this).data("arg");
+                var $grid = jQuery("#grid1Cont");
+                if(method == "showCol"){
+                    $grid.grid(method,"XM",arg);
+                }else{
+                    $grid.grid(method,arg);
+                }
+                jQuery(this).attr("arg",!arg);
+            });
+        });
     </script>
 </head>
 <body>
@@ -33,8 +47,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-
+            <div class="col-md-12 tools">
+                <button type="button" class="btn btn-success" toggle data-method="showCheckbox" data-arg="false">切换复选框</button>
+                <button type="button" class="btn btn-success" toggle data-method="showPagination" data-arg="false">切换分页条</button>
+                <button type="button" class="btn btn-success" toggle data-method="showResponsive" data-arg="true">响应式表格</button>
+                <button type="button" class="btn btn-success" toggle data-method="showCol" data-arg="true">显示隐藏姓名列</button>
             </div>
         </div>
     </div>
