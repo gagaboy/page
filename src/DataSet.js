@@ -18,35 +18,43 @@
  *  可以被扩展
  */
 define([], function () {
+    var status = "$status$";
+    var notModify = "$notModify$";
+    var add = "$add$";
+    var update = "$update$";
+    var remove = "$remove$";
+
     var DataSet = new Class({
         Implements: [Events, Options],
         initialize: function (opts) {
             this.setOptions(opts);
         },
         options: {
-            data: [],
+            data: [],//[{wid:'1',name:''},{wid:'2',name:''}]
+            _dataMap: {},
             readUrl: '',
             syncUrl: '',
-            defaultArg: {}
-        },
-        ajax: function (url, params, success, fail) {
-            jQuery.ajax({
-                url: url,
-                data: params,
-                dataType: 'json',
-                cache: false,
-                success: function (data) {
-                    //TODO
-                    success(data);
-                },
-                error: fail
-            });
+            defaultArg: {},
+            model: {
+                id: 'wid',
+                status: status,
+                notModify: notModify,
+                add: add,
+                update: update,
+                remove: remove
+            }
         },
         fetch: function (callback) {
             var $this = this;
             var params = {};
-            this.ajax(this.options.readUrl, params, function (data) {
+
+            Page.utils.ajax(this.options.readUrl, params, function (data) {
                 $this.data = data;
+                for (var i = 0; i < $this.data.length; i++) {
+                    var d = $this.data[i];
+                    d[status] = notModify;
+                    $this.options._dataMap[d[$this.options.model.id]] = d;
+                }
                 //TODO
                 callback()
             }, null);
@@ -54,22 +62,38 @@ define([], function () {
         sync: function (callback) {
             var $this = this;
             var params = {};
-            this.ajax(this.options.syncUrl, params, function (data) {
+            Page.utils.ajax(this.options.syncUrl, params, function (data) {
                 //TODO
                 callback()
             }, null);
         },
+        at: function (index) {
+            return this.options.data[index];
+        },
         readRecord: function (id) {
-
+            if (id == undefined) {
+                return this.options.data;
+            } else {
+                return this.options._dataMap[id];
+            }
         },
         deleteRecord: function (id) {
 
         },
         addRecord: function (record) {
-
+            var re = record;
+            re[status] = add;
+            this.options.data.push(re);
         },
         updateRecord: function (record) {
-
+            var re = record;
+            if (re[status] && re[status] != add) {
+                re[status] = update;
+            }
+            var r = this.options._dataMap[record[this.options.model.id]];
+            if(r) {
+                Object.merge(r, record);
+            }
         }
     });
     return DataSet;

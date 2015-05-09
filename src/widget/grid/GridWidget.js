@@ -6,15 +6,27 @@
  * id : 控件ID,如果不传则自动为控件生成一个ID,该ID会绑定在父元素上作为controller.
  * datas : [{}] 数据集合,形如: [{ZGH : '01113200','XM': '孟斌',XB : '1',XB_DISP : '男'},...]
  * cols : [{}] 数据列信息,形如:[{ENAME : 'ZGH',CNAME : '职工号'},{ENAME : 'XM',CNAME : '姓名'},...]
+ * hideCols : [] 隐藏的数据列,形如 ["WID","ZGH"]
+ * keyName : 数据集主键字段
+ * responsive : true/false 是否响应式表格
+ * loadOnInit : true/false 是否初始化时加载数据
  * checkbox : true/false 是否显示复选框
+ * pagination : 是否分页
+ * pager : {} 分页信息, 形如: {pageSize : 10,pageIndex : 2, total : 100, pages : 10}
+ * pageBlockSize : 分页条显示大小
  *
  * methods :
  * getSelected() : [{}] 返回选中的数据集合
+ * getData(pos) : 返回指定索引行数据信息
  * select(pos/key,checked) : 根据索引或者主键选中或取消记录
  * selectAll(checked) : 全选或全不选
  * add(datas) : 添加记录,可以传递对象或者对象数组
  * remove(pos/key) : 移除记录
  * update(datas) : 更新记录,可以传递对象或者对象数组
+ * showCol(ename,show) : 是否显示某列
+ * showPagination(show) : 是否显示分页条
+ * showCheckbox(show) : 是否显示复选框
+ * showResponsive(show) : 响应式表格
  *
  * events :
  * onSelectAll(checked) : 全选时触发
@@ -32,7 +44,18 @@
     Grid.prototype.DEFAULTS = {
         keyName : 'WID',
         checkbox : false,
-        pagination : false
+        pagination : false,
+        responsive : false,
+        loadOnInit : true,
+        pageBlockSize : 3,
+        datas : [],
+        cols : [],
+        hideCols : [],
+        pager : {
+            pages : 1,
+            pageIndex : 1,
+            pageSize : 10
+        }
     };
     $.fn.grid = function(){
         var option = arguments[0];
@@ -49,12 +72,22 @@
             if(typeof option == 'string'){
                 result = data[option].apply(data,args);
             }
+            if(!option){
+                result = data;
+            }
         });
         return result;
     };
 
     // 定义公开方法
     $.extend(Grid.prototype,{
+        /**
+         * 设置avalon属性,内部使用,不建议直接调用
+         * @param opts
+         */
+        setOpts : function(opts){
+            $.extend(this.vModel,opts);
+        },
         /**
          * 获取选中的记录
          * @returns 返回对象数组
@@ -113,7 +146,7 @@
          * @param data 可以传递下标索引(从0开始),也可以传递记录的主键值
          */
         remove : function(data){
-            if(!data){
+            if(data == undefined){
                 // 移除所有
                 this.vModel.datas.removeAll();
             }else{
@@ -160,6 +193,92 @@
                     }
                 }
             }
+        },
+        /**
+         * 重新加载数据,会根据条件进行查询
+         * @param opts
+         */
+        reload : function(opts){
+            opts = $.extend({},this.options,opts);
+            var url = opts.url;
+            if(!url){
+                return;
+            }
+            var fields = ["datas","cols","pager"];
+            $.ajax({
+                async : false,
+                url : url,
+                data : opts.param || "",
+                dataType : 'text',
+                type : 'POST',
+                success : function(resp){
+                    resp = eval("(" + resp + ")");
+                    for(var i=0;i<fields.length;i++){
+                        opts[fields[i]] = resp[fields[i]];
+                    }
+                }
+            });
+            if(this.vModel){
+                for(var i=0;i<fields.length;i++) {
+                    this.vModel[fields[i]] = opts[fields[i]];
+                }
+            }
+            this.options = opts;
+            // 重置复选框
+            $(this.container).find(":checkbox").prop("checked",false);
+        },
+        /**
+         * 根据索引获取指定行数据
+         * @param pos 行索引,从0开始
+         * @returns {*}
+         */
+        getData : function(pos){
+            if($.type(pos) != 'number'){
+                return null;
+            }
+            return this.vModel.datas.$model[pos];
+        },
+        /**
+         * 显示或隐藏列
+         * @param ename 列名
+         * @param show true/false 是否显示
+         */
+        showCol : function(ename,show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            var hideCols = this.vModel.hideCols;
+            if(show){
+                hideCols.remove(ename);
+            }else{
+                hideCols.ensure(ename);
+            }
+        },
+        /**
+         * 显示复选框
+         * @param show
+         */
+        showCheckbox : function(show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            this.setOpts({checkbox : show});
+        },
+        /**
+         * 是否显示分页
+         * @param show
+         */
+        showPagination : function(show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            this.setOpts({pagination : show});
+        },
+        showResponsive : function(show){
+            if($.type(show) != 'boolean'){
+                return;
+            }
+            this.setOpts({responsive : show});
         }
     });
 
@@ -170,15 +289,18 @@
             options.id = "_" + new Date().getTime(); // 如果没有传入ID则随机生成一个
         }
         options["$id"] = options.id + "-controller"; // controller默认构造规则,id-controller
+        if(options.loadOnInit == true){
+            grid.reload(options);
+        }
         var template = Grid.prototype.template; // 控件模板
         if(!template) {
             // 获取控件模板
             $.get("/page/src/widget/grid/GridWidget.html", function (html) {
                 Grid.prototype.template = html; // 缓存控件模板
-                parseTemplate(grid,html,options);
+                parseTemplate(grid,html,grid.options);
             },'html');
         }else{
-            parseTemplate(grid,template,options);
+            parseTemplate(grid,template,grid.options);
         }
     }
 
@@ -207,20 +329,45 @@
                 }
             }
         });
+
+        // 分页事件
+        $cont.delegate("ul.pagination [data-index]","click",function(){
+            var $obj = $(this);
+            var index = $obj.data("index");
+            if(index == 0){
+                return;
+            }
+            grid.reload({
+                pager : {
+                    pageIndex : index
+                }
+            })
+        });
     }
 
-    // 使用avalon绑定数据和模板
-    function parseTemplate(grid,template,model) {
+    // 解析选项,生成avalon数据模型
+    function prepareOptions(grid){
         var opts = grid.options;
-        $(grid.container).html(template).attr("ms-controller", opts["$id"]);// 设置容器为监听器
-        // 处理分页
-        if(opts.pagination == true && opts.pages > 1){
+        // 分页处理,显示当前页的前3条与后3条
+        if(opts.pagination == true && opts.pager.pages > 1) {
             var $pages = [];
-            for(var i=1;i<=opts.pages;i++){
+            var curPage = opts.pager.pageIndex;
+            var pages = opts.pager.pages;
+            for (var i = curPage; (i >= 1) && (curPage - i <= 3); i--) {
+                $pages.unshift(i);
+            }
+            for (var i = curPage + 1; (i <= pages) && (i - curPage <= 3); i++) {
                 $pages.push(i);
             }
             opts["$pages"] = $pages;
         }
+        return opts;
+    }
+
+    // 使用avalon绑定数据和模板
+    function parseTemplate(grid,template,model) {
+        var opts = prepareOptions(grid);
+        $(grid.container).html(template).attr("ms-controller", opts["$id"]);// 设置容器为监听器
         grid.vModel = avalon.define(model);
         avalon.scan(grid.container); // 扫描监听容器
     }

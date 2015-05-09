@@ -1,0 +1,48 @@
+<div ms-visible="show">
+    <table class="table">
+        <tr>
+            <th style="width: 20px">
+                <input type="checkbox" ms-duplex-checked="allChecked" ms-click="allClick(vid, this)">
+            </th>
+            <th ms-repeat="header">{{el.title}}</th>
+            <th>
+
+            </th>
+        </tr>
+        <tr ms-repeat-a="data">
+            <td>
+                <input type="checkbox" ms-duplex-checked="a['checked']" ms-click="checkMe(a, vid)">
+            </td>
+            <td ms-repeat="header">
+                <div ms-if="header[$index].type=='ctype'">
+                    {{a[header[$index].ctitle+"Display"]}}
+                </div>
+                <div ms-if="header[$index].type!='ctype'">
+                    {{a[header[$index].ctitle]}}
+                </div>
+            </td>
+            <td ms-attr-rowIndex="$index">
+                {{opColumn.template|html}}
+            </td>
+        </tr>
+    </table>
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

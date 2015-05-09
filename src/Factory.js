@@ -22,7 +22,8 @@ define([
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
     "./widget/form/combobox/ComboboxWidget",
-    "./widget/layout/BaseLayout"
+    "./widget/layout/BaseLayout",
+    "./widget/simple/SimpleGrid"
 ], function () {
     var allComps = arguments;
 
@@ -53,7 +54,9 @@ define([
     //**********************************
     var factory = new Factory();
     Array.each(allComps, function (c, index) {
-        factory.add(c.xtype, c);
+        if(c.xtype) {
+            factory.add(c.xtype, c);
+        }
     });
     return factory;
 });

@@ -1,23 +1,33 @@
-<div class="table-responsive">
+<div ms-class-table-responsive="responsive">
     <table class="table table-striped" ms-attr-id="{{id}}">
         <thead>
         <tr>
             <th ms-if="checkbox">
                 <input type="checkbox" name="chkAll">
             </th>
-            <th ms-repeat="cols">{{el.CNAME}}</th>
+            <th ms-repeat="cols" ms-if-loop="hideCols.indexOf(el.ENAME) < 0">{{el.CNAME}}</th>
         </tr>
         </thead>
         <tr ms-repeat-data="datas" ms-data-data="data" ms-attr-key="data[keyName]">
             <td ms-if="checkbox">
-                <input type="checkbox" name="chk" ms-duplex-checked="data['checked']">
+                <input type="checkbox" name="chk">
             </td>
-            <td ms-repeat-col="cols">{{data[col.ENAME + '_DISP'] || data[col.ENAME]}}</td>
+            <td ms-repeat-col="cols" ms-if-loop="hideCols.indexOf(col.ENAME) < 0">{{data[col.ENAME + '_DISP'] || data[col.ENAME]}}</td>
         </tr>
     </table>
-    <ul ms-if="pagination && pages > 1" class="pagination pagination-sm">
-        <li><a href="#">上一页</a></li>
-        <li ms-repeat="$pages" ms-class-active="pageIndex == el"><a href="#">{{el}}</a></li>
-        <li><a href="#">下一页</a></li>
-    </ul>
+    <div class="row" ms-if="pagination && pager.pages > 1">
+        <div class="col-md-4">
+            <div class="dataTables_info">
+                显示{{(pager.pageIndex - 1 ) * pager.pageSize}}到{{pager.pageIndex * pager.pageSize}} 条
+                共 {{pager.total}} 条
+            </div>
+        </div>
+        <div class="col-md-8">
+            <ul class="pagination pagination-sm pull-right" style="margin:0">
+                <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex > 1 ?pager.pageIndex - 1 : 0">上一页</a></li>
+                <li ms-repeat="$pages" ms-class-active="pager.pageIndex == el"><a href="javascript:;" ms-attr-data-index="el">{{el}}</a></li>
+                <li><a href="javascript:;" ms-attr-data-index="pager.pageIndex >= pager.pages ? 0 : pager.pageIndex + 1">下一页</a></li>
+            </ul>
+        </div>
+    </div>
 </div>

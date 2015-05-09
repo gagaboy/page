@@ -5,19 +5,26 @@
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
-            <div ms-attr-id="uuid">
-                <input class="form-control form-widget-to-focus-class" ms-duplex="value"
-                       ms-attr-readonly="status=='readonly'" ms-class="form-text:status=='readonly'"/>
-                <span class="glyphicon glyphicon-menu-down form-control-feedback" aria-hidden="true"
-                      style="pointer-events:auto; cursor: pointer" ms-on-click="select(vid, this)"></span>
+            <div class="" unselectable="on" title="" style="">
+                <div ms-class-div-focus="focused" ms-class="form-control" ms-click="comboBoxFocus(vid, this)">
+                    <ul ms-if="multi" style="margin: 0;padding: 0;border: 0;outline: 0;text-decoration: none;font-size: 100%;list-style: none;">
+                        <li class="" ms-repeat-item="selectItem" class="oni-combobox-multiselected" ms-hover="oni-combobox-multihover">
+                            <span ms-text="item.display"></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ms-click="removeItem(item.key, $event)"></span>
+                        </li>
+                    </ul>
+                    <input ms-css-width="_inputWidth" ms-attr-value="multi?'':display" style="border: 0px;" ms-on-blur="comboBoxBlur(vid, this)">
+                    <span class="glyphicon glyphicon-menu-down form-control-feedback" aria-hidden="true"
+                          style="pointer-events:auto; cursor: pointer" ms-on-click="select(vid, this)"></span>
+                </div>
+                <ul class="dropdown-menu" role="menu" style="min-width: 100%" ms-css-display="pullDownDisplay">
+                    <li role="presentation" ms-repeat="data">
+                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ms-click="selectValue(vid, el)">
+                            {{el.display}}
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <ul class="dropdown-menu" role="menu" style="min-width: 100%" ms-css-display="pullDownDisplay">
-                <li role="presentation" ms-repeat="data">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0)">
-                        {{el.display}}
-                    </a>
-                </li>
-            </ul>
         </td>
         <td class="form-icon-container">
             <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
