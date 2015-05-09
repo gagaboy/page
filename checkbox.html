@@ -16,9 +16,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="ibox-content" style="min-height: 200px">
-                <div >
+                <div>
                     <label ms-repeat="data" ms-click="chickCheck(el)">
-                        <div class="icheckbox_square-green checked"  ms-class-checked="el.clicked" style="position: relative;">
+                        <div class="icheckbox_square-green checked" ms-class-checked="el.clicked"
+                             style="position: relative;">
 
                         </div>
                         {{el.display}} &nbsp;&nbsp;&nbsp;
@@ -40,22 +41,22 @@
 <script src="bower_components/avalon/avalon.js"></script>
 <script>
     var vm = avalon.define({
-        $id:'checkCtrl',
-        data:[{
-            value:'1',
-            display:'足球',
-            clicked:false
-        },{
-            value:'2',
-            display:'台球',
-            clicked:false
+        $id: 'checkCtrl',
+        data: [{
+            value: '1',
+            display: '足球',
+            clicked: false
+        }, {
+            value: '2',
+            display: '台球',
+            clicked: false
         }],
-        value:[],
-        chickCheck:function(d){
+        value: [],
+        chickCheck: function (d) {
             d.clicked = !d.clicked;
             var value = [];
-            for(var i=0; i<vm.data.length;i++){
-                if(vm.data[i].clicked){
+            for (var i = 0; i < vm.data.length; i++) {
+                if (vm.data[i].clicked) {
                     value.push(vm.data[i].value);
                 }
             }
