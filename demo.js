@@ -44,7 +44,32 @@ require(["src/Bootstrap"], function () {
         label: '性别'
     })
     combo.render();
+    var checkbox = Page.create('checkbox',{
+        $parentId:"checkboxContainer",
+        id:'jtqk',
+        label:'checkbox',
+        data:[{value:'1231',display:'xsnr',clicked:true},{value:'321',display:'name',clicked:false}]
 
+    });
+    checkbox.render();
+
+    var radio =  Page.create('radio',{
+        $parentId:"radioContainer",
+        id:'xb',
+        label:'radio',
+        data:[{value:'1',display:'男',clicked:false},{value:'2',display:'女',clicked:false}]
+
+    });
+    radio.render();
+    var textarea = Page.create('textarea',{
+        $parentId:"textareaContainer",
+        id:'discript',
+        label:'textarea',
+        value:'dsfdsafasdfasdfasfd',
+        rows:5,
+        cols:3
+    });
+    textarea.render();
     var grid = Page.create("simpleGrid", {
         $id: 'grid',
         $parentId: 'simpleGrid',
