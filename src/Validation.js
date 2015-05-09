@@ -488,7 +488,7 @@ define([], function () {
         },
         _valNotEqualField:function(obj,params){
             if(obj&&params&&params.field1&&params.field2){
-                return this.checkNotEqualField(obj,params.field1,params.field2);
+                return this.checkNotEqualField(obj,params.field1,params.field2);//多值
             }
             return {"result":true};
         },
