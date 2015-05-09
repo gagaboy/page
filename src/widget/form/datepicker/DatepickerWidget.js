@@ -34,7 +34,7 @@ define(['../BaseFormWidget',
             widgetElement: "", // accordion容器
             formatErrorTip: "格式错误",
             onSelect:function(date,vmodel,data){
-                var cmp = Page.manager.components[vmodel.$id];
+                var cmp = Page.manager.components["datepicker123456"];
                 //cmp.fireEvent('onSelect', arguments);
                 cmp.fireEvent('onSelect');
             }
