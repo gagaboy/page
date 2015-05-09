@@ -6,7 +6,13 @@
     <link href="/page/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
+    <!--
+    <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="/page/src/css/page.css" rel="stylesheet">
+    -->
     <script src="/page/bower_components/jquery/dist/jquery.js"></script>
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="/page/lib/bootstrap/js/plugins/iCheck/icheck.min. "></script>
     <script>
         $.noConflict();
     </script>
@@ -18,7 +24,7 @@
                id : 'grid1',
                checkbox : true,
                 hideCols : ["WID"],
-               loadOnInit : true,
+               loadOnInit : false,
                pagination : true,
                url : "/page/src/widget/grid/test.json"
            });
