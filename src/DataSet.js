@@ -45,9 +45,9 @@ define([], function () {
             }
         },
         fetch: function (callback) {
+
             var $this = this;
             var params = {};
-
             Page.utils.ajax(this.options.readUrl, params, function (data) {
                 $this.data = data;
                 for (var i = 0; i < $this.data.length; i++) {
@@ -61,7 +61,7 @@ define([], function () {
         },
         sync: function (callback) {
             var $this = this;
-            var params = {};
+            var params = this.data;
             Page.utils.ajax(this.options.syncUrl, params, function (data) {
                 //TODO
                 callback()
@@ -78,7 +78,10 @@ define([], function () {
             }
         },
         deleteRecord: function (id) {
-
+            if(id) {
+                var r = this.readRecord(id);
+                r[status] = remove;
+            }
         },
         addRecord: function (record) {
             var re = record;
@@ -86,13 +89,18 @@ define([], function () {
             this.options.data.push(re);
         },
         updateRecord: function (record) {
-            var re = record;
-            if (re[status] && re[status] != add) {
-                re[status] = update;
+            var vid = this.options.model.id;
+            if(!vid) {
+                //error
+                window.console.log("纪录没有指定ID.");
+                return;
             }
-            var r = this.options._dataMap[record[this.options.model.id]];
+            var r = this.readRecord(record[vid]);
             if(r) {
                 Object.merge(r, record);
+                if(r[status] != add) {
+                    r[status] = update;
+                }
             }
         }
     });
