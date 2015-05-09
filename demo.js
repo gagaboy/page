@@ -25,9 +25,10 @@ require(["./src/Bootstrap"], function () {
     var datepicker = Page.create("datepicker", {
         $parentId: 'datepickerContainer',
         $id: 'datepicker123456',
-        time: '2015-04-28',
+        timer: 'true',
+        watermark:false,
         onSelect: function(date, vmodel, data) {
-            avalon.log("选中日期后的用户回调")
+            avalon.log("选中日期后的用户回调");
             avalon.log(arguments);
         }
     });
