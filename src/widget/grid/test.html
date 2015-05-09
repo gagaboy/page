@@ -24,17 +24,36 @@
            });
         });
 
-        jQuery(function(){
-            jQuery(".tools").delegate("[toggle]","click",function(){
-                var method = jQuery(this).data("method");
-                var arg = jQuery(this).data("arg");
-                var $grid = jQuery("#grid1Cont");
-                if(method == "showCol"){
-                    $grid.grid(method,"XM",arg);
+        function getArgs($obj){
+            var params = $obj.data();
+            var method = params["method"]; // 方法名
+            var args = []; // 获取参数数组
+            for(var i=1;i<10;i++){
+                if(params["arg" + i] != undefined){
+                    args.push(params["arg" + i]);
                 }else{
-                    $grid.grid(method,arg);
+                    break;
                 }
-                jQuery(this).attr("arg",!arg);
+            }
+            return [method,args];
+        }
+
+        jQuery(function(){
+            jQuery(".tools").delegate("button","click",function(){
+                var info = getArgs(jQuery(this));
+                var args = info[1];
+                var method = info[0]; // 方法名
+
+                var $grid = jQuery("#grid1Cont").grid();
+                $grid[method].apply($grid,args);
+                jQuery(this).data("arg" + args.length,!args[args.length - 1]);
+            });
+            jQuery(".methods").delegate("button","click",function(){
+                var info = getArgs(jQuery(this));
+                var args = info[1];
+                var method = info[0]; // 方法名
+                var $grid = jQuery("#grid1Cont").grid();
+                console.log($grid[method].apply($grid,args));
             });
         });
     </script>
@@ -48,10 +67,18 @@
         </div>
         <div class="row">
             <div class="col-md-12 tools">
-                <button type="button" class="btn btn-success" toggle data-method="showCheckbox" data-arg="false">切换复选框</button>
-                <button type="button" class="btn btn-success" toggle data-method="showPagination" data-arg="false">切换分页条</button>
-                <button type="button" class="btn btn-success" toggle data-method="showResponsive" data-arg="true">响应式表格</button>
-                <button type="button" class="btn btn-success" toggle data-method="showCol" data-arg="true">显示隐藏姓名列</button>
+                <button type="button" class="btn btn-success" data-method="showCheckbox" data-arg1="false">切换复选框</button>
+                <button type="button" class="btn btn-success" data-method="showPagination" data-arg1="false">切换分页条</button>
+                <button type="button" class="btn btn-success" data-method="showResponsive" data-arg1="true">响应式表格</button>
+                <button type="button" class="btn btn-success" data-method="showCol" data-arg1="XM" data-arg2="false">显示隐藏姓名列</button>
+                <button type="button" class="btn btn-success" data-method="selectAll" data-arg1="true">是否全选</button>
+                <button type="button" class="btn btn-success" data-method="select" data-arg1="1" data-arg2="true">选中第2行</button>
+            </div>
+        </div>
+        <div class="row" style="margin-top : 10px;">
+            <div class="col-md-12 methods">
+                <button type="button" class="btn btn-success" data-method="getSelected">获取选中行数据</button>
+                <button type="button" class="btn btn-success" data-method="remove" data-arg1="0">删除第一行</button>
             </div>
         </div>
     </div>
