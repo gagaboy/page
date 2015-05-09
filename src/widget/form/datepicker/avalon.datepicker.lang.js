@@ -1,6 +1,9 @@
+/**
+ * 日期控件语言包，目前只支持中文
+ */
 define(function() {
     var HolidayStyle = {
-        "元旦节" : {
+        "元旦" : {
             "afterTime": 3,
             "beforeTime": 3,
             "dayIndex": 0,
@@ -73,7 +76,7 @@ define(function() {
     };
     var HolidayData = {
         "2014-01-01": {
-            "holidayName": "元旦节"
+            "holidayName": "元旦"
         },
         "2014-01-30": {
             "holidayName": "除夕"
@@ -115,7 +118,7 @@ define(function() {
             "holidayName": "圣诞节"
         },
         "2015-01-01": {
-            "holidayName": "元旦节"
+            "holidayName": "元旦"
         },
         "2015-02-18": {
             "holidayName": "除夕"
