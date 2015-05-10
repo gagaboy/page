@@ -22,6 +22,7 @@ define([
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
     "./widget/form/combobox/ComboboxWidget",
+    "./widget/form/datepicker/DatepickerWidget",
     "./widget/layout/BaseLayout",
     "./widget/simple/SimpleGrid"
 ], function () {
