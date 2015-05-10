@@ -397,10 +397,11 @@ define(["./avalon.getModel",
                 calendar = avalon.parseHTML(calendarTemplate).firstChild
                 elementPar.insertBefore(calendar, element)
                 elementPar.insertBefore(element, calendar)
-                avalon(element).attr("ms-css-width", "width")
+                //avalon(element).attr("ms-css-width", "width")
                 vmodel.weekNames = calendarHeader()
 
                 if (element.tagName === "INPUT" && vmodel.type !== "range") {
+                    //todo 为了显示，需要把这个div去掉
                     var div = document.createElement("div")
                     div.className = "oni-datepicker-input-wrapper"
                     div.setAttribute("ms-class", "oni-datepicker-active:toggle")
@@ -409,7 +410,7 @@ define(["./avalon.getModel",
                     elementPar.insertBefore(div,element)
                     div.appendChild(element)
                     if (vmodel.showTip) {
-                        var tip = avalon.parseHTML("<div class='oni-datepicker-tip'>{{tip}}<i class='oni-icon oni-icon-calendar-o'>&#xf088;</i></div>")
+                        var tip = avalon.parseHTML("<div class='oni-datepicker-tip'>{{tip}}<i class='glyphicon glyphicon-calendar'></i></div>")
                         div.appendChild(tip)
                     } else {
                         element.style.paddingRight = "0px"
