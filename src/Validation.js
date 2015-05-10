@@ -330,7 +330,7 @@ define([], function () {
             //var complexRules = valRules[p];
             if(complexRules&&complexRules.length>0) {
                 //调用各工具方法
-                //错误信息组合（ ；区隔）
+                //错误信息组合（；区隔）
                 for(var t=0;t<complexRules.length;t++) {
                     var valRes = null;
                     if (complexRules[t]) {//complexRules[t]为false时直接不处理
