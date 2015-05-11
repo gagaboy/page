@@ -11,7 +11,7 @@
         "avalon": "bower_components/oniui/avalon"
 
     },
-    out: 'dist/page-builD.js'
+    out: 'dist/page-build.js'
     //baseUrl:"src",
     /*
     modules: [{
