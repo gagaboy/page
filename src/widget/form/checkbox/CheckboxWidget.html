@@ -1,0 +1,14 @@
+    <!--<label  ms-class="col-md-{{labelSpan}} form-label" ms-if="showLabel" > {{label}}</label>-->
+    <!--<div ms-class="col-sm-{{12-labelSpan}}"  >-->
+        <!--<label ms-class="checkbox-inline i-checks" ms-repeat-a="data" >-->
+            <!--<input type="checkbox" ms-duplex-checked="a['checked']" ms-attr-val="a.value" ms-attr-display="a.display" ms-attr-checked="a.checked"> {{a.display}}-->
+        <!--</label>-->
+    <!--</div>-->
+    <label  ms-class="col-md-{{labelSpan}} form-label" ms-if="showLabel" > {{label}}</label>
+    <div ms-class="col-sm-{{12-labelSpan}}"  >
+        <label  ms-repeat-a="data"  ms-click="clickCheck(a)">
+            <div class="icheckbox_square-green checked"  ms-class-checked="a.clicked" style="position: relative;">
+            </div>
+            {{a.display}} &nbsp;&nbsp;&nbsp;
+        </label>
+    </div>
