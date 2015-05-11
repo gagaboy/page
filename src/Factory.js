@@ -23,7 +23,10 @@ define([
     "./widget/form/input/InputWidget",
     "./widget/form/combobox/ComboboxWidget",
     "./widget/layout/BaseLayout",
-    "./widget/simple/SimpleGrid"
+    "./widget/simple/SimpleGrid",
+    "./widget/form/checkbox/CheckboxWidget",
+    "./widget/form/radio/RadioWidget",
+    "./widget/form/textarea/TextareaWidget"
 ], function () {
     var allComps = arguments;
 
