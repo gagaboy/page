@@ -74,11 +74,41 @@ define(['../BaseFormWidget',
         },
         initialize: function (opts) {
             this.options.$opts=mergeUserConfigs(opts);
+            //默认可以通过下拉框选择月份或者年份
+            this.options.$opts["changeMonthAndYear"]=true;
             this.parent(opts);
         },
         //返回日期控件的模板
         getTemplate: function () {
             return template;
+        },
+        _getInputElement: function () {
+            return jQuery(this.getElement()).find("input.form-widget-to-focus-class");
+        },
+        focus: function () {
+            var input = this._getInputElement();
+            input.focus();
+        },
+        blur: function () {
+            var input = this._getInputElement();
+            input.blur();
+        },
+        validate: function () {
+            //var valRes = Page.validation.validateValue(this.getValue(),this.getAttr("validationRules"));
+            var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
+
+            var valRes = null;
+            if (this.getAttr("required")) {//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue(), 1);
+            }
+            if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
+                valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
+            }
+            if (valRes && !valRes.result) {//将错误信息赋值给属性
+                this.setAttr("errorMessage", valRes.errorMsg);
+            } else {//清空错误信息
+                this.setAttr("errorMessage", "");
+            }
         }
     });
 
