@@ -42,6 +42,8 @@ require(["src/Bootstrap"], function () {
         $parentId: 'comboboxContainer',
         $id: 'sex',
         label: '性别'
+        //,
+        //multi: true
     })
     combo.render();
     var checkbox = Page.create('checkbox',{
@@ -58,7 +60,6 @@ require(["src/Bootstrap"], function () {
         id:'xb',
         label:'radio',
         data:[{value:'1',display:'男',clicked:false},{value:'2',display:'女',clicked:false}]
-
     });
     radio.render();
     var textarea = Page.create('textarea',{
