@@ -18,13 +18,11 @@ define(['../BaseFormWidget',
         startDay: 1, //@config 设置每一周的第一天是哪天，0代表Sunday，1代表Monday，依次类推, 默认从周一开始
         minute: 0, //@config 设置time的默认minute
         hour: 0, //@config 设置time的hour
-        width: 90, //@config 设置日历框宽度
         showTip: true, //@config 是否显示节日提示
         disabled: false, //@config 是否禁用日历组件
         changeMonthAndYear: false, //@config 是否可以通过下拉框选择月份或者年份
         showOtherMonths: false, //@config 是否显示非当前月的日期
         numberOfMonths: 1, //@config 一次显示的日历月份数, 默认一次显示一个
-        allowBlank: false, //@config 是否允许日历框为空
         minDate: null, //@config 最小的可选日期，可以配置为Date对象，也可以是yyyy-mm-dd格式的字符串，或者当分隔符是“/”时，可以是yyyy/mm/dd格式的字符串
         maxDate: null, //@config 最大的可选日期，可以配置为Date对象，也可以是yyyy-mm-dd格式的字符串，或者当分隔符是“/”时，可以是yyyy/mm/dd格式的字符串
         stepMonths: 1, //@config 当点击next、prev链接时应该跳过几个月份, 默认一个月份
@@ -76,6 +74,10 @@ define(['../BaseFormWidget',
             this.options.$opts=mergeUserConfigs(opts);
             //默认可以通过下拉框选择月份或者年份
             this.options.$opts["changeMonthAndYear"]=true;
+            //将“required”属性映射为avalon datepicker能够识别的"allowBlank"属性
+            if(opts.hasOwnProperty("required")){
+                this.options.$opts["allowBlank"]=!opts["required"];
+            }
             this.parent(opts);
         },
         //返回日期控件的模板
