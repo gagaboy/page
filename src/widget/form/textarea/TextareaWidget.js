@@ -1,11 +1,11 @@
-define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./ TextareaWidget.css'],function(BaseFormWidget, template){
+define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget.css'],function(BaseFormWidget, template){
     var xtype = "textarea";
     var TextareaWidget = new Class({
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            rows: '',//Õ¼¼¸ÐÐ ²ÎÊýÔÝÊ±ÎÞÐ§
-            cols:''//²ÎÊýÔÝÊ±ÎÞÐ§
+            rows: '',//Õ¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ð§
+            cols:''//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ð§
         },
         initialize: function (opts) {
             var rows = opts.rows;

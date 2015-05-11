@@ -1,13 +1,13 @@
-define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./ CheckboxWidget.css'],function(BaseFormWidget, template){
+define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget.css'], function (BaseFormWidget, template) {
     var xtype = "checkbox";
     var CheckboxWidget = new Class({
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            rowcols: 1,//Ã¿ÐÐÏÔÊ¾ÁÐÊý
-            data: [],//Õ¹Ê¾µÄÊý¾Ý
-            allchecked:false,
-            clickCheck:function(d){
+            rowcols: 1,//Ã¿ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+            data: [],//Õ¹Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
+            allchecked: false,
+            clickCheck: function (d) {
                 d.clicked = !d.clicked;
             }
         },
@@ -23,35 +23,35 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./ CheckboxWidge
         getTemplate: function () {
             return template;
         },
-        getOptions : function(){
+        getOptions: function () {
             var d = this.getAttr('data');
             var arr = [];
-            for(var i =0;i< d.length;i++){
-                if(d[i].clicked){
+            for (var i = 0; i < d.length; i++) {
+                if (d[i].clicked) {
                     var one_arr = [];
-                    one_arr.push("value:"+d[i].value);
-                    one_arr.push("display:"+d[i].display);
+                    one_arr.push("value:" + d[i].value);
+                    one_arr.push("display:" + d[i].display);
                     arr.push(one_arr);
                 }
             }
             return arr;
         },
-        getValue:function(){
+        getValue: function () {
             var d = this.getAttr('data');
-            var values=[];
-            for(var i =0;i< d.length;i++){
-                if(d[i].clicked){
+            var values = [];
+            for (var i = 0; i < d.length; i++) {
+                if (d[i].clicked) {
                     values.push(d[i].value);
                     //values+=d[i].value+','
                 }
             }
             return values;
         },
-        setValue:function(key,clicked){
+        setValue: function (key, clicked) {
             var d = this.getAttr('data');
-            for(var i =0;i< d.length;i++){
-                if(d[i].value == key){
-                    d[i].clicked=clicked;
+            for (var i = 0; i < d.length; i++) {
+                if (d[i].value == key) {
+                    d[i].clicked = clicked;
                 }
             }
             return;

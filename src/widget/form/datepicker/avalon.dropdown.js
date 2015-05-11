@@ -12,13 +12,13 @@
  <li>3，通过配置，可以让下拉框自动识别在屏幕中的位置，来调整向上或者向下显示</li>
  </ul>
  */
-define(["avalon",
+define([
     "text!./avalon.dropdown.html",
     "./avalon.getModel",
     "./avalon.scrollbar",
     "css!./oniui-common.css",
     "css!./avalon.dropdown.css"
-], function(avalon, template) {
+], function( template) {
     var styleReg = /^(\d+).*$/;
     var ie6=!-[1,]&&!window.XMLHttpRequest;
     var widget = avalon.ui.dropdown = function(element, data, vmodels) {
