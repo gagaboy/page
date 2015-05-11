@@ -1,4 +1,4 @@
-define(["avalon"], function(avalon) {
+define([], function() {
     function getChildVM(expr, vm, strLen) {
         var t = vm, pre, _t;
         for (var i = 0, len = expr.length; i < len; i++) {

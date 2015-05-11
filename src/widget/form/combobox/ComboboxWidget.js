@@ -1,21 +1,18 @@
 /**
  * Created by JKYANG on 15/4/23.
  */
-//define(['../BaseFormWidget', 'text!./ComboBoxWidget.html', 'css!./ComboBoxWidget.css'], function (BaseFormWidget, template) {
-define(['../BaseFormWidget', 'text!./ComboBoxWidget.html', 'css!./ComboBoxWidget.css'], function (BaseFormWidget, template) {
+define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'], function (BaseFormWidget, template) {
+//define(['../BaseFormWidget', 'text!./nnn.html', 'css!./ComboboxWidget.css'], function (BaseFormWidget, template) {
     var xtype = "combobox";
     var ComboBoxWidget = new Class({
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
             showPulldown: false,
-            pullDownDisplay: "",
-            data1: [{value: '1', display: '333'}, {value: '2', display: '2'}],
             pullDownDisplay: null,
             focused: false,
             multi: false,
-            _inputWidth: 25,
-            data: [{value: '1', display: '333'}, {value: '2', display: '2'}],
+            data: null,
             selectedItem: null,
             value: null,
             display: null,
@@ -24,53 +21,73 @@ define(['../BaseFormWidget', 'text!./ComboBoxWidget.html', 'css!./ComboBoxWidget
                 vm.showPulldown = !vm.showPulldown;
                 vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
             },
-            selectValue: function(vid, data) {
+            selectItem: function (vid, data) {
                 var vm = avalon.vmodels[vid];
-                vm.selectedItem = data;
-                vm.value = data.value;
-                vm.display = data.display;
-                if(!vm.multi) {
+                if (vm.multi) {
+                    var contains = false;
+                    for (var i = 0, len = vm.selectedItem.length; i < len; i++) {
+                        if (vm.selectedItem[i].value == data.value) {
+                            contains = true;
+                            break;
+                        }
+                    }
+                    if (!contains) {
+                        vm.selectedItem.push(data);
+                        vm.value.push(data.value);
+                        vm.display.push(data.display);
+                    }
+                }
+                else {
+                    vm.selectedItem = data;
+                    vm.value = data.value;
+                    vm.display = data.display;
                     vm.showPulldown = false;
                     vm.pullDownDisplay = "none";
                 }
             },
+            removeItem: function (vid, data) {
+                var vm = avalon.vmodels[vid];
+                vm.selectedItem.remove(data);
+                vm.value.remove(data.value);
+                vm.display.remove(data.display);
+            },
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                span.getElement("input").focus();
+                jQuery(span).find('input').focus();
             },
             comboBoxBlur: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = false;
-                //vm.showPulldown = false;
-                //vm.pullDownDisplay = "none";
+                vm.showPulldown = false;
+                vm.pullDownDisplay = "none";
             }
         },
         initialize: function (opts) {
             if (opts) {
                 // TODO initData
 
-                if(opts.data && opts.value) {
-                    if(opts.multi) {
-                        opts.display = [];
-                        opts.selectedItem = [];
-                        for (var s in opts.value) {
-                            for (var o in opts.data) {
-                                if (s == o.value) {
-                                    opts.display.push(o.display);
-                                    opts.selectedItem.push(o);
-                                    break;
-                                }
+                if (opts.multi) {
+                    opts.value = opts.value || [];
+                    opts.selectedItem = [];
+                    opts.display = [];
+                    for (var i = 0, valueLen = opts.value.length; i < valueLen; i++) {
+                        for (var j = 0, dataLen = opts.data.length; j < dataLen; j++) {
+                            if (opts.value[i] == opts.data[j].value) {
+                                opts.display.push(opts.data[j].display);
+                                opts.selectedItem.push(opts.data[j]);
+                                break;
                             }
                         }
                     }
-                    else {
-                        for (var o in opts.data) {
-                            if (opts.value == o.value) {
-                                opts.display = o.display;
-                                opts.selectedItem = o;
-                                break;
-                            }
+                }
+                else {
+                    opts.value = opts.value || null;
+                    for (var o in opts.data) {
+                        if (opts.value == o.value) {
+                            opts.display = o.display;
+                            opts.selectedItem = o;
+                            break;
                         }
                     }
                 }
@@ -85,7 +102,8 @@ define(['../BaseFormWidget', 'text!./ComboBoxWidget.html', 'css!./ComboBoxWidget
             inputWidth = value.length * 7 + 25;
         },
         _getInputElement: function () {
-            var input = this.getElement()[0].getElement("input.comboBoxInput");
+            //var input = this.getElement()[0].getElement("input.comboBoxInput");
+            var input = this.getElement().find('input.comboBoxInput');
             return input;
         },
         focus: function () {

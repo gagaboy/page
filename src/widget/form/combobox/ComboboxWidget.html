@@ -5,21 +5,22 @@
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
-            <div class="" unselectable="on" title="" style="">
-                <div ms-class-div-focus="focused" ms-class="form-control" ms-click="comboBoxFocus(vid, this)">
+            <div>
+                <div ms-class-div-focus="focused" class="form-control" ms-click="comboBoxFocus(vid, this)">
                     <ul ms-if="multi" style="margin: 0;padding: 0;border: 0;outline: 0;text-decoration: none;font-size: 100%;list-style: none;">
-                        <li class="" ms-repeat-item="selectItem" class="oni-combobox-multiselected" ms-hover="oni-combobox-multihover">
+                        <li ms-repeat-item="selectedItem" style="float: left">
                             <span ms-text="item.display"></span>
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ms-click="removeItem(item.key, $event)"></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ms-click="removeItem(vid, item)"></span>
                         </li>
                     </ul>
-                    <input ms-css-width="_inputWidth" ms-attr-value="multi?'':display" style="border: 0px;" ms-on-blur="comboBoxBlur(vid, this)">
+                    <input ms-css-width="display ? ((display.length * 7 + 25) > 163 ? 163 : display.length * 7 + 25) : 25" ms-attr-value="multi ? '' : display" style="outline: none;border: none;"
+                           ms-on-blur="comboBoxBlur(vid, this)">
                     <span class="glyphicon glyphicon-menu-down form-control-feedback" aria-hidden="true"
                           style="pointer-events:auto; cursor: pointer" ms-on-click="select(vid, this)"></span>
                 </div>
                 <ul class="dropdown-menu" role="menu" style="min-width: 100%" ms-css-display="pullDownDisplay">
                     <li role="presentation" ms-repeat="data">
-                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ms-click="selectValue(vid, el)">
+                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ms-on-mousedown="selectItem(vid, el)">
                             {{el.display}}
                         </a>
                     </li>

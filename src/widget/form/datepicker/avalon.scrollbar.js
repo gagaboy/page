@@ -4,7 +4,7 @@
  * @introduce
  *  <p> 自定义滚动条样式，绑定ms-widget="scrollbar"的元素内必须包含一个class="oni-scrollbar-scroller"的视窗元素</p>
  */
-define(["avalon", "text!./avalon.scrollbar.html", "./avalon.draggable", "css!./avalon.scrollbar.css", "css!./oniui-common.css"], function(avalon, template) {
+define([ "text!./avalon.scrollbar.html", "./avalon.draggable", "css!./avalon.scrollbar.css", "css!./oniui-common.css"], function( template) {
 
     // get by className, not strict
     function getByClassName(cname, par) {
