@@ -52,13 +52,18 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.value.remove(data.value);
                 vm.display.remove(data.display);
             },
-            inputValue: function (vid, span) {
+            keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
                 var maxWidth = jQuery(this).parent().width();
                 if (vm.multi) {
-                    var selected = jQuery(this).parent().find("li");
+                    if (e.keyCode == 8 && jQuery(this).val() == "") {
+                        vm.selectedItem.pop();
+                        vm.value.pop();
+                        vm.display.pop();
+                    }
+                    var selected = jQuery(this).parent().find("div");
                     for (var i = 0, len = selected.length; i < len; i++) {
-                        maxWidth = maxWidth - jQuery(selected[i]).width();
+                        maxWidth = maxWidth - selected[i].offsetWidth - 8;
                     }
                 }
                 var inputWidth = jQuery(this).val().length * 7 + 25;
@@ -70,7 +75,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                jQuery(span).find('input').focus();
+                jQuery(this).find('input').focus();
             },
             comboBoxBlur: function (vid, span) {
                 var vm = avalon.vmodels[vid];
@@ -118,7 +123,6 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _valueChange: function (value) {
             this.setAttr("display", value);
-            inputWidth = value.length * 7 + 25;
         },
         _getInputElement: function () {
             //var input = this.getElement()[0].getElement("input.comboBoxInput");
@@ -127,7 +131,6 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         focus: function () {
             //console to invoke this method is not ok...
-            alert(111);
             var input = this._getInputElement();
             avalon.nextTick(function () {
                 input.focus();
