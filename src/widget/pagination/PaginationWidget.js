@@ -32,10 +32,10 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 var vm = avalon.vmodels[vid];
                 vm.goPage(vid, vm.totalPage);
             },
-            goPreviousPage: function () {
+            goPreviousPage: function (vid) {
                 var vm = avalon.vmodels[vid];
                 if (vm.pageIndex > 1) {
-                    vm.goPage(vm.pageIndex - 1);
+                    vm.goPage(vid,vm.pageIndex - 1);
                 }
             },
             goNextPage: function (vid) {
@@ -81,7 +81,7 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
         },
         _calculateTotalPage: function () {
             if (this.getAttr("totalNum") && this.getAttr("pageSize")) {
-                var _totalPage = this.getAttr("totalNum") % this.getAttr("pageSize") == 0 ? (this.getAttr("totalNum") / this.getAttr("pageSize")) : (this.getAttr("totalNum") / this.getAttr("pageSize") + 1)
+                var _totalPage = this.getAttr("totalNum") % this.getAttr("pageSize") == 0 ? (this.getAttr("totalNum") / this.getAttr("pageSize")) : parseInt(this.getAttr("totalNum") / this.getAttr("pageSize")) + 1
                 this.setAttr("totalPage",_totalPage);
             }
         },
