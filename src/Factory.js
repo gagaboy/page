@@ -24,7 +24,10 @@ define([
     "./widget/form/combobox/ComboboxWidget",
     "./widget/form/datepicker/DatepickerWidget",
     "./widget/layout/BaseLayout",
-    "./widget/simple/SimpleGrid"
+    "./widget/simple/SimpleGrid",
+    "./widget/form/checkbox/CheckboxWidget",
+    "./widget/form/radio/RadioWidget",
+    "./widget/form/textarea/TextareaWidget"
 ], function () {
     var allComps = arguments;
 

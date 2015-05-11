@@ -1,0 +1,19 @@
+<!--<div  ms-class="form-group">-->
+
+    <!--<label  ms-class="col-md-{{labelSpan}} form-label" ms-if="showLabel" > {{label}}</label>-->
+    <!--<div ms-class="col-sm-{{12-labelSpan}}" >-->
+        <!--<label ms-class="checkbox-inline i-checks" ms-repeat-a="data" >-->
+            <!--<input type="radio"  ms-attr-name="{{id}}" ms-duplex-checked="a['checked']" > {{a.display}}-->
+        <!--</label>-->
+    <!--</div>-->
+<!--</div>-->
+
+<label  ms-class="col-md-{{labelSpan}} form-label" ms-if="showLabel" > {{label}}</label>
+<div ms-class="col-sm-{{12-labelSpan}}"  >
+    <label  ms-repeat-a="data"  ms-click="clickCheck(a,data)">
+            <div class="iradio_square-green  checked"  ms-class-checked="a.clicked" style="position: relative;">
+
+            </div>
+        {{a.display}} &nbsp;&nbsp;&nbsp;
+    </label>
+</div>
