@@ -4,57 +4,126 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            rowcols: 1,//ÿ����ʾ����
-            data: [],//չʾ�����
-            allchecked: false,
-            clickCheck: function (d) {
+            cols: 3,//布局列数
+            data: [],//选项
+            //valueFiled:"value",//值字段
+            //textFiled:"display",//显示字段
+            //showAllcheckBtn: false,//提供全选按钮
+            data: [{
+                value: '1',
+                display: '足球',
+                clicked: false
+            }, {
+                value: '11',
+                display: '足球1',
+                clicked: false
+            }, {
+                value: '12',
+                display: '足球2',
+                clicked: false
+            }, {
+                value: '13',
+                display: '足球3',
+                clicked: false
+            }, {
+                value: '2',
+                display: '台球',
+                clicked: false
+            }, {
+                value: '21',
+                display: '台球1',
+                clicked: false
+            }, {
+                value: '22',
+                display: '台球2',
+                clicked: false
+            }, {
+                value: '23',
+                display: '台球3',
+                clicked: false
+            }, {
+                value: '24',
+                display: '台球4',
+                clicked: false
+            }, {
+                value: '25',
+                display: '台球5',
+                clicked: false
+            }],
+            value: [],
+            itemCheck: function (vid,d) {
+                var vm = avalon.vmodels[vid];
                 d.clicked = !d.clicked;
+                vm.setValueByData(vid);
+            },
+            setValueByData:function(vid){
+                var vm = avalon.vmodels[vid];
+                var value = [];
+                for (var i = 0; i < vm.data.length; i++) {
+                    if (vm.data[i].clicked) {
+                        value.push(vm.data[i].value);
+                    }
+                }
+                vm.value = value;
             }
         },
         initialize: function (opts) {
-            var d = opts.data;
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked == undefined) {
-                    d[i].clicked = false;
-                }
-            }
             this.parent(opts);
+            this._setValueByData();
         },
         getTemplate: function () {
             return template;
         },
-        getOptions: function () {
-            var d = this.getAttr('data');
-            var arr = [];
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked) {
-                    var one_arr = [];
-                    one_arr.push("value:" + d[i].value);
-                    one_arr.push("display:" + d[i].display);
-                    arr.push(one_arr);
+        setValue: function (valueArr) {
+            //重写
+            if(valueArr&&this.getAttr("data")){
+                var items = this.getAttr("data");
+                this.setAttr("value",valueArr);
+                for (var i = 0; i < items.length; i++) {//清楚原选项
+                    items[i].clicked = false;
+                }
+                for (var t = 0; t < valueArr.length; t++) {//设置新的值
+                    var valueT = valueArr[t];
+                    for (var i = 0; i < items.length; i++) {
+                        if (valueT==items[i].value) {
+                            items[i].clicked = true;
+                        }
+                    }
                 }
             }
-            return arr;
         },
-        getValue: function () {
-            var d = this.getAttr('data');
+        getCheckedDetail:function(){
+            //获取所选选项详情
+        },
+        checkAll:function(){
+            var datas = this.getAttr("data");
             var values = [];
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked) {
-                    values.push(d[i].value);
-                    //values+=d[i].value+','
-                }
+            for (var i = 0; i < datas.length; i++) {
+                datas[i].clicked = true;
+                values.push(datas[i].value);
             }
-            return values;
+            this.setAttr("value",values);
         },
-        setValue: function (key, clicked) {
-            var d = this.getAttr('data');
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].value == key) {
-                    d[i].clicked = clicked;
+        deCheckAll:function(){
+            var datas = this.getAttr("data");
+            for (var i = 0; i < datas.length; i++) {
+                datas[i].clicked = false;
+            }
+            this.setAttr("value",[]);
+        },
+        _itemCheck: function (item) {
+            item.clicked = !item.clicked;
+            this._setValueByData();
+        },
+        _setValueByData:function(){
+            var datas = this.getAttr("data");
+            var values = [];
+            for (var i = 0; i < datas.length; i++) {
+                if (datas[i].clicked) {
+                    values.push(datas[i].value);
                 }
             }
-            return;
+            this.setAttr("value",values);
         }
     });
     CheckboxWidget.xtype = xtype;

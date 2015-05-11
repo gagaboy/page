@@ -9,20 +9,26 @@
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
     <link href="/page/src/css/page.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
 </head>
 <body>
 <br>
+
 <div class="container">
     <div class="row">
         <div class="ibox float-e-margins">
+
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-12" id="simplePager">
+                    <div class="col-md-4" id="comboboxContainer">
 
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 <script src="/page/bower_components/mootools/dist/mootools-core.js"></script>
@@ -32,16 +38,12 @@
 </script>
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
-
     require(["../../../page/src/Bootstrap"], function () {
-        var pagination = Page.create("pagination", {
-            $parentId: 'simplePager',
-            totalNum:20,
-            pageChangeEvent:function(pager){
-                pager.setAttr("totalNum",133);
-            }
+        var checkbox = Page.create('checkbox', {
+            $parentId: 'comboboxContainer',
+            label: '性别'
         });
-        pagination.render();
+        checkbox.render();
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
