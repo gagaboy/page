@@ -93,7 +93,6 @@ define(["./DataConstant"], function (Constant) {
                     var cvalue = $this.childDS[v].getValue();
                     value[v] = cvalue;
                 }
-
             });
             this.options.model.refAlias.each(function (v, i) {
                 if($this.refDS[v]){
@@ -106,14 +105,16 @@ define(["./DataConstant"], function (Constant) {
         },
         updateRecord: function (value) {
             var r = this.options.data;
+            this.fireEvent("beforeUpdateRecord",[value, r]);
             Object.merge(r, value);
-            if (r[status] != this.options.model.add) {
-                r[status] = this.options.model.update;
+            if (r[this.options.model.status] != this.options.model.add) {
+                r[this.options.model.status] = this.options.model.update;
             }
+            this.fireEvent("afterUpdateRecord",[value]);
         },
         deleteRecord: function () {
             var r = this.options.data;
-            r[status] = this.options.model.remove;
+            r[this.options.model.status] = this.options.model.remove;
         }
     });
     DataValue.xtype = xtype;

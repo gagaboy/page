@@ -104,6 +104,7 @@ define(["./DataConstant"], function (Constant) {
                 var r = this.readRecord(id);
                 if (r) {
                     var status = r.options.data[this.options.model.status];
+                    this.fireEvent("beforeDeleteRecord", [r]);
                     if (status == this.options.model.add) {
                         //real delete
                         this.options._dataArray.erase(r);
@@ -111,6 +112,7 @@ define(["./DataConstant"], function (Constant) {
                     } else {
                         r.changeStatus(this.options.model.remove);
                     }
+                    this.fireEvent("afterDeleteRecord", [r]);
                 }
             } else {
                 window.console.log("没有找到指定ID的纪录.");
@@ -125,11 +127,13 @@ define(["./DataConstant"], function (Constant) {
             }
             var rid = record[this.options.model.id];
             if (rid) {
+                this.fireEvent("beforeAddRecord", [r]);
                 var dv = Page.create("dataValue", {
                     data: record
                 });
                 this.options._dataMap[rid] = dv;
                 this.options._dataArray.push(dv);
+                this.fireEvent("afterAddRecord", [r]);
             } else {
                 window.console.log("纪录没有指定ID.");
             }
