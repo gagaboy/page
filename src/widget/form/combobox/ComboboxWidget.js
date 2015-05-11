@@ -12,6 +12,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             pullDownDisplay: null,
             focused: false,
             multi: false,
+            inputWidth: 25,
             data: null,
             selectedItem: null,
             value: null,
@@ -51,6 +52,21 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.value.remove(data.value);
                 vm.display.remove(data.display);
             },
+            inputValue: function (vid, span) {
+                var vm = avalon.vmodels[vid];
+                var maxWidth = jQuery(this).parent().width();
+                if (vm.multi) {
+                    var selected = jQuery(this).parent().find("li");
+                    for (var i = 0, len = selected.length; i < len; i++) {
+                        maxWidth = maxWidth - jQuery(selected[i]).width();
+                    }
+                }
+                var inputWidth = jQuery(this).val().length * 7 + 25;
+                if (inputWidth > maxWidth) {
+                    inputWidth = maxWidth;
+                }
+                vm.inputWidth = inputWidth;
+            },
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
@@ -89,6 +105,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                             opts.selectedItem = o;
                             break;
                         }
+                    }
+                    if (opts.display) {
+                        opts.inputWidth = opts.display.length * 7 + 25;
                     }
                 }
             }
