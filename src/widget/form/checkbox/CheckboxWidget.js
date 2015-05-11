@@ -54,6 +54,10 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
                 d.clicked = !d.clicked;
+                vm.setValueByData(vid);
+            },
+            setValueByData:function(vid){
+                var vm = avalon.vmodels[vid];
                 var value = [];
                 for (var i = 0; i < vm.data.length; i++) {
                     if (vm.data[i].clicked) {
@@ -65,6 +69,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         },
         initialize: function (opts) {
             this.parent(opts);
+            this._setValueByData();
         },
         getTemplate: function () {
             return template;
@@ -73,7 +78,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             //重写
             if(valueArr&&this.getAttr("data")){
                 var items = this.getAttr("data");
-                this.setAttr("value",[]);
+                this.setAttr("value",valueArr);
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     items[i].clicked = false;
                 }
@@ -91,20 +96,34 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             //获取所选选项详情
         },
         checkAll:function(){
-
+            var datas = this.getAttr("data");
+            var values = [];
+            for (var i = 0; i < datas.length; i++) {
+                datas[i].clicked = true;
+                values.push(datas[i].value);
+            }
+            this.setAttr("value",values);
         },
-        _dataChange:function(){
-
+        deCheckAll:function(){
+            var datas = this.getAttr("data");
+            for (var i = 0; i < datas.length; i++) {
+                datas[i].clicked = false;
+            }
+            this.setAttr("value",[]);
+        },
+        _itemCheck: function (item) {
+            item.clicked = !item.clicked;
+            this._setValueByData();
         },
         _setValueByData:function(){
             var datas = this.getAttr("data");
-            this.setAttr("value",[]);
+            var values = [];
             for (var i = 0; i < datas.length; i++) {
                 if (datas[i].clicked) {
-                    value.push(vm.data[i].value);
+                    values.push(datas[i].value);
                 }
             }
-            vm.value = value;
+            this.setAttr("value",values);
         }
     });
     CheckboxWidget.xtype = xtype;
