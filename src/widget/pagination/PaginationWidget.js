@@ -32,10 +32,10 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 var vm = avalon.vmodels[vid];
                 vm.goPage(vid, vm.totalPage);
             },
-            goPreviousPage: function () {
+            goPreviousPage: function (vid) {
                 var vm = avalon.vmodels[vid];
                 if (vm.pageIndex > 1) {
-                    vm.goPage(vm.pageIndex - 1);
+                    vm.goPage(vid,vm.pageIndex - 1);
                 }
             },
             goNextPage: function (vid) {
