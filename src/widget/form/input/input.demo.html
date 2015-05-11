@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link href="/page1/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/page1/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="/page1/lib/bootstrap/css/animate.css" rel="stylesheet">
-    <link href="/page1/lib/bootstrap/css/style.css" rel="stylesheet">
-    <link href="/page1/src/css/page.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="/page/src/css/page.css" rel="stylesheet">
 </head>
 <body>
 <br>
@@ -56,12 +56,12 @@
 
     </div>
 </div>
-<script src="/page1/bower_components/mootools/dist/mootools-core.js"></script>
-<script src="/page1/bower_components/jquery/dist/jquery.js"></script>
+<script src="/page/bower_components/mootools/dist/mootools-core.js"></script>
+<script src="/page/bower_components/jquery/dist/jquery.js"></script>
 <script>
     $.noConflict();
 </script>
-<script src="/page1/bower_components/avalon/avalon.js"></script>
+<script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     function valForm(){
         var validateTool = Page.create("validation",{onlyError:true});//后续由系统统一创建，只需调用即可
@@ -82,6 +82,12 @@
                 "field1": "username",
                 "field2": "phone"
             }
+//            ,
+//            {
+//                "ruleId": "greaterThan",
+//                "field1": "username",
+//                "field2": "phone"
+//            }
         ];
         //进行校验
         var valRes = validateTool.validateObject(formValues,formRules);
@@ -91,7 +97,7 @@
             alert("校验结果："+JSON.stringify(valRes.errorMsg));
         }
     }
-    require(["../../../page1/src/Bootstrap"], function () {
+    require(["../../../page/src/Bootstrap"], function () {
         var inp = Page.create("input", {
             $parentId: 'nameContainer',
             value: '',
@@ -106,7 +112,8 @@
                     minLen: 2
                 },
                 regex: {
-                    regexStr: "/^[\u4e00-\u9fa5]+$/"
+                    regexStr: "/^[\u4e00-\u9fa5]+$/",
+                    customErrMsg:"只能输入汉字"
                 }
             },
             showErrorMessage:true,

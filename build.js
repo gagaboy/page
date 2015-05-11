@@ -2,16 +2,24 @@
  * Created by qianqianyi on 15/5/6.
  */
 ({
+    name:"demo",
     paths: {
         text: 'bower_components/text/text',
         css: 'bower_components/require-css/css',
         "css-builder": 'bower_components/require-css/css-builder',
-        "normalize":"bower_components/require-css/normalize"
-    },
+        "normalize": "bower_components/require-css/normalize",
+        "avalon": "bower_components/oniui/avalon"
 
-    name: "demo",
+    },
     out: 'dist/page-build.js'
-    //baseUrl:"src"
+    //baseUrl:"src",
+    /*
+    modules: [{
+        name: 'demo',
+        exclude: "avalon",
+        out:"dist/demo.js"
+    }]
+    */
 })
 
 

@@ -91,7 +91,7 @@
     background-color: white;
     border: 1px solid #d4d4d4;
     overflow-y: scroll;
-    padding: 3px 0; }
+    /*padding: 3px 0;*/ }
 .oni-dropdown .oni-dropdown-item {
     white-space: nowrap;
     overflow: hidden;

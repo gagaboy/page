@@ -3,27 +3,26 @@
      ms-class="oni-datepicker-multiple:numberOfMonths!==1">
     <div class="oni-datepicker-wrapper" ms-css-position="_position">
         <div class="oni-datepicker-content" >
-            <div class="oni-datepicker-label" ms-if="numberOfMonths===1">{{calendarLabel}}</div>
-            <i  class="oni-datepicker-prev oni-icon" 
+            <i  class="oni-datepicker-prev glyphicon glyphicon-chevron-left" 
                 ms-if="numberOfMonths!==1" 
                 ms-click="_prev(prevMonth, $event)"
                 ms-class="oni-datepicker-prev-disabled:!prevMonth" 
-                style="left:15px;">&#xf047;</i>
-            <i  class="oni-datepicker-next oni-icon" 
+                style="left:15px;"></i>
+            <i  class="oni-datepicker-next glyphicon glyphicon-chevron-right" 
                 ms-if="numberOfMonths!==1" 
                 ms-click="_next(nextMonth, $event)"
                 ms-class="oni-datepicker-next-disabled:!nextMonth" 
-                style="right:15px;">&#xf03e;</i>
+                style="right:15px;"></i>
             <div class="oni-datepicker-content-content" 
                  ms-repeat-calendar="data" 
                  ms-visible="_datepickerToggle">
                 <div class="oni-datepicker-header" ms-if="numberOfMonths===1">
-                    <i class="oni-datepicker-prev oni-icon" 
+                    <i class="oni-datepicker-prev glyphicon glyphicon-chevron-left"
                        ms-click="_prev(prevMonth, $event)"
-                       ms-class="oni-datepicker-prev-disabled:!prevMonth">&#xf047;</i>
-                    <i class="oni-datepicker-next oni-icon"    
+                       ms-class="oni-datepicker-prev-disabled:!prevMonth"></i>
+                    <i class="oni-datepicker-next glyphicon glyphicon-chevron-right"
                        ms-click="_next(nextMonth, $event)"
-                       ms-class="oni-datepicker-next-disabled:!nextMonth">&#xf03e;</i>
+                       ms-class="oni-datepicker-next-disabled:!nextMonth"></i>
                     <div class="oni-datepicker-title" ms-if="changeMonthAndYear && regional.showMonthAfterYear">
                         <select ms-each="years" data-each-rendered="_afterYearRendered">
                             <option ms-attr-value="el">{{el}}</option>
@@ -101,17 +100,17 @@
                     <thead>
                         <tr class="oni-datepicker-title">
                             <th class="prev" style="visibility: visible;text-align:left">
-                                <i class="oni-datepicker-prev oni-icon" 
+                                <i class="oni-datepicker-prev glyphicon glyphicon-chevron-left" 
                                    ms-click="_prevYear(mobileYear)"
-                                   ms-class="oni-datepicker-prev-disabled:mobileYear===years[0]">&#xf047;</i>
+                                   ms-class="oni-datepicker-prev-disabled:mobileYear===years[0]"></i>
                             </th>
                             <th style="text-align:center" 
                                 ms-click="_selectYears" 
                                 ms-hover="oni-state-hover:mobileMonthAndYear">{{mobileYear}}</th>
                             <th class="next" style="visibility: visible;text-align:right">
-                                <i class="oni-datepicker-next oni-icon" 
+                                <i class="oni-datepicker-next glyphicon glyphicon-chevron-right" 
                                    ms-click="_nextYear(mobileYear)"
-                                   ms-class="oni-datepicker-prev-disabled:mobileYear===years[years.length-1]">&#xf03e;</i>
+                                   ms-class="oni-datepicker-prev-disabled:mobileYear===years[years.length-1]"></i>
                             </th>
                         </tr>
                     </thead>
@@ -141,17 +140,17 @@
                     <thead>
                         <tr class="oni-datepicker-title">
                             <th class="prev" style="visibility: visible;text-align:left">
-                                <i class="oni-datepicker-prev oni-icon" 
+                                <i class="oni-datepicker-prev glyphicon glyphicon-chevron-left" 
                                    ms-click="_prevYears" 
-                                   ms-class="oni-datepicker-prev-disabled:_years[0]<=years[0]">&#xf047;</i>
+                                   ms-class="oni-datepicker-prev-disabled:_years[0]<=years[0]"></i>
                             </th>
                             <th style="text-align:center" 
                                 ms-hover="oni-state-hover:mobileMonthAndYear">{{_years[0]}}-{{_years[9]}}
                             </th>
                             <th class="next" style="visibility: visible;text-align:right">
-                                <i class="oni-datepicker-next oni-icon" 
+                                <i class="oni-datepicker-next glyphicon glyphicon-chevron-right" 
                                     ms-click="_nextYears"
-                                    ms-class="oni-datepicker-next-disabled:_years[_years.length-1]>=years[years.length-1]">&#xf03e;</i>
+                                    ms-class="oni-datepicker-next-disabled:_years[_years.length-1]>=years[years.length-1]"></i>
                             </th>
                         </tr>
                     </thead>
