@@ -1,12 +1,12 @@
 <div class="row" ms-if="show">
     <div class="col-md-6">
-        <div ms-if="showPageDetail" class="dataTables_info" role="status" aria-live="polite">
+        <div ms-if="showPageDetail" class="dataTables_info" role="status" aria-live="polite" style="line-height: 33px">
             {{pageIndex}}/{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
         </div>
     </div>
     <div class="col-md-6">
         <div class="dataTables_paginate paging_simple_numbers">
-            <ul class="pagination">
+            <ul class="pagination" style="margin:3px ">
                 <li ms-if="showPreviousAndNextPage" class="paginate_button previous disabled" aria-controls="DataTables_Table_0" tabindex="0">
                     <a href="javascript:void(0);" ms-click="goPreviousPage(vid)"
                        ms-attr-data-pageIndex="pageIndex>1?pageIndex-1:pageIndex">

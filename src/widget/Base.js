@@ -82,7 +82,7 @@ define([], function () {
             //e.set("ms-controller", $this.getId());
             //e.appendHTML(tmp);
 
-            var e = jQuery("<div></div>").addClass($this.getAttr('$xtype')).attr("ms-controller", $this.getId());
+            var e = jQuery("<div></div>").addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
             e.append(tmp);
             $this.getParentElement().html(e);
             $this.element = e[0];
