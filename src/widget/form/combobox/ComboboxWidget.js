@@ -21,7 +21,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.showPulldown = !vm.showPulldown;
                 vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
             },
-            selectItem: function(vid, data) {
+            selectItem: function (vid, data) {
                 var vm = avalon.vmodels[vid];
                 if (vm.multi) {
                     var contains = false;
@@ -31,7 +31,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                             break;
                         }
                     }
-                    if(!contains) {
+                    if (!contains) {
                         vm.selectedItem.push(data);
                         vm.value.push(data.value);
                         vm.display.push(data.display);
@@ -45,7 +45,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.pullDownDisplay = "none";
                 }
             },
-            removeItem: function(vid, data) {
+            removeItem: function (vid, data) {
                 var vm = avalon.vmodels[vid];
                 vm.selectedItem.remove(data);
                 vm.value.remove(data.value);
@@ -59,8 +59,10 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             comboBoxBlur: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = false;
-                vm.showPulldown = false;
-                vm.pullDownDisplay = "none";
+                if (!vm.multi) {
+                    vm.showPulldown = false;
+                    vm.pullDownDisplay = "none";
+                }
             }
         },
         initialize: function (opts) {
