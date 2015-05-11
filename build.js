@@ -1,6 +1,12 @@
 /**
  * Created by qianqianyi on 15/5/6.
  */
+
+//cmd: node bower_components/r.js/dist/r.js -o build.js
+
+//TODO 生成一个合并文件&一个合并压缩文件&一个SourceMap 文件
+// http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html
+
 ({
     name:"demo",
     paths: {
@@ -13,13 +19,6 @@
     },
     out: 'dist/page-build.js'
     //baseUrl:"src",
-    /*
-    modules: [{
-        name: 'demo',
-        exclude: "avalon",
-        out:"dist/demo.js"
-    }]
-    */
 })
 
 

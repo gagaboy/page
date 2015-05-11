@@ -54,7 +54,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                span.getElement("input").focus();
+                //span.getElement("input").focus();
+                jQuery(span).find('input.comboBoxInput').focus();
             },
             comboBoxBlur: function (vid, span) {
                 var vm = avalon.vmodels[vid];
@@ -104,7 +105,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             inputWidth = value.length * 7 + 25;
         },
         _getInputElement: function () {
-            var input = this.getElement()[0].getElement("input.comboBoxInput");
+            //var input = this.getElement()[0].getElement("input.comboBoxInput");
+            var input = this.getElement().find('input.comboBoxInput');
             return input;
         },
         focus: function () {
