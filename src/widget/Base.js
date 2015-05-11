@@ -78,14 +78,17 @@ define([], function () {
              });
              */
             var tmp = this.getTemplate();
-            var e = new Element("div." + $this.getAttr('$xtype'));
-            e.set("ms-controller", $this.getId());
-            e.appendHTML(tmp);
-            $this.getParentElement().adopt(e);
-            avalon.scan(e);
-            $this.element = e;
+            //var e = new Element("div." + $this.getAttr('$xtype'));
+            //e.set("ms-controller", $this.getId());
+            //e.appendHTML(tmp);
+
+            var e = jQuery("<div></div>").addClass($this.getAttr('$xtype')).attr("ms-controller", $this.getId());
+            e.append(tmp);
+            $this.getParentElement().html(e);
+            $this.element = e[0];
+            avalon.scan($this.getParentElement()[0]);
             $this.fireEvent("afterRender", [this.vmodel]);
-            if(this["_afterRender"]){
+            if (this["_afterRender"]) {
                 this["_afterRender"](this.vmodel);
             }
             return this;
@@ -121,9 +124,9 @@ define([], function () {
          */
         getParentElement: function () {
             if (this.options.$parentId == null) {
-                return $$(document.body);
+                return jQuery(document.body);
             } else {
-                return $(this.options.$parentId);
+                return jQuery("#"+this.options.$parentId);
             }
         },
         show: function () {

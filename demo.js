@@ -7,9 +7,19 @@ require(["./src/Bootstrap"], function () {
         value: '',
         required: false,
         glyphicon: 'glyphicon-ok',
-        message: '请输入用户名',
-        label: '用户名',
-        hasError: false,
+        message: '请输入2-5个汉字',
+        label: '您的姓名',
+        validationRules: {
+            required:true,//options中为false时，此处可重开启校验
+            length: {
+                maxLen: 5,
+                minLen: 2
+            },
+            regex: {
+                regexStr: "/^[\u4e00-\u9fa5]+$/"
+            }
+        },
+        showErrorMessage:true,
         $id: 'username'//,
         //value: 'init'
     });
