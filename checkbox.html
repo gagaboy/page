@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/animate.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="src/css/page.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" ms-controller="checkCtrl">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox-content" style="min-height: 200px">
+                <div>
+                    <label ms-repeat="data" ms-click="chickCheck(el)">
+                        <div class="icheckbox_square-green checked" ms-class-checked="el.clicked"
+                             style="position: relative;">
+
+                        </div>
+                        {{el.display}} &nbsp;&nbsp;&nbsp;
+                    </label>
+                </div>
+                <br>
+                {{data[0].clicked}}
+                <br>
+                {{data[1].clicked}}
+
+                <br>
+                Value:{{value}}
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="bower_components/avalon/avalon.js"></script>
+<script>
+    var vm = avalon.define({
+        $id: 'checkCtrl',
+        data: [{
+            value: '1',
+            display: '足球',
+            clicked: false
+        }, {
+            value: '2',
+            display: '台球',
+            clicked: false
+        }],
+        value: [],
+        chickCheck: function (d) {
+            d.clicked = !d.clicked;
+            var value = [];
+            for (var i = 0; i < vm.data.length; i++) {
+                if (vm.data[i].clicked) {
+                    value.push(vm.data[i].value);
+                }
+            }
+            vm.value = value;
+        }
+    });
+</script>
+</html>

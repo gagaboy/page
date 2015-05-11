@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link href="/page1/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/page1/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="/page1/lib/bootstrap/css/animate.css" rel="stylesheet">
-    <link href="/page1/lib/bootstrap/css/style.css" rel="stylesheet">
-    <link href="/page1/src/css/page.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="/page/src/css/page.css" rel="stylesheet">
 </head>
 <body>
 <br>
@@ -47,20 +47,57 @@
                     <div class="col-md-4" id="phoneContainer">
 
                     </div>
+                    <div class="col-md-4" id="btnContainer">
+                        <button onclick="valForm();">校验表单</button>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
-<script src="/page1/bower_components/mootools/dist/mootools-core.js"></script>
-<script src="/page1/bower_components/jquery/dist/jquery.js"></script>
+<script src="/page/bower_components/mootools/dist/mootools-core.js"></script>
+<script src="/page/bower_components/jquery/dist/jquery.js"></script>
 <script>
     $.noConflict();
 </script>
-<script src="/page1/bower_components/avalon/avalon.js"></script>
+<script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
-    require(["../../../page1/src/Bootstrap"], function () {
+    function valForm(){
+        var validateTool = Page.create("validation",{onlyError:true});//后续由系统统一创建，只需调用即可
+
+        //获取数据
+        var comps = Page.manager.components;
+        var formValues = {};
+        formValues.username = comps.username.getValue();
+        formValues.phone = comps.phone.getValue();
+
+        //获取校验规则
+        var formRules = {};
+        formRules.username =  comps.username.getAttr("validationRules");
+        formRules.phone =  comps.phone.getAttr("validationRules");
+        formRules._global = [//_global 为固定
+            {
+                "ruleId": "notEqualField",
+                "field1": "username",
+                "field2": "phone"
+            }
+//            ,
+//            {
+//                "ruleId": "greaterThan",
+//                "field1": "username",
+//                "field2": "phone"
+//            }
+        ];
+        //进行校验
+        var valRes = validateTool.validateObject(formValues,formRules);
+        if(valRes.result){
+            alert("校验通过");
+        }else{
+            alert("校验结果："+JSON.stringify(valRes.errorMsg));
+        }
+    }
+    require(["../../../page/src/Bootstrap"], function () {
         var inp = Page.create("input", {
             $parentId: 'nameContainer',
             value: '',
@@ -75,7 +112,8 @@
                     minLen: 2
                 },
                 regex: {
-                    regexStr: "/^[\u4e00-\u9fa5]+$/"
+                    regexStr: "/^[\u4e00-\u9fa5]+$/",
+                    customErrMsg:"只能输入汉字"
                 }
             },
             showErrorMessage:true,
@@ -90,14 +128,17 @@
             message: '请输入手机号',
             label: '联系方式',
             validationRules: {
+                lengthFix: {
+                    fixLen: 11
+                },
                 required:true,//设置为false可关闭校验
-                mobilePhone:true
+                mobilePhone:false
             },
             showErrorMessage:true,
             $id: 'phone'//
         });
         inq.render();
-        console.log(inq);
+        //console.log(inq);
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

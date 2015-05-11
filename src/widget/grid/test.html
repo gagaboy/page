@@ -6,7 +6,13 @@
     <link href="/page/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
+    <!--
+    <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="/page/src/css/page.css" rel="stylesheet">
+    -->
     <script src="/page/bower_components/jquery/dist/jquery.js"></script>
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="/page/lib/bootstrap/js/plugins/iCheck/icheck.min. "></script>
     <script>
         $.noConflict();
     </script>
@@ -18,23 +24,46 @@
                id : 'grid1',
                checkbox : true,
                 hideCols : ["WID"],
-               loadOnInit : true,
+               loadOnInit : false,
                pagination : true,
                url : "/page/src/widget/grid/test.json"
            });
         });
 
-        jQuery(function(){
-            jQuery(".tools").delegate("[toggle]","click",function(){
-                var method = jQuery(this).data("method");
-                var arg = jQuery(this).data("arg");
-                var $grid = jQuery("#grid1Cont");
-                if(method == "showCol"){
-                    $grid.grid(method,"XM",arg);
+        function getArgs($obj){
+            var params = $obj.data();
+            var method = params["method"]; // 方法名
+            var args = []; // 获取参数数组
+            for(var i=1;i<10;i++){
+                if(params["arg" + i] != undefined){
+                    var arg = params["arg" + i];
+                    if(typeof arg == "string" && (arg.charAt(0) == "{" || arg.charAt(0) == "[")){
+                        arg = eval("(" + arg + ")");
+                    }
+                    args.push(arg);
                 }else{
-                    $grid.grid(method,arg);
+                    break;
                 }
-                jQuery(this).attr("arg",!arg);
+            }
+            return [method,args];
+        }
+
+        jQuery(function(){
+            jQuery(".tools").delegate("button","click",function(){
+                var info = getArgs(jQuery(this));
+                var args = info[1];
+                var method = info[0]; // 方法名
+
+                var $grid = jQuery("#grid1Cont").grid();
+                $grid[method].apply($grid,args);
+                jQuery(this).data("arg" + args.length,!args[args.length - 1]);
+            });
+            jQuery(".methods").delegate("button","click",function(){
+                var info = getArgs(jQuery(this));
+                var args = info[1];
+                var method = info[0]; // 方法名
+                var $grid = jQuery("#grid1Cont").grid();
+                console.log($grid[method].apply($grid,args));
             });
         });
     </script>
@@ -48,10 +77,20 @@
         </div>
         <div class="row">
             <div class="col-md-12 tools">
-                <button type="button" class="btn btn-success" toggle data-method="showCheckbox" data-arg="false">切换复选框</button>
-                <button type="button" class="btn btn-success" toggle data-method="showPagination" data-arg="false">切换分页条</button>
-                <button type="button" class="btn btn-success" toggle data-method="showResponsive" data-arg="true">响应式表格</button>
-                <button type="button" class="btn btn-success" toggle data-method="showCol" data-arg="true">显示隐藏姓名列</button>
+                <button type="button" class="btn btn-success" data-method="showCheckbox" data-arg1="false">切换复选框</button>
+                <button type="button" class="btn btn-success" data-method="showPagination" data-arg1="false">切换分页条</button>
+                <button type="button" class="btn btn-success" data-method="showResponsive" data-arg1="true">响应式表格</button>
+                <button type="button" class="btn btn-success" data-method="showCol" data-arg1="XM" data-arg2="false">显示隐藏姓名列</button>
+                <button type="button" class="btn btn-success" data-method="selectAll" data-arg1="true">是否全选</button>
+                <button type="button" class="btn btn-success" data-method="select" data-arg1="1" data-arg2="true">选中第2行</button>
+            </div>
+        </div>
+        <div class="row" style="margin-top : 10px;">
+            <div class="col-md-12 methods">
+                <button type="button" class="btn btn-success" data-method="getSelected">获取选中行数据</button>
+                <button type="button" class="btn btn-success" data-method="getData" data-arg1="0">获取第一行数据</button>
+                <button type="button" class="btn btn-success" data-method="remove" data-arg1="1">删除第二行</button>
+                <button type="button" class="btn btn-success" data-method="add" data-arg1="{ZGH : 'zhangsan',XM : '张三'}">添加一行</button>
             </div>
         </div>
     </div>

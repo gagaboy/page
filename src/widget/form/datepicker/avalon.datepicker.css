@@ -2,7 +2,7 @@
 /*
 这是每个都组件都应该引用的部分
 */
-.oni-datepicker { position: relative; display: block; font-size: 0; white-space: nowrap; color: #333; z-index: 10; width: auto; margin-left: -1px; }
+.oni-datepicker { position: relative; display: block; font-size: 0; white-space: nowrap; color: #333; z-index: 10; width: auto; /* margin-left: -1px; */ }
 .oni-datepicker tr, .oni-datepicker td, .oni-datepicker th { border: 0; }
 .oni-datepicker .oni-icon { text-indent: 0; }
 .oni-datepicker .oni-icon-calendar-o { padding: 0 6px; vertical-align: top; text-indent: 0; display: inline; }
@@ -82,9 +82,9 @@
 .oni-datepicker-dropdown .oni-dropdown-item-selected { background: #3775c0; }
 .oni-datepicker-dropdown .oni-dropdown:hover .oni-dropdown-source { border-color: #3775c0; border-bottom-color: #cccccc; }
 
-.oni-datepicker-input-wrapper { background: #ffffff; border: 1px solid #cccccc; cursor: pointer; color: #333; font-size: 12px; position: relative; display: inline-block; *display: inline; zoom: 1; z-index: 1; }
-.oni-datepicker-input-wrapper input { border: 0 none; cursor: pointer; outline: none; padding: 3px 90px 3px 6px; width: 90px; height: 18px; margin: 0; font-size: 12px; }
+.oni-datepicker-input-wrapper { background: #ffffff; /*border: 1px solid #cccccc;*/ cursor: pointer; /* color: #333; */ /* font-size: 12px; */ position: relative; /* display: inline-block; */ *display: inline; /* zoom: 1; */ /* z-index: 1; */ }
+.oni-datepicker-input-wrapper input { /*border: 0 none;*/ cursor: pointer; outline: none; /* padding: 3px 90px 3px 6px; */ /* width: 90px; */ /* height: 18px; */ margin: 0; font-size: 12px; }
 
-.oni-datepicker-tip { position: absolute; top: 3px; right: 10px; line-height: 18px; height: 18px; color: #b5b5b5; }
+.oni-datepicker-tip { position: absolute; top: 1px; right: 10px; line-height: 34px; height: 34px; color: #b5b5b5; }
 
 .oni-datepicker-active { border-color: #3775c0; }
