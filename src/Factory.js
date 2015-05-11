@@ -17,6 +17,7 @@ define([
     "./Manager",
     "./Validation",
     "./Utils",
+    "./DataValue",
     "./DataSet",
     "./widget/Base",
     "./widget/form/BaseFormWidget",
