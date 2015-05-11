@@ -5,18 +5,15 @@
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
-            <div class="" unselectable="on" title="" style="">
-                <div ms-class-div-focus="focused" ms-class="form-control" ms-click="comboBoxFocus(vid, this)">
-                    <ul ms-if="multi"
-                        style="margin: 0;padding: 0;border: 0;outline: 0;text-decoration: none;font-size: 100%;list-style: none;">
-                        <li ms-repeat-item="selectedItem" style="float: left" class="oni-combobox-multiselected" ms-hover="oni-combobox-multihover">
+            <div>
+                <div ms-class-div-focus="focused" class="form-control" ms-click="comboBoxFocus(vid, this)">
+                    <ul ms-if="multi" style="margin: 0;padding: 0;border: 0;outline: 0;text-decoration: none;font-size: 100%;list-style: none;">
+                        <li ms-repeat-item="selectedItem" style="float: left">
                             <span ms-text="item.display"></span>
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"
-                                  ms-click="removeItem(vid, item)"></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ms-click="removeItem(vid, item)"></span>
                         </li>
                     </ul>
-                    <input ms-css-width="display ? ((display.length * 7 + 25) > 163 ? 163 : display.length * 7 + 25) : 25" ms-attr-value="multi ? '' : display" style="outline: none;border: none;"
-                           ms-on-blur="comboBoxBlur(vid, this)">
+                    <input style="outline: none;border: none;" ms-css-width="multi ? inputWidth : -1" ms-attr-value="multi ? '' : display" ms-on-keydown="inputValue(vid, this)" ms-on-blur="comboBoxBlur(vid, this)">
                     <span class="glyphicon glyphicon-menu-down form-control-feedback" aria-hidden="true"
                           style="pointer-events:auto; cursor: pointer" ms-on-click="select(vid, this)"></span>
                 </div>

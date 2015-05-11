@@ -12,6 +12,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             pullDownDisplay: null,
             focused: false,
             multi: false,
+            inputWidth: 25,
             data: null,
             selectedItem: null,
             value: null,
@@ -21,7 +22,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.showPulldown = !vm.showPulldown;
                 vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
             },
-            selectItem: function(vid, data) {
+            selectItem: function (vid, data) {
                 var vm = avalon.vmodels[vid];
                 if (vm.multi) {
                     var contains = false;
@@ -31,7 +32,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                             break;
                         }
                     }
-                    if(!contains) {
+                    if (!contains) {
                         vm.selectedItem.push(data);
                         vm.value.push(data.value);
                         vm.display.push(data.display);
@@ -45,17 +46,31 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.pullDownDisplay = "none";
                 }
             },
-            removeItem: function(vid, data) {
+            removeItem: function (vid, data) {
                 var vm = avalon.vmodels[vid];
                 vm.selectedItem.remove(data);
                 vm.value.remove(data.value);
                 vm.display.remove(data.display);
             },
+            inputValue: function (vid, span) {
+                var vm = avalon.vmodels[vid];
+                var maxWidth = jQuery(this).parent().width();
+                if (vm.multi) {
+                    var selected = jQuery(this).parent().find("li");
+                    for (var i = 0, len = selected.length; i < len; i++) {
+                        maxWidth = maxWidth - jQuery(selected[i]).width();
+                    }
+                }
+                var inputWidth = jQuery(this).val().length * 7 + 25;
+                if (inputWidth > maxWidth) {
+                    inputWidth = maxWidth;
+                }
+                vm.inputWidth = inputWidth;
+            },
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                //span.getElement("input").focus();
-                jQuery(span).find('input.comboBoxInput').focus();
+                jQuery(span).find('input').focus();
             },
             comboBoxBlur: function (vid, span) {
                 var vm = avalon.vmodels[vid];
@@ -90,6 +105,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                             opts.selectedItem = o;
                             break;
                         }
+                    }
+                    if (opts.display) {
+                        opts.inputWidth = opts.display.length * 7 + 25;
                     }
                 }
             }
