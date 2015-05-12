@@ -27,10 +27,11 @@ module.exports = function(grunt) {
                     'dist/page-build-min.js': 'dist/page-build.js'
                 }
             }
-        }
+        },
+        clean:["!dist/*.ignore" ,'dist/*.js','dist/*.map']
     });
-    grunt.loadNpmTasks('grunt-contrib-requirejs'); //requirejs优化
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+
+    require('load-grunt-tasks')(grunt);
     // 注册任务
-    grunt.registerTask('default', ['requirejs','uglify']);
+    grunt.registerTask('default', ['clean','requirejs','uglify']);
 };
