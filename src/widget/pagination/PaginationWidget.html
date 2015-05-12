@@ -1,7 +1,7 @@
 <table class="form-horizontal-table" ms-visible="show">
     <tr>
-        <td class="col-md-6">
-            <div ms-if="showPageDetail" class="dataTables_info" role="status" aria-live="polite">
+        <td class="col-md-6" ms-if="showPageDetail">
+            <div class="dataTables_info" role="status" aria-live="polite">
                 {{pageIndex}}/{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
             </div>
         </td>
