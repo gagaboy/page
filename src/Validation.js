@@ -25,14 +25,14 @@ define([], function () {
         },
         //～～～～～～基本校验工具方法～～～～～～
         checkRequired: function (value,customErrMsg) {
-            if (!value) {
+            if (!value||(typeof(value)=="object"&&value.length<1)) {
                 return {"result":false,"errorMsg":customErrMsg?customErrMsg:this._getErrMsg("required")};
             }else{
                 return {"result":true};
             }
         },
         checkLength: function (value,minLen,maxLen,customErrMsg) {
-            var fieldLength = value?String(value).length:0;
+            var fieldLength = this._getLength(value);
             var errMsg = "";
             if(minLen||maxLen){
                 if(minLen&&typeof(minLen)!="number"){
@@ -63,7 +63,7 @@ define([], function () {
             return {"result":true};
         },
         checkLengthFix: function (value,fixLen,customErrMsg) {
-            var fieldLength = value ? String(value).length : 0;
+            var fieldLength = this._getLength(value);
             if(fixLen&&typeof(fixLen)!="number"){
                 fixLen = eval(fixLen);
             }
@@ -489,6 +489,17 @@ define([], function () {
                 return this.allRules[ruleName];
             }
             return null;
+        },
+        _getLength:function(value){
+            var fieldLength = 0;
+            if(value){
+                if(typeof(value)=="object"){
+                    fieldLength = value.length;
+                }else{
+                    fieldLength = value?String(value).length:0;
+                }
+            }
+            return fieldLength;
         },
         _priRules:function(){
             return {
