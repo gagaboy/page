@@ -27,6 +27,7 @@ define([
     "./widget/form/datepicker/DatepickerWidget",
     "./widget/pagination/PaginationWidget",
     "./widget/layout/BaseLayout",
+    "./widget/dataTable/DataTableWidget",
     "./widget/simple/SimpleGrid",
     "./widget/form/checkbox/CheckboxWidget",
     "./widget/form/radio/RadioWidget",
