@@ -22,8 +22,16 @@ module.exports = function(grunt) {
             }
         },
         uglify: {
-            dist: {
+            builda: {//任务一：添加banner，支持Source Map
+                options: {
+                    banner: '//@ sourceMappingURL=page-build.js.map\n'//添加banner
+                },
                 files: {
+                    'dist/page-build-min.js': 'dist/page-build.js'
+                }
+            },
+            buildb: {
+                files: {//任务二：不添加banner
                     'dist/page-build-min.js': 'dist/page-build.js'
                 }
             }
@@ -33,5 +41,7 @@ module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
     // 注册任务
-    grunt.registerTask('default', ['clean','requirejs','uglify']);
+    grunt.registerTask('default', ['clean','requirejs','uglify:builda']);
+    //不支持Source Map
+    grunt.registerTask('buildNoMap', ['clean','requirejs','uglify:buildb']);
 };
