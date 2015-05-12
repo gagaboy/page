@@ -19,6 +19,7 @@ define([
     "./Utils",
     "./data/DataValue",
     "./data/DataSet",
+    "./data/DataBinder",
     "./widget/Base",
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
