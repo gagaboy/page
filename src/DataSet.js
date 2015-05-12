@@ -17,12 +17,8 @@
  *  哪些组件会用DataSource 例如：grid, form, charts, combobox, tree etc..
  *  可以被扩展
  */
-define([], function () {
-    var status = "$status$";
-    var notModify = "$notModify$";
-    var add = "$add$";
-    var update = "$update$";
-    var remove = "$remove$";
+define(["./DataConstant"], function (Constant) {
+
     var xtype = "dataSet";
     var DataSet = new Class({
         Implements: [Events, Options],
@@ -31,20 +27,14 @@ define([], function () {
             $xtype: xtype,
             data: [],//[{wid:'1',name:''},{wid:'2',name:''}]
             _dataMap: {},
-            _childrenData: {},
-            _refData: {},
-            readUrl: '',
-            syncUrl: '',
-            defaultArg: {},
+            _dataArray: [],
             model: {
                 id: 'wid',
-                childAlias: ['items'],
-                refAlias: ["xb"],
-                status: status,
-                notModify: notModify,
-                add: add,
-                update: update,
-                remove: remove
+                status: Constant.status,
+                notModify: Constant.notModify,
+                add: Constant.add,
+                update: Constant.update,
+                remove: Constant.remove
             }
         },
 
@@ -55,59 +45,29 @@ define([], function () {
             }
             this._initData();
         },
+
         _initData: function () {
             if (this.options.data && this.options.data.length > 0) {
                 for (var i = 0; i < this.options.data.length; i++) {
                     var d = this.options.data[i];
-                    for (var j = 0; j < this.options.model.childAlias.length; j++) {
-                        var alias = this.options.model.childAlias[j];
-                        var cRecord = d[alias];
-                        if (cRecord) {
-                            this.options._childrenData[alias] = new DataSet({
-                                data: cRecord
-                            });
-                        }
-                        delete d[alias];
-                    }
-                    for (var j = 0; j < this.options.model.refAlias.length; j++) {
-                        var alias = this.options.model.refAlias[j];
-                        var cRecord = d[alias];
-                        if (cRecord) {
-                            this.options._refData[alias] = new DataSet({
-                                data: [cRecord]
-                            });
-                        }
-                        delete d[alias];
-                    }
-                    d[status] = notModify;
-                    this.options._dataMap[d[this.options.model.id]] = d;
+                    var dv = Page.create("dataValue", {
+                        data: d
+                    });
+                    this.options._dataMap[d[this.options.model.id]] = dv;
+                    this.options._dataArray.push(dv);
                 }
             }
         },
         getValue: function () {
             var o = [];
-            var array = this.options.data;
+            var array = this.options._dataArray;
             for (var i = 0; i < array.length; i++) {
                 var value = array[i];
-                var oo = Object.merge({}, value);
-                o.push(oo);
-                for (var j = 0; j < this.options.model.childAlias.length; j++) {
-                    var key = this.options.model.childAlias[j];
-                    var ds = this.getChildDS(key);
-                    if (ds) {
-                        oo[key] = ds.getValue();
-                    }
-                }
-                for (var j = 0; j < this.options.model.refAlias.length; j++) {
-                    var key = this.options.model.refAlias[j];
-                    var ds = this.getRefDS(key);
-                    if (ds) {
-                        oo[key] = ds.getValue()[0];
-                    }
-                }
+                o.push(value.getValue());
             }
             return o;
         },
+
         getId: function () {
             return this.options.$id;
         },
@@ -130,38 +90,29 @@ define([], function () {
             }, null);
         },
         at: function (index) {
-            return this.options.data[index];
+            return this.options._dataArray[index];
         },
         readRecord: function (id) {
             if (id == undefined) {
-                return this.options.data;
+                return this.options._dataArray;
             } else {
                 return this.options._dataMap[id];
             }
-        },
-        getChildDS: function (alias) {
-            return this.options._childrenData[alias];
-        },
-        getRefDS: function (alias) {
-            return this.options._refData[alias];
-        },
-        readChildRecord: function (alias, id) {
-            if (this.options._childrenData[alias]) {
-                return this.options._childrenData[alias].readRecord(id);
-            }
-            return null;
         },
         deleteRecord: function (id) {
             if (id) {
                 var r = this.readRecord(id);
                 if (r) {
-                    if (r[status] == add) {
+                    var status = r.options.data[this.options.model.status];
+                    this.fireEvent("beforeDeleteRecord", [r]);
+                    if (status == this.options.model.add) {
                         //real delete
-                        this.options.data.erase(r);
+                        this.options._dataArray.erase(r);
                         delete this.options._dataMap[id];
                     } else {
-                        r[status] = remove;
+                        r.changeStatus(this.options.model.remove);
                     }
+                    this.fireEvent("afterDeleteRecord", [r]);
                 }
             } else {
                 window.console.log("没有找到指定ID的纪录.");
@@ -176,10 +127,13 @@ define([], function () {
             }
             var rid = record[this.options.model.id];
             if (rid) {
-                var re = record;
-                re[status] = add;
-                this.options.data.push(re);
-                this.options._dataMap[rid] = re;
+                this.fireEvent("beforeAddRecord", [r]);
+                var dv = Page.create("dataValue", {
+                    data: record
+                });
+                this.options._dataMap[rid] = dv;
+                this.options._dataArray.push(dv);
+                this.fireEvent("afterAddRecord", [r]);
             } else {
                 window.console.log("纪录没有指定ID.");
             }
@@ -193,10 +147,7 @@ define([], function () {
             }
             var r = this.readRecord(record[vid]);
             if (r) {
-                Object.merge(r, record);
-                if (r[status] != add) {
-                    r[status] = update;
-                }
+                r.updateRecord(record);
             }
         }
     });
