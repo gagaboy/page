@@ -1,63 +1,61 @@
-define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css'],function(BaseFormWidget, template){
+define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css'],function(CheckboxWidget, template){
     var xtype = "radio";
     var RadioWidget = new Class({
-        Extends: BaseFormWidget,
+        Extends: CheckboxWidget,
         options: {
             $xtype: xtype,
-            rowcols: 1,//每行显示列数
-            data: [],//展示的数据
-            clickCheck:function(d,data){
-                for(var i =0;i<data.length;i++){
-                    data[i].clicked=false;
+            value:null,
+            itemCheck: function (vid,d) {
+                var vm = avalon.vmodels[vid];
+                if(!d.checked){
+                    d.checked = true;
+                    vm._setOthersUnCheck(vid,d);
+                    vm.value = d.value;
                 }
-                d.clicked = true;
+            },
+            _setOthersUnCheck:function(vid,d){
+                var vm = avalon.vmodels[vid];
+                for (var i = 0; i < vm.items.length; i++) {
+                    var itemi = vm.items[i];
+                    if (itemi.checked&&itemi.value!= d.value) {
+                        itemi.checked = false;
+                    }
+                }
             }
         },
         initialize: function (opts) {
-            var d = opts.data;
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked == undefined) {
-                    d[i].clicked = false;
-                }
-            }
             this.parent(opts);
+            this._setValueByItems();
+            this.validate();
         },
         getTemplate: function () {
             return template;
         },
-        getOptions : function(){
-            var d = this.getAttr('data');
-            var arr = [];
-            for(var i =0;i< d.length;i++){
-                if(d[i].clicked){
-                    var one_arr = [];
-                    one_arr.push("value:"+d[i].value);
-                    one_arr.push("display:"+d[i].display);
-                    arr.push(one_arr);
+        setValue: function (value) {
+            //閲嶅啓
+            if(value&&this.getAttr("items")){
+                var items = this.getAttr("items");
+                this.setAttr("value",value);
+                for (var i = 0; i < items.length; i++) {//娓呮鍘熼�夐」
+                    if(items[i]&&value==items[i].value){
+                        items[i].checked = true;
+                    }else{
+                        items[i].checked = false;
+                    }
                 }
             }
-            return arr;
         },
-        getValue:function(){
-            var d = this.getAttr('data');
-            var values=[];
-            for(var i =0;i< d.length;i++){
-                if(d[i].clicked){
-                    values.push(d[i].value);
-                }
-            }
-            return values;
+        _valueChange:function(){//鍊兼敼鍙樻椂鏍￠獙
+            this.validate();
         },
-        setValue:function(key,clicked){
-            var d = this.getAttr('data');
-            for(var i =0;i< d.length;i++){
-                if(d[i].value == key){
-                    d[i].clicked=clicked;
+        _setValueByItems:function(){
+            var items = this.getAttr("items");
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].checked) {
+                    this.setAttr("value",items[i].value);
                 }
             }
-            return;
         }
-
     });
     RadioWidget.xtype = xtype;
     return RadioWidget;

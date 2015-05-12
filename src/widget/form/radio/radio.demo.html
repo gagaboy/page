@@ -22,7 +22,7 @@
 
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4" id="comboboxContainer">
+                    <div class="col-md-4" id="radioContainer">
 
                     </div>
                 </div>
@@ -39,58 +39,22 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../../page/src/Bootstrap"], function () {
-        var checkbox = Page.create('checkbox', {
-            $parentId: 'comboboxContainer',
-            label: '兴趣',
+        var checkbox = Page.create('radio', {
+            $parentId: 'radioContainer',
+            label: '性别',
             required:true,
             showErrorMessage:true,
-            validationRules: {
-                required:true,//options中为false时，此处可重开启校验
-                length: {
-                    maxLen: 5,
-                    minLen: 2,
-                    customErrMsg:"请选择2-5个兴趣"
-                }
-            },
             items:[{
                 value: '1',
-                display: '足球',
+                display: '男',
                 checked: false
             }, {
             value: '11',
-                display: '足球1',
+                display: '女',
                 checked: false
             }, {
                 value: '12',
-                display: '足球2',
-                checked: false
-            }, {
-                value: '13',
-                display: '足球3',
-                checked: false
-            }, {
-                value: '2',
-                display: '台球',
-                checked: false
-            }, {
-                value: '21',
-                display: '台球1',
-                checked: false
-            }, {
-                value: '22',
-                display: '台球2',
-                checked: false
-            }, {
-                value: '23',
-                display: '台球3',
-                checked: false
-            }, {
-                value: '24',
-                display: '台球4',
-                checked: false
-            }, {
-                value: '25',
-                display: '台球5',
+                display: '未知',
                 checked: false
             }]
         });

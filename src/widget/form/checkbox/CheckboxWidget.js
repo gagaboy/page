@@ -5,8 +5,8 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         options: {
             $xtype: xtype,
             cols: 3,//布局列数
-            items: [],//选项
-            value: [],
+            items:[],//选项
+            value:null,
             //valueFiled:"value",//值字段
             //textFiled:"display",//显示字段
             //showAllcheckBtn: false,//提供全选按钮
@@ -14,22 +14,19 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
                 d.checked = !d.checked;
-                vm.setValueByItems(vid);
-            },
-            setValueByItems:function(vid){
-                var vm = avalon.vmodels[vid];
-                var value = [];
+                var values = [];
                 for (var i = 0; i < vm.items.length; i++) {
                     if (vm.items[i].checked) {
-                        value.push(vm.items[i].value);
+                        values.push(vm.items[i].value);
                     }
                 }
-                vm.value = value;
+                vm.value = values;
             }
         },
         initialize: function (opts) {
             this.parent(opts);
             this._setValueByItems();
+            this.validate();
         },
         getTemplate: function () {
             return template;
@@ -77,7 +74,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
 
             var valRes = null;
             if (this.getAttr("required")) {//先判断是否必填
-                valRes = validateTool.checkRequired(this.getValue(), 1);
+                valRes = validateTool.checkRequired(this.getValue());
             }
             if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
                 valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));

@@ -44,7 +44,7 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
 
             var valRes = null;
             if (this.getAttr("required")) {//先判断是否必填
-                valRes = validateTool.checkRequired(this.getValue(), 1);
+                valRes = validateTool.checkRequired(this.getValue());
             }
             if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
                 valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
