@@ -12,6 +12,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             pullDownDisplay: null,
             focused: false,
             multi: false,
+            inputWidth: 25,
             data: null,
             selectedItem: null,
             value: null,
@@ -51,19 +52,36 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.value.remove(data.value);
                 vm.display.remove(data.display);
             },
+            keyDown: function (vid, e) {
+                var vm = avalon.vmodels[vid];
+                var maxWidth = jQuery(this).parent().width();
+                if (vm.multi) {
+                    if (e.keyCode == 8 && jQuery(this).val() == "") {
+                        vm.selectedItem.pop();
+                        vm.value.pop();
+                        vm.display.pop();
+                    }
+                    var selected = jQuery(this).parent().find("div");
+                    for (var i = 0, len = selected.length; i < len; i++) {
+                        maxWidth = maxWidth - selected[i].offsetWidth - 8;
+                    }
+                }
+                var inputWidth = jQuery(this).val().length * 7 + 25;
+                if (inputWidth > maxWidth) {
+                    inputWidth = maxWidth;
+                }
+                vm.inputWidth = inputWidth;
+            },
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                //span.getElement("input").focus();
-                jQuery(span).find('input.comboBoxInput').focus();
+                jQuery(this).find('input').focus();
             },
             comboBoxBlur: function (vid, span) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = false;
-                if (!vm.multi) {
-                    vm.showPulldown = false;
-                    vm.pullDownDisplay = "none";
-                }
+                vm.showPulldown = false;
+                vm.pullDownDisplay = "none";
             }
         },
         initialize: function (opts) {
@@ -93,6 +111,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                             break;
                         }
                     }
+                    if (opts.display) {
+                        opts.inputWidth = opts.display.length * 7 + 25;
+                    }
                 }
             }
             this.parent(opts);
@@ -102,7 +123,6 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _valueChange: function (value) {
             this.setAttr("display", value);
-            inputWidth = value.length * 7 + 25;
         },
         _getInputElement: function () {
             //var input = this.getElement()[0].getElement("input.comboBoxInput");
@@ -111,7 +131,6 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         focus: function () {
             //console to invoke this method is not ok...
-            alert(111);
             var input = this._getInputElement();
             avalon.nextTick(function () {
                 input.focus();

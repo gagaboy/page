@@ -4,57 +4,106 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            rowcols: 1,//ÿ����ʾ����
-            data: [],//չʾ�����
-            allchecked: false,
-            clickCheck: function (d) {
-                d.clicked = !d.clicked;
+            cols: 3,//布局列数
+            items: [],//选项
+            value: [],
+            //valueFiled:"value",//值字段
+            //textFiled:"display",//显示字段
+            //showAllcheckBtn: false,//提供全选按钮
+
+            itemCheck: function (vid,d) {
+                var vm = avalon.vmodels[vid];
+                d.checked = !d.checked;
+                vm.setValueByItems(vid);
+            },
+            setValueByItems:function(vid){
+                var vm = avalon.vmodels[vid];
+                var value = [];
+                for (var i = 0; i < vm.items.length; i++) {
+                    if (vm.items[i].checked) {
+                        value.push(vm.items[i].value);
+                    }
+                }
+                vm.value = value;
             }
         },
         initialize: function (opts) {
-            var d = opts.data;
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked == undefined) {
-                    d[i].clicked = false;
-                }
-            }
             this.parent(opts);
+            this._setValueByItems();
         },
         getTemplate: function () {
             return template;
         },
-        getOptions: function () {
-            var d = this.getAttr('data');
-            var arr = [];
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked) {
-                    var one_arr = [];
-                    one_arr.push("value:" + d[i].value);
-                    one_arr.push("display:" + d[i].display);
-                    arr.push(one_arr);
+        setValue: function (valueArr) {
+            //重写
+            if(valueArr&&this.getAttr("items")){
+                var items = this.getAttr("items");
+                this.setAttr("value",valueArr);
+                for (var i = 0; i < items.length; i++) {//清楚原选项
+                    items[i].checked = false;
+                }
+                for (var t = 0; t < valueArr.length; t++) {//设置新的值
+                    var valueT = valueArr[t];
+                    for (var i = 0; i < items.length; i++) {
+                        if (valueT==items[i].value) {
+                            items[i].checked = true;
+                        }
+                    }
                 }
             }
-            return arr;
         },
-        getValue: function () {
-            var d = this.getAttr('data');
+        getCheckedDetail:function(){
+            //获取所选选项详情
+        },
+        checkAll:function(){
+            var items = this.getAttr("items");
             var values = [];
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].clicked) {
-                    values.push(d[i].value);
-                    //values+=d[i].value+','
-                }
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = true;
+                values.push(items[i].value);
             }
-            return values;
+            this.setAttr("value",values);
         },
-        setValue: function (key, clicked) {
-            var d = this.getAttr('data');
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].value == key) {
-                    d[i].clicked = clicked;
+        deCheckAll:function(){
+            var items = this.getAttr("items");
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = false;
+            }
+            this.setAttr("value",[]);
+        },
+        validate: function () {
+            //var valRes = Page.validation.validateValue(this.getValue(),this.getAttr("validationRules"));
+            var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
+
+            var valRes = null;
+            if (this.getAttr("required")) {//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue(), 1);
+            }
+            if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
+                valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
+            }
+            if (valRes && !valRes.result) {//将错误信息赋值给属性
+                this.setAttr("errorMessage", valRes.errorMsg);
+            } else {//清空错误信息
+                this.setAttr("errorMessage", "");
+            }
+        },
+        _valueChange:function(){//值改变时校验
+            this.validate();
+        },
+        _itemCheck: function (item) {
+            item.checked = !item.checked;
+            this._setValueByItems();
+        },
+        _setValueByItems:function(){
+            var items = this.getAttr("items");
+            var values = [];
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].checked) {
+                    values.push(items[i].value);
                 }
             }
-            return;
+            this.setAttr("value",values);
         }
     });
     CheckboxWidget.xtype = xtype;
