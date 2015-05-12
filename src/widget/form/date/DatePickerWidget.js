@@ -1,5 +1,6 @@
 /**
  * Created by qianqianyi on 15/5/9.
+ * 废弃
  */
 define(['../BaseFormWidget', 'text!./DatePickerWidget.html', 'bower_components/oniui/datepicker/avalon.datepicker','css!./DatePickerWidget.css'], function (BaseFormWidget, template, datePi) {
     var xtype = "datePicker";
