@@ -52,7 +52,7 @@ define(["./DataConstant"], function (Constant) {
                 this.options.data[this.options.model.status] = this.options.model.notModify;
             }
             this.options.model.childAlias.each(function (v, i) {
-                if($this.options.data[v]){
+                if ($this.options.data[v]) {
                     var child = Page.create("dataSet", {
                         data: $this.options.data[v]
                     });
@@ -61,7 +61,7 @@ define(["./DataConstant"], function (Constant) {
                 }
             });
             this.options.model.refAlias.each(function (v, i) {
-                if($this.options.data[v]){
+                if ($this.options.data[v]) {
                     var ref = Page.create("dataValue", {
                         data: $this.options.data[v]
                     });
@@ -78,10 +78,10 @@ define(["./DataConstant"], function (Constant) {
         getRefDS: function (alias) {
             return this.refDS[alias];
         },
-        changeStatus:function(status){
+        changeStatus: function (status) {
             this.options.data[this.options.model.status] = status;
         },
-        getStatus:function(){
+        getStatus: function () {
             return this.options.data[this.options.model.status];
         },
         getValue: function () {
@@ -89,13 +89,13 @@ define(["./DataConstant"], function (Constant) {
             var $this = this;
             Object.merge(value, this.options.data);
             this.options.model.childAlias.each(function (v, i) {
-                if($this.childDS[v]){
+                if ($this.childDS[v]) {
                     var cvalue = $this.childDS[v].getValue();
                     value[v] = cvalue;
                 }
             });
             this.options.model.refAlias.each(function (v, i) {
-                if($this.refDS[v]){
+                if ($this.refDS[v]) {
                     var cvalue = $this.refDS[v].getValue();
                     value[v] = cvalue;
                 }
@@ -103,15 +103,20 @@ define(["./DataConstant"], function (Constant) {
             });
             return value;
         },
-        updateRecord: function (value) {
+        updateRecord: function (value, notFireEvent) {
             var r = this.options.data;
-            this.fireEvent("beforeUpdateRecord",[value, r]);
+            if (!notFireEvent) {
+                this.fireEvent("beforeUpdateRecord", [value, r]);
+            }
             Object.merge(r, value);
             if (r[this.options.model.status] != this.options.model.add) {
                 r[this.options.model.status] = this.options.model.update;
             }
-            this.fireEvent("afterUpdateRecord",[value]);
+            if (!notFireEvent) {
+                this.fireEvent("afterUpdateRecord", [value]);
+            }
         },
+
         deleteRecord: function () {
             var r = this.options.data;
             r[this.options.model.status] = this.options.model.remove;
