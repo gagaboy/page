@@ -17,17 +17,23 @@
  *  哪些组件会用DataSource 例如：grid, form, charts, combobox, tree etc..
  *  可以被扩展
  */
-define(["./DataConstant"], function (Constant) {
+define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
     var xtype = "dataSet";
     var DataSet = new Class({
-        Implements: [Events, Options],
+        Implements: [Events, Options, DataSource],
         options: {
             $id: "",
             $xtype: xtype,
             data: [],//[{wid:'1',name:''},{wid:'2',name:''}]
+
             _dataMap: {},
             _dataArray: [],
+            fetchUrl: '',
+            fetchParam: {},
+            syncUrl: '',
+            syncParam: {},
+            autoSync: false,
             model: {
                 id: 'wid',
                 status: Constant.status,
@@ -46,6 +52,16 @@ define(["./DataConstant"], function (Constant) {
             this._initData();
         },
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        getFetchParam: function () {
+            return {};
+        },
+
+        getSyncParam: function () {
+            return this.getValue();
+        },
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         _initData: function () {
             if (this.options.data && this.options.data.length > 0) {
                 for (var i = 0; i < this.options.data.length; i++) {
@@ -58,6 +74,7 @@ define(["./DataConstant"], function (Constant) {
                 }
             }
         },
+
         getValue: function () {
             var o = [];
             var array = this.options._dataArray;
@@ -71,24 +88,7 @@ define(["./DataConstant"], function (Constant) {
         getId: function () {
             return this.options.$id;
         },
-        fetch: function (callback) {
-            var $this = this;
-            var params = {};
-            Page.utils.ajax(this.options.readUrl, params, function (data) {
-                $this.data = data;
-                this._initData();
-                //TODO
-                callback()
-            }, null);
-        },
-        sync: function (callback) {
-            var $this = this;
-            var params = this.getValue();
-            Page.utils.ajax(this.options.syncUrl, params, function (data) {
-                //TODO
-                callback()
-            }, null);
-        },
+
         at: function (index) {
             return this.options._dataArray[index];
         },
@@ -113,6 +113,7 @@ define(["./DataConstant"], function (Constant) {
                         r.changeStatus(this.options.model.remove);
                     }
                     this.fireEvent("afterDeleteRecord", [r]);
+                    this._valueChanged();
                 }
             } else {
                 window.console.log("没有找到指定ID的纪录.");
@@ -134,6 +135,7 @@ define(["./DataConstant"], function (Constant) {
                 this.options._dataMap[rid] = dv;
                 this.options._dataArray.push(dv);
                 this.fireEvent("afterAddRecord", [r]);
+                this._valueChanged();
             } else {
                 window.console.log("纪录没有指定ID.");
             }
@@ -148,6 +150,7 @@ define(["./DataConstant"], function (Constant) {
             var r = this.readRecord(record[vid]);
             if (r) {
                 r.updateRecord(record);
+                this._valueChanged();
             }
         }
     });

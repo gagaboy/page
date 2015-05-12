@@ -10,19 +10,24 @@
  *
  *
  */
-define(["./DataConstant"], function (Constant) {
+define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
     var xtype = "dataValue";
     var DataValue = new Class({
-        Implements: [Events, Options],
+        Implements: [Events, Options, DataSource],
         options: {
             $id: "",
             $xtype: xtype,
             data: {},
+            fetchUrl: '',
+            fetchParam: {},
+            syncUrl: '',
+            syncParam: {},
+            autoSync: false,
             model: {
                 id: 'wid',
-                childAlias: ['items'],
-                refAlias: ["xb"],
+                childAlias: [],
+                refAlias: [],
                 status: Constant.status,
                 notModify: Constant.notModify,
                 add: Constant.add,
@@ -45,10 +50,18 @@ define(["./DataConstant"], function (Constant) {
         getId: function () {
             return this.options.$id;
         },
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        getFetchParam: function () {
+            return {};
+        },
 
-        _initData: function () {
+        getSyncParam: function () {
+            return this.getValue();
+        },
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        _initData: function (forceNotModify) {
             var $this = this;
-            if (!this.options.data[this.options.model.status]) {
+            if (!this.options.data[this.options.model.status] || forceNotModify) {
                 this.options.data[this.options.model.status] = this.options.model.notModify;
             }
             this.options.model.childAlias.each(function (v, i) {
@@ -68,7 +81,6 @@ define(["./DataConstant"], function (Constant) {
                     $this.refDS[v] = ref;
                     delete $this.options.data[v];
                 }
-
             });
         },
 
@@ -115,11 +127,13 @@ define(["./DataConstant"], function (Constant) {
             if (!notFireEvent) {
                 this.fireEvent("afterUpdateRecord", [value]);
             }
+            this._valueChanged();
         },
 
         deleteRecord: function () {
             var r = this.options.data;
             r[this.options.model.status] = this.options.model.remove;
+            this._valueChanged();
         }
     });
     DataValue.xtype = xtype;

@@ -10,6 +10,7 @@ define([], function () {
             jQuery.ajax({
                 url: url,
                 data: params,
+                type:'POST',
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
