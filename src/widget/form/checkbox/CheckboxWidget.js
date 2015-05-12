@@ -5,63 +5,23 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         options: {
             $xtype: xtype,
             cols: 3,//布局列数
-            data: [],//选项
+            items: [],//选项
+            value: [],
             //valueFiled:"value",//值字段
             //textFiled:"display",//显示字段
             //showAllcheckBtn: false,//提供全选按钮
-            data: [{
-                value: '1',
-                display: '足球',
-                clicked: false
-            }, {
-                value: '11',
-                display: '足球1',
-                clicked: false
-            }, {
-                value: '12',
-                display: '足球2',
-                clicked: false
-            }, {
-                value: '13',
-                display: '足球3',
-                clicked: false
-            }, {
-                value: '2',
-                display: '台球',
-                clicked: false
-            }, {
-                value: '21',
-                display: '台球1',
-                clicked: false
-            }, {
-                value: '22',
-                display: '台球2',
-                clicked: false
-            }, {
-                value: '23',
-                display: '台球3',
-                clicked: false
-            }, {
-                value: '24',
-                display: '台球4',
-                clicked: false
-            }, {
-                value: '25',
-                display: '台球5',
-                clicked: false
-            }],
-            value: [],
+
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
-                d.clicked = !d.clicked;
-                vm.setValueByData(vid);
+                d.checked = !d.checked;
+                vm.setValueByItems(vid);
             },
-            setValueByData:function(vid){
+            setValueByItems:function(vid){
                 var vm = avalon.vmodels[vid];
                 var value = [];
-                for (var i = 0; i < vm.data.length; i++) {
-                    if (vm.data[i].clicked) {
-                        value.push(vm.data[i].value);
+                for (var i = 0; i < vm.items.length; i++) {
+                    if (vm.items[i].checked) {
+                        value.push(vm.items[i].value);
                     }
                 }
                 vm.value = value;
@@ -69,24 +29,24 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         },
         initialize: function (opts) {
             this.parent(opts);
-            this._setValueByData();
+            this._setValueByItems();
         },
         getTemplate: function () {
             return template;
         },
         setValue: function (valueArr) {
             //重写
-            if(valueArr&&this.getAttr("data")){
-                var items = this.getAttr("data");
+            if(valueArr&&this.getAttr("items")){
+                var items = this.getAttr("items");
                 this.setAttr("value",valueArr);
                 for (var i = 0; i < items.length; i++) {//清楚原选项
-                    items[i].clicked = false;
+                    items[i].checked = false;
                 }
                 for (var t = 0; t < valueArr.length; t++) {//设置新的值
                     var valueT = valueArr[t];
                     for (var i = 0; i < items.length; i++) {
                         if (valueT==items[i].value) {
-                            items[i].clicked = true;
+                            items[i].checked = true;
                         }
                     }
                 }
@@ -96,31 +56,51 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             //获取所选选项详情
         },
         checkAll:function(){
-            var datas = this.getAttr("data");
+            var items = this.getAttr("items");
             var values = [];
-            for (var i = 0; i < datas.length; i++) {
-                datas[i].clicked = true;
-                values.push(datas[i].value);
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = true;
+                values.push(items[i].value);
             }
             this.setAttr("value",values);
         },
         deCheckAll:function(){
-            var datas = this.getAttr("data");
-            for (var i = 0; i < datas.length; i++) {
-                datas[i].clicked = false;
+            var items = this.getAttr("items");
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = false;
             }
             this.setAttr("value",[]);
         },
-        _itemCheck: function (item) {
-            item.clicked = !item.clicked;
-            this._setValueByData();
+        validate: function () {
+            //var valRes = Page.validation.validateValue(this.getValue(),this.getAttr("validationRules"));
+            var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
+
+            var valRes = null;
+            if (this.getAttr("required")) {//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue(), 1);
+            }
+            if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
+                valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
+            }
+            if (valRes && !valRes.result) {//将错误信息赋值给属性
+                this.setAttr("errorMessage", valRes.errorMsg);
+            } else {//清空错误信息
+                this.setAttr("errorMessage", "");
+            }
         },
-        _setValueByData:function(){
-            var datas = this.getAttr("data");
+        _valueChange:function(){//值改变时校验
+            this.validate();
+        },
+        _itemCheck: function (item) {
+            item.checked = !item.checked;
+            this._setValueByItems();
+        },
+        _setValueByItems:function(){
+            var items = this.getAttr("items");
             var values = [];
-            for (var i = 0; i < datas.length; i++) {
-                if (datas[i].clicked) {
-                    values.push(datas[i].value);
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].checked) {
+                    values.push(items[i].value);
                 }
             }
             this.setAttr("value",values);

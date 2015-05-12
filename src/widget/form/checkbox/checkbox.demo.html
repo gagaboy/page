@@ -41,7 +41,48 @@
     require(["../../../page/src/Bootstrap"], function () {
         var checkbox = Page.create('checkbox', {
             $parentId: 'comboboxContainer',
-            label: '性别'
+            label: '性别',
+            items:[{
+                value: '1',
+                display: '足球',
+                checked: false
+            }, {
+            value: '11',
+                display: '足球1',
+                checked: false
+            }, {
+                value: '12',
+                display: '足球2',
+                checked: false
+            }, {
+                value: '13',
+                display: '足球3',
+                checked: false
+            }, {
+                value: '2',
+                display: '台球',
+                checked: false
+            }, {
+                value: '21',
+                display: '台球1',
+                checked: false
+            }, {
+                value: '22',
+                display: '台球2',
+                checked: false
+            }, {
+                value: '23',
+                display: '台球3',
+                checked: false
+            }, {
+                value: '24',
+                display: '台球4',
+                checked: false
+            }, {
+                value: '25',
+                display: '台球5',
+                checked: false
+            }]
         });
         checkbox.render();
     });
