@@ -4,45 +4,29 @@
             <th style="width: 20px">
                 <input type="checkbox" ms-duplex-checked="allChecked" ms-click="allClick(vid, this)">
             </th>
-            <th ms-repeat="header">{{el.title}}</th>
+            <th ms-repeat="columns">{{el.title}}</th>
             <th>
 
             </th>
         </tr>
         <tr ms-repeat-a="data">
             <td>
-                <input type="checkbox" ms-duplex-checked="a['checked']" ms-click="checkMe(a, vid)">
+                <input type="checkbox" ms-click="checkRow(vid,a)">
             </td>
-            <td ms-repeat="header">
-                <div ms-if="header[$index].type=='ctype'">
-                    {{a[header[$index].ctitle+"Display"]}}
+            <td ms-repeat="columns">
+                <div ms-if="columns[$index].type=='ctype'">
+                    {{a[columns[$index].dataField+"Display"]}}
                 </div>
-                <div ms-if="header[$index].type!='ctype'">
-                    {{a[header[$index].ctitle]}}
+                <div ms-if="columns[$index].type!='ctype'">
+                    {{a[columns[$index].dataField]}}
                 </div>
             </td>
-            <td ms-attr-rowIndex="$index">
+            <td ms-attr-rowIndex="$index" ms-if="opColumn.template">
                 {{opColumn.template|html}}
             </td>
         </tr>
     </table>
-    <nav>
-        <ul class="pagination">
-            <li>
-                <a href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
+    <nav ms-if="usePager">
+        <div ms-attr-id="'pager_'+vid"></div>
     </nav>
 </div>
