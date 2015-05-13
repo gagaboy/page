@@ -13,7 +13,6 @@
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
 
-
     <!-- Data Tables -->
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
@@ -55,6 +54,13 @@
                                 <td class="center">4</td>
                                 <td class="center">X</td>
                             </tr>
+                            <tr class="gradeX">
+                                <td>AA</td>
+                                <td>BB</td>
+                                <td>CC</td>
+                                <td class="center">4</td>
+                                <td class="center">X</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -63,56 +69,58 @@
         </div>
     </div>
 </div>
-<script src="/page/bower_components/mootools/dist/mootools-core.js"></script>
-<script src="/page/bower_components/jquery/dist/jquery.js"></script>
-
-
+<script src="/page/bower_components/mootools/Source/Core/Core.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Array.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/String.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Object.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Number.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Function.js"></script>
+<script src="/page/bower_components/mootools/Source/Class/Class.js"></script>
+<script src="/page/bower_components/mootools/Source/Class/Class.Extras.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/jquery-2.1.1.js"></script>
-<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.min.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
+
+<!-- Data Tables -->
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/jeditable/jquery.jeditable.js"></script>
-
-<!-- Data Tables -->
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/dataTables/jquery.dataTables.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/dataTables/dataTables.responsive.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+<!-- Data Tables End -->
 
-<!-- Custom and plugin javascript -->
-<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/inspinia.js"></script>
-<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/pace/pace.min.js"></script>
-
-<script>
-    $.noConflict();
-</script>
 <script src="/page/bower_components/avalon/avalon.js"></script>
-
 <script>
     require(["../../../page/src/Bootstrap"], function () {
 
         var eDataTableAuto = Page.create('eDataTable', {
             $parentId: 'gridContainer',
-            $id: "ss",
+            $id: "ss1",
             autoTable:true,
             columns: [
-                { text: 'First Name', dataField: 'First Name', width: 100 },
-                { text: 'Last Name', dataField: 'Last Name', width: 100 },
-                { text: 'Product', dataField: 'Product', width: 180 },
-                { text: 'Unit Price', dataField: 'Price', width: 90, align: 'right', cellsAlign: 'right', cellsFormat: 'c2' },
-                { text: 'Quantity', dataField: 'Quantity', width: 80, align: 'right', cellsAlign: 'right' }
+                { title: 'First Name', data: 'FirstName', width: 100 },
+                { title: 'Last Name', data: 'LastName', width: 100 },
+                { title: 'Product', data: 'Product', width: 180 },
+                { title: 'Unit Price', data: 'Price', width: 90, align: 'right', cellsAlign: 'right', cellsFormat: 'c2' },
+                { title: 'Quantity', data: 'Quantity', width: 80, align: 'right', cellsAlign: 'right' }
+            ],
+            data:[
+                {"FirstName":"A1","LastName":"A2","Product":"A3","Price":"A4",Quantity:"A5"},
+                {"FirstName":"B1","LastName":"B2","Product":"B3","Price":"B4",Quantity:"B5"},
+                {"FirstName":"C1","LastName":"C2","Product":"C3","Price":"C4",Quantity:"C5"}
             ]
         });
         eDataTableAuto.render();
-
+        //eDataTableAuto.dataTableObj.fnAddData({});//点用dataTable对象即可
 
         var eDataTable = Page.create('eDataTable', {
             $parentId: 'alreadytable',
-            $id: "ss",
+            $id: "ss2",
             autoTable:false
         });
         eDataTable.render();
-
+        //eDataTableAuto.dataTableObj.fnAddData({});//点用dataTable对象即可
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

@@ -21,11 +21,11 @@ define(['../Base', 'text!./DataTableWidget.html', 'css!./DataTableWidget.css'], 
                 $this.getParentElement().html(e);
 
                 var tableObj = tmp.find("table.table");
-                jQuery(tableObj).dataTable(this.options);//调用dataTable
+                this.dataTableObj = jQuery(tableObj).dataTable(this.options);//调用dataTable
                 $this.element = e[0];
                 //avalon.scan($this.getParentElement()[0]);
             }else{//使用已有table渲染
-                $this.getParentElement().dataTable(this.options);//调用dataTable
+                this.dataTableObj = $this.getParentElement().dataTable(this.options);//调用dataTable
             }
             $this.fireEvent("afterRender", [this.vmodel]);
             if (this["_afterRender"]) {
