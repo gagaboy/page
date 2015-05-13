@@ -23,6 +23,7 @@ define([
     "./widget/Base",
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
+    "./widget/form/maskedtextbox/MaskedtextboxWidget",
     "./widget/form/combobox/ComboboxWidget",
     "./widget/form/datepicker/DatepickerWidget",
     "./widget/pagination/PaginationWidget",
