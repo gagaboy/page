@@ -1,6 +1,7 @@
 body {
     background-color: #ccc;
 }
+
 .form-horizontal-table {
     width: 100%;
     border: 0;
@@ -48,4 +49,12 @@ body {
     height: 25px;
     line-height: 25px;
     padding: 1px 6px
+}
+
+.form-widget-container {
+    padding: 3px;
+}
+
+.has-error .form-widget-container {
+    /*border-bottom: 1px solid red;*/
 }
