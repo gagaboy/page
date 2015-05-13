@@ -1,122 +1,214 @@
 /**
  * Created by JKYANG on 15/4/23.
  */
-define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'], function (BaseFormWidget, template) {
-//define(['../BaseFormWidget', 'text!./nnn.html', 'css!./ComboboxWidget.css'], function (BaseFormWidget, template) {
+define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'
+    ,'css!../../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (BaseFormWidget, template) {
     var xtype = "combobox";
+    var dataSource, pagination;
     var ComboBoxWidget = new Class({
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            showPulldown: false,
-            pullDownDisplay: null,
-            focused: false,
-            multi: false,
-            inputWidth: 25,
-            data: null,
-            selectedItem: null,
             value: null,
             display: null,
-            select: function (vid, span) {
+            multi: false,
+            searchable: true,
+            selectedItems: [],
+            showPanel: false,
+            focused: false,
+            inputWidth: 25,
+            searchValue: " ",
+
+            model: "normal",   //grid | tree
+            data: [],
+            $valueField: "value",
+            $textField: "display",
+            $pageSize: 10,
+            $split: ",",
+            $firstLoad: true,
+
+            comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
-                vm.showPulldown = !vm.showPulldown;
-                vm.pullDownDisplay = vm.showPulldown ? "block" : "none";
+                vm.focused = true;
+                jQuery(this).find('input').focus();
+                vm.changePanelShow(vid);
+
+                vm.searchValue = "";  //使其触发搜索
             },
-            selectItem: function (vid, data) {
+            inputFocus: function(vid, $event) {
                 var vm = avalon.vmodels[vid];
-                if (vm.multi) {
-                    var contains = false;
-                    for (var i = 0, len = vm.selectedItem.length; i < len; i++) {
-                        if (vm.selectedItem[i].value == data.value) {
-                            contains = true;
-                            break;
-                        }
-                    }
-                    if (!contains) {
-                        vm.selectedItem.push(data);
-                        vm.value.push(data.value);
-                        vm.display.push(data.display);
-                    }
-                }
-                else {
-                    vm.selectedItem = data;
-                    vm.value = data.value;
-                    vm.display = data.display;
-                    vm.showPulldown = false;
-                    vm.pullDownDisplay = "none";
-                }
-            },
-            removeItem: function (vid, data) {
-                var vm = avalon.vmodels[vid];
-                vm.selectedItem.remove(data);
-                vm.value.remove(data.value);
-                vm.display.remove(data.display);
+                vm.focused = true;
+                vm.searchValue = "";  //使其触发搜索
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
-                var maxWidth = jQuery(this).parent().width();
+                //如果是多选，则需要动态改变输入区域的宽度
                 if (vm.multi) {
+                    var maxWidth = jQuery(this).parent().parent().width();
+                    //删除已选项（如果是删除且输入区域为空字符串）
                     if (e.keyCode == 8 && jQuery(this).val() == "") {
-                        vm.selectedItem.pop();
-                        vm.value.pop();
-                        vm.display.pop();
+                        var el = vm.selectedItems.pop();
                     }
                     var selected = jQuery(this).parent().find("div");
                     for (var i = 0, len = selected.length; i < len; i++) {
                         maxWidth = maxWidth - selected[i].offsetWidth - 8;
                     }
+
+                    var inputWidth = jQuery(this).val().length * 7 + 25;
+                    if (inputWidth > maxWidth) {
+                        inputWidth = maxWidth;
+                    }
+                    vm.inputWidth = inputWidth;
                 }
-                var inputWidth = jQuery(this).val().length * 7 + 25;
-                if (inputWidth > maxWidth) {
-                    inputWidth = maxWidth;
-                }
-                vm.inputWidth = inputWidth;
             },
-            comboBoxFocus: function (vid, span) {
+            changePanelShow: function(vid, e) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                jQuery(this).find('input').focus();
-            },
-            comboBoxBlur: function (vid, span) {
-                var vm = avalon.vmodels[vid];
-                vm.focused = false;
-                vm.showPulldown = false;
-                vm.pullDownDisplay = "none";
-            }
-        },
-        initialize: function (opts) {
-            if (opts) {
-                // TODO initData
-
-                if (opts.multi) {
-                    opts.value = opts.value || [];
-                    opts.selectedItem = [];
-                    opts.display = [];
-                    for (var i = 0, valueLen = opts.value.length; i < valueLen; i++) {
-                        for (var j = 0, dataLen = opts.data.length; j < dataLen; j++) {
-                            if (opts.value[i] == opts.data[j].value) {
-                                opts.display.push(opts.data[j].display);
-                                opts.selectedItem.push(opts.data[j]);
-                                break;
-                            }
-                        }
-                    }
+                vm.showPanel = !vm.showPanel;
+                if(vm.$firstLoad) {
+                    vm.$firstLoad = false;
+                    Page.manager.components[vm.vid].renderPanel(vm.vid);
                 }
-                else {
-                    opts.value = opts.value || null;
-                    for (var o in opts.data) {
-                        if (opts.value == o.value) {
-                            opts.display = o.display;
-                            opts.selectedItem = o;
+            },
+
+            initNormalItem: function(vm) {
+                var optionData = vm.data.length>0 ? vm.data : vm.optionData;   //如果data中有值，则从data中获取下拉数据，以便以后对选中项的操作
+                if(!optionData) return;
+                for(var i=0; i<optionData.length; i++) {
+                    optionData[i].checked = false;
+                    for(var j=0; j<vm.selectedItems.length; j++) {
+                        if(vm.selectedItems[j][vm.$valueField] == optionData[i][vm.$valueField]) {
+                            optionData[i].checked = true;
                             break;
                         }
                     }
-                    if (opts.display) {
-                        opts.inputWidth = opts.display.length * 7 + 25;
+                }
+            },
+            initGridItem: function() {},
+            toggleItemSelect: function(vid, el) {
+                var vm = avalon.vmodels[vid];
+                vm.changeSelectedItems(vm, el, !el.checked);
+                if(!vm.multi) {
+                    vm.showPanel = false;
+                    vm.focused = false;
+                }
+            },
+            changeSelectedItems: function(vm, el, addFlag) {
+                var item = {};
+                item[vm.$valueField] = el[vm.$valueField];
+                item[vm.$textField] = el[vm.$textField];
+                //增加选中项
+                if(addFlag) {
+                    if(!vm.multi) {
+                        vm.selectedItems.clear();   //单选模式下，先删除，再插入，才能监控到selecetedItems数据的变化
                     }
+                    vm.selectedItems.push(item);
+                }
+                //删除选中项
+                else {
+                    for(var i=0; i<vm.selectedItems.length; i++) {
+                        if(vm.selectedItems[i][vm.$valueField] ==  item[vm.$valueField] ) {
+                            vm.selectedItems.removeAt(i);
+                            break;
+                        }
+                    }
+                }
+            },
+            removeItem: function(vid, item, index, evnet) {
+                var vm = avalon.vmodels[vid];
+                vm.selectedItems.removeAt(index);
+                event.stopPropagation();
+            },
+            removeAll: function(vid) {
+                var vm = avalon.vmodels[vid];
+                vm.value = "";
+                vm.display = "";
+                vm.selectedItems.clear();
+            }
+
+        },
+        initialize: function (opts) {
+            if (opts && opts.value && opts.display) {
+                var splitChar = opts.$split || this.options.$split;
+                var valueArr = opts.value.split(splitChar);
+                var displayArr = opts.display.split(splitChar);
+                for(var i=0; i<valueArr.length; i++) {
+                    var item = {};
+                    item[opts.$valueField || this.options.$valueField] = valueArr[i];
+                    item[opts.$textField || this.options.$textField] = displayArr[i];
+                    this.options.selectedItems.push(item);
                 }
             }
             this.parent(opts);
+
+            this._watchSelectedItems(this.vmodel);
+            this._watchSearchValue(this.vmodel);
+        },
+        _watchSelectedItems: function(vm) {
+            vm.selectedItems.$watch("length", function (newValue, oldValue) {
+                if("normal" == vm.model) {
+                    //疑为BUG,不应该再次清除
+                    if(0 == newValue)   vm.selectedItems.clear();
+                    //重新渲染下拉面板中的选中项
+                    vm.initNormalItem(vm);
+                }
+                //更新组件值
+                var value = "";
+                var display = "";
+                for(var i=0; i<vm.selectedItems.length; i++) {
+                    var item = vm.selectedItems[i];
+                    value += item[vm.$valueField];
+                    display += item[vm.$textField];
+                    if(i != vm.selectedItems.length-1) {
+                        value += ",";
+                        display += ",";
+                    }
+                }
+                vm.value = value;
+                vm.display = display;
+            });
+        },
+        _watchSearchValue: function(vm) {
+            vm.$watch("searchValue", function (newValue, oldValue)  {
+                if(!newValue || newValue.length>3) {
+                    alert(newValue)
+                }
+            });
+        },
+        renderPanel: function(vid) {
+            var vm = this._getCompVM(vid);
+            if("normal" == vm.model) {
+                vm.optionData = this._getDataSource().getValue();
+                if( vm.optionData) {
+                    vm.initNormalItem(vm);
+                    vm.data = vm.optionData;
+                }
+                //创建分页条
+                pagination = Page.create("pagination", {
+                    $parentId: 'page_'+vm.vid,
+                    totalNum: 20,
+                    showPageDetail: false,
+                    pageChangeEvent:function(pager){
+                        alert(1);
+                    }
+                });
+                pagination.render();
+            }else if("grid" == vm.model) {
+
+            }else if("tree" == vm.model) {
+
+            }
+
+        },
+        _getCompVM: function(vid) {
+            return avalon.vmodels[vid]
+        },
+        _getDataSource: function() {
+            if(!dataSource) {
+                dataSource =  Page.create("dataSet", {data: [{value: "1", display: "男"}, {value: "2", display: "女"}, {value: "3", display: "未知"}]});
+                //dataSource = Page.create("dataSet", {data: [{id: "1", text: "男"}, {id: "2", text: "女"}, {id: "3", text: "未知"}]});
+            }
+            return dataSource;
         },
         getTemplate: function () {
             return template;
@@ -125,7 +217,6 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             this.setAttr("display", value);
         },
         _getInputElement: function () {
-            //var input = this.getElement()[0].getElement("input.comboBoxInput");
             var input = this.getElement().find('input.comboBoxInput');
             return input;
         },

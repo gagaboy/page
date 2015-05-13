@@ -5,31 +5,51 @@
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
-            <div>
-                <div ms-class-div-focus="focused" class="form-control" ms-click="comboBoxFocus(vid, this)">
-                    <!--<ul ms-if="multi" class="form-control oni-combobox-input" ms-hover="oni-combobox-mouseon">-->
-                        <!--<li ms-repeat-item="selectedItem" class="oni-combobox-multiselected" ms-hover="oni-combobox-multihover">-->
-                            <!--<span ms-text="item.display"></span>-->
-                            <!--<span class="glyphicon glyphicon-remove" aria-hidden="true" ms-click="removeItem(vid, item)"></span>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                    <div ms-repeat-item="selectedItem" class="oni-combobox-multiselected" ms-if="multi" ms-hover="oni-combobox-multihover">
-                        <span ms-text="item.display"></span>
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ms-click="removeItem(vid, item)"></span>
+            <div  ms-if="status=='edit'" class="form-group" style=" margin-bottom: 0px;">
+                <div class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
+                    <!--多选区域-->
+                    <div ms-if="multi" ms-class="div-focus: focused"
+                         style="width: 350px;border: 1px solid #CBD5DD;  border-radius: 2px;" title="" ms-click="comboBoxFocus(vid, this)">
+                        <ul class="chosen-choices" style="border: 0px;">
+                            <li ms-repeat-item="selectedItems" class="search-choice">
+                                <span ms-text="item[$textField]"></span>
+                                <a ms-click="removeItem(vid, item, $index, $event)" class="search-choice-close" data-option-array-index="105"></a>
+                            </li>
+
+                            <li class="search-field">
+                                <input type="text" ms-duplex="searchValue" autocomplete="off"tabindex="4" ms-css-width="multi ? inputWidth : -1" ms-on-keydown="keyDown(vid, $event)">
+                            </li>
+                        </ul>
                     </div>
-                    <input style="outline: none;border: none;" ms-css-width="multi ? inputWidth : -1" ms-attr-value="multi ? '' : display" ms-on-keydown="keyDown(vid, $event)" ms-on-blur="comboBoxBlur(vid, this)">
-                    <span class="glyphicon glyphicon-menu-down form-control-feedback" aria-hidden="true"
-                          style="pointer-events:auto; cursor: pointer" ms-on-click="select(vid, this)"></span>
+                    <!--单选可搜索-->
+                    <div ms-if="!multi && searchable" ms-class="div-focus: focused" class="form-control" >
+                        <input ms-duplex="display" style="outline: none;border: none;width: 100%"  ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
+                        <a ms-click="removeAll(vid)" class="clearBtn" data-option-array-index="105"></a>
+                        <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
+                              style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;" ms-on-click="changePanelShow(vid, $event)"></span>
+                    </div>
+                    <!--单选不可搜索-->
+                    <div ms-if="!multi && !searchable" ms-class="div-focus: showPanel" class="form-control" style="cursor: pointer;"ms-on-click="changePanelShow(vid, $event)">
+                        <span ms-repeat-item="selectedItems" ms-text="item[$textField]"></span>
+                        <a ms-click="removeAll(vid)" class="clearBtn" data-option-array-index="105"></a>
+                        <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
+                              style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;"></span>
+                    </div>
+
+                    <!--下拉面板区域-->
+                    <div class="chosen-drop"  ms-visible="showPanel">
+                        <div ms-if="model=='normal'">
+                            <ul class="chosen-results" ms-each-el="data">
+                                <li class="active-result" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index)">{{el[$textField]}}</li>
+                            </ul>
+                            <div ms-attr-id="page_{{vid}}"></div>
+                        </div>
+                    </div>
                 </div>
-                <ul class="dropdown-menu" role="menu" style="min-width: 100%" ms-css-display="pullDownDisplay">
-                    <li role="presentation" ms-repeat="data">
-                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ms-on-mousedown="selectItem(vid, el)">
-                            {{el.display}}
-                        </a>
-                    </li>
-                </ul>
             </div>
+            <input ms-if="status!='edit'" class="form-control form-widget-to-focus-class form-text" ms-duplex="display"  readonly/>
         </td>
+
         <td class="form-icon-container">
             <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
         </td>

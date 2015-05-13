@@ -40,7 +40,21 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4" id="comboboxContainer">
+                    <div class="col-md-6" id="multi">
+
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-md-6" id="singleSearchable">
+
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-md-6" id="single">
 
                     </div>
                 </div>
@@ -57,19 +71,41 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../src/Bootstrap"], function () {
-        var combo = Page.create('combobox', {
-            $parentId: 'comboboxContainer',
-            $id: 'sex',
-            label: '性别',
+        var combo1 = Page.create('combobox', {
+            $parentId: 'multi',
+            $id: 'sex1',
+            label: '性别（多选）',
             multi: true,
-            value: ["1"],
-//            multi: false,
-//            value: "1",
-            data: [{value: '1', display: '1'}, {value: '2', display: '2'}, {value: '3', display: '3'}, {value: '4', display: '4'}, {value: '5', display: '5'}, {value: '6', display: '6'}, {value: '7', display: '7'}, {value: '8', display: '8'}]
+            value: "1,3",
+            display: "男,未知"
         })
-        combo.render();
-        console.log(combo);
-        console.log(combo.getValue());
+        combo1.render();
+
+        var combo2 = Page.create('combobox', {
+            $parentId: 'singleSearchable',
+            $id: 'sex2',
+            label: '性别（单选可搜索）',
+            multi: false,
+            searchable: true,
+//            $valueField: "id",
+//            $textField: "text",
+            value: "1",
+            display: "男"
+
+        })
+        combo2.render();
+
+        var combo3 = Page.create('combobox', {
+            $parentId: 'single',
+            $id: 'sex3',
+            label: '性别（单选）',
+            multi: false,
+            searchable: false,
+            value: "1",
+            display: "男"
+        })
+        combo3.render();
+
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
