@@ -145,6 +145,18 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 Object.merge(arr, v);
             });
             arr[this.options.model.status] = this.options.data[this.options.model.status];
+            var $this = this;
+            this.options.model.childAlias.each(function (v, i) {
+                if ($this.options.data[v]) {
+                    arr[v] = $this.getChildDS(v).getModifiedValue();
+                }
+            });
+            this.options.model.refAlias.each(function (v, i) {
+                if ($this.options.data[v]) {
+                    arr[v] = $this.getRefDS(v).getModifiedValue();
+                }
+            });
+            arr[this.options.model.id] = $this.options.data[this.options.model.id];
             return arr;
         }
     });
