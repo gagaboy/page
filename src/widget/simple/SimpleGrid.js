@@ -16,6 +16,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             totalNum:0,
             totalPage:1,
             opColumn: {},
+            activeRow:null,
             //事件
             beforeCheckRow:null,
             afterCheckRow:null,
@@ -26,6 +27,10 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                     vm.data[i]['checked'] = element.checked;
                 }
                 vm.allChecked = element.checked;
+            },
+            activeRow:function(vid,row){
+                var vm = avalon.vmodels[vid];
+                vm.activeRow = row;
             },
             checkRow: function (vid,row) {
                 var vm = avalon.vmodels[vid];
@@ -47,18 +52,16 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             },
             deleteRow: function (vid,row) {
                 //删除行，remove掉
+                var vm = avalon.vmodels[vid];
                 row = null;
-                var upFlag = false;
-                for (var i = 0; i < vm.data.$model.length; i++) {
-                    if (!vm.data[i]&&(i+1)<vm.data.$model.length) {
-                        vm.data[i] = vm.data[i+1];
-                        upFlag = true;
-                    }else if((i+1)<vm.data.$model.length){
-                        vm.data[i] = vm.data[i+1];
+                var nArr = [];
+                for (var i = 0; i < vm.data.length; i++) {
+                    if (vm.data[i]) {
+                        nArr.push(vm.data[i]);
                     }
                 }
-                vm.data.length--;
-                vm.data.$model.length--;
+                vm.data = nArr;
+                //重新判断全选属性
                 var all = true;
                 for (var i = 0; i < vm.data.$model.length; i++) {
                     if (!vm.data[i]['checked']) {
@@ -72,9 +75,17 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         pagination:null,//分页条对象
         initialize: function (opts) {
             var d = opts.data;
-            for (var i = 0; i < d.length; i++) {
-                if (d[i].checked == undefined) {
-                    d[i].checked = false;
+            if(opts.allChecked){//默认全部勾选
+                for (var i = 0; i < d.length; i++) {
+                    if (d[i]) {
+                        d[i].checked = true;
+                    }
+                }
+            }else{
+                for (var i = 0; i < d.length; i++) {
+                    if (d[i].checked == undefined) {
+                        d[i].checked = false;
+                    }
                 }
             }
             this.parent(opts);
@@ -96,6 +107,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             this.pagination.render();
 
         },
+        /**
+         * 获取勾选的行，数组
+         */
         getCheckedRows: function () {
             var arr = [];
             var datas = this.getAttr('data');
@@ -106,6 +120,15 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             }
             return arr;
         },
+        /**
+         * 获取当前激活的行，鼠标点击的行
+         */
+        getActiveRow:function(){
+            return this.getAttr("activeRow");
+        },
+        /**
+         * 新增一行数据
+         */
         addRow:function(rowData,pos){//{}则表示新增空行,pos指新增位置，表示放到第几行，默认表示最后一行
             var pSize = this.getAttr("pageSize");
             var datas = this.getAttr("data");
@@ -127,25 +150,67 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             }
             this._updateAllCheckedByDatas();
         },
+        /**
+         * 删除某行
+         */
         deleteRow: function (row) {
             //删除行，remove掉
             row = null;
             var upFlag = false;
             var datas = this.getAttr("data");
-            for (var i = 0; i < datas.length; i++) {
-                if (!datas[i]&&(i+1)<datas.length) {
-                    datas[i] = datas[i+1];
-                    upFlag = true;
-                }else if((i+1)<datas.length){
-                    datas[i] = datas[i+1];
-                }
-            }
-            datas.length--;
+            this.setAttr("data",this._formArr(datas));
             this._updateAllCheckedByDatas();
         },
-        deleteCheckRows: function () {
+        /**
+         * 根据主键删除某行
+         */
+        deleteRowByDataId: function (dataId) {
+            if(dataId&&this.getAttr("idField")){
+                var idField = this.getAttr("idField");
+                var datas = this.getAttr("data");
+                for (var i = 0; i < datas.length; i++) {
+                    if(datas[i]&&datas[i][idField]
+                    &&datas[i][idField]==dataId){
+                        datas[i] = null;
+                    }
+                }
+                this.setAttr("data",this._formArr(datas));
+            }
+            this._updateAllCheckedByDatas();
+        },
+        /**
+         * 删除当前行
+         */
+        deleteActiveRow: function () {
             //删除行，remove掉
-
+            var datas = this.getAttr("data");
+            var acRow = this.getActiveRow();
+            if(acRow){
+                for(var s=0;s<datas.length;s++){
+                    if(datas[s]&&acRow==datas[s]){
+                        datas[s] = null;
+                        this.setAttr("data",this._formArr(datas));
+                        this._updateAllCheckedByDatas();
+                        break;
+                    }
+                }
+            }
+        },
+        /**
+         * 删除选中的行
+         */
+        deleteCheckedRows: function () {
+            //删除行，remove掉
+            var datas = this.getAttr("data");
+            var cdatas = this.getCheckedRows();
+            for(var s=0;s<datas.length;s++){
+                for (var i = 0; i < cdatas.length; i++) {
+                    if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
+                        datas[s] = null;
+                    }
+                }
+            }
+            this.setAttr("data",this._formArr(datas));
             this._updateAllCheckedByDatas();
         },
         getTemplate: function () {
@@ -167,6 +232,18 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         _pageSizeChange:function(pageSize){
             this.pagination.setAttr("pageSize",pageSize);
+        },
+        _formArr:function(arr){
+            if(arr){
+                var nArr = [];
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i]) {
+                        nArr.push(arr[i]);
+                    }
+                }
+                arr = nArr;
+            }
+            return arr;
         }
 
     });
