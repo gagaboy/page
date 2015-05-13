@@ -23,7 +23,6 @@ define([], function () {
         fetch: function (callback) {
             var $this = this;
             var params = this.getFetchParam();
-
             Page.utils.ajax(this.options.fetchUrl, params, function (data) {
                 $this.data = data;
                 $this._initData();

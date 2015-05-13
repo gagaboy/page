@@ -45,6 +45,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 this.options.$id = this.options.$xtype + String.uniqueID();
             }
             this._initData();
+
         },
 
         getId: function () {
@@ -82,6 +83,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                     delete $this.options.data[v];
                 }
             });
+            this.dataStack = [];
         },
 
         getChildDS: function (alias) {
@@ -121,6 +123,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 this.fireEvent("beforeUpdateRecord", [value, r]);
             }
             Object.merge(r, value);
+            this.dataStack.push(value);
             if (r[this.options.model.status] != this.options.model.add) {
                 r[this.options.model.status] = this.options.model.update;
             }
@@ -134,6 +137,15 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             var r = this.options.data;
             r[this.options.model.status] = this.options.model.remove;
             this._valueChanged();
+        },
+
+        getModifiedValue: function () {
+            var arr = {};
+            this.dataStack.each(function (v) {
+                Object.merge(arr, v);
+            });
+            arr[this.options.model.status] = this.options.data[this.options.model.status];
+            return arr;
         }
     });
     DataValue.xtype = xtype;

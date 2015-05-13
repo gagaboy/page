@@ -50,6 +50,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 this.options.$id = this.options.$xtype + String.uniqueID();
             }
             this._initData();
+
         },
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,6 +82,19 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             for (var i = 0; i < array.length; i++) {
                 var value = array[i];
                 o.push(value.getValue());
+            }
+            return o;
+        },
+
+        getModifiedValue: function () {
+            var o = [];
+            var array = this.options._dataArray;
+            for (var i = 0; i < array.length; i++) {
+                var value = array[i];
+                if (value[this.options.model.notModify]) {
+                    continue;
+                }
+                o.push(value.getModifiedValue());
             }
             return o;
         },
