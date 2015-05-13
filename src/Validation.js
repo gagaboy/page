@@ -514,8 +514,8 @@ define([], function () {
                 },
                 "length": {
                     "validateFunc": "_valLength",
-                    "errorMsg_min": "长度必须小于",
-                    "errorMsg_max": "长度必须大于",
+                    "errorMsg_min": "长度必须大于",
+                    "errorMsg_max": "长度必须小于",
                     "errorMsg_bt1": "长度必须在 ",
                     "errorMsg_bt2": "－",
                     "errorMsg_bt3": " 之间"
@@ -526,8 +526,8 @@ define([], function () {
                 },
                 "limit": {
                     "validateFunc": "_valLimit",
-                    "errorMsg_min": "大小必须小于",
-                    "errorMsg_max": "大小必须大于",
+                    "errorMsg_min": "大小必须大于",
+                    "errorMsg_max": "大小必须小于",
                     "errorMsg_bt1": "大小必须在 ",
                     "errorMsg_bt2": "－",
                     "errorMsg_bt3": " 之间"
