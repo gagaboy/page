@@ -77,7 +77,8 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             this._calculateBeginAndTo();
         },
         _pageSizeChange: function (tNum, oldNum, model) {
-            this.setAttr("totalPage", 12);
+            this._calculateTotalPage();
+            this._calculateBeginAndTo();
         },
         _calculateTotalPage: function () {
             if (this.getAttr("totalNum") && this.getAttr("pageSize")) {
