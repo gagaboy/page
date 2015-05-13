@@ -26,7 +26,6 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             $id: "",
             $xtype: xtype,
             data: [],//[{wid:'1',name:''},{wid:'2',name:''}]
-
             _dataMap: {},
             _dataArray: [],
             fetchUrl: '',

@@ -25,6 +25,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             syncParam: {},
             autoSync: false,
             model: {
+                modelId: '',// 根据ID获取模型
                 id: 'wid',
                 childAlias: [],
                 refAlias: [],
