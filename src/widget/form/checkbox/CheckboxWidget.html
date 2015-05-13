@@ -4,13 +4,15 @@
             <span class="form-required" ms-visible="required && showRequired">*</span>
             {{label}}
         </td>
-        <td class="has-feedback" ms-class="has-error:showErrorMessage&&errorMessage" ms-css-padding="controlPadding">
-            <label ms-repeat="items" ms-click="itemCheck(vid,el)">
+        <td class="has-feedback" ms-class="has-error:showErrorMessage&&errorMessage" ms-css-padding="controlPadding" style="height: 34px; vertical-align: middle">
+            <div class="form-widget-container">
+            <label ms-repeat="items" ms-click="itemCheck(vid,el)" style="margin-bottom:0">
                 <div class="icheckbox_square-green" ms-class-checked="el.checked"
                      style="position: relative;">
                 </div>
                 {{el.display}} &nbsp;&nbsp;&nbsp;
             </label>
+            </div>
         </td>
         <td class="form-icon-container">
             <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>

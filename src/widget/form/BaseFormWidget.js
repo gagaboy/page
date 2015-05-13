@@ -120,6 +120,22 @@ define(['../Base'], function (Base) {
         validate: function () {
             //todo every form widget to extend
             window.console.error("need to be extended.");
+        },
+        isValid:function(){
+            var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
+
+            var valRes = null;
+            if (this.getAttr("required")) {//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue());
+            }
+            if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
+                valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
+            }
+            if (valRes && !valRes.result) {//将错误信息赋值给属性
+                return false;
+            } else {//清空错误信息
+                return true;
+            }
         }
     });
     BaseFormWidget.xtype = xtype;

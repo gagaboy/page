@@ -7,6 +7,9 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
             value:null,
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
+                if(vm.status == 'readonly'){
+                    return;
+                }
                 if(!d.checked){
                     d.checked = true;
                     vm._setOthersUnCheck(vid,d);
@@ -26,7 +29,7 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
         initialize: function (opts) {
             this.parent(opts);
             this._setValueByItems();
-            this.validate();
+            //this.validate();
         },
         getTemplate: function () {
             return template;

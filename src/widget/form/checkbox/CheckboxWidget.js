@@ -13,6 +13,9 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
 
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
+                if(vm.status == 'readonly'){
+                    return;
+                }
                 d.checked = !d.checked;
                 var values = [];
                 for (var i = 0; i < vm.items.length; i++) {
@@ -26,7 +29,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         initialize: function (opts) {
             this.parent(opts);
             this._setValueByItems();
-            this.validate();
+            //this.validate();
         },
         getTemplate: function () {
             return template;
@@ -94,13 +97,16 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         },
         _setValueByItems:function(){
             var items = this.getAttr("items");
+
             var values = [];
             for (var i = 0; i < items.length; i++) {
                 if (items[i].checked) {
                     values.push(items[i].value);
                 }
             }
-            this.setAttr("value",values);
+            if(values.length>0){
+                this.setAttr("value",values);
+            }
         }
     });
     CheckboxWidget.xtype = xtype;
