@@ -52,15 +52,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
         getId: function () {
             return this.options.$id;
         },
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        getFetchParam: function () {
-            return {};
-        },
 
-        getSyncParam: function () {
-            return this.getValue();
-        },
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         _initData: function (forceNotModify) {
             var $this = this;
             if (!this.options.data[this.options.model.status] || forceNotModify) {

@@ -9,7 +9,7 @@
  *  fetch
  *  sync
  */
-define([], function () {
+define(["./DataConstant"], function (Constant) {
     var DataSource = new Class({
         isAutoSync: function () {
             return this.options.autoSync;
@@ -20,11 +20,31 @@ define([], function () {
                 this.sync();
             }
         },
+
+        getFetchParam: function () {
+            var other = this._otherFetchParam();
+            var fp = this.options.fetchParam
+            if (other) {
+                Object.merge(fp, other);
+            }
+            return fp;
+        },
+
+        getSyncParam: function () {
+            var p = {};
+            Object.merge(p, this.getValue(), this.options.syncParam);
+            return p;
+        },
+
         fetch: function (callback) {
             var $this = this;
             var params = this.getFetchParam();
             Page.utils.ajax(this.options.fetchUrl, params, function (data) {
-                $this.data = data;
+                var result = data.result;
+                $this.options.data = result['data'];
+                $this.options.pageSize = result[Constant.pageSize];
+                $this.options.pageNo = result[Constant.pageNo];
+                $this.options.totalSize = result[Constant.totalSize];
                 $this._initData();
                 //TODO
                 callback()
@@ -38,6 +58,20 @@ define([], function () {
                 $this._initData(true);
                 callback()
             }, null);
+        },
+        getAttr: function (key) {
+            return this.options[key];
+        },
+        setAttr: function (key, value) {
+            var oldValue = this.options[key];
+            this.options[key] = value;
+            var privateMethod2Invoke = '_' + key + "Change";
+            if (this[privateMethod2Invoke]) {
+                // old value, new value, vm.model
+                this[privateMethod2Invoke](value, oldValue);
+            }
+            this.fireEvent(key + "Change", [value, oldValue]);
+            return this;
         }
     });
     return DataSource;

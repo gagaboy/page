@@ -29,10 +29,13 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             _dataMap: {},
             _dataArray: [],
             fetchUrl: '',
-            fetchParam: {},
+            fetchParam: {},// pageSize, pageNo
             syncUrl: '',
             syncParam: {},
             autoSync: false,
+            pageSize: 20,
+            pageNo: 1,
+            totalSize: -1,
             model: {
                 id: 'wid',
                 status: Constant.status,
@@ -52,16 +55,14 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
         },
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        getFetchParam: function () {
-            return {};
+        _otherFetchParam: function () {
+            var page = {};
+            page[Constant.pageNo] = this.options.pageNo;
+            page[Constant.pageSize] = this.options.pageSize;
+            //page[Constant.totalSize] = this.options.totalSize;
+            return page;
         },
 
-        getSyncParam: function () {
-            return this.getValue();
-        },
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         _initData: function () {
             if (this.options.data && this.options.data.length > 0) {
                 for (var i = 0; i < this.options.data.length; i++) {
@@ -105,6 +106,17 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
         at: function (index) {
             return this.options._dataArray[index];
         },
+
+        getPageNo: function () {
+            return this.options.pageNo;
+        },
+        getPageSize: function () {
+            return this.options.pageSize;
+        },
+        getTotalSize: function () {
+            return this.options.totalSize;
+        },
+
         readRecord: function (id) {
             if (id == undefined) {
                 return this.options._dataArray;
