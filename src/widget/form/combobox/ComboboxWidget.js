@@ -4,7 +4,6 @@
 define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'
     ,'css!../../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (BaseFormWidget, template) {
     var xtype = "combobox";
-    var dataSource, pagination;
     var ComboBoxWidget = new Class({
         Extends: BaseFormWidget,
         options: {
@@ -17,7 +16,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             showPanel: false,
             focused: false,
             inputWidth: 25,
-            searchValue: " ",
+            searchValue: null,
 
             model: "normal",   //grid | tree
             data: [],
@@ -26,6 +25,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             $pageSize: 10,
             $split: ",",
             $firstLoad: true,
+            usePager: true,
+            $dataSource: null,
+            $pagination: null,
 
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
@@ -33,12 +35,11 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 jQuery(this).find('input').focus();
                 vm.changePanelShow(vid);
 
-                vm.searchValue = "";  //使其触发搜索
             },
             inputFocus: function(vid, $event) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                vm.searchValue = "";  //使其触发搜索
+                vm.changePanelShow(vid);
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
@@ -67,7 +68,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.showPanel = !vm.showPanel;
                 if(vm.$firstLoad) {
                     vm.$firstLoad = false;
-                    Page.manager.components[vm.vid].renderPanel(vm.vid);
+                    vm.getCmpMgr(vm.vid)._renderPanel(vm.vid);
                 }
             },
 
@@ -124,6 +125,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.value = "";
                 vm.display = "";
                 vm.selectedItems.clear();
+            },
+            getCmpMgr: function(vid) {
+                return Page.manager.components[vid];
             }
 
         },
@@ -169,30 +173,90 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             });
         },
         _watchSearchValue: function(vm) {
+            var that = this;
             vm.$watch("searchValue", function (newValue, oldValue)  {
-                if(!newValue || newValue.length>3) {
-                    alert(newValue)
+                that._handleSearch(newValue, vm);
+            });
+            //单选时，输入区绑定了display
+            vm.$watch("display", function (newValue, oldValue)  {
+                if(!vm.multi && vm.searchable) {
+                    that._handleSearch(newValue, vm);
                 }
             });
         },
-        renderPanel: function(vid) {
+        _handleSearch: function(newValue, vm){
+            if(!newValue || newValue.length>3) {
+                var page;
+                if(vm.usePager) {
+                    page = {
+                        pageNo: 1,
+                        pageSize: vm.$pageSize
+                    };
+                }
+                this._getSelectData(vm.vid, page);
+            }
+        },
+        _getSelectData: function(vid, page) {
             var vm = this._getCompVM(vid);
-            if("normal" == vm.model) {
-                vm.optionData = this._getDataSource().getValue();
+            //TODO fetch Data page==undefined 时为无分页
+            var searchValue;
+            if(vm.multi) {
+                searchValue = vm.searchValue;
+            }
+            else if(vm.searchable){
+                searchValue = vm.display;
+            }
+
+            var data = this._getDataSource().getValue();
+            if(searchValue)
+            data = [{value: "1", display: "篮球"}, {value: "2", display: "足球"}, {value: "3", display: "排球"}];
+            this._renderSelectData(data, vm);
+        },
+        //可作为回调传递
+        _renderSelectData: function(data, vm) {
+            if(data) {
+                vm.data.clear();
+                vm.optionData = data;
                 if( vm.optionData) {
                     vm.initNormalItem(vm);
                     vm.data = vm.optionData;
                 }
-                //创建分页条
-                pagination = Page.create("pagination", {
-                    $parentId: 'page_'+vm.vid,
-                    totalNum: 20,
-                    showPageDetail: false,
-                    pageChangeEvent:function(pager){
-                        alert(1);
-                    }
-                });
-                pagination.render();
+                //TODO 改变分页的总条数
+                if(!vm.usePager) return;
+                var that = this;
+                if(!this.options.pagination) {
+                    this.options.pagination = Page.create("pagination", {
+                        $parentId: 'page_'+vm.vid,
+                        totalNum: 20,  //TODO 总条数应该从数据中获取
+                        pageSize: vm.$pageSize,
+                        showPageDetail: false,
+                        pageChangeEvent:function(pager, pageNo){
+                            var page = {
+                                pageNo: pageNo,
+                                pageSize: pager.getAttr("pageSize")
+                            };
+                            that._getSelectData(vm.vid, page);
+                        }
+                    });
+                    this.options.pagination.render();
+                }
+                else {
+                    this.options.pagination.setAttr("totalNum", "50");
+                }
+            }
+        },
+
+        _renderPanel: function(vid) {
+            var vm = this._getCompVM(vid);
+            if("normal" == vm.model) {
+                var page;
+                if(vm.usePager) {
+                    page = {
+                        pageNo: 1,
+                        pageSize: vm.$pageSize
+                    };
+                }
+                this._getSelectData(vm.vid, page)
             }else if("grid" == vm.model) {
 
             }else if("tree" == vm.model) {
@@ -204,14 +268,22 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             return avalon.vmodels[vid]
         },
         _getDataSource: function() {
-            if(!dataSource) {
-                dataSource =  Page.create("dataSet", {data: [{value: "1", display: "男"}, {value: "2", display: "女"}, {value: "3", display: "未知"}]});
+            if(!this.options.dataSource) {
+                this.options.dataSource =  Page.create("dataSet", {data: [{value: "1", display: "男"}, {value: "2", display: "女"}, {value: "3", display: "未知"}]});
                 //dataSource = Page.create("dataSet", {data: [{id: "1", text: "男"}, {id: "2", text: "女"}, {id: "3", text: "未知"}]});
             }
-            return dataSource;
+            return this.options.dataSource;
         },
         getTemplate: function () {
             return template;
+        },
+        getDisplay: function() {
+            var vid = this.options.vid;
+            var vm = this._getCompVM(vid);
+            return vm.display;
+        },
+        setSelect: function(item) {
+                    var a,b;
         },
         _valueChange: function (value) {
             this.setAttr("display", value);
