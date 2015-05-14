@@ -236,17 +236,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         _pageSizeChange:function(pageSize){
             this.pagination.setAttr("pageSize",pageSize);
         },
-        _allCheckedChange:function(allchecked){
-            if(allchecked!=undefined){
-                var ds = this.getAttr("data");
-                for (var i = 0; i < ds.length; i++) {
-                    if (ds[i]) {
-                        ds[i].checked = allchecked;
-                    }
-                }
-                this.setAttr("data",ds);//防止出现死循环
-            }
-        },
+
         _dataChange:function(){
             //this._updateAllCheckedByDatas();
         },
