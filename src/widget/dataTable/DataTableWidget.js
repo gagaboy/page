@@ -21,6 +21,7 @@ define(['../Base', 'text!./DataTableWidget.html', 'css!./DataTableWidget.css'], 
                 $this.getParentElement().html(e);
 
                 var tableObj = tmp.find("table.table");
+
                 this.dataTableObj = jQuery(tableObj).dataTable(this.options);//调用dataTable
                 $this.element = e[0];
                 //avalon.scan($this.getParentElement()[0]);
@@ -35,6 +36,25 @@ define(['../Base', 'text!./DataTableWidget.html', 'css!./DataTableWidget.css'], 
         },
         getTemplate: function(){
             return template;
+        },
+        //将英文转为中文，引入文件即可，方法作废
+        _changePageDetailToChinese:function(options){
+            if(options){
+               if(!options.oLanguage){
+                   options.oLanguage = {};
+               }
+                if(!options.oLanguage.oPaginate){
+                    options.oLanguage.oPaginate = {};
+                }
+                options.oLanguage.oPaginate.sFirst = "首页";
+                options.oLanguage.oPaginate.sLast = "末页";
+                options.oLanguage.oPaginate.sNext = "下一页";
+                options.oLanguage.oPaginate.sPrevious = "上一页";
+                options.oLanguage.sInfo = "显示 _START_ 到 _END_ ,共 _TOTAL_ 条数据";
+                options.oLanguage.sInfoEmpty = "没有找到数据";
+                options.oLanguage.sLengthMenu = "显示 _MENU_ 条记录";
+            }
+            return options;
         }
     });
     DataTableWidget.xtype = xtype;

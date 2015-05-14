@@ -21,17 +21,20 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="row">
+                    <div class="col-md-12" id="ops">
+                        <a class="btn btn-primary" href="javascript:addRow();">新增行</a>
+                        <a class="btn btn-primary" href="javascript:delCheckedRow();">删除所选行</a>
+                        <a class="btn btn-primary" href="javascript:delCustomRow(141);">删除值AACode为141的行</a>
+                    </div>
+                    <br>
+                </div>
+
+                <div class="row">
                     <div class="col-md-12" id="simpleGrid">
 
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12" id="ops">
-                        <a href="javascript:addRow();">新增行</a>
-                        <a href="javascript:delCheckedRow();">删除所选行</a>
-                        <a href="javascript:delCustomRow(141);">删除值AACode为141的行</a>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -53,14 +56,14 @@
             usePager:true,
             allChecked:false,
             columns:[
-                {title:"姓名",dataField:"name",width:" "},
-                {title:"性别编码",dataField:"sex"},//编码
-                {title:"性别",dataField:"sex",showDisplay:true},//显示Display字段
-                {title:"出生年月",dataField:"birthDate"},
+                {title:"姓名",dataField:"name",width:"8%",orderType:"asc"},
+                {title:"性别编码",dataField:"sex",orderType:"asc"},//编码
+                {title:"性别",dataField:"sex",showDisplay:true,sortDisabled:true},//显示Display字段
+                {title:"出生年月",dataField:"birthDate",orderType:"desc"},
                 {title:"入学时间",dataField:"rxDate"},
                 {title:"是否党员",dataField:"isParty"},
                 {title:"所在班级",dataField:"className"},
-                {title:"备注",dataField:"notes"}
+                {title:"备注",dataField:"notes",sortDisabled:true}
             ],
             data:[
                 {"name":"王菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"朝鲜族"},
@@ -75,8 +78,8 @@
                 {"name":"吴菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""}
             ],
             opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
-            "<a href='javascript:deleteActive();'>Delete This Row</a>"},
-            afterCheckRow:function(row){
+                "<a href='javascript:deleteActive();'>Delete This Row</a>"},
+                afterCheckRow:function(row){
                 //alert("选中行:"+row.aa);
             }
         });

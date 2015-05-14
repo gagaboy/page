@@ -7,7 +7,12 @@
                      ms-class-checked="allChecked" ms-click="allClick(vid, this)">
                 </div>
             </th>
-            <th ms-repeat="columns" ms-attr-width="el.width">{{el.title}}</th>
+            <th ms-repeat="columns" ms-attr-width="el.width">
+                {{el.title}}
+                    <div ms-if="!el.sortDisabled&&el.orderType=='asc'" class="fa fa-caret-down" ms-click="sortByCol(vid,el,'desc')"></div>
+                    <div ms-if="!el.sortDisabled&&el.orderType=='desc'" class="fa fa-caret-up" ms-click="sortByCol(vid,el,'asc')"></div>
+                    <div ms-if="!el.sortDisabled&&!el.orderType" class="fa fa-unsorted" ms-click="sortByCol(vid,el,'asc')"></div>
+            </th>
             <th ms-attr-width="opWidth" ms-if="opColumn.template">
                 {{opTile}}
             </th>
