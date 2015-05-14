@@ -39,6 +39,7 @@
             fetchUrl: 'Data.demo.json',
             syncUrl: ''
         });
+        var a = {}
         window.console.log(ds);
 
         function log(msg){
@@ -57,9 +58,9 @@
 
             ds.setAttr("pageNo","2");
             ds.fetch(function(){
-
+                alert('a');
             });
-
+            ds.sync();
 
         });
 
