@@ -719,7 +719,9 @@ define(["./avalon.getModel",
         function bindEvents(calendar, tipContainer) {
             // focus Input元素时显示日历组件
             avalon.bind(element, "focus", function(e) {
-                vmodel.toggle = true;
+                if(jQuery(element).prop("readonly") !== true){
+                    vmodel.toggle = true;
+                }
             })
             // 切换日期年月或者点击input输入域时不隐藏组件，选择日期或者点击文档的其他地方则隐藏日历组件
             avalon.bind(document, "click", function(e) {
@@ -731,7 +733,9 @@ define(["./avalon.getModel",
                     vmodel.toggle = false;
                     return ;
                 } else if(!vmodel.toggle && !vmodel.disabled && tipContainer.contains(target)){
-                    vmodel.toggle = true;
+                    if(jQuery(element).prop("readonly") !== true){
+                        vmodel.toggle = true;
+                    }
                     return ;
                 }
             })

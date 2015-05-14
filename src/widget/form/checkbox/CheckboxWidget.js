@@ -91,6 +91,25 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         _valueChange:function(){//值改变时校验
             this.validate();
         },
+        _statusChange:function(value, oldValue, model){
+            if(value !== oldValue){
+                var formWidgetContainer = jQuery(this.getElement()).find(".form-widget-container");
+                if(value === "readonly"){
+                    formWidgetContainer.hide();
+                    var items = this.getAttr("items");
+                    var displays = " ";
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].checked) {
+                            displays+=items[i].display+" ";
+                        }
+                    }
+                    formWidgetContainer.parent().append(jQuery('<span class="checkedValue">'+displays+'</span>'));
+                }else if(value === "edit"){
+                    formWidgetContainer.show();
+                    formWidgetContainer.parent().find(".checkedValue").remove();
+                }
+            }
+        },
         _itemCheck: function (item) {
             item.checked = !item.checked;
             this._setValueByItems();

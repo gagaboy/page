@@ -80,6 +80,16 @@ define(['../BaseFormWidget',
             }
             this.parent(opts);
         },
+        _statusChange:function(value, oldValue, model){
+            if(value !== oldValue){
+                var dateIcon = jQuery(this.getElement()).find(".oni-datepicker-tip");
+                if(value === "readonly"){
+                    dateIcon.hide();
+                }else if(value === "edit"){
+                    dateIcon.show();
+                }
+            }
+        },
         //返回日期控件的模板
         getTemplate: function () {
             return template;
