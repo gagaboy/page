@@ -9,6 +9,10 @@
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
     <link href="/page/src/css/page.css" rel="stylesheet">
+
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
 </head>
 <body>
 <br>
@@ -45,19 +49,32 @@
             $parentId: 'simpleGrid',
             idField:"aa",
             totalNum:200,
+            showCheckbox:true,
+            usePager:true,
+            allChecked:false,
             columns:[
-                {title:"AA",dataField:"aa",type:"ctype"},
-                {title:"AACode",dataField:"aa",type:"input"},
-                {title:"BB",dataField:"bb",type:"input"}
+                {title:"姓名",dataField:"name",width:" "},
+                {title:"性别编码",dataField:"sex"},//编码
+                {title:"性别",dataField:"sex",showDisplay:true},//显示Display字段
+                {title:"出生年月",dataField:"birthDate"},
+                {title:"入学时间",dataField:"rxDate"},
+                {title:"是否党员",dataField:"isParty"},
+                {title:"所在班级",dataField:"className"},
+                {title:"备注",dataField:"notes"}
             ],
             data:[
-                {"aaDisplay":"菜菜","aa":121,"bbDisplay":"二1","bb":212},
-                {"aaDisplay":"肉肉","aa":131,"bbDisplay":"二2","bb":222},
-                {"aaDisplay":"汤汤","aa":141,"bbDisplay":"二3","bb":232},
-                {"aaDisplay":"水水","aa":151,"bbDisplay":"二4","bb":242},
-                {"aaDisplay":"乐乐","aa":161,"bbDisplay":"二5","bb":252}
+                {"name":"王菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"朝鲜族"},
+                {"name":"张菜菜","sex":002,"sexDisplay":"女","birthDate":1989-11-03,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
+                {"name":"李菜菜","sex":001,"sexDisplay":"男","birthDate":1987-03-19,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
+                {"name":"杨菜菜","sex":002,"sexDisplay":"女","birthDate":1990-10-22,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
+                {"name":"丁菜菜","sex":002,"sexDisplay":"女","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"单亲"},
+                {"name":"曾菜菜","sex":002,"sexDisplay":"女","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
+                {"name":"毕菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
+                {"name":"裴菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
+                {"name":"刘菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
+                {"name":"吴菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""}
             ],
-            opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a><br/>" +
+            opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
             "<a href='javascript:deleteActive();'>Delete This Row</a>"},
             afterCheckRow:function(row){
                 //alert("选中行:"+row.aa);

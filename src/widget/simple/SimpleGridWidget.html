@@ -1,23 +1,29 @@
-<div ms-visible="show">
-    <table class="table">
+<div class="table-responsive" ms-visible="show">
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <th style="width: 20px">
-                <input type="checkbox" ms-duplex-checked="allChecked" ms-click="allClick(vid, this)">
+            <th style="width:20px" ms-if="showCheckbox">
+                <div class="icheckbox_square-green" style="position: relative;"
+                     ms-class-checked="allChecked" ms-click="allClick(vid, this)">
+                </div>
             </th>
-            <th ms-repeat="columns">{{el.title}}</th>
-            <th>
-
+            <th ms-repeat="columns" ms-attr-width="el.width">{{el.title}}</th>
+            <th ms-attr-width="opWidth" ms-if="opColumn.template">
+                {{opTile}}
             </th>
         </tr>
+        </thead>
         <tr ms-repeat-a="data" ms-click="activeRow(vid,a)">
-            <td>
-                <input type="checkbox" ms-duplex-checked="a['checked']" ms-click="checkRow(vid,a)">
+            <td ms-if="showCheckbox">
+                <div class="icheckbox_square-green" style="position: relative;"
+                     ms-class-checked="a['checked']" ms-click="checkRow(vid,a)">
+                </div>
             </td>
             <td ms-repeat="columns">
-                <div ms-if="columns[$index].type=='ctype'">
+                <div ms-if="columns[$index].showDisplay">
                     {{a[columns[$index].dataField+"Display"]}}
                 </div>
-                <div ms-if="columns[$index].type!='ctype'">
+                <div ms-if="!columns[$index].showDisplay">
                     {{a[columns[$index].dataField]}}
                 </div>
             </td>
