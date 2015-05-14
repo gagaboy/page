@@ -32,7 +32,9 @@ define(["./DataConstant"], function (Constant) {
 
         getSyncParam: function () {
             var p = {};
-            Object.merge(p, this.getValue(), this.options.syncParam);
+            var value = this.getValue();
+            Object.merge(p, {value:value});
+            Object.merge(p, this.options.syncParam);
             return p;
         },
 
