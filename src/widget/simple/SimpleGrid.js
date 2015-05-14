@@ -12,28 +12,33 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             idField:"wid",
             allChecked: false,//设置为true，则默认全部选中
             usePager:true,
+            showCheckbox:true,
+            checkboxWidth:"10%",
             pageSize:10,
             totalNum:0,
             totalPage:1,
             opColumn: {},
+            opTile:"操作",
+            opWidth:"15%",
             activedRow:null,//激活的行
             //事件
             afterCheckRow:null,
 
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
+                vm.allChecked = !vm.allChecked;
                 var datas = vm.data;
                 for (var i = 0; i < datas.length; i++) {
-                    datas[i]['checked'] = element.checked;
+                    datas[i]['checked'] = vm.allChecked;
                 }
                 vm.data = datas;
-                vm.allChecked = element.checked;
             },
             activeRow:function(vid,row){
                 var vm = avalon.vmodels[vid];
                 vm.activedRow = row;
             },
             checkRow: function (vid,row) {
+                row.checked = !row.checked;
                 var vm = avalon.vmodels[vid];
                 if(vm.afterCheckRow&&row.checked){
                     vm.afterCheckRow(row);//选中后事件
@@ -96,7 +101,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 pageSize: this.getAttr("pageSize"),
                 pageChangeEvent: function (pager) {
                     //Test
-                    that.setAttr("data",[]);
+                    //that.setAttr("data",[]);
 
                     //TODO
                     var newDataCallBack = function(data,totalNum,pageSize){//回调
@@ -108,7 +113,6 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 }
             });
             this.pagination.render();
-
         },
         /**
          * 获取勾选的行，数组

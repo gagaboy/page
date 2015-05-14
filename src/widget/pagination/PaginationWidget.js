@@ -12,9 +12,9 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             pageSize: 10,//每页条数
             pageIndex: 1,//当前页，默认显示第一页
 
-            totalPage: 0,//总页数,计算所得，设置无效
-            recordBegin: 1,//显示从第几条开始,计算所得，设置无效
-            recordTo: 10,//显示到第几条,计算所得，设置无效
+            totalPage: 1,//总页数,计算所得，设置无效
+            recordBegin:0,//显示从第几条开始,计算所得，设置无效
+            recordTo: 0,//显示到第几条,计算所得，设置无效
 
             showPageIndexInput: true,//显示跳转到某页输入框
             showPageSizeInput: true,//显示每页条数输入框]
@@ -69,7 +69,8 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             this.setAttr("show", false);
         },
         _pageIndexChange: function (pindex, oldIndex, model) {
-            this.options.pageChangeEvent(this, pindex, oldIndex, model);
+            //属性扩展
+            this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model);
             this._calculateBeginAndTo();
         },
         _totalNumChange: function (tNum, oldNum, model) {
