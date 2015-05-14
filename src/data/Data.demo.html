@@ -55,6 +55,7 @@
             log('ss');
         }
 
+        ds.sync();
 
         var callback = function () {
             window.console.log(ds.readRecord());
@@ -66,10 +67,12 @@
             log(ds.getValue());
             ds.setAttr("pageNo", "2");
         };
-        log(ds.fetch());
-        Promise.all([ds.fetch()]).then(callback);
+//        log(ds.fetch());
+        Promise.all([ds.fetch()]).then(callback).then(function(){
+            ds.sync();
+        });;
 
-        Promise.all([ds.fetch()]).then(callback);
+//        Promise.all([ds.fetch()]).then(callback);
 //        Promise.then(ds.fetch()).then(ds.fetch());
 
 //

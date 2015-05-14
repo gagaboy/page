@@ -23,7 +23,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             activedRow:null,//激活的行
             //事件
             afterCheckRow:null,
-
+            onChangeOrder:null,
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
                 vm.allChecked = !vm.allChecked;
@@ -52,6 +52,15 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 }
                 vm.allChecked = all;
             },
+            sortByCol:function(vid,row,orderType){
+                var vm = avalon.vmodels[vid];
+                row.orderType = orderType;
+                if(vm.onChangeOrder){
+                    vm.onChangeOrder(vm,row,orderType);
+                }else{
+                    //this.dataSet.readRecord(pageIndex,newDataCallBack);// 调用dataset接口进行查询
+                }
+            },
             deleteRow: function (vid,row) {
                 //删除行，remove掉
                 var vm = avalon.vmodels[vid];
@@ -76,21 +85,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         pagination:null,//分页条对象
         initialize: function (opts) {
-            var d = opts.data;
-            if(opts.allChecked){//默认全部勾选
-                for (var i = 0; i < d.length; i++) {
-                    if (d[i]) {
-                        d[i].checked = true;
-                    }
-                }
-            }else{
-                for (var i = 0; i < d.length; i++) {
-                    if (d[i].checked == undefined) {
-                        d[i].checked = false;
-                    }
-                }
-            }
-            this.parent(opts);
+            this.parent(this._formatOptions(opts));
         },
         render:function(){
             this.parent();
@@ -255,6 +250,34 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 arr = nArr;
             }
             return arr;
+        },
+        _formatOptions:function(opts){
+            var d = opts.data;
+            if(opts.allChecked){//默认全部勾选
+                for (var i = 0; i < d.length; i++) {
+                    if (d[i]) {
+                        d[i].checked = true;
+                    }
+                }
+            }else{
+                for (var i = 0; i < d.length; i++) {
+                    if (d[i].checked == undefined) {
+                        d[i].checked = false;
+                    }
+                }
+            }
+            var cols = opts.columns;
+            if(cols&&cols.length>0){
+                for (var i = 0; i < cols.length; i++) {
+                    if (cols[i]) {
+                        var coli = cols[i];
+                        if(!coli.orderType){
+                            coli.orderType = "";
+                        }
+                    }
+                }
+            }
+            return opts;
         }
 
     });
