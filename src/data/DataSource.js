@@ -36,28 +36,33 @@ define(["./DataConstant"], function (Constant) {
             return p;
         },
 
-        fetch: function (callback) {
+        fetch: function () {
             var $this = this;
-            var params = this.getFetchParam();
-            Page.utils.ajax(this.options.fetchUrl, params, function (data) {
-                var result = data.result;
-                $this.options.data = result['data'];
-                $this.options.pageSize = result[Constant.pageSize];
-                $this.options.pageNo = result[Constant.pageNo];
-                $this.options.totalSize = result[Constant.totalSize];
-                $this._initData();
-                //TODO
-                callback()
-            }, null);
+            return new Promise(function(resolve){
+                var params = $this.getFetchParam();
+                Page.utils.ajax($this.options.fetchUrl, params, function (data) {
+                    var result = data.result;
+                    $this.options.data = result['data'];
+                    $this.options.pageSize = result[Constant.pageSize];
+                    $this.options.pageNo = result[Constant.pageNo];
+                    $this.options.totalSize = result[Constant.totalSize];
+                    $this._initData();
+                    resolve();
+                }, null);
+            });
+
         },
-        sync: function (callback) {
+        sync: function () {
             var $this = this;
-            var params = this.getSyncParam();
-            Page.utils.ajax(this.options.syncUrl, params, function (data) {
-                //TODO reset $status$
-                $this._initData(true);
-                callback()
-            }, null);
+            return new Promise(function(resolve){
+                var params = $this.getSyncParam();
+                Page.utils.ajax($this.options.syncUrl, params, function (data) {
+                    //TODO reset $status$
+                    $this._initData(true);
+                    resolve();
+
+                }, null);
+            });
         },
         getAttr: function (key) {
             return this.options[key];

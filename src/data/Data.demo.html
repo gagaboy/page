@@ -37,32 +37,43 @@
     require(["../../../page/src/Bootstrap"], function () {
         var ds = Page.create("dataSet", {
             fetchUrl: 'Data.demo.json',
-            syncUrl: ''
+
+            syncUrl: 'Result.demo.json'
         });
-        var a = {}
+//        var a = {}
         window.console.log(ds);
 
-        function log(msg){
+        function log(msg) {
             window.console.log(msg);
         }
 
-        ds.fetch(function(){
+        function a() {
+            log('ss');
+        }
+
+        var aa = function () {
+            log('ss');
+        }
+
+
+        var callback = function () {
             window.console.log(ds.readRecord());
             var a = ds.readRecord("1");
-            log(a);
-            a.updateRecord({name:'balabala'});
+            log(a.getValue());
+            a.updateRecord({name: 'balabala'});
             log(ds.getValue());
             a.deleteRecord("1");
             log(ds.getValue());
+            ds.setAttr("pageNo", "2");
+        };
+        log(ds.fetch());
+        Promise.all([ds.fetch()]).then(callback);
 
 
-            ds.setAttr("pageNo","2");
-            ds.fetch(function(){
-                alert('a');
-            });
-            ds.sync();
-
-        });
+//
+//        ds.sync(function(){
+//            log("aa");
+//        });
 
     });
 
