@@ -87,11 +87,20 @@
             display: "计算机学院,经管学院",
             $pageSize: 5,
             dataSetId: "comboBoxDS",
+            showErrorMessage:true,
+            validationRules: {
+                required:true,//options中为false时，此处可重开启校验
+                length: {
+                    maxLen: 4,
+                    minLen: 2,
+                    customErrMsg:"请选择2-4个学院"
+                }
+            },
             beforeSelectEvent: function(value, display, obj) {
-                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
+//                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
             },
             selectedEvent: function(value, display, obj) {
-                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
+//                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
             }
         })
         combo1.render();
@@ -106,13 +115,7 @@
 //            $textField: "text",
             value: "1",
             display: "计算机学院",
-            dataSetId: "comboBoxDS",
-            beforeSelectEvent: function(value, display, obj) {
-                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
-            },
-            selectedEvent: function(value, display, obj) {
-                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
-            }
+            dataSetId: "comboBoxDS"
 
         })
         combo2.render();
@@ -124,15 +127,16 @@
             multi: false,
             searchable: false,
             value: "1",
+            $pageSize: 5,
             display: "计算机学院",
             dataSetId: "comboBoxDS",
             beforeOpenEvent: function(a,b,c,d) {
-                alert("让你打不开下拉面板，哈哈");
-                return false;
+//                alert("让你打不开下拉面板，哈哈");
+//                return false;
             }
         })
         combo3.render();
-
+        Page.manager.components.sex1.focus()
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

@@ -16,7 +16,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             showPanel: false,
             focused: false,
             inputWidth: 25,
-            searchValue: null,
+            searchValue: "",
             searchKey: "searchValue",
 
             model: "normal",   //grid | tree
@@ -30,6 +30,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             showPager: true,
             dataSetId: null,
             $pagination: null,
+            downShow: true,
 
 
             beforeSelectEvent: null,
@@ -40,13 +41,17 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
                 jQuery(this).find('input').focus();
-                vm.changePanelShow(vid);
-
+                if(!vm.showPanel) {
+                    vm.changePanelShow(vid);
+                }
             },
             inputFocus: function(vid, $event) {
                 var vm = avalon.vmodels[vid];
                 vm.focused = true;
-                vm.changePanelShow(vid);
+                vm.clickItem = false;
+                if(!vm.showPanel) {
+                    vm.changePanelShow(vid);
+                }
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
@@ -94,12 +99,23 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         }
                     }
                 }
+                vm.judgePanelPosition(event);
                 vm.focused = true;
                 vm.showPanel = !vm.showPanel;
                 if(vm.$firstLoad) {
                     vm.$firstLoad = false;
                     vm.getCmpMgr()._renderPanel();
                 }
+            },
+            judgePanelPosition: function(event) {
+                var element = jQuery(this.getCmpMgr().getElement())
+                var panelHeight = element.find("[name='panel']").height();
+                var downHeight =  jQuery(window).height()-event.pageY;
+                var upHeight = event.pageY;
+                if(downHeight < panelHeight && downHeight < upHeight) {
+                    this.downShow = false;
+                }
+
             },
 
             initNormalItem: function() {
@@ -148,6 +164,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     if(!vm.multi) {
                         vm.selectedItems.clear();   //单选模式下，先删除，再插入，才能监控到selecetedItems数据的变化
                     }
+                    //vm.clickItem = true;            //单选模式下，选中后，不再发送查询请求
                     vm.selectedItems.push(item);
                 }
                 //删除选中项
@@ -221,9 +238,20 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
             }
             this.parent(opts);
-
+            var that = this;
+            //点击其它区域，隐藏掉下拉面板
+            jQuery(document).click(function(event) {
+                var name = "ComboBoxWidget_"+that.options.vid;
+                if(!jQuery(event.target).closest("[name='"+name+"']").length) {
+                    var vm = that._getCompVM();
+                    vm.showPanel = false;
+                    vm.focused = false;
+                    vm.searchValue = "";
+                }
+            });
             this._watchSelectedItems(this.vmodel);
             this._watchSearchValue(this.vmodel);
+
         },
         _watchSelectedItems: function(vm) {
             vm.selectedItems.$watch("length", function (newValue, oldValue) {
@@ -256,7 +284,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             });
             //单选时，输入区绑定了display
             vm.$watch("display", function (newValue, oldValue)  {
-                if(!vm.multi && vm.searchable) {
+                if(!vm.multi && vm.searchable &&  !vm.clickItem) {
                     that._handleSearch(newValue);
                 }
             });
@@ -277,26 +305,29 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     pageNo: 1,
                     pageSize: this.options.usePager ? this.options.$pageSize : "10000"
                 };
-                this._getSelectData(page)
+                //this._getSelectData(page, false);   //如果是第一次渲染面板时，不需要根据searchValue查询（单选可搜索时display可能会有值）
+                this._getSelectData(page);
             }else if("grid" == options.model) {
 
             }else if("tree" == options.model) {
 
             }
         },
-        _getSelectData: function(page) {
+        _getSelectData: function(page, needSearchValue) {
             var vm = this._getCompVM();
-            var searchValue;
-            if(vm.multi) {
-                searchValue = vm.searchValue;
-            }
-            else if(vm.searchable){
-                searchValue = vm.display;
+            var searchValue="";
+            if(needSearchValue || needSearchValue==undefined) {
+                if(vm.multi) {
+                    searchValue = vm.searchValue;
+                }
+                else if(vm.searchable){
+                    searchValue = vm.display;
+                }
             }
             var ds = this._getDataSet();
             if(!ds) return;
             //配置查询条件
-            if(searchValue) {
+            if(searchValue.trim() != "") {
                 var fetchParam = {};
                 fetchParam[vm.searchKey] = searchValue;
                 ds.setAttr("fetchParam", fetchParam);
@@ -304,6 +335,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 ds.setAttr("fetchUrl", "DataSearch.demo.json");
             }
             else {
+                ds.setAttr("fetchParam", {});
                 ds.setAttr("fetchUrl", "Data.demo.json");
             }
             //设置分页数据
@@ -349,6 +381,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                                 pageSize: pager.getAttr("pageSize")
                             };
                             that._getSelectData(page);
+                            event.stopPropagation();
                         }
                     });
                     this.options.pagination.render();
@@ -397,7 +430,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             this.setAttr("display", value);
         },
         _getInputElement: function () {
-            var input = this.getElement().find('input.comboBoxInput');
+            var input = jQuery(this.getElement()).find('input');
             return input;
         },
         focus: function () {
@@ -406,16 +439,38 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             avalon.nextTick(function () {
                 input.focus();
             });
-            this.options.focused = true;
+            this._getCompVM().focused = true;
         },
         blur: function () {
             var input = this._getInputElement();
             avalon.nextTick(function () {
                 input.blur();
             });
-            this.options.focused = false;
-        }
+            this._getCompVM().focused = false;
+        },
+        _valueChange:function(){//值改变时校验
+            this.validate();
+        },
+        validate: function () {
+            //var valRes = Page.validation.validateValue(this.getValue(),this.getAttr("validationRules"));
+            var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
 
+            var valRes = null;
+            if (this.getAttr("required")) {//先判断是否必填
+                valRes = validateTool.checkRequired(this.getValue());
+            }
+            if ((!valRes || valRes.result) && this.getAttr("validationRules")) {//再判断校验规则
+                var value = this.getValue();
+                var valueArr = [];
+                if(value) valueArr = value.split(this.options.$split);
+                valRes = validateTool.validateValue(valueArr, this.getAttr("validationRules"));
+            }
+            if (valRes && !valRes.result) {//将错误信息赋值给属性
+                this.setAttr("errorMessage", valRes.errorMsg);
+            } else {//清空错误信息
+                this.setAttr("errorMessage", "");
+            }
+        }
     });
     ComboBoxWidget.xtype = xtype;
     return ComboBoxWidget;

@@ -5,7 +5,7 @@
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage" ms-css-padding="controlPadding">
-            <div  ms-if="status=='edit'" class="form-group" style=" margin-bottom: 0px;">
+            <div   ms-attr-name="ComboBoxWidget_{{vid}}" ms-if="status=='edit'" class="form-group" style=" margin-bottom: 0px;">
                 <div class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
                     <!--多选区域-->
                     <div ms-if="multi" ms-class="div-focus: focused"
@@ -37,7 +37,7 @@
                     </div>
 
                     <!--下拉面板区域-->
-                    <div class="chosen-drop"  ms-visible="showPanel">
+                    <div name="panel" ms-class-1="chosen-drop:downShow" ms-class-2="chosen-up:!downShow"  ms-visible="showPanel" >
                         <div ms-if="model=='normal'">
                             <ul class="chosen-results" ms-each-el="data" ms-css-height="showPager ? '150px':'100%'">
                                 <li class="active-result" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index)">{{el[$textField]}}</li>
