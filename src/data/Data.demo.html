@@ -69,6 +69,8 @@
         log(ds.fetch());
         Promise.all([ds.fetch()]).then(callback);
 
+        Promise.all([ds.fetch()]).then(callback);
+//        Promise.then(ds.fetch()).then(ds.fetch());
 
 //
 //        ds.sync(function(){
