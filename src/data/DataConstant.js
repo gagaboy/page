@@ -4,7 +4,12 @@ define([], function (Constant) {
         notModify: "$notModify$",
         add: "$add$",
         update: "$update$",
-        remove: "$remove$"
+        remove: "$remove$",
+        pageSize:'pageSize',
+        pageNo:'pageNo',
+        totalSize:'totalSize',
+        data:'data'
+
     }
     return constant;
 })
