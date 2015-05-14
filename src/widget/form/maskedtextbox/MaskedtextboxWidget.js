@@ -1,4 +1,4 @@
-define(['../BaseFormWidget','./kendo.maskedtextbox', 'text!./MaskedtextboxWidget.html'], function (BaseFormWidget,maskedtextbox,template) {
+define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 'text!./MaskedtextboxWidget.html'], function (BaseFormWidget,maskedtextbox,template) {
     var xtype = "maskedtextbox";
     var MaskedtextboxWidget = new Class({
         Extends: BaseFormWidget,
