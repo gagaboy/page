@@ -2,7 +2,7 @@
     <table class="table">
         <tr>
             <th style="width: 20px">
-                <input type="checkbox" ms-duplex-checked="allChecked" ms-click="allClick(vid, this)">
+                <input type="checkbox" ms-attr-checked="allChecked" ms-click="allClick(vid, this)">
             </th>
             <th ms-repeat="columns">{{el.title}}</th>
             <th>
@@ -11,7 +11,7 @@
         </tr>
         <tr ms-repeat-a="data" ms-click="activeRow(vid,a)">
             <td>
-                <input type="checkbox" ms-click="checkRow(vid,a)">
+                <input type="checkbox" ms-attr-checked="a['checked']" ms-click="checkRow(vid,a)">
             </td>
             <td ms-repeat="columns">
                 <div ms-if="columns[$index].type=='ctype'">
