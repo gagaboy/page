@@ -16,28 +16,25 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             totalNum:0,
             totalPage:1,
             opColumn: {},
-            activeRow:null,
+            activedRow:null,//激活的行
             //事件
-            beforeCheckRow:null,
             afterCheckRow:null,
 
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
-                for (var i = 0; i < vm.data.$model.length; i++) {
-                    vm.data[i]['checked'] = element.checked;
+                var datas = vm.data;
+                for (var i = 0; i < datas.length; i++) {
+                    datas[i]['checked'] = element.checked;
                 }
+                vm.data = datas;
                 vm.allChecked = element.checked;
             },
             activeRow:function(vid,row){
                 var vm = avalon.vmodels[vid];
-                vm.activeRow = row;
+                vm.activedRow = row;
             },
             checkRow: function (vid,row) {
                 var vm = avalon.vmodels[vid];
-                if(vm.beforeCheckRow&&!row.checked){
-                    vm.beforeCheckRow(row);//选中前事件
-                }
-                row.checked = !row.checked;//不设置双向绑定 ms-duplex-checked="a['checked']"
                 if(vm.afterCheckRow&&row.checked){
                     vm.afterCheckRow(row);//选中后事件
                 }
@@ -92,10 +89,16 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         render:function(){
             this.parent();
+            var that = this;
             this.pagination = Page.create("pagination", {
                 $parentId: "pager_" + this.getAttr("vid"),
                 totalNum: this.getAttr("totalNum"),
+                pageSize: this.getAttr("pageSize"),
                 pageChangeEvent: function (pager) {
+                    //Test
+                    that.setAttr("data",[]);
+
+                    //TODO
                     var newDataCallBack = function(data,totalNum,pageSize){//回调
                         this.setAttr("data",data);
                         this.setAttr("totalNum",totalNum);
@@ -124,7 +127,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
          * 获取当前激活的行，鼠标点击的行
          */
         getActiveRow:function(){
-            return this.getAttr("activeRow");
+            return this.getAttr("activedRow");
         },
         /**
          * 新增一行数据
@@ -232,6 +235,20 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         _pageSizeChange:function(pageSize){
             this.pagination.setAttr("pageSize",pageSize);
+        },
+        _allCheckedChange:function(allchecked){
+            if(allchecked!=undefined){
+                var ds = this.getAttr("data");
+                for (var i = 0; i < ds.length; i++) {
+                    if (ds[i]) {
+                        ds[i].checked = allchecked;
+                    }
+                }
+                this.setAttr("data",ds);//防止出现死循环
+            }
+        },
+        _dataChange:function(){
+            //this._updateAllCheckedByDatas();
         },
         _formArr:function(arr){
             if(arr){

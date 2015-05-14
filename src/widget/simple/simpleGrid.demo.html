@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="/page/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="/page/src/css/page.css" rel="stylesheet">
+</head>
+<body>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-md-12" id="simpleGrid">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="ops">
+                        <a href="javascript:addRow();">新增行</a>
+                        <a href="javascript:delCheckedRow();">删除所选行</a>
+                        <a href="javascript:delCustomRow(141);">删除值AACode为141的行</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/page/bower_components/mootools/dist/mootools-core.js"></script>
+<script src="/page/bower_components/jquery/dist/jquery.js"></script>
+<script>
+    $.noConflict();
+</script>
+<script src="/page/bower_components/avalon/avalon.js"></script>
+<script>
+    var simpleGrid = null;
+    require(["../../../page/src/Bootstrap"], function () {
+        simpleGrid = Page.create("simpleGrid", {
+            $parentId: 'simpleGrid',
+            idField:"aa",
+            totalNum:200,
+            columns:[
+                {title:"AA",dataField:"aa",type:"ctype"},
+                {title:"AACode",dataField:"aa",type:"input"},
+                {title:"BB",dataField:"bb",type:"input"}
+            ],
+            data:[
+                {"aaDisplay":"菜菜","aa":121,"bbDisplay":"二1","bb":212},
+                {"aaDisplay":"肉肉","aa":131,"bbDisplay":"二2","bb":222},
+                {"aaDisplay":"汤汤","aa":141,"bbDisplay":"二3","bb":232},
+                {"aaDisplay":"水水","aa":151,"bbDisplay":"二4","bb":242},
+                {"aaDisplay":"乐乐","aa":161,"bbDisplay":"二5","bb":252}
+            ],
+            opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a><br/>" +
+            "<a href='javascript:deleteActive();'>Delete This Row</a>"},
+            afterCheckRow:function(row){
+                //alert("选中行:"+row.aa);
+            }
+        });
+        simpleGrid.render();
+
+    });
+    function addRow(){
+        simpleGrid.addRow({"aaDisplay":"南农","aa":100,"bbDisplay":"图书馆","bb":8},1);
+    }
+    function delCheckedRow(){
+        simpleGrid.deleteCheckedRows();
+    }
+    function delCustomRow(aid){
+        simpleGrid.deleteRowByDataId(aid);
+    }
+    function deleteActive(){
+        simpleGrid.deleteActiveRow();
+    }
+
+</script>
+<!--<script src="bower_components/avalon/avalon.js" ></script>-->
+<!--<script src="dist/page-build.js" data-main="demo.js"></script>-->
+</body>
+</html>
