@@ -32,7 +32,8 @@ define([
     "./widget/simple/SimpleGrid",
     "./widget/form/checkbox/CheckboxWidget",
     "./widget/form/radio/RadioWidget",
-    "./widget/form/textarea/TextareaWidget"
+    "./widget/form/textarea/TextareaWidget",
+    "./widget/kendogrid/GridWidget"
 ], function () {
     var allComps = arguments;
 
