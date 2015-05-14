@@ -64,6 +64,8 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
         },
 
         _initData: function () {
+            this.options._dataMap = {};
+            this.options._dataArray = [];
             if (this.options.data && this.options.data.length > 0) {
                 for (var i = 0; i < this.options.data.length; i++) {
                     var d = this.options.data[i];
