@@ -18,18 +18,23 @@
             </th>
         </tr>
         </thead>
-        <tr ms-repeat-a="data" ms-click="activeRow(vid,a)">
+        <tr ms-repeat-a="data" ms-click="activeRow(vid,a,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,a,this):''">
             <td ms-if="showCheckbox">
                 <div class="icheckbox_square-green" style="position: relative;"
                      ms-class-checked="a['checked']" ms-click="checkRow(vid,a)">
                 </div>
             </td>
-            <td ms-repeat="columns">
-                <div ms-if="columns[$index].showDisplay">
-                    {{a[columns[$index].dataField+"Display"]}}
+                <td ms-repeat="columns" ms-attr-bindField="columns[$index].dataField" ms-click="!columns[$index].disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,a,columns[$index].dataField,this):''">
+                <div ms-attr-bindField="columns[$index].dataField" ms-if="!columns[$index].editContent||!a[columns[$index].state]||a[columns[$index].state]=='view'">
+                    <div ms-attr-id="" ms-if="columns[$index].showDisplay">
+                        {{a[columns[$index].dataField+"Display"]}}
+                    </div>
+                    <div ms-if="!columns[$index].showDisplay">
+                        {{a[columns[$index].dataField]}}
+                    </div>
                 </div>
-                <div ms-if="!columns[$index].showDisplay">
-                    {{a[columns[$index].dataField]}}
+                <div ms-attr-bindField="columns[$index].dataField" ms-if="columns[$index].editContent&&a[columns[$index].state]=='edit'">
+                    {{a[columns[$index].editContent]}}
                 </div>
             </td>
             <td ms-attr-rowIndex="$index" ms-if="opColumn.template">
