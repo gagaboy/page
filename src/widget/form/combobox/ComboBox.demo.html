@@ -71,27 +71,48 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../src/Bootstrap"], function () {
+
+        var ds = Page.create("dataSet", {
+            $id: 'comboBoxDS',
+            fetchUrl: 'Data.demo.json',
+            syncUrl: ''
+        });
+
         var combo1 = Page.create('combobox', {
             $parentId: 'multi',
             $id: 'sex1',
-            label: '性别（多选）',
+            label: '学院（多选）',
             multi: true,
             value: "1,3",
-            display: "男,未知",
-            $pageSize: 5
+            display: "计算机学院,经管学院",
+            $pageSize: 5,
+            dataSetId: "comboBoxDS",
+            beforeSelectEvent: function(value, display, obj) {
+                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
+            },
+            selectedEvent: function(value, display, obj) {
+                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
+            }
         })
         combo1.render();
 
         var combo2 = Page.create('combobox', {
             $parentId: 'singleSearchable',
             $id: 'sex2',
-            label: '性别（单选可搜索）',
+            label: '学院（单选可搜索）',
             multi: false,
             searchable: true,
 //            $valueField: "id",
 //            $textField: "text",
             value: "1",
-            display: "男"
+            display: "计算机学院",
+            dataSetId: "comboBoxDS",
+            beforeSelectEvent: function(value, display, obj) {
+                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
+            },
+            selectedEvent: function(value, display, obj) {
+                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
+            }
 
         })
         combo2.render();
@@ -99,11 +120,16 @@
         var combo3 = Page.create('combobox', {
             $parentId: 'single',
             $id: 'sex3',
-            label: '性别（单选）',
+            label: '学院（单选）',
             multi: false,
             searchable: false,
             value: "1",
-            display: "男"
+            display: "计算机学院",
+            dataSetId: "comboBoxDS",
+            beforeOpenEvent: function(a,b,c,d) {
+                alert("让你打不开下拉面板，哈哈");
+                return false;
+            }
         })
         combo3.render();
 
