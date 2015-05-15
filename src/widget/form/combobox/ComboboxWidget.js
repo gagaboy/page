@@ -110,10 +110,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             judgePanelPosition: function(event) {
                 var element = jQuery(this.getCmpMgr().getElement())
                 var panelHeight = element.find("[name='panel']").height();
+                //window.console.log(jQuery(window).height());
                 var downHeight =  jQuery(window).height()-event.pageY;
                 var upHeight = event.pageY;
                 if(downHeight < panelHeight && downHeight < upHeight) {
                     this.downShow = false;
+                }else {
+                    this.downShow = true;
                 }
 
             },
