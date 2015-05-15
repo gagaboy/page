@@ -9,9 +9,12 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             $xtype: xtype,
             columns: [],
             data: [],
+            dataSetId: null,//数据集
+            queryParams:null,
             idField:"wid",
             showCheckbox:true,
             checkboxWidth:"10%",
+            allChecked: false,//设置为true，则默认全部选中
             //分页信息
             usePager:true,
             pageSize:10,
@@ -19,7 +22,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             totalPage:1,
             //操作列
             opColumn: {},
-            opTile:"操作",
+            opTitle:"操作",
             opWidth:"15%",
             //行编辑
             canEdit:true,//是否可编辑
@@ -27,13 +30,12 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             clickToEditField:true,//单击编辑事件
             editRowFunc:null,//编辑行事件
             editFieldFunc:null,//编辑单属性事件
-            //其他参数
-            allChecked: false,//设置为true，则默认全部选中
-            //中间参数，不可初始化
-            activedRow:null,//激活的行
             //事件
             afterCheckRow:null,
             onChangeOrder:null,
+
+            //中间参数，不可初始化
+            activedRow:null,//激活的行
             editComp:null,//行编辑对象
             activedRowDom:null,//行编辑Dom
             allClick: function (vid, element) {
@@ -71,7 +73,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 if(vm.onChangeOrder){
                     vm.onChangeOrder(vm,row,orderType);
                 }else{
-                    //this.dataSet.readRecord(pageIndex,newDataCallBack);// 调用dataset接口进行查询
+                    var grid = Page.manager.components[vid];
+                    grid.reloadData();// 调用dataset接口进行查询
                 }
             },
             editRow:function(vid,row,rowDom){
@@ -80,10 +83,10 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                     vm.editRowFunc(vm,row,rowDom);
                 }
             },
-            editField:function(vid,row,fieldName,tdDom){
+            editField:function(vid,row,fieldName,fieldXtype,tdDom){
                 var vm = avalon.vmodels[vid];
                 if(vm.editFieldFunc){
-                    vm.editFieldFunc(vm,row,fieldName);
+                    vm.editFieldFunc(vm,row,fieldName,fieldXtype,tdDom);
                 }
             },
             deleteRow: function (vid,row) {
@@ -120,19 +123,44 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 totalNum: this.getAttr("totalNum"),
                 pageSize: this.getAttr("pageSize"),
                 pageChangeEvent: function (pager) {
-                    //Test
-                    //that.setAttr("data",[]);
-
-                    //TODO
-                    var newDataCallBack = function(data,totalNum,pageSize){//回调
-                        this.setAttr("data",data);
-                        this.setAttr("totalNum",totalNum);
-                        this.setAttr("pageSize",pageSize);
-                    }
-                    //this.dataSet.readRecord(pageIndex,newDataCallBack);// 调用dataset接口进行查询
+                    that.reloadData()// 调用dataset接口进行查询
                 }
             });
             this.pagination.render();
+        },
+        reloadData:function(){
+            var ds = this._getDataSet();
+            if(!ds) return;
+            //配置分页信息
+            if(this.getAttr("usePager")){
+                ds.setAttr("pageNo",this.getAttr("pageIndex"));
+                ds.setAttr("pageSize",this.getAttr("pageSize"));
+                ds.setAttr("pageNo",this.getAttr("pageIndex"));
+            }
+            //配置查询条件
+            var fetchParams = {};
+            if(this.getAttr("queryParams")){
+                jQuery.extend(fetchParams,this.getAttr("queryParams"));
+            }
+            var columns = this.getAttr("columns");
+            if(columns&&columns.length>0){
+                var orders = {};
+                for(var k=0;k<columns.length;k++){
+                    if(columns[k].orderType){
+                        orders[columns[k].dataField] = columns[k].orderType;
+                    }
+                }
+                fetchParams.orders = orders;
+            }
+            ds.setAttr("fetchParam",fetchParams);
+            //发送获取数据请求
+            var that = this;
+            Promise.all([ds.fetch()]).then(function() {
+                that.setAttr("data",ds.getValue());
+                that.setAttr("totalNum",ds.getTotalSize());
+                that.setAttr("pageSize",ds.getPageSize());
+                that.setAttr("pageIndex",ds.getPageNo());
+            });
         },
         /**
          * 获取勾选的行，数组
@@ -160,8 +188,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
          * 新增一行数据
          */
         addRow:function(rowData,pos){//{}则表示新增空行,pos指新增位置，表示放到第几行，默认表示最后一行
-            var pSize = this.getAttr("pageSize");
             var datas = this.getAttr("data");
+            var pSize = datas.length;
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 for(var t=0;t<pSize;t++){
@@ -245,6 +273,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         getTemplate: function () {
             return template;
+        },
+        _getDataSet: function() {
+            return Page.manager.components[this.getAttr("dataSetId")];
         },
         _updateAllCheckedByDatas:function(){
             var datas = this.getAttr("data");

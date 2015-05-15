@@ -108,13 +108,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         }
                     }
                 }
-                vm.judgePanelPosition(event);
-                vm.focused = true;
-                vm.showPanel = !vm.showPanel;
                 if(vm.$firstLoad) {
                     vm.$firstLoad = false;
                     vm.getCmpMgr()._renderPanel();
                 }
+                vm.judgePanelPosition(event);
+                vm.focused = true;
+                vm.showPanel = !vm.showPanel;
             },
             judgePanelPosition: function(event) {
                 var element = jQuery(this.getCmpMgr().getElement())
@@ -136,6 +136,38 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 if(!optionData) return;
                 for(var i=0; i<optionData.length; i++) {
                     optionData[i].checked = false;
+                    //匹配搜索值
+                    var text = optionData[i][vm.$textField];
+                    var textArr = [];
+                    var searchValue = vm.searchValue;
+                    if(!vm.multi && vm.searchable) {
+                        searchValue = vm.display;
+                    }
+                    if(searchValue) {
+                        var index = text.indexOf(searchValue);
+                        var searchLen = searchValue.length;
+                        var textLen = text.length;
+                        if(index<0) {
+                            textArr.push(text);
+                        }
+                        else if(index == 0) {
+                            textArr.push(searchValue);
+                            textArr.push(text.slice(index+searchLen));
+                        }
+                        else{
+                            textArr.push(text.slice(0, index));
+                            textArr.push(searchValue);
+                            if(index+searchLen < textLen) {
+                                textArr.push(text.slice(index+searchLen));
+                            }
+                        }
+                    }
+                    else {
+                        textArr.push(text);
+                    }
+                    optionData[i]['displayArr'] = textArr;
+
+
                     for(var j=0; j<vm.selectedItems.length; j++) {
                         if(vm.selectedItems[j][vm.$valueField] == optionData[i][vm.$valueField]) {
                             optionData[i].checked = true;
@@ -210,7 +242,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
                 event.stopPropagation();
             },
-            removeAll: function(vid) {
+            removeAll: function(vid, event) {
+                event && event.stopPropagation();
                 var vm = avalon.vmodels[vid];
                 var el = vm.selectedItems[0];
                 if(!el) return;
@@ -231,6 +264,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         return;
                     }
                 }
+
+
             },
             getCmpMgr: function() {
                 return Page.manager.components[this.vid];
@@ -302,7 +337,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             });
         },
         _handleSearch: function(newValue){
-            if(!newValue || newValue.length>3) {
+            if(!newValue || newValue.length>1) {
                 var page = {
                     pageNo: "1",
                     pageSize: this.options.usePager ? this.options.$pageSize : "10000"
@@ -437,6 +472,28 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         clearSelect: function() {
             var vm = this._getCompVM();
             vm.removeAll(vm.vid);
+        },
+        reset: function () {
+            this.setValue({
+                value: this.getInitValue(),
+                display: this.getInitDisplay()
+            });
+            //修改选中项
+            var vm = this._getCompVM();
+            if(vm.multi || !vm.searchable) {
+                var splitChar = this.options.$split;
+                var valueArr = this.getInitValue() ? this.getInitValue().split(splitChar) : [];
+                var displayArr = this.getInitDisplay() ? this.getInitDisplay().split(splitChar) : [];
+                //vm.selectedItems.clear();
+                var array = [];
+                for(var i=0; i<valueArr.length; i++) {
+                    var item = {};
+                    item[this.options.$valueField] = valueArr[i];
+                    item[this.options.$textField] = displayArr[i];
+                    array.push(item);
+                }
+                vm.selectedItems = array;
+            }
         },
         _valueChange: function (value) {
             this.setAttr("display", value);

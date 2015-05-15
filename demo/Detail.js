@@ -172,6 +172,9 @@ require(["../../../page/src/Bootstrap"], function () {
         }
     })
     combo3.render();
+    form.push(combo1);
+    form.push(combo2);
+    form.push(combo3);
     //textarea
     var textarea = Page.create("textarea", {
         $parentId: 'textarea',
