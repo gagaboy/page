@@ -449,13 +449,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var splitChar = this.options.$split;
                 var valueArr = this.getInitValue() ? this.getInitValue().split(splitChar) : [];
                 var displayArr = this.getInitDisplay() ? this.getInitDisplay().split(splitChar) : [];
-                vm.selectedItems.clear();
+                //vm.selectedItems.clear();
+                var array = [];
                 for(var i=0; i<valueArr.length; i++) {
                     var item = {};
                     item[this.options.$valueField] = valueArr[i];
                     item[this.options.$textField] = displayArr[i];
-                    vm.selectedItems.push(item);
+                    array.push(item);
                 }
+                vm.selectedItems = array;
             }
         },
         _valueChange: function (value) {

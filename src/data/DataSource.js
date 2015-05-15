@@ -41,6 +41,7 @@ define(["./DataConstant"], function (Constant) {
         fetch: function () {
             var $this = this;
             return new Promise(function(resolve){
+                $this.fireEvent("beforeFetch");
                 var params = $this.getFetchParam();
                 Page.utils.ajax($this.options.fetchUrl, params, function (data) {
                     var result = data.result;
