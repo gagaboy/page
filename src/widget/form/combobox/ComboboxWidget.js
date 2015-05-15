@@ -108,13 +108,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         }
                     }
                 }
-                vm.judgePanelPosition(event);
-                vm.focused = true;
-                vm.showPanel = !vm.showPanel;
                 if(vm.$firstLoad) {
                     vm.$firstLoad = false;
                     vm.getCmpMgr()._renderPanel();
                 }
+                vm.judgePanelPosition(event);
+                vm.focused = true;
+                vm.showPanel = !vm.showPanel;
             },
             judgePanelPosition: function(event) {
                 var element = jQuery(this.getCmpMgr().getElement())
@@ -437,6 +437,26 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         clearSelect: function() {
             var vm = this._getCompVM();
             vm.removeAll(vm.vid);
+        },
+        reset: function () {
+            this.setValue({
+                value: this.getInitValue(),
+                display: this.getInitDisplay()
+            });
+            //修改选中项
+            var vm = this._getCompVM();
+            if(vm.multi || !vm.searchable) {
+                var splitChar = this.options.$split;
+                var valueArr = this.getInitValue() ? this.getInitValue().split(splitChar) : [];
+                var displayArr = this.getInitDisplay() ? this.getInitDisplay().split(splitChar) : [];
+                vm.selectedItems.clear();
+                for(var i=0; i<valueArr.length; i++) {
+                    var item = {};
+                    item[this.options.$valueField] = valueArr[i];
+                    item[this.options.$textField] = displayArr[i];
+                    vm.selectedItems.push(item);
+                }
+            }
         },
         _valueChange: function (value) {
             this.setAttr("display", value);
