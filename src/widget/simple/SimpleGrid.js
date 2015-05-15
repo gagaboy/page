@@ -10,20 +10,32 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             columns: [],
             data: [],
             idField:"wid",
-            allChecked: false,//设置为true，则默认全部选中
-            usePager:true,
             showCheckbox:true,
             checkboxWidth:"10%",
+            //分页信息
+            usePager:true,
             pageSize:10,
             totalNum:0,
             totalPage:1,
+            //操作列
             opColumn: {},
             opTile:"操作",
             opWidth:"15%",
+            //行编辑
+            canEdit:true,//是否可编辑
+            dbClickToEditRow:false,//双击编辑行
+            clickToEditField:true,//单击编辑事件
+            editRowFunc:null,//编辑行事件
+            editFieldFunc:null,//编辑单属性事件
+            //其他参数
+            allChecked: false,//设置为true，则默认全部选中
+            //中间参数，不可初始化
             activedRow:null,//激活的行
             //事件
             afterCheckRow:null,
             onChangeOrder:null,
+            editComp:null,//行编辑对象
+            activedRowDom:null,//行编辑Dom
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
                 vm.allChecked = !vm.allChecked;
@@ -33,9 +45,10 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 }
                 vm.data = datas;
             },
-            activeRow:function(vid,row){
+            activeRow:function(vid,row,rowObj){
                 var vm = avalon.vmodels[vid];
                 vm.activedRow = row;
+                vm.activedRowDom = rowObj;
             },
             checkRow: function (vid,row) {
                 row.checked = !row.checked;
@@ -59,6 +72,18 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                     vm.onChangeOrder(vm,row,orderType);
                 }else{
                     //this.dataSet.readRecord(pageIndex,newDataCallBack);// 调用dataset接口进行查询
+                }
+            },
+            editRow:function(vid,row,rowDom){
+                var vm = avalon.vmodels[vid];
+                if(vm.editRowFunc){
+                    vm.editRowFunc(vm,row,rowDom);
+                }
+            },
+            editField:function(vid,row,fieldName,tdDom){
+                var vm = avalon.vmodels[vid];
+                if(vm.editFieldFunc){
+                    vm.editFieldFunc(vm,row,fieldName);
                 }
             },
             deleteRow: function (vid,row) {
@@ -127,6 +152,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
          */
         getActiveRow:function(){
             return this.getAttr("activedRow");
+        },
+        getActiveRowDom:function(){
+            return this.getAttr("activedRowDom");
         },
         /**
          * 新增一行数据
@@ -253,7 +281,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         _formatOptions:function(opts){
             var d = opts.data;
-            if(opts.allChecked){//默认全部勾选
+            //是否默认全部勾选
+            if(opts.allChecked){
                 for (var i = 0; i < d.length; i++) {
                     if (d[i]) {
                         d[i].checked = true;
@@ -262,10 +291,11 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             }else{
                 for (var i = 0; i < d.length; i++) {
                     if (d[i].checked == undefined) {
-                        d[i].checked = false;
+                        d[i].checked = false;//未设置，默认不选中
                     }
                 }
             }
+            //列信息
             var cols = opts.columns;
             if(cols&&cols.length>0){
                 for (var i = 0; i < cols.length; i++) {
@@ -273,6 +303,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                         var coli = cols[i];
                         if(!coli.orderType){
                             coli.orderType = "";
+                        }
+                        if(!coli.type){
+                            coli.xtype = "input";
                         }
                     }
                 }

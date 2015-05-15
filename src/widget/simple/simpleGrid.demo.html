@@ -55,11 +55,13 @@
             showCheckbox:true,
             usePager:true,
             allChecked:false,
+            canEdit:true,
+            clickToEdit:true,
             columns:[
-                {title:"姓名",dataField:"name",width:"8%",orderType:"asc"},
+                {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
                 {title:"性别编码",dataField:"sex",orderType:"asc"},//编码
                 {title:"性别",dataField:"sex",showDisplay:true,sortDisabled:true},//显示Display字段
-                {title:"出生年月",dataField:"birthDate",orderType:"desc"},
+                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"date"},
                 {title:"入学时间",dataField:"rxDate"},
                 {title:"是否党员",dataField:"isParty"},
                 {title:"所在班级",dataField:"className"},
@@ -78,10 +80,14 @@
                 {"name":"吴菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""}
             ],
             opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
-                "<a href='javascript:deleteActive();'>Delete This Row</a>"},
-                afterCheckRow:function(row){
-                //alert("选中行:"+row.aa);
-            }
+                                "<a href='javascript:deleteActive();'>Delete This Row</a> | " +
+                                "<a href='javascript:editRow();'>Edit This Row</a>"},
+            editRowFunc:function(){
+                alert("row~~~~");
+            },//编辑行事件
+            editFieldFunc:function(){
+                alert("field~~~~");
+            }//编辑单属性事件
         });
         simpleGrid.render();
 
@@ -97,6 +103,21 @@
     }
     function deleteActive(){
         simpleGrid.deleteActiveRow();
+    }
+    function editRow(){
+        myEditPro(simpleGrid,simpleGrid.getActiveRow(),simpleGrid.getActiveRowDom());
+    }
+
+    function myEditPro(vm,row,rowDom){
+        if(rowDom&&rowDom.children&&rowDom.children.length>0){
+            rowDom
+            for(var s=0;s<rowDom.children.length;s++){
+                var fiedObj = rowDom.children[s];
+                if(fiedObj.bindField){
+                    //fiedObj
+                }
+            }
+        }
     }
 
 </script>
