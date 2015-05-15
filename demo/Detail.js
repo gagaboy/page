@@ -106,6 +106,72 @@ require(["../../../page/src/Bootstrap"], function () {
     });
     radio.render();
     form.push(radio);
+
+    //combobox
+    var comboDS = Page.create("dataSet", {
+        $id: 'comboBoxDS',
+        fetchUrl: 'Data.demo.json',
+        syncUrl: ''
+    });
+
+    var combo1 = Page.create('combobox', {
+        $parentId: 'comboMulti',
+        $id: 'combo1',
+        label: '学院（多选）',
+        multi: true,
+        value: "1,3",
+        display: "计算机学院,经管学院",
+        $pageSize: 5,
+        dataSetId: "comboBoxDS",
+        showErrorMessage:true,
+        validationRules: {
+            required:true,//options中为false时，此处可重开启校验
+            length: {
+                maxLen: 4,
+                minLen: 2,
+                customErrMsg:"请选择2-4个学院"
+            }
+        },
+        beforeSelectEvent: function(value, display, obj) {
+//                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
+        },
+        selectedEvent: function(value, display, obj) {
+//                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
+        }
+    })
+    combo1.render();
+
+    var combo2 = Page.create('combobox', {
+        $parentId: 'comboSingleSearchable',
+        $id: 'combo2',
+        label: '学院（单选可搜索）',
+        multi: false,
+        searchable: true,
+//            $valueField: "id",
+//            $textField: "text",
+        value: "1",
+        display: "计算机学院",
+        dataSetId: "comboBoxDS"
+
+    })
+    combo2.render();
+
+    var combo3 = Page.create('combobox', {
+        $parentId: 'comboSingle',
+        $id: 'combo3',
+        label: '学院（单选）',
+        multi: false,
+        searchable: false,
+        value: "1",
+        $pageSize: 5,
+        display: "计算机学院",
+        dataSetId: "comboBoxDS",
+        beforeOpenEvent: function(a,b,c,d) {
+                alert(" 返回false,可以阻止面板打看，要试试吗?");
+//                return false;
+        }
+    })
+    combo3.render();
     //textarea
     var textarea = Page.create("textarea", {
         $parentId: 'textarea',
