@@ -33,7 +33,7 @@ define([
     "./widget/form/checkbox/CheckboxWidget",
     "./widget/form/radio/RadioWidget",
     "./widget/form/textarea/TextareaWidget",
-    "./widget/kendogrid/GridWidget"
+    "./widget/form/slider/SliderWidget"
 ], function () {
     var allComps = arguments;
 
