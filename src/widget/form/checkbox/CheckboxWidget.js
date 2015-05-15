@@ -103,7 +103,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                             displays+=items[i].display+" ";
                         }
                     }
-                    formWidgetContainer.parent().append(jQuery('<span class="checkedValue">'+displays+'</span>'));
+                    formWidgetContainer.parent().append(jQuery('<span class="checkedValue form-control form-text">'+displays+'</span>'));
                 }else if(value === "edit"){
                     formWidgetContainer.show();
                     formWidgetContainer.parent().find(".checkedValue").remove();
