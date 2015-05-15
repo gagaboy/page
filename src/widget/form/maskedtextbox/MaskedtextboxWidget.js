@@ -25,6 +25,17 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
             this.setAttr("display", value);
             this.validate();//即时校验
         },
+        _statusChange:function(value, oldValue, model){
+            if(value !== oldValue){
+                var input = this._getInputElement();
+                var maskedObj = input.data("kendoMaskedTextBox");
+                if(value === "readonly"){
+                    maskedObj.readonly(true);
+                }else if(value === "edit"){
+                    maskedObj.readonly(false);
+                }
+            }
+        },
         _getInputElement: function () {
             //var input = this.getElement()[0].getElement("input.form-widget-to-focus-class");
             var input = jQuery(this.getElement()).find("input.form-widget-to-focus-class");

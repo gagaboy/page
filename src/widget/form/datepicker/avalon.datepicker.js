@@ -742,6 +742,9 @@ define(["./avalon.getModel",
 
             // 处理用户的输入
             avalon.bind(element, "keydown", function(e) {
+                if(jQuery(element).prop("readonly") === true){
+                    return false;
+                }
                 var keyCode = e.keyCode,  operate, eChar;
                 eChar = e.key;
                 if(eChar) {
@@ -773,6 +776,9 @@ define(["./avalon.getModel",
                 } 
             })
             avalon.bind(element, "keyup", function(e) {
+                if(jQuery(element).prop("readonly") === true){
+                    return false;
+                }
                 var value = element.value,
                     year = vmodel.year, 
                     month = vmodel.month, 
