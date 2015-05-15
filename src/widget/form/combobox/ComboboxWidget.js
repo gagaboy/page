@@ -136,6 +136,38 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 if(!optionData) return;
                 for(var i=0; i<optionData.length; i++) {
                     optionData[i].checked = false;
+                    //匹配搜索值
+                    var text = optionData[i][vm.$textField];
+                    var textArr = [];
+                    var searchValue = vm.searchValue;
+                    if(!vm.multi && vm.searchable) {
+                        searchValue = vm.display;
+                    }
+                    if(searchValue) {
+                        var index = text.indexOf(searchValue);
+                        var searchLen = searchValue.length;
+                        var textLen = text.length;
+                        if(index<0) {
+                            textArr.push(text);
+                        }
+                        else if(index == 0) {
+                            textArr.push(searchValue);
+                            textArr.push(text.slice(index+searchLen));
+                        }
+                        else{
+                            textArr.push(text.slice(0, index));
+                            textArr.push(searchValue);
+                            if(index+searchLen < textLen) {
+                                textArr.push(text.slice(index+searchLen));
+                            }
+                        }
+                    }
+                    else {
+                        textArr.push(text);
+                    }
+                    optionData[i]['displayArr'] = textArr;
+
+
                     for(var j=0; j<vm.selectedItems.length; j++) {
                         if(vm.selectedItems[j][vm.$valueField] == optionData[i][vm.$valueField]) {
                             optionData[i].checked = true;
@@ -210,7 +242,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
                 event.stopPropagation();
             },
-            removeAll: function(vid) {
+            removeAll: function(vid, event) {
+                event && event.stopPropagation();
                 var vm = avalon.vmodels[vid];
                 var el = vm.selectedItems[0];
                 if(!el) return;
@@ -231,6 +264,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         return;
                     }
                 }
+
+
             },
             getCmpMgr: function() {
                 return Page.manager.components[this.vid];
@@ -302,7 +337,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             });
         },
         _handleSearch: function(newValue){
-            if(!newValue || newValue.length>3) {
+            if(!newValue || newValue.length>1) {
                 var page = {
                     pageNo: "1",
                     pageSize: this.options.usePager ? this.options.$pageSize : "10000"
