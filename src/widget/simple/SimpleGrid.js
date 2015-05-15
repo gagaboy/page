@@ -73,7 +73,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 if(vm.onChangeOrder){
                     vm.onChangeOrder(vm,row,orderType);
                 }else{
-                    //this.dataSet.readRecord(pageIndex,newDataCallBack);// 调用dataset接口进行查询
+                    var grid = Page.manager.components[vid];
+                    grid.reloadData();// 调用dataset接口进行查询
                 }
             },
             editRow:function(vid,row,rowDom){
@@ -134,6 +135,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             if(this.getAttr("usePager")){
                 ds.setAttr("pageNo",this.getAttr("pageIndex"));
                 ds.setAttr("pageSize",this.getAttr("pageSize"));
+                ds.setAttr("pageNo",this.getAttr("pageIndex"));
             }
             //配置查询条件
             var fetchParams = {};
