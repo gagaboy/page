@@ -48,6 +48,13 @@
 <script>
     var simpleGrid = null;
     require(["../../../page/src/Bootstrap"], function () {
+        var ds = Page.create("dataSet", {
+            $id: 'sampleGridDataSet',
+            fetchUrl: 'simpleGrid.demo.json',
+            syncUrl: ''
+        });
+
+
         simpleGrid = Page.create("simpleGrid", {
             $parentId: 'simpleGrid',
             idField:"aa",
@@ -55,6 +62,7 @@
             showCheckbox:true,
             usePager:true,
             allChecked:false,
+            dataSetId: ds.getId(),
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
                 {title:"性别编码",dataField:"sex",orderType:"asc"},//编码
