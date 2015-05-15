@@ -63,7 +63,7 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
                             displays+=items[i].display+" ";
                         }
                     }
-                    formWidgetContainer.parent().append(jQuery('<span class="checkedValue">'+displays+'</span>'));
+                    formWidgetContainer.parent().append(jQuery('<input class="checkedValue form-control form-text" readonly value="'+displays+'"></input>'));
                 }else if(value === "edit"){
                     formWidgetContainer.show();
                     formWidgetContainer.parent().find(".checkedValue").remove();

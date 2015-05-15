@@ -46,6 +46,9 @@ define(['../Base'], function (Base) {
             if (opts['value'] != undefined) {
                 opts['initValue'] = opts['value'];
             }
+            if (opts['display'] != undefined) {
+                opts['initDisplay'] = opts['display'];
+            }
             this.parent(opts);
         },
         getValue: function () {

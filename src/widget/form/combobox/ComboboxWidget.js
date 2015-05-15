@@ -31,6 +31,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             dataSetId: null,
             $pagination: null,
             downShow: true,
+            clearShow: false,
 
 
             beforeSelectEvent: null,
@@ -52,6 +53,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 if(!vm.showPanel) {
                     vm.changePanelShow(vid);
                 }
+            },
+            showClearIcon: function(vid, $event) {
+                var vm = avalon.vmodels[vid];
+                vm.clearShow = true;
+            },
+            displayClearIcon: function(vid, $event) {
+                var vm = avalon.vmodels[vid];
+                vm.clearShow = false;
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
@@ -99,21 +108,24 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         }
                     }
                 }
-                vm.judgePanelPosition(event);
-                vm.focused = true;
-                vm.showPanel = !vm.showPanel;
                 if(vm.$firstLoad) {
                     vm.$firstLoad = false;
                     vm.getCmpMgr()._renderPanel();
                 }
+                vm.judgePanelPosition(event);
+                vm.focused = true;
+                vm.showPanel = !vm.showPanel;
             },
             judgePanelPosition: function(event) {
                 var element = jQuery(this.getCmpMgr().getElement())
                 var panelHeight = element.find("[name='panel']").height();
+                //window.console.log(jQuery(window).height());
                 var downHeight =  jQuery(window).height()-event.pageY;
                 var upHeight = event.pageY;
                 if(downHeight < panelHeight && downHeight < upHeight) {
                     this.downShow = false;
+                }else {
+                    this.downShow = true;
                 }
 
             },
@@ -425,6 +437,28 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         clearSelect: function() {
             var vm = this._getCompVM();
             vm.removeAll(vm.vid);
+        },
+        reset: function () {
+            this.setValue({
+                value: this.getInitValue(),
+                display: this.getInitDisplay()
+            });
+            //修改选中项
+            var vm = this._getCompVM();
+            if(vm.multi || !vm.searchable) {
+                var splitChar = this.options.$split;
+                var valueArr = this.getInitValue() ? this.getInitValue().split(splitChar) : [];
+                var displayArr = this.getInitDisplay() ? this.getInitDisplay().split(splitChar) : [];
+                //vm.selectedItems.clear();
+                var array = [];
+                for(var i=0; i<valueArr.length; i++) {
+                    var item = {};
+                    item[this.options.$valueField] = valueArr[i];
+                    item[this.options.$textField] = displayArr[i];
+                    array.push(item);
+                }
+                vm.selectedItems = array;
+            }
         },
         _valueChange: function (value) {
             this.setAttr("display", value);

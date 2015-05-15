@@ -33,7 +33,7 @@ define(["./DataConstant"], function (Constant) {
         getSyncParam: function () {
             var p = {};
             var value = this.getValue();
-            Object.merge(p, {value:value});
+            Object.merge(p, {data:value});
             Object.merge(p, this.options.syncParam);
             return p;
         },
@@ -41,6 +41,7 @@ define(["./DataConstant"], function (Constant) {
         fetch: function () {
             var $this = this;
             return new Promise(function(resolve){
+                $this.fireEvent("beforeFetch");
                 var params = $this.getFetchParam();
                 Page.utils.ajax($this.options.fetchUrl, params, function (data) {
                     var result = data.result;
