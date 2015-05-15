@@ -20,8 +20,8 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
             this.validate();//即时校验
         },
         _getInputElement: function () {
-            //var input = this.getElement()[0].getElement("input.form-widget-to-focus-class");
-            var input = this.getElement().find("input.form-widget-to-focus-class");
+            var input = this.getElement().getElement("input.form-widget-to-focus-class");
+            //var input = this.getElement().find("input.form-widget-to-focus-class");
             return input;
 
         },
