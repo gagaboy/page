@@ -14,7 +14,7 @@
                     <div ms-if="!el.sortDisabled&&!el.orderType" class="fa fa-unsorted" ms-click="sortByCol(vid,el,'asc')"></div>
             </th>
             <th ms-attr-width="opWidth" ms-if="opColumn.template">
-                {{opTile}}
+                {{opTitle}}
             </th>
         </tr>
         </thead>
@@ -24,17 +24,19 @@
                      ms-class-checked="a['checked']" ms-click="checkRow(vid,a)">
                 </div>
             </td>
-                <td ms-repeat="columns" ms-attr-bindField="columns[$index].dataField" ms-click="!columns[$index].disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,a,columns[$index].dataField,this):''">
-                <div ms-attr-bindField="columns[$index].dataField" ms-if="!columns[$index].editContent||!a[columns[$index].state]||a[columns[$index].state]=='view'">
-                    <div ms-attr-id="" ms-if="columns[$index].showDisplay">
-                        {{a[columns[$index].dataField+"Display"]}}
+            <td ms-repeat-c="columns" ms-attr-xtype="c.xtype">
+                <div ms-attr-bindField="c.dataField" style="padding:0px;"
+                     ms-click="!c.disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,a,c.dataField,c.xtype,this):''"
+                     ms-if="a['editContent_'+c.dataField]==undefined||(a.state==undefined||a.state=='view')">
+                    <div ms-attr-id="" ms-if="c.showDisplay">
+                        {{a[c.dataField+"Display"]}}
                     </div>
-                    <div ms-if="!columns[$index].showDisplay">
-                        {{a[columns[$index].dataField]}}
+                    <div ms-if="!c.showDisplay">
+                        {{a[c.dataField]}}
                     </div>
                 </div>
-                <div ms-attr-bindField="columns[$index].dataField" ms-if="columns[$index].editContent&&a[columns[$index].state]=='edit'">
-                    {{a[columns[$index].editContent]}}
+                <div ms-attr-bindField="c.dataField" ms-if="a['editContent_'+c.dataField]&&a.state=='edit'">
+                    {{a["editContent_"+c.dataField]|html}}
                 </div>
             </td>
             <td ms-attr-rowIndex="$index" ms-if="opColumn.template">

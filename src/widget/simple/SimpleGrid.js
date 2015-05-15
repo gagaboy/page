@@ -19,7 +19,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             totalPage:1,
             //操作列
             opColumn: {},
-            opTile:"操作",
+            opTitle:"操作",
             opWidth:"15%",
             //行编辑
             canEdit:true,//是否可编辑
@@ -80,10 +80,10 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                     vm.editRowFunc(vm,row,rowDom);
                 }
             },
-            editField:function(vid,row,fieldName,tdDom){
+            editField:function(vid,row,fieldName,fieldXtype,tdDom){
                 var vm = avalon.vmodels[vid];
                 if(vm.editFieldFunc){
-                    vm.editFieldFunc(vm,row,fieldName);
+                    vm.editFieldFunc(vm,row,fieldName,fieldXtype,tdDom);
                 }
             },
             deleteRow: function (vid,row) {
@@ -160,8 +160,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
          * 新增一行数据
          */
         addRow:function(rowData,pos){//{}则表示新增空行,pos指新增位置，表示放到第几行，默认表示最后一行
-            var pSize = this.getAttr("pageSize");
             var datas = this.getAttr("data");
+            var pSize = datas.length;
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 for(var t=0;t<pSize;t++){

@@ -21,12 +21,12 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-12" id="ops">
+                    <div class="col-md-12" id="ops" style="padding-bottom: 30px;">
                         <a class="btn btn-primary" href="javascript:addRow();">新增行</a>
                         <a class="btn btn-primary" href="javascript:delCheckedRow();">删除所选行</a>
                         <a class="btn btn-primary" href="javascript:delCustomRow(141);">删除值AACode为141的行</a>
+                        * 双击属性进行编辑
                     </div>
-                    <br>
                 </div>
 
                 <div class="row">
@@ -55,8 +55,6 @@
             showCheckbox:true,
             usePager:true,
             allChecked:false,
-            canEdit:true,
-            clickToEdit:true,
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
                 {title:"性别编码",dataField:"sex",orderType:"asc"},//编码
@@ -68,7 +66,9 @@
                 {title:"备注",dataField:"notes",sortDisabled:true}
             ],
             data:[
-                {"name":"王菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"朝鲜族"},
+                {"name":"王菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,
+                    "rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"朝鲜族",
+                    "editContent_sex":"XXX","state":"edit"},
                 {"name":"张菜菜","sex":002,"sexDisplay":"女","birthDate":1989-11-03,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
                 {"name":"李菜菜","sex":001,"sexDisplay":"男","birthDate":1987-03-19,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
                 {"name":"杨菜菜","sex":002,"sexDisplay":"女","birthDate":1990-10-22,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
@@ -82,18 +82,59 @@
             opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
                                 "<a href='javascript:deleteActive();'>Delete This Row</a> | " +
                                 "<a href='javascript:editRow();'>Edit This Row</a>"},
-            editRowFunc:function(){
+            //行编辑
+            canEdit:true,
+            clickToEditRow:false,
+            dbClickToEditField:true,
+            editRowFunc:function(vm,row,rowDom){
                 alert("row~~~~");
+                myEditPro(vm,row,rowDom);
             },//编辑行事件
-            editFieldFunc:function(){
-                alert("field~~~~");
+            editFieldFunc:function(vm,row,fieldName,fieldXtype,tdDom){
+                var rowData = null;
+                var datas = vm.data;
+                var dataArr = [];
+                for(var t=0;t<datas.length;t++){
+                    if(datas[t]==row){
+                        datas[t].state = "edit";
+                        if(!datas[t]["editContent_"+fieldName]){
+                            datas[t]["editContent_"+fieldName]= "<div id='__currentEditField'></div>";
+                        }
+                    }
+                    dataArr.push(datas[t]);
+                }
+                vm.data = dataArr;
+                if(true){//根据类型判断渲染何种组件,fieldXtype
+                    var editField = Page.create("input", {
+                        $parentId: '__currentEditField',
+                        value: row[fieldName],
+                        showLabel: false,
+                        valueChange:function(){
+                            row[fieldName] = editField.getValue();
+                        }
+                    });
+                    editField.render();
+                    editField._getInputElement().onblur = function(){
+                        var dataArr = [];
+                        for(var t=0;t<datas.length;t++){
+                            if(datas[t]==row){
+                                datas[t].state = "view";
+                                datas[t][fieldName] = editField.getValue();
+                                datas[t]["editContent_"+fieldName]= "";
+                            }
+                            dataArr.push(datas[t]);
+                        }
+                        vm.data = dataArr;
+                    };
+                }
+
             }//编辑单属性事件
         });
         simpleGrid.render();
 
     });
     function addRow(){
-        simpleGrid.addRow({"aaDisplay":"南农","aa":100,"bbDisplay":"图书馆","bb":8},1);
+        simpleGrid.addRow({"name":"南农保安","sex":0,"sexDisplay":"未知"},1);
     }
     function delCheckedRow(){
         simpleGrid.deleteCheckedRows();
@@ -105,12 +146,13 @@
         simpleGrid.deleteActiveRow();
     }
     function editRow(){
+        alert("执行自定义的行编辑操作");
         myEditPro(simpleGrid,simpleGrid.getActiveRow(),simpleGrid.getActiveRowDom());
     }
 
     function myEditPro(vm,row,rowDom){
         if(rowDom&&rowDom.children&&rowDom.children.length>0){
-            rowDom
+            //rowDom
             for(var s=0;s<rowDom.children.length;s++){
                 var fiedObj = rowDom.children[s];
                 if(fiedObj.bindField){
