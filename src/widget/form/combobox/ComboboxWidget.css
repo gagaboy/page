@@ -43,3 +43,6 @@
 .chosen-container.chosen-with-drop .chosen-up{
     left: 0;
 }
+.matchsearch {
+    background-color: yellow;
+}
