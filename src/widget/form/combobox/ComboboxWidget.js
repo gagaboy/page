@@ -31,6 +31,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             dataSetId: null,
             $pagination: null,
             downShow: true,
+            clearShow: false,
 
 
             beforeSelectEvent: null,
@@ -52,6 +53,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 if(!vm.showPanel) {
                     vm.changePanelShow(vid);
                 }
+            },
+            showClearIcon: function(vid, $event) {
+                var vm = avalon.vmodels[vid];
+                vm.clearShow = true;
+            },
+            displayClearIcon: function(vid, $event) {
+                var vm = avalon.vmodels[vid];
+                vm.clearShow = false;
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
