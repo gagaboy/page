@@ -56,7 +56,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
         render: function () {
             this.fireEvent("beforeRender", [this.vmodel]);
             var $this = this;
-            var tmp = this.getformTpl();
+            var tmp = this.getTemplate();
 
             var widgetType = $this.options.$xtype;
 
@@ -65,7 +65,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 compTemp = formTpl;  //待扩展，设置为表格的模板 gridTpl
             }
             //替换模板中的子模板名称
-            compTemp = formTpl.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
+            compTemp = compTemp.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
             //替换模板中的子模板内容
             compTemp = compTemp.replace(/\{\{TEMPLATEVALUE\}\}/g, tmp);
 
