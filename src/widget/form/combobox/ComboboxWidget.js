@@ -1,5 +1,5 @@
 /**
- * Created by JKYANG on 15/4/23.
+ * Created by BIKUI on 15/4/23.
  */
 define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'
     ,'css!../../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (BaseFormWidget, template) {
@@ -379,11 +379,11 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 fetchParam[vm.searchKey] = searchValue;
                 ds.setAttr("fetchParam", fetchParam);
                 //TODO 测试
-                ds.setAttr("fetchUrl", "DataSearch.demo.json");
+                //ds.setAttr("fetchUrl", "DataSearch.demo.json");
             }
             else {
                 ds.setAttr("fetchParam", {});
-                ds.setAttr("fetchUrl", "Data.demo.json");
+                //ds.setAttr("fetchUrl", "Data.demo.json");
             }
             //设置分页数据
             page && page.pageNo && ds.setAttr("pageNo",page.pageNo);
