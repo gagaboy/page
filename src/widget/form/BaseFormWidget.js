@@ -1,13 +1,15 @@
 /**
  * Created by qianqianyi on 15/4/23.
  */
-define(['../Base', 'text!./BaseFormWidget.html'], function (Base, template) {
+define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
     var xtype = "baseFormWidget";
     var BaseFormWidget = new Class({
         Extends: Base,
         options: {
             $xtype: xtype,
             status: 'edit',//default = edit |edit|readonly
+
+            parentTpl: "form",  //组件的父模板类型 default=form |form|grid
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             initValue: '',// 初始值
             initDisplay: '',
@@ -54,17 +56,22 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, template) {
         render: function () {
             this.fireEvent("beforeRender", [this.vmodel]);
             var $this = this;
-            var tmp = this.getTemplate();
+            var tmp = this.getformTpl();
 
             var widgetType = $this.options.$xtype;
+
+            var compTemp = formTpl;
+            if("grid" == $this.options.parentTpl) {
+                compTemp = formTpl;  //待扩展，设置为表格的模板 gridTpl
+            }
             //替换模板中的子模板名称
-            template = template.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
+            compTemp = formTpl.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
             //替换模板中的子模板内容
-            template = template.replace(/\{\{TEMPLATEVALUE\}\}/g, tmp);
+            compTemp = compTemp.replace(/\{\{TEMPLATEVALUE\}\}/g, tmp);
 
 
             var e = jQuery("<div></div>").addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
-            e.append(template);
+            e.append(compTemp);
             $this.getParentElement().html(e);
             $this.element = e[0];
             avalon.scan($this.getParentElement()[0]);
