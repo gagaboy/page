@@ -14,7 +14,7 @@ define(['../Base','text!./DialogWidget.html', 'css!./DialogWidget.css'
             content:'',
             width:'',
             height:'',
-            btn:[],
+            button:[],
             params:""
 
         },
@@ -30,7 +30,7 @@ define(['../Base','text!./DialogWidget.html', 'css!./DialogWidget.css'
                 lock: true,
                 title: options.title,
                 url: options.url,
-                button: options.btn,
+                button: options.button,
                 width: options.width!=""?options.width:undefined,
                 height: options.height!=""?options.height:undefined
             }
@@ -48,6 +48,27 @@ define(['../Base','text!./DialogWidget.html', 'css!./DialogWidget.css'
                 this["_afterRender"](this.vmodel);
             }
             return this;
+        },
+        close: function() {
+            this.dialogObj.close();
+        },
+        show: function() {
+            this.dialogObj.show();
+        },
+        hide: function() {
+            this.dialogObj.hide();
+        },
+        lock: function() {
+            this.dialogObj.lock();
+        },
+        unlock: function() {
+            this.dialogObj.unlock();
+        },
+        title: function(value) {
+            this.dialogObj.title(value);
+        },
+        content: function(value) {
+            this.dialogObj.content(value);
         },
         getTemplate: function(){
             return template;
