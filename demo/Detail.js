@@ -212,6 +212,33 @@ require(["../../../page/src/Bootstrap"], function () {
     });
 
 
+    $("#openDialog").click(function () {
+        Page.create('dialog', {
+            $id: "dialog",
+            //           url: "www.baidu.com",
+            content: "测试一下，哈哈",
+            width: "400px",
+            height: "200px",
+            button: [{
+                name: "点击试试",
+                callback: function() {
+                    Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
+                        Page.dialog.tips('执行确定操作');
+                    }, function () {
+                        Page.dialog.alert('执行取消操作');
+                    });
+                }
+            },{
+                name: "测试Prompt",
+                callback: function() {
+                    Page.dialog.prompt('请输入图片网址', function (val) {
+                        Page.dialog.tips(val);
+                    }, '默认输入值');
+                }
+            }]
+        }).render();
+    });
+
     $("#getFormData").click(function () {
         var values = {};
         form.each(function (c) {

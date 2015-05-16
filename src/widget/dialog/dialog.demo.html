@@ -46,12 +46,12 @@
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/jquery-2.1.1.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
 
-<!-- Data Tables -->
+<!-- Dialog -->
 <script src="/page/lib/artdialog/artDialog.source.js"></script>
 <script src="/page/lib/artdialog/iframeTools.source.js"></script>
 <link href="/page/lib/artdialog/skins/blue.css" rel="stylesheet">
 <link href="/page/lib/artdialog/css/ui-dialog.css" rel="stylesheet">
-<!-- Data Tables End -->
+<!-- Dialog End -->
 
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
@@ -64,31 +64,24 @@
             width: "400px",
             height: "200px",
             button: [{
-                name: "确定",
+                name: "点击试试",
                 callback: function() {
-                    alert("确定了啊");
+                    Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
+                        Page.dialog.tips('执行确定操作');
+                    }, function () {
+                        Page.dialog.alert('执行取消操作');
+                    });
                 }
             },{
-                name: "取消"
+                name: "测试Prompt",
+                callback: function() {
+                    Page.dialog.prompt('请输入图片网址', function (val) {
+                        Page.dialog.tips(val);
+                    }, 'http://');
+                }
             }]
         });
         dialog.render();
-
-        //简易操作
-    /*
-        Page.dialog.alert('人品越来越不那么稳定了，请检查！');
-        Page.dialog.tips('成功！已经保存在服务器');
-        Page.dialog.prompt('请输入图片网址', function (val) {
-            Page.dialog.tips(val);
-        }, 'http://');
-
-        Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
-            Page.dialog.tips('执行确定操作');
-        }, function () {
-            Page.dialog.tips('执行取消操作');
-        });
-
-*/
 
     });
 </script>
