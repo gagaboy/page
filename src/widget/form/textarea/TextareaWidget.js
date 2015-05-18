@@ -14,12 +14,6 @@ define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget
                 cmp.fireEvent('labelClick', cmp);
             }
         },
-        render:function(opts){
-            this.parent(opts);
-            if(this.options.placeholder){
-                this._getInputElement().attr("placeholder",this.options.placeholder);
-            }
-        },
         getTemplate: function () {
             return template;
         },
@@ -30,7 +24,6 @@ define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget
         _getInputElement: function () {
             var input = jQuery(this.getElement()).find("textarea.form-widget-to-focus-class");
             return input;
-
         },
         focus: function () {
             //console to invoke this method is not ok...
