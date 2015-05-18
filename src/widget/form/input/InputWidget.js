@@ -6,11 +6,7 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
     var InputWidget = new Class({
         Extends: BaseFormWidget,
         options: {
-            $xtype: xtype,
-            labelClick: function (vid) {
-                var cmp = Page.manager.components[vid];
-                cmp.fireEvent('labelClick', cmp);
-            }
+            $xtype: xtype
         },
         getTemplate: function () {
             return template;
