@@ -21,7 +21,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             totalNum:0,
             totalPage:1,
             //操作列
-            opColumns:[],//{opTitle:"操作",opWidth:'10%',position:2,template:''}//position支持值为front、end和具体数字
+            opColumns:[],//{title:"操作",width:'10%',position:2,template:''}//position支持值为front、end和具体数字
             //行编辑
             canEdit:true,//是否可编辑
             dbClickToEditRow:false,//双击编辑行
@@ -300,18 +300,6 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         _dataChange:function(){
             //this._updateAllCheckedByDatas();
         },
-        _formArr:function(arr){
-            if(arr){
-                var nArr = [];
-                for (var i = 0; i < arr.length; i++) {
-                    if (arr[i]) {
-                        nArr.push(arr[i]);
-                    }
-                }
-                arr = nArr;
-            }
-            return arr;
-        },
         _formatOptions:function(opts){
             var d = opts.data||[];
             //是否默认全部勾选
@@ -348,11 +336,23 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                         if(coli.showDisplay==undefined){
                             coli.showDisplay = false;
                         }
-
+                        if(coli.isOpColumn==undefined){
+                            coli.isOpColumn = false;
+                        }
+                        if(coli.sortDisabled==undefined){
+                            coli.sortDisabled = false;
+                        }
                     }
                 }
             }
-            //var allColumns = new Array(cols);
+            var allColumns = [];
+            if(cols&&cols.length>0) {
+                for (var i = 0; i < cols.length; i++) {
+                    if (cols[i]&&!cols[i].hidden) {
+                        allColumns.push(cols[i]);
+                    }
+                }
+            }
             var opCols = opts.opColumns;
             if(opCols&&opCols.length>0){
                 var opColumnMap = {};
@@ -362,16 +362,33 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                         if(typeof(positioni)=='number'&&positioni>(cols.length-1)){
                             positioni = "end";
                         }
-                        opCols[t].opTitle = opCols[t].opTitle?opCols[t].opTitle:"操作";
+                        if(typeof(positioni)=='number'){
+                            for(var s=0;s<allColumns.length;s++){
+                                if(allColumns[s]&&allColumns[s]==cols[positioni]){
+                                    if(cols[positioni].hidden){
+                                        positioni = positioni +1;
+                                        if(positioni>cols.length-1){//达到最后一个时
+                                            opColumnMap['op_end'].push(opCols[t]);
+                                            break;
+                                        }
+                                    }else{
+                                        opCols[t].isOpColumn = true;
+                                        allColumns = this._pushIntoArr(allColumns,opCols[t],s);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        opCols[t].title = opCols[t].title?opCols[t].title:"操作";
                         if(!opColumnMap['op_'+positioni]){
                             opColumnMap['op_'+positioni] = [];
                         }
                         opColumnMap['op_'+positioni].push(opCols[t]);
                     }
-
                 }
                 opts.opColumnMap = opColumnMap;
             }
+            opts.allColumns = allColumns;
             return opts;
         },
         _formatDatas:function(datas){
@@ -394,6 +411,33 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 }
             }
             return datas;
+        },
+        _formArr:function(arr){
+            if(arr){
+                var nArr = [];
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i]) {
+                        nArr.push(arr[i]);
+                    }
+                }
+                arr = nArr;
+            }
+            return arr;
+        },
+        _pushIntoArr:function(arr,ele,position){
+            if(arr&&ele&&position){
+                var nArr = [];
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i]) {
+                        if(i==position){
+                            nArr.push(ele);
+                        }
+                        nArr.push(arr[i]);
+                    }
+                }
+                return nArr;
+            }
+            return arr;
         }
     });
     SimpleGridWidget.xtype = xtype;
