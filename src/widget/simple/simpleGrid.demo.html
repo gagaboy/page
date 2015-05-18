@@ -65,27 +65,13 @@
             dataSetId: ds.getId(),
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
-                {title:"性别编码",dataField:"sex",orderType:"asc"},//编码
-                {title:"性别",dataField:"sex",showDisplay:true,sortDisabled:true},//显示Display字段
-                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"date"},
-                {title:"入学时间",dataField:"rxDate"},
-                {title:"是否党员",dataField:"isParty"},
-                {title:"所在班级",dataField:"className"},
+                {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
+                {title:"性别",dataField:"sex",width:"8%",showDisplay:true,sortDisabled:true},//显示Display字段
+                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"date"},
+                {title:"入学时间",dataField:"rxDate",width:"12%"},
+                {title:"是否党员",dataField:"isParty",width:"8%"},
+                {title:"所在班级",dataField:"className",width:"15%"},
                 {title:"备注",dataField:"notes",sortDisabled:true}
-            ],
-            data:[
-                {"name":"王菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,
-                    "rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"朝鲜族",
-                    "editContent_sex":"XXX","state":"edit"},
-                {"name":"张菜菜","sex":002,"sexDisplay":"女","birthDate":1989-11-03,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
-                {"name":"李菜菜","sex":001,"sexDisplay":"男","birthDate":1987-03-19,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
-                {"name":"杨菜菜","sex":002,"sexDisplay":"女","birthDate":1990-10-22,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
-                {"name":"丁菜菜","sex":002,"sexDisplay":"女","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":"单亲"},
-                {"name":"曾菜菜","sex":002,"sexDisplay":"女","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
-                {"name":"毕菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
-                {"name":"裴菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""},
-                {"name":"刘菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"是","className":"信息0701班","notes":""},
-                {"name":"吴菜菜","sex":001,"sexDisplay":"男","birthDate":1988-09-20,"rxDate":"2007-09-02",isParty:"否","className":"信息0701班","notes":""}
             ],
             opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
                                 "<a href='javascript:deleteActive();'>Delete This Row</a> | " +
@@ -112,26 +98,29 @@
                     dataArr.push(datas[t]);
                 }
                 vm.data = dataArr;
-                if(true){//根据类型判断渲染何种组件,fieldXtype
+                if(!fieldXtype||fieldXtype=="input"){//根据类型判断渲染何种组件,fieldXtype
                     var editField = Page.create("input", {
                         $parentId: '__currentEditField',
                         value: row[fieldName],
+                        width:"100px",
                         showLabel: false,
                         valueChange:function(){
                             row[fieldName] = editField.getValue();
                         }
                     });
                     editField.render();
+                    editField.focus();
                     editField._getInputElement().onblur = function(){
                         var dataArr = [];
                         for(var t=0;t<datas.length;t++){
                             if(datas[t]==row){
                                 datas[t].state = "view";
                                 datas[t][fieldName] = editField.getValue();
-                                datas[t]["editContent_"+fieldName]= "";
+                                datas[t]["editContent_"+fieldName]= null;
                             }
                             dataArr.push(datas[t]);
                         }
+                        editField.destroy();
                         vm.data = dataArr;
                     };
                 }

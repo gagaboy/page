@@ -117,6 +117,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         render:function(){
             this.parent();
+            if(this.getAttr("data")==[]||this.getAttr("data").length<1){
+                this.reloadData();
+            }
             var that = this;
             this.pagination = Page.create("pagination", {
                 $parentId: "pager_" + this.getAttr("vid"),
@@ -335,7 +338,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                         if(!coli.orderType){
                             coli.orderType = "";
                         }
-                        if(!coli.type){
+                        if(!coli.xtype){
                             coli.xtype = "input";
                         }
                     }
