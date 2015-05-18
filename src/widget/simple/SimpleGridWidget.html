@@ -7,17 +7,23 @@
                      ms-class-checked="allChecked" ms-click="allClick(vid, this)">
                 </div>
             </th>
-            <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" ms-attr-width="opcolumn.width">
-                {{opcolumn.opTitle}}
+            <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']"
+                ms-attr-width="opcolumn.width" style="text-align:center;">
+                {{opcolumn.title}}
             </th>
-            <th ms-repeat="columns" ms-attr-width="el.width">
-                <div ms-if="!el.sortDisabled&&el.orderType=='asc'" ms-click="sortByCol(vid,el,'desc')">{{el.title}} <div class="fa fa-caret-down"></div></div>
-                <div ms-if="!el.sortDisabled&&el.orderType=='desc'" ms-click="sortByCol(vid,el,'asc')">{{el.title}} <div class="fa fa-caret-up"></div></div>
-                <div ms-if="!el.sortDisabled&&!el.orderType" ms-click="sortByCol(vid,el,'asc')">{{el.title}} <div class="fa fa-unsorted"></div></div>
-                <div ms-if="el.sortDisabled"> {{el.title}} </div>
+            <th ms-repeat-col="allColumns" ms-attr-width="col.width" style="text-align:center;">
+                <div ms-if="col.isOpColumn">
+                    {{col.title}}
+                </div>
+                <div ms-if="!col.isOpColumn">
+                    <div ms-if="!col.sortDisabled&&col.orderType=='asc'" ms-click="sortByCol(vid,el,'desc')">{{col.title}} <div class="fa fa-caret-down"></div></div>
+                    <div ms-if="!col.sortDisabled&&col.orderType=='desc'" ms-click="sortByCol(vid,el,'asc')">{{col.title}} <div class="fa fa-caret-up"></div></div>
+                    <div ms-if="!col.sortDisabled&&!col.orderType" ms-click="sortByCol(vid,el,'asc')">{{col.title}} <div class="fa fa-unsorted"></div></div>
+                    <div ms-if="col.sortDisabled"> {{col.title}} </div>
+                </div>
             </th>
             <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-attr-width="opcolumn.width">
-                {{opcolumn.opTitle}}
+                {{opcolumn.title}}
             </th>
         </tr>
         </thead>
@@ -27,8 +33,11 @@
                      ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                 </div>
             </td>
-            <td ms-repeat-col="columns" ms-attr-xtype="col.xtype">
-
+            <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype">
+                <div ms-if="col.isOpColumn">
+                    {{col.template|html}}
+                </div>
+                <div ms-if="!col.isOpColumn">
                     <div ms-attr-bindField="col.dataField" style="padding:0px;"
                          ms-click="!col.disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,rowdata,col.dataField,col.xtype,this):''"
                          ms-if="rowdata['editContent_'+col.dataField]==undefined||(rowdata.state=='view')">
@@ -42,6 +51,7 @@
                     <div ms-attr-bindField="col.dataField" ms-if="rowdata['editContent_'+col.dataField]&&rowdata.state=='edit'">
                         {{rowdata["editContent_"+col.dataField]|html}}
                     </div>
+                </div>
             </td>
             <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
                 {{opcolumn.template|html}}
