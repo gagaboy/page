@@ -7,9 +7,12 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            labelClick: function (vid) {
-                var cmp = Page.manager.components[vid];
-                cmp.fireEvent('labelClick', cmp);
+            placeholder:null
+        },
+        render:function(opts){
+            this.parent(opts);
+            if(this.options.placeholder){
+                this._getInputElement().attr("placeholder",this.options.placeholder);
             }
         },
         getTemplate: function () {
@@ -20,10 +23,8 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
             this.validate();//即时校验
         },
         _getInputElement: function () {
-            var input = this.getElement().getElement("input.form-widget-to-focus-class");
-            //var input = this.getElement().find("input.form-widget-to-focus-class");
+            var input = jQuery(this.getElement()).find("input.form-widget-to-focus-class");
             return input;
-
         },
         focus: function () {
             //console to invoke this method is not ok...

@@ -1,12 +1,12 @@
 <table class="form-horizontal-table" ms-visible="show">
     <tr>
-        <td class="form-label" ms-class="col-md-{{labelSpan}}" ms-if="showLabel" ms-click="labelClick(vid)">
+        <td class="form-label" ms-class="col-md-{{labelSpan}}" ms-if="showLabel" >
             <span class="form-required" ms-visible="required && showRequired">*</span>
             {{label}}
         </td>
         <td class="has-feedback" ms-class="has-error:showErrorMessage&&errorMessage" ms-css-padding="controlPadding">
             <!--调用组件模板-->
-            <div ms-include="'{{TEMPLATENAME}}'" ></div>
+            {{TEMPLATEVALUE}}
         </td>
         <td class="form-icon-container">
             <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
@@ -21,7 +21,3 @@
         </td>
     </tr>
 </table>
-
-<script type="avalon" id="{{TEMPLATENAME}}">
-    {{TEMPLATEVALUE}}
-</script>

@@ -65,7 +65,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 compTemp = formTpl;  //待扩展，设置为表格的模板 gridTpl
             }
             //替换模板中的子模板名称
-            compTemp = compTemp.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
+//            compTemp = compTemp.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
             //替换模板中的子模板内容
             compTemp = compTemp.replace(/\{\{TEMPLATEVALUE\}\}/g, tmp);
 
