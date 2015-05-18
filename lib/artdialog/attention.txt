@@ -1,0 +1,26 @@
+artDialog.source.js 源码有改动：解决对话框自定义按钮传参数问题
+1612行
+改动前：
+_click: function (name) {
+		var that = this,
+			fn = that._listeners[name] && that._listeners[name].callback;
+		return typeof fn !== 'function' || fn.call(that, window) !== false ?
+			that.close() : that;
+	},
+
+改动后：
+_click: function (name) {
+		var that = this,
+			fn = that._listeners[name] && that._listeners[name].callback;
+		return typeof fn !== 'function' || fn.call(that, window, getParams()) !== false ?
+			that.close() : that;
+
+		function getParams(){
+			var buttons = that.config.button;
+			for(var i = 0; i < buttons.length; i++){
+				if(buttons[i].name == name){
+					return buttons[i].params;
+				}
+			}
+		}
+	},

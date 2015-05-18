@@ -33,7 +33,8 @@ define([
     "./widget/form/checkbox/CheckboxWidget",
     "./widget/form/radio/RadioWidget",
     "./widget/form/textarea/TextareaWidget",
-    "./widget/kendogrid/GridWidget"
+    "./widget/form/slider/SliderWidget",
+    "./widget/dialog/DialogWidget"
 ], function () {
     var allComps = arguments;
 
@@ -68,5 +69,7 @@ define([
             factory.add(c.xtype, c);
         }
     });
+    if(art)
+        factory.dialog = art.dialog;
     return factory;
 });
