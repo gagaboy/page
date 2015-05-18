@@ -30,21 +30,7 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
             return input;
         },
         render: function (opts) {
-            this.fireEvent("beforeRender", [this.vmodel]);
-            var $this = this;
-            var tmp = this.getTemplate();
-
-            var widgetType = $this.options.$xtype;
-
-            var e = jQuery("<div></div>").addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
-            e.append(tmp);
-            $this.getParentElement().html(e);
-            $this.element = e[0];
-            avalon.scan($this.getParentElement()[0]);
-            $this.fireEvent("afterRender", [this.vmodel]);
-            if (this["_afterRender"]) {
-                this["_afterRender"](this.vmodel);
-            }
+            this.parent(opts);
             if(this.options.multi){
                 this.sliderObj = this._getInputElement().kendoRangeSlider(this.options).data("kendoRangeSlider");
             }else{
