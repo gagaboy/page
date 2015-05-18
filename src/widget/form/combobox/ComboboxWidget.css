@@ -44,5 +44,6 @@
     left: 0;
 }
 .matchsearch {
-    background-color: yellow;
+    /*background-color: yellow;*/
+    text-decoration: underline;
 }
