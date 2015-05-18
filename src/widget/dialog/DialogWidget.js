@@ -1,8 +1,8 @@
 /**
  * Created by hhxu on 15/5/12.
  */
-define(['../Base','text!./DialogWidget.html', 'css!./DialogWidget.css'
-], function (Base, template) {
+define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWidget.css','css!./../../../lib/artdialog/skins/blue.css','css!./../../../lib/artdialog/skins/blue.css','css!./../../../lib/artdialog/css/ui-dialog.css'
+], function (Base, template, art, artIframe) {
     var xtype = "dialog";
     var DialogWidget = new Class({
         Extends: Base,

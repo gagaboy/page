@@ -12,7 +12,9 @@ module.exports = function(grunt) {
                         css: 'bower_components/require-css/css',
                         "css-builder": 'bower_components/require-css/css-builder',
                         "normalize": "bower_components/require-css/normalize",
-                        "avalon": "bower_components/oniui/avalon"
+                        "avalon": "bower_components/oniui/avalon",
+                        "art": 'lib/artdialog/artDialog.source',
+                        "artIframe": 'lib/artdialog/iframeTools.source'
                     },
                     optimize: 'none',
                     preserveLicenseComments:false,
