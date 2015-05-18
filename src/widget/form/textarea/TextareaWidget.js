@@ -8,9 +8,16 @@ define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget
         options: {
             $xtype: xtype,
             rows:3,//显示行数，默认3;列数不设置，采取自适应的方式
+            placeholder:null,
             labelClick: function (vid) {
                 var cmp = Page.manager.components[vid];
                 cmp.fireEvent('labelClick', cmp);
+            }
+        },
+        render:function(opts){
+            this.parent(opts);
+            if(this.options.placeholder){
+                this._getInputElement().attr("placeholder",this.options.placeholder);
             }
         },
         getTemplate: function () {
@@ -21,8 +28,7 @@ define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget
             this.validate();//即时校验
         },
         _getInputElement: function () {
-            var input = this.getElement().getElement("input.form-widget-to-focus-class");
-            //var input = this.getElement().find("textarea.form-widget-to-focus-class");
+            var input = jQuery(this.getElement()).find("textarea.form-widget-to-focus-class");
             return input;
 
         },
