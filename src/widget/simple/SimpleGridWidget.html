@@ -7,40 +7,44 @@
                      ms-class-checked="allChecked" ms-click="allClick(vid, this)">
                 </div>
             </th>
-            <th ms-repeat="columns" ms-attr-width="el.width">
-                {{el.title}}
-                    <div ms-if="!el.sortDisabled&&el.orderType=='asc'" class="fa fa-caret-down" ms-click="sortByCol(vid,el,'desc')"></div>
-                    <div ms-if="!el.sortDisabled&&el.orderType=='desc'" class="fa fa-caret-up" ms-click="sortByCol(vid,el,'asc')"></div>
-                    <div ms-if="!el.sortDisabled&&!el.orderType" class="fa fa-unsorted" ms-click="sortByCol(vid,el,'asc')"></div>
+            <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" ms-attr-width="opcolumn.width">
+                {{opcolumn.opTitle}}
             </th>
-            <th ms-attr-width="opWidth" ms-if="opColumn.template">
-                {{opTitle}}
+            <th ms-repeat="columns" ms-attr-width="el.width">
+                <div ms-if="!el.sortDisabled&&el.orderType=='asc'" ms-click="sortByCol(vid,el,'desc')">{{el.title}} <div class="fa fa-caret-down"></div></div>
+                <div ms-if="!el.sortDisabled&&el.orderType=='desc'" ms-click="sortByCol(vid,el,'asc')">{{el.title}} <div class="fa fa-caret-up"></div></div>
+                <div ms-if="!el.sortDisabled&&!el.orderType" ms-click="sortByCol(vid,el,'asc')">{{el.title}} <div class="fa fa-unsorted"></div></div>
+                <div ms-if="el.sortDisabled"> {{el.title}} </div>
+            </th>
+            <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-attr-width="opcolumn.width">
+                {{opcolumn.opTitle}}
             </th>
         </tr>
         </thead>
-        <tr ms-repeat-a="data" ms-click="activeRow(vid,a,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,a,this):''">
+        <tr ms-repeat-rowdata="data" ms-click="activeRow(vid,rowdata,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,rowdata,this):''">
             <td ms-if="showCheckbox">
-                <div class="icheckbox_square-green" style="position: relative;"
-                     ms-class-checked="a['checked']" ms-click="checkRow(vid,a)">
+                <div class="icheckbox_square-green"
+                     ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                 </div>
             </td>
-            <td ms-repeat-c="columns" ms-attr-xtype="c.xtype">
-                <div ms-attr-bindField="c.dataField" style="padding:0px;"
-                     ms-click="!c.disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,a,c.dataField,c.xtype,this):''"
-                     ms-if="a['editContent_'+c.dataField]==undefined||(a.state==undefined||a.state=='view')">
-                    <div ms-attr-id="" ms-if="c.showDisplay">
-                        {{a[c.dataField+"Display"]}}
+            <td ms-repeat-col="columns" ms-attr-xtype="col.xtype">
+
+                    <div ms-attr-bindField="col.dataField" style="padding:0px;"
+                         ms-click="!col.disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,rowdata,col.dataField,col.xtype,this):''"
+                         ms-if="rowdata['editContent_'+col.dataField]==undefined||(rowdata.state=='view')">
+                        <div ms-attr-id="" ms-if="col.showDisplay">
+                            {{rowdata[col.dataField+"Display"]}}
+                        </div>
+                        <div ms-if="!col.showDisplay">
+                            {{rowdata[col.dataField]}}
+                        </div>
                     </div>
-                    <div ms-if="!c.showDisplay">
-                        {{a[c.dataField]}}
+                    <div ms-attr-bindField="col.dataField" ms-if="rowdata['editContent_'+col.dataField]&&rowdata.state=='edit'">
+                        {{rowdata["editContent_"+col.dataField]|html}}
                     </div>
-                </div>
-                <div ms-attr-bindField="c.dataField" ms-if="a['editContent_'+c.dataField]&&a.state=='edit'">
-                    {{a["editContent_"+c.dataField]|html}}
-                </div>
             </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumn.template">
-                {{opColumn.template|html}}
+            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
+                {{opcolumn.template|html}}
             </td>
         </tr>
     </table>

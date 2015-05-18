@@ -21,9 +21,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             totalNum:0,
             totalPage:1,
             //操作列
-            opColumn: {},
-            opTitle:"操作",
-            opWidth:"15%",
+            opColumns:[],//{opTitle:"操作",opWidth:'10%',position:2,template:''}//position支持值为front、end和具体数字
             //行编辑
             canEdit:true,//是否可编辑
             dbClickToEditRow:false,//双击编辑行
@@ -35,6 +33,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             onChangeOrder:null,
 
             //中间参数，不可初始化
+            opColumnMap:{},//操作列
+            allColumns:[],
             activedRow:null,//激活的行
             editComp:null,//行编辑对象
             activedRowDom:null,//行编辑Dom
@@ -117,7 +117,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         },
         render:function(){
             this.parent();
-            if(this.getAttr("data")==[]||this.getAttr("data").length<1){
+            if(!this.getAttr("data")||this.getAttr("data").length<1){
                 this.reloadData();
             }
             var that = this;
@@ -138,7 +138,6 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             if(this.getAttr("usePager")){
                 ds.setAttr("pageNo",this.getAttr("pageIndex"));
                 ds.setAttr("pageSize",this.getAttr("pageSize"));
-                ds.setAttr("pageNo",this.getAttr("pageIndex"));
             }
             //配置查询条件
             var fetchParams = {};
@@ -159,7 +158,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             //发送获取数据请求
             var that = this;
             Promise.all([ds.fetch()]).then(function() {
-                that.setAttr("data",ds.getValue());
+                that.setAttr("data",that._formatDatas(ds.getValue()));
                 that.setAttr("totalNum",ds.getTotalSize());
                 that.setAttr("pageSize",ds.getPageSize());
                 that.setAttr("pageIndex",ds.getPageNo());
@@ -314,18 +313,20 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             return arr;
         },
         _formatOptions:function(opts){
-            var d = opts.data;
+            var d = opts.data||[];
             //是否默认全部勾选
             if(opts.allChecked){
                 for (var i = 0; i < d.length; i++) {
                     if (d[i]) {
                         d[i].checked = true;
+                        d[i].state = d[i].state?d[i].state:'view';
                     }
                 }
             }else{
                 for (var i = 0; i < d.length; i++) {
                     if (d[i].checked == undefined) {
                         d[i].checked = false;//未设置，默认不选中
+                        d[i].state = d[i].state?d[i].state:'view';
                     }
                 }
             }
@@ -341,12 +342,59 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                         if(!coli.xtype){
                             coli.xtype = "input";
                         }
+                        if(coli.disabledEdit==undefined){
+                            coli.disabledEdit = false;
+                        }
+                        if(coli.showDisplay==undefined){
+                            coli.showDisplay = false;
+                        }
+
                     }
                 }
             }
-            return opts;
-        }
+            //var allColumns = new Array(cols);
+            var opCols = opts.opColumns;
+            if(opCols&&opCols.length>0){
+                var opColumnMap = {};
+                for(var t=0;t<opCols.length;t++){
+                    if(opCols[t]){
+                        var positioni = opCols[t].position||"end";
+                        if(typeof(positioni)=='number'&&positioni>(cols.length-1)){
+                            positioni = "end";
+                        }
+                        opCols[t].opTitle = opCols[t].opTitle?opCols[t].opTitle:"操作";
+                        if(!opColumnMap['op_'+positioni]){
+                            opColumnMap['op_'+positioni] = [];
+                        }
+                        opColumnMap['op_'+positioni].push(opCols[t]);
+                    }
 
+                }
+                opts.opColumnMap = opColumnMap;
+            }
+            return opts;
+        },
+        _formatDatas:function(datas){
+            //是否默认全部勾选
+            if(datas){
+                if(this.getAttr("allChecked")){
+                    for (var i = 0; i < datas.length; i++) {
+                        if (datas[i]) {
+                            datas[i].checked = true;
+                            datas[i].state = datas[i].state?datas[i].state:'view';
+                        }
+                    }
+                }else{
+                    for (var i = 0; i < datas.length; i++) {
+                        if (datas[i].checked == undefined) {
+                            datas[i].checked = false;//未设置，默认不选中
+                            datas[i].state = datas[i].state?datas[i].state:'view';
+                        }
+                    }
+                }
+            }
+            return datas;
+        }
     });
     SimpleGridWidget.xtype = xtype;
     return SimpleGridWidget;

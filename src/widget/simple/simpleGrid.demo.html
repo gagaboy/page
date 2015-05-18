@@ -50,7 +50,7 @@
     require(["../../../page/src/Bootstrap"], function () {
         var ds = Page.create("dataSet", {
             $id: 'sampleGridDataSet',
-            fetchUrl: 'simpleGrid.demo.json',
+            fetchUrl: 'simpleGrid.demo.json?pageSize&pageIndex',
             syncUrl: ''
         });
 
@@ -73,9 +73,9 @@
                 {title:"所在班级",dataField:"className",width:"15%"},
                 {title:"备注",dataField:"notes",sortDisabled:true}
             ],
-            opColumn:{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
+            opColumns:[{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
                                 "<a href='javascript:deleteActive();'>Delete This Row</a> | " +
-                                "<a href='javascript:editRow();'>Edit This Row</a>"},
+                                "<a ms-click='editMyRow(rowdata,this);'>Edit This Row</a>"}],
             //行编辑
             canEdit:true,
             clickToEditRow:false,
@@ -128,6 +128,10 @@
             }//编辑单属性事件
         });
         simpleGrid.render();
+        simpleGrid.setAttr("editMyRow",function(rowData,rowObj){
+            alert("执行行编辑操作:"+rowData.name);
+            myEditPro(simpleGrid,simpleGrid.getActiveRow(),simpleGrid.getActiveRowDom());
+        });
 
     });
     function addRow(){
@@ -142,10 +146,6 @@
     function deleteActive(){
         simpleGrid.deleteActiveRow();
     }
-    function editRow(){
-        alert("执行自定义的行编辑操作");
-        myEditPro(simpleGrid,simpleGrid.getActiveRow(),simpleGrid.getActiveRowDom());
-    }
 
     function myEditPro(vm,row,rowDom){
         if(rowDom&&rowDom.children&&rowDom.children.length>0){
@@ -159,6 +159,16 @@
         }
     }
 
+//    <td ms-attr-rowIndex="$index">
+//    {{opColumn.template|html}}
+//    </td>
+
+
+
+//    <div ms-if="el.isOpColumn">
+//    {{col.template|html}}
+//    </div>
+//    <div ms-if="!el.isOpColumn">
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
 <!--<script src="dist/page-build.js" data-main="demo.js"></script>-->
