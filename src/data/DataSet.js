@@ -38,6 +38,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             totalSize: -1,
             model: {
                 id: 'wid',
+                mainAlias:'',
                 status: Constant.status,
                 notModify: Constant.notModify,
                 add: Constant.add,

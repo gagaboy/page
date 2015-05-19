@@ -47,18 +47,19 @@ define(["./DataConstant"], function (Constant) {
                     var result = data.result;
 
                     ///***************wrap for emp start *****************************
+                    result = result[Constant.data];
                     if ($this.options.model.mainAlias != '') {
                         result = result[$this.options.model.mainAlias];
                     }
                     if ($this.options.model.childAlias && $this.options.model.childAlias.length > 0) {
                         for(var i=0; i<$this.options.model.childAlias.length; i++) {
                             var calias = $this.options.model.childAlias[i];
-                            result[calias] = (data.result)[calias];
+                            result[calias] = ((data.result)[Constant.data])[calias];
                         }
                     }
                     ///***************wrap for emp end *****************************
 
-                    $this.options.data = result[Constant.data];
+                    $this.options.data = result[Constant.rows];
                     $this.options.pageSize = result[Constant.pageSize];
                     $this.options.pageNo = result[Constant.pageNo];
                     $this.options.totalSize = result[Constant.totalSize];

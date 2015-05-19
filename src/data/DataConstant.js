@@ -12,7 +12,8 @@ define([], function (Constant) {
         pageSize:'pageSize',
         pageNo:'pageNumber',
         totalSize:'totalCount',
-        data:'datas'
+        data:'datas',
+        rows:'rows'
     }
     //sync data send ds1={name:xxx}
     /*
