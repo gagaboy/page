@@ -69,9 +69,10 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             this.setAttr("show", false);
         },
         _pageIndexChange: function (pindex, oldIndex, model) {
+            //if(pindex!=oldIndex){
             //属性扩展
-            this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model);
-            this._calculateBeginAndTo();
+            this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model)
+            //}
         },
         _totalNumChange: function (tNum, oldNum, model) {
             this._calculateTotalPage();
