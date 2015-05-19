@@ -2,16 +2,16 @@ define([], function (Constant) {
     var constant = {
         status: "$status$",
         notModify: "$notModify$",
-        add: "$add$",
-        update: "$update$",
-        remove: "$remove$",
+        add: "add",
+        update: "update",
+        remove: "remove",
         //pageSize:'pageSize',
         //pageNo:'pageNo',
         //totalSize:'totalSize',
         //data:'data'
         pageSize:'pageSize',
         pageNo:'pageNumber',
-        totalSize:'totalCount',
+        totalSize:'totalSize',
         data:'datas',
         rows:'rows'
     }
