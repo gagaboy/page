@@ -22,6 +22,9 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             label: '未设置标题', //标题
             showLabel: true,
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            hasMessageBar:true,
+
             message: '',
             showMessage: true,
 
