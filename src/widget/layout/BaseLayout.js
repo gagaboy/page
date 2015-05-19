@@ -36,9 +36,15 @@ define(['../Base'], function (Base) {
             this._renderWidget(config);
         },
         removeItem: function (index) {
-            var widgetId = this.itemsArr.splice(index,1);
-            this.options.items.splice(index,1);
+            var widgetId = this.itemsArr.splice(index, 1);
+            this.options.items.splice(index, 1);
             Page.manager.components[widgetId].destroy();
+        },
+        destroy: function () {
+            for (var i = 0; i < this.itemsArr.length; i++) {
+                Page.manager.components[this.itemsArr[i]].destroy();
+            }
+            this.parent();
         }
     });
     BaseLayout.xtype = "baseLayout";

@@ -139,6 +139,7 @@ define([], function () {
         },
         destroy: function () {
             this.$element.remove();
+            Page.manager.remove(this.getId());
         }
     });
     Base.xtype = xtype;

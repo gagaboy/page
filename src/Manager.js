@@ -20,6 +20,9 @@ define([], function () {
         },
         add: function (key, value) {
             this.components[key] = value;
+        },
+        remove:function(id){
+            delete this.components[id];
         }
     });
     Manager.xtype = xtype;
