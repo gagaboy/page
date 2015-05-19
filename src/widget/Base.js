@@ -138,7 +138,7 @@ define([], function () {
             this.setAttr("show", false);
         },
         destroy: function () {
-            this.element.destroy();
+            this.$element.remove();
         }
     });
     Base.xtype = xtype;

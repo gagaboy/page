@@ -18,6 +18,9 @@
 
 
     </div>
+    <div>
+        <button class="btn " id="abc">clickme</button>
+    </div>
 </div>
 <script src="/page/bower_components/mootools/Source/Core/Core.js"></script>
 <script src="/page/bower_components/mootools/Source/Types/Array.js"></script>
@@ -39,6 +42,7 @@
         var panel = Page.create("panel", {
             $parentId: 'r',
             items: [{
+                $id:'p',
                 $xtype: 'row',
                 items: [{
                     $xtype: 'col',
@@ -69,6 +73,12 @@
         });
 
         panel.render();
+
+        $("#abc").click(function(){
+            panel.addItem({$xtype:'row', md:4,items:[{$xtype: 'input', label: '2'}]});
+        });
+
+
     });
 </script>
 </body>
