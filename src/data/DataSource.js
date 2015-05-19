@@ -45,7 +45,7 @@ define(["./DataConstant"], function (Constant) {
                 var params = $this.getFetchParam();
                 Page.utils.ajax($this.options.fetchUrl, params, function (data) {
                     var result = data.result;
-                    $this.options.data = result['data'];
+                    $this.options.data = result[Constant.data];
                     $this.options.pageSize = result[Constant.pageSize];
                     $this.options.pageNo = result[Constant.pageNo];
                     $this.options.totalSize = result[Constant.totalSize];
