@@ -27,6 +27,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             model: {
                 modelId: '',// 根据ID获取模型
                 id: 'wid',
+                mainAlias:'',
                 childAlias: [],
                 refAlias: [],
                 status: Constant.status,

@@ -33,19 +33,33 @@ define(["./DataConstant"], function (Constant) {
         getSyncParam: function () {
             var p = {};
             var value = this.getValue();
-            Object.merge(p, {data:value});
+            Object.merge(p, {data: value});
             Object.merge(p, this.options.syncParam);
             return p;
         },
 
         fetch: function () {
             var $this = this;
-            return new Promise(function(resolve){
+            return new Promise(function (resolve) {
                 $this.fireEvent("beforeFetch");
                 var params = $this.getFetchParam();
                 Page.utils.ajax($this.options.fetchUrl, params, function (data) {
                     var result = data.result;
-                    $this.options.data = result['data'];
+
+                    ///***************wrap for emp start *****************************
+                    result = result[Constant.data];
+                    if ($this.options.model.mainAlias != '') {
+                        result = result[$this.options.model.mainAlias];
+                    }
+                    if ($this.options.model.childAlias && $this.options.model.childAlias.length > 0) {
+                        for(var i=0; i<$this.options.model.childAlias.length; i++) {
+                            var calias = $this.options.model.childAlias[i];
+                            result[calias] = ((data.result)[Constant.data])[calias];
+                        }
+                    }
+                    ///***************wrap for emp end *****************************
+
+                    $this.options.data = result[Constant.rows];
                     $this.options.pageSize = result[Constant.pageSize];
                     $this.options.pageNo = result[Constant.pageNo];
                     $this.options.totalSize = result[Constant.totalSize];
@@ -57,7 +71,7 @@ define(["./DataConstant"], function (Constant) {
         },
         sync: function () {
             var $this = this;
-            return new Promise(function(resolve){
+            return new Promise(function (resolve) {
                 var params = $this.getSyncParam();
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
                     //TODO reset $status$

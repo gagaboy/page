@@ -9,12 +9,6 @@ define(['../BaseFormWidget', 'text!./InputWidget.html', 'css!./InputWidget.css']
             $xtype: xtype,
             placeholder:null
         },
-        render:function(opts){
-            this.parent(opts);
-            if(this.options.placeholder){
-                this._getInputElement().attr("placeholder",this.options.placeholder);
-            }
-        },
         getTemplate: function () {
             return template;
         },

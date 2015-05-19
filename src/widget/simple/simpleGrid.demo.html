@@ -50,10 +50,10 @@
     require(["../../../page/src/Bootstrap"], function () {
         var ds = Page.create("dataSet", {
             $id: 'sampleGridDataSet',
-            fetchUrl: 'simpleGrid.demo.json?pageSize&pageIndex',
-            syncUrl: ''
+            fetchUrl: 'simpleGrid.demo.json',
+            syncUrl: '',
+            model:{mainAlias:'ds1'}
         });
-
 
         simpleGrid = Page.create("simpleGrid", {
             $parentId: 'simpleGrid',
@@ -66,20 +66,26 @@
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
                 {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
-                {title:"性别",dataField:"sex",width:"8%",showDisplay:true,sortDisabled:true},//显示Display字段
+                {title:"性别",dataField:"sex",width:"4%",showDisplay:true,sortDisabled:true},//显示Display字段
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"date"},
                 {title:"入学时间",dataField:"rxDate",width:"12%"},
-                {title:"是否党员",dataField:"isParty",width:"8%"},
-                {title:"所在班级",dataField:"className",width:"15%"},
-                {title:"备注",dataField:"notes",sortDisabled:true}
+                {title:"是否党员",dataField:"isParty"},
+                {title:"所在班级",dataField:"className"},
+                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true}
             ],
-            opColumns:[{template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
-                                "<a href='javascript:deleteActive();'>Delete This Row</a> | " +
-                                "<a ms-click='editMyRow(rowdata,this);'>Edit This Row</a>"}],
+            opColumns:[{title:"自定义操作",
+                    width:'15%',
+                    position:1,
+                    template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
+                                "<a href='javascript:deleteActive();'>Delete This Row</a>"},
+                    {title:"编辑",
+                    width:'12%',
+                    position:'end',
+                    template:"<a ms-click='editMyRow(rowdata,this);'>Edit Row of {{rowdata.name}}</a>"}],
             //行编辑
             canEdit:true,
-            clickToEditRow:false,
-            dbClickToEditField:true,
+            dbClickToEditRow:false,
+            clickToEditField:true,
             editRowFunc:function(vm,row,rowDom){
                 alert("row~~~~");
                 myEditPro(vm,row,rowDom);
@@ -165,10 +171,7 @@
 
 
 
-//    <div ms-if="el.isOpColumn">
-//    {{col.template|html}}
-//    </div>
-//    <div ms-if="!el.isOpColumn">
+
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
 <!--<script src="dist/page-build.js" data-main="demo.js"></script>-->
