@@ -56,7 +56,10 @@ require(["../../../page/src/Bootstrap"], function () {
             value: '13',
             display: '足球3',
             checked: false
-        }]
+        }],
+        onValueChange:function(value){
+            alert(value);
+        }
     });
     checkbox.render();
     form.push(checkbox);
