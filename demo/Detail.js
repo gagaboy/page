@@ -76,11 +76,12 @@ require(["../../../page/src/Bootstrap"], function () {
         message: '',
         label: '电话',
         validationRules: {
-            required: true//options中为false时，此处可重开启校验
+            required: true,//options中为false时，此处可重开启校验
+            telephone:true
         },
         showErrorMessage: true,
         $id: 'username',
-        mask: "(000)00000000"
+        mask: "000-00000000"
     });
     maskedtextbox.render();
     form.push(maskedtextbox);
@@ -195,6 +196,25 @@ require(["../../../page/src/Bootstrap"], function () {
     });
     textarea.render();
     form.push(textarea);
+
+    //slider
+    var slider = Page.create("slider", {
+        $parentId: 'slider',
+        value: '',
+        required: true,
+        glyphicon: 'glyphicon-ok',
+        message: '请拖动滑块选择年龄',
+        value: '22',
+        $id: 'age',
+        label:"年龄",
+        min: 15,
+        max: 40,
+        smallStep: 1,
+        largeStep: 5,
+        showButtons: false
+    });
+    slider.render();
+    form.push(slider);
 
     function printFormValue() {
 

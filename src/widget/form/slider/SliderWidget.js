@@ -1,4 +1,4 @@
-define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./SliderWidget.html'], function (BaseFormWidget,slider, template) {
+define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./SliderWidget.html', 'css!./SliderWidget.css'], function (BaseFormWidget,slider, template) {
     var xtype = "slider";
     var SliderWidget = new Class({
         Extends: BaseFormWidget,
@@ -43,6 +43,15 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
         setValue:function(value){
             this.sliderObj.value(value);
             this.setAttr("valueChanged", true);
+        },
+        _statusChange:function(value, oldValue, model){
+            if(value !== oldValue){
+                if(value === "readonly"){
+                    this.sliderObj.disable();
+                }else if(value === "edit"){
+                    this.sliderObj.enable();
+                }
+            }
         }
     });
     SliderWidget.xtype = xtype;
