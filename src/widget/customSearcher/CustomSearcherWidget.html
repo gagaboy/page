@@ -1,27 +1,77 @@
-<div   ms-attr-name="ComboBoxWidget_{{vid}}" ms-if="status=='edit'" class="form-group" style=" margin-bottom: 0px;">
+<div   ms-attr-name="CustomSearcherWidget_{{vid}}" class="form-group" style=" margin-bottom: 0px;">
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
-        <!--多选区域-->
-        <div ms-if="multi" ms-class="div-focus: focused"
-             style="width: 350px;border: 1px solid #CBD5DD;  border-radius: 2px;" title="" ms-click="comboBoxFocus(vid, this)">
-            <ul class="chosen-choices" style="border: 0px;">
-                <li ms-repeat-item="selectedItems" class="search-choice">
-                    <span ms-text="item[$textField]"></span>
-                    <a ms-click="removeItem(vid, item, $index, $event)" class="search-choice-close" data-option-array-index="105"></a>
+        <div ms-class="div-focus: focused" class="searcherContainer" ms-click="searcherFocus(vid, this)">
+            <div class="amp-search-icon"><i class="fa fa-search"></i></div>
+
+            <ul class="chosen-choices itemContainer">
+                <!--快速查询项-->
+                <li ms-repeat-item="quickSearchArr" ms-name="item.bindField" type="quick" class="selectedItem"
+                    ms-mouseover="showRemoveIcon(vid, $index, $event)" ms-mouseout="displayRemoveIcon(vid, $event)">
+                    <span style="color: white;margin: 0px 5px;">{{item.label}}</span>
+
+                    <div ms-each="item.value" name="valueSpan" style="background-color: whitesmoke;display: inline-block">
+                        <span ms-if="$index == 0" style="padding: 0px 5px;display: inline-block;">{{el}}</span>
+                        <span ms-if="$index != 0" style="border-left: 1px solid #AFAFB6; padding: 0px 5px 0px 5px;display: inline-block;">{{el}}</span>
+                    </div>
+                    <a ms-click="removeItem(vid, 'quickSearch', $event, item, $index)" href="#" style="position: absolute; top: -9px; right: -6px;">
+                        <i ms-class="fa fa-times-circle: iconShowIndex==$index"></i>
+                    </a>
+                </li>
+                <!--视图查询项-->
+                <li ms-repeat-item="viewSearchArr" ms-name="item.bindField" type="view" class="selectedItem"
+                    ms-mouseover="showRemoveIcon(vid, $index, $event)" ms-mouseover-1="showTipsPanel(vid, 'viewSearch', $event)" ms-mouseout="displayRemoveIcon(vid, $event)">
+                    <a href="#" style="color: white;"><i class="fa fa-star-o"></i></a>
+                    <span style="color: white;">查询方案</span>
+
+                    <div name="valueSpan" style="background-color: whitesmoke;display: inline-block">
+                        <span style="padding: 0px 5px;display: inline-block;">{{item.viewName}}</span>
+                    </div>
+                    <a ms-click="removeItem(vid, 'viewSearch', $event, item)" href="#" style="position: absolute; top: -9px; right: -6px;">
+                        <i ms-class="fa fa-times-circle: iconShowIndex==$index"></i>
+                    </a>
+                </li>
+                <!--自定义查询项-->
+                <li ms-if="customSearchArr.length>0" class="selectedItem"
+                    ms-mouseover="showRemoveIcon(vid, 0, $event)" ms-mouseover-1="showTipsPanel(vid, 'customSearch', $event)" ms-mouseout="displayRemoveIcon(vid, $event)">
+                    <a href="#" style="color: white;"><i class="fa fa-slack"></i></a>
+                    <span style="color: white;">自定义查询</span>
+
+                    <div ms-repeat-item="customSearchArr" name="valueSpan" style="background-color: whitesmoke;display: inline-block">
+                        <span ms-if="$index == 0" style="padding: 0px 5px;display: inline-block;">{{item.nameDisplay}}</span>
+                        <span ms-if="$index != 0 && item.show!=false" style="border-left: 1px solid #AFAFB6; padding: 0px 5px 0px 5px;display: inline-block;">{{item.nameDisplay}}</span>
+                    </div>
+                    <a ms-click="removeItem(vid, 'customSearch', $event)" href="#" style="position: absolute; top: -9px; right: -6px;">
+                        <i ms-class="fa fa-times-circle: iconShowIndex!=null"></i>
+                    </a>
                 </li>
 
+                <!--输入框-->
                 <li class="search-field">
-                    <input type="text" ms-duplex="searchValue" autocomplete="off"tabindex="4" ms-css-width="multi ? inputWidth : -1" ms-on-keydown="keyDown(vid, $event)">
+                    <input type="text" ms-duplex="searchValue" ms-attr-readonly="customSearchArr.length>0" autocomplete="off" tabindex="4" ms-css-width="inputWidth" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
+                </li>
+            </ul>
+            <div class="amp-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'"></i></div>
+        </div>
+
+        <!--快速查询面板区域-->
+        <div class="amp-seach-mh animated fadeIn" ms-visible="showPanel=='quickPanel'" style="top: 100%;">
+            <ul ms-each-el="controls">
+                <li ms-if="el.quickSearch" ms-click="selectQuickItem(vid, el, $event)">
+                    <span>搜索</span>&nbsp;
+                    <span>{{el.label}}：</span>
+                    <a href="#"><strong>{{searchValue}}&nbsp;</strong></a>
                 </li>
             </ul>
         </div>
-
-        <!--下拉面板区域-->
-        <div name="panel" ms-class-1="chosen-drop:downShow" ms-class-2="chosen-up:!downShow"  ms-visible="showPanel" >
-            <div ms-if="model=='normal'">
-                <ul class="chosen-results" ms-each-el="data" ms-css-height="showPager ? '150px':'100%'">
-                    <li class="active-result" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index)"><span ms-repeat-item="el['displayArr']" ms-class-matchSearch="(multi || searchable ) && (item == searchValue || (!multi && item == display))">{{item}}</span></li>
-                </ul>
-                <div ms-attr-id="page_{{vid}}" ms-visible="showPager"></div>
+        <!--查询条件详情-->
+        <div ms-if="showTips" class="well well-sm" style="width: 250px; position: absolute; z-index: 999; top: 100%; left: 0px;">
+            <div style="margin: 5px 5px 5px 0px"><strong name="tipTiltle">条件详情：{{tipsArr.length==0 ? "无":""}}</strong></div>
+            <div ms-each-el="tipsArr">
+                <div ms-if="$index == 0" style="margin: 5px 5px 5px 25px"><strong>{{el.nameDisplay}}</strong> {{el.builderDisplay}} {{el.valueDisplay}}</div>
+                <div ms-if="$index != 0" style="margin: 5px">
+                    <div style="display: inline;margin-right: 5px">{{groupOper=='or' ? "或":"和"}}</div>
+                    <div style="display: inline;"><strong>{{el.nameDisplay}}</strong> {{el.builderDisplay}} {{el.valueDisplay}}</div>
+                </div>
             </div>
         </div>
     </div>

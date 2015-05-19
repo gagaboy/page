@@ -3,7 +3,7 @@
  */
 define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'
     ,'css!../../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (BaseFormWidget, template) {
-    var xtype = "combobox";
+    var xtype = "comboBox";
     var ComboBoxWidget = new Class({
         Extends: BaseFormWidget,
         options: {
@@ -181,7 +181,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
-                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
                     if(res == false) {
                         return;
                     }
@@ -192,7 +192,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.focused = false;
                 }
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
                     if(res == false) {
                         return;
                     }
@@ -419,6 +419,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 if(!this.options.pagination) {
                     this.options.pagination = Page.create("pagination", {
                         $parentId: 'page_'+vm.vid,
+                        $id: 'page_'+vm.vid,
                         totalNum: totalSize,
                         pageSize: vm.$pageSize,
                         showPageDetail: false,

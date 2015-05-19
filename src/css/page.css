@@ -58,3 +58,6 @@ body {
 .has-error .form-widget-container {
     /*border-bottom: 1px solid red;*/
 }
+.ms-controller,.ms-important,[ms-controller],[ms-important]{
+    visibility: hidden;
+}
