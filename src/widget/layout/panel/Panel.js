@@ -7,7 +7,8 @@ define(["../BaseLayout", "text!./Panel.html"], function (BaseLayout, panelTpl) {
     var Panel = new Class({
         Extends: BaseLayout,
         options: {
-            title:'未设置标题'
+            title:'未设置标题',
+            showTitle: true
         },
         getTemplate: function () {
             return panelTpl;
