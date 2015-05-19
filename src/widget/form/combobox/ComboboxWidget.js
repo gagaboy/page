@@ -3,7 +3,7 @@
  */
 define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'
     ,'css!../../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (BaseFormWidget, template) {
-    var xtype = "comboBox";
+    var xtype = "combobox";
     var ComboBoxWidget = new Class({
         Extends: BaseFormWidget,
         options: {
