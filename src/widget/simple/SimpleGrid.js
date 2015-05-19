@@ -10,14 +10,14 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             columns: [],
             data: [],
             dataSetId: null,//数据集
-            queryParams:null,
+            queryParams:null,//查询条件
             idField:"wid",
             showCheckbox:true,
             checkboxWidth:"10%",
             allChecked: false,//设置为true，则默认全部选中
             //分页信息
             usePager:true,
-            pageSize:10,
+            pageSize:15,
             totalNum:0,
             totalPage:1,
             //操作列
@@ -296,7 +296,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         _pageSizeChange:function(pageSize){
             this.pagination.setAttr("pageSize",pageSize);
         },
-
+        _pageIndexChange:function(pageIndex){
+            this.pagination.setAttr("pageIndex",pageIndex);
+        },
         _dataChange:function(){
             //this._updateAllCheckedByDatas();
         },
