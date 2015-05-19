@@ -28,13 +28,17 @@ define([
     "./widget/form/datepicker/DatepickerWidget",
     "./widget/pagination/PaginationWidget",
     "./widget/layout/BaseLayout",
+    "./widget/layout/panel/Panel",
+    "./widget/layout/row/Row",
+    "./widget/layout/col/Col",
     "./widget/dataTable/DataTableWidget",
     "./widget/simple/SimpleGrid",
     "./widget/form/checkbox/CheckboxWidget",
     "./widget/form/radio/RadioWidget",
     "./widget/form/textarea/TextareaWidget",
     "./widget/form/slider/SliderWidget",
-    "./widget/dialog/DialogWidget"
+    "./widget/dialog/DialogWidget",
+    "./widget/customSearcher/CustomSearcherWidget"
 ], function () {
     var allComps = arguments;
 

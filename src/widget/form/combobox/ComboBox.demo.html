@@ -74,8 +74,7 @@
 
         var ds = Page.create("dataSet", {
             $id: 'comboBoxDS',
-            fetchUrl: 'Data.demo.json',
-            syncUrl: ''
+            fetchUrl: 'Data.demo.json'
         });
 
         var combo1 = Page.create('combobox', {
@@ -96,8 +95,8 @@
                     customErrMsg:"请选择2-4个学院"
                 }
             },
-            beforeSelectEvent: function(value, display, obj) {
-//                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
+            beforeSelectEvent: function(value, display, obj, el) {
+                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
             },
             selectedEvent: function(value, display, obj) {
 //                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);

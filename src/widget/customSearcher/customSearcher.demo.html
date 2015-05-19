@@ -9,6 +9,7 @@
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
     <link href="/page/src/css/page.css" rel="stylesheet">
+    <link href="/page/src/css/amp-common.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
@@ -27,7 +28,7 @@
             <div class="ibox-content">
                 <div class="row">
                     我只是一个div：<br/>
-                    <div class="col-md-12" id="dialogContainer">
+                    <div class="col-md-4" id="container">
 
                     </div>
                 </div>
@@ -57,31 +58,44 @@
 <script>
     require(["../../../page/src/Bootstrap"], function () {
 
-        var dialog = Page.create('dialog', {
-            $id: "dialog",
- //           url: "www.baidu.com",
-            content: "测试一下，哈哈",
-            width: "400px",
-            height: "200px",
-            button: [{
-                name: "点击试试",
-                callback: function() {
-                    Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
-                        Page.dialog.tips('执行确定操作');
-                    }, function () {
-                        Page.dialog.alert('执行取消操作');
-                    });
-                }
+        var customSearcher = Page.create('customSearcher', {
+            $id: "customSearcher",
+            $parentId: "container",
+            controls: [{
+                id: "stuName",
+                xtype: "input",
+                label: "姓名",
+                filterName: "stuName",
+                bindField: "stuName",
+                builderList: "nameOpers"
             },{
-                name: "测试Prompt",
-                callback: function() {
-                    Page.dialog.prompt('请输入图片网址', function (val) {
-                        Page.dialog.tips(val);
-                    }, 'http://');
-                }
-            }]
+                id: "stuSex",
+                xtype: "comboBox",
+                label: "性别",
+                filterName: "stuSex",
+                bindField: "stuSex",
+                builderList: "nameOpers",
+                quickSearch: true
+            }],
+            builderLists: {
+                nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}]
+            }
+
+
         });
-        dialog.render();
+        customSearcher.render();
+
+
+       /* {viewId: "testView1", viewName: "查询方案（默认）", defaultView: "0", viewValue: [
+        {"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
+        {"show": false, "name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
+        {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
+        ]}*/
+
+        /*{"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
+        {"show": false, "name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
+        {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
+*/
 
     });
 </script>

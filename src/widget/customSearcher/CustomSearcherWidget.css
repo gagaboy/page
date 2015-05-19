@@ -1,0 +1,33 @@
+.searcherContainer {
+    width: 100%;
+    border: 1px solid #CBD5DD;
+    border-radius: 2px;
+}
+.form-group .searcherContainer .itemContainer {
+    border: 0px;
+    margin-left: 25px;
+    width:88%
+}
+.selectedItem {
+    background-color: #1ab394;
+    border: 1px solid #AFAFB6;
+    border-radius: 3px;
+    height: 100%;
+    margin: 4px 0px 0px 5px;
+    position: relative;
+    cursor: pointer;
+}
+.div-focus {
+    border-color: #1ab394 !important;
+}
+.menu_close {
+    display: block;
+    height: 13px;
+    width: 13px;
+    position: absolute;
+    top: -2px;
+    right: -6px;
+    cursor: pointer;
+    z-index: 999;
+    url(../widget/emap/images/taskbar/taskbar_menu_close.png) no-repeat;
+}

@@ -50,8 +50,9 @@
     require(["../../../page/src/Bootstrap"], function () {
         var ds = Page.create("dataSet", {
             $id: 'sampleGridDataSet',
-            fetchUrl: 'simpleGrid.demo.json?pageSize&pageIndex',
-            syncUrl: ''
+            fetchUrl: 'simpleGrid.demo.json',
+            syncUrl: '',
+            model:{mainAlias:'ds1'}
         });
 
         simpleGrid = Page.create("simpleGrid", {
@@ -83,8 +84,8 @@
                     template:"<a ms-click='editMyRow(rowdata,this);'>Edit Row of {{rowdata.name}}</a>"}],
             //行编辑
             canEdit:true,
-            clickToEditRow:false,
-            dbClickToEditField:true,
+            dbClickToEditRow:false,
+            clickToEditField:true,
             editRowFunc:function(vm,row,rowDom){
                 alert("row~~~~");
                 myEditPro(vm,row,rowDom);
