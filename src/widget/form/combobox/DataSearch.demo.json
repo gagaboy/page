@@ -1,21 +1,23 @@
 {
   "result": {
-    "data": [
-      {
-        "value": "5",
-        "display": "电气学院"
-      },
-      {
-        "value": "6",
-        "display": "机电学院"
-      },
-      {
-        "value": "7",
-        "display": "通信学院"
-      }
-    ],
-    "pageSize": 5,
-    "pageNo": 1,
-    "totalSize": 3
+    "datas": {
+      "rows": [
+        {
+          "value": "5",
+          "display": "电气学院"
+        },
+        {
+          "value": "6",
+          "display": "机电学院"
+        },
+        {
+          "value": "7",
+          "display": "通信学院"
+        }
+      ],
+      "pageSize": 5,
+      "pageNo": 1,
+      "totalSize": 3
+    }
   }
 }
