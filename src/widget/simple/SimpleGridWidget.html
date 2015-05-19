@@ -40,7 +40,7 @@
                 <div ms-if="!col.isOpColumn">
                     <div ms-attr-bindField="col.dataField" style="padding:0px;"
                          ms-click="!col.disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,rowdata,col.dataField,col.xtype,this):''"
-                         ms-if="rowdata['editContent_'+col.dataField]==undefined||(rowdata.state=='view')">
+                         ms-if="rowdata.state=='view'">
                         <div ms-attr-id="" ms-if="col.showDisplay">
                             {{rowdata[col.dataField+"Display"]}}
                         </div>
