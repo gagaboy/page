@@ -34,7 +34,8 @@ define([
     "./widget/form/radio/RadioWidget",
     "./widget/form/textarea/TextareaWidget",
     "./widget/form/slider/SliderWidget",
-    "./widget/dialog/DialogWidget"
+    "./widget/dialog/DialogWidget",
+    "./widget/customSearcher/CustomSearcherWidget"
 ], function () {
     var allComps = arguments;
 
