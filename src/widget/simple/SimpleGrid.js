@@ -291,13 +291,19 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             this.setAttr("allChecked",all);
         },
         _totalNumChange:function(totalNum){
-            this.pagination.setAttr("totalNum",totalNum);
+            if(totalNum!=this.pagination.getAttr("totalNum")) {
+                this.pagination.setAttr("totalNum", totalNum);
+            }
         },
         _pageSizeChange:function(pageSize){
-            this.pagination.setAttr("pageSize",pageSize);
+            if(pageSize!=this.pagination.getAttr("pageSize")){
+                this.pagination.setAttr("pageSize",pageSize);
+            }
         },
         _pageIndexChange:function(pageIndex){
-            this.pagination.setAttr("pageIndex",pageIndex);
+            if(pageIndex!=this.pagination.getAttr("pageIndex")){
+                this.pagination.setAttr("pageIndex",pageIndex);
+            }
         },
         _dataChange:function(){
             //this._updateAllCheckedByDatas();

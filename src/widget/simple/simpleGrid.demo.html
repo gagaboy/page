@@ -50,7 +50,7 @@
     require(["../../../page/src/Bootstrap"], function () {
         var ds = Page.create("dataSet", {
             $id: 'sampleGridDataSet',
-            fetchUrl: 'simpleGrid.demo.json?pageSize&pageIndex',
+            fetchUrl: 'simpleGrid.demo.json',
             syncUrl: ''
         });
 
@@ -115,19 +115,19 @@
                     });
                     editField.render();
                     editField.focus();
-                    editField._getInputElement().onblur = function(){
-                        var dataArr = [];
-                        for(var t=0;t<datas.length;t++){
-                            if(datas[t]==row){
-                                datas[t].state = "view";
-                                datas[t][fieldName] = editField.getValue();
-                                datas[t]["editContent_"+fieldName]= null;
-                            }
-                            dataArr.push(datas[t]);
-                        }
-                        editField.destroy();
-                        vm.data = dataArr;
-                    };
+//                    editField._getInputElement().onblur = function(){
+//                        var dataArr = [];
+//                        for(var t=0;t<datas.length;t++){
+//                            if(datas[t]==row){
+//                                datas[t].state = "view";
+//                                datas[t][fieldName] = editField.getValue();
+//                                datas[t]["editContent_"+fieldName]= null;
+//                            }
+//                            dataArr.push(datas[t]);
+//                        }
+//                        editField.destroy();
+//                        vm.data = dataArr;
+//                    };
                 }
 
             }//编辑单属性事件
