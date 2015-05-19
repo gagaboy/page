@@ -22,7 +22,8 @@ define([], function () {
             $fullName: fullName,
             $parentId: null,
             $appendEl: null,
-            show: true
+            show: true,
+            _addWrapDiv:true//是否在组件外边套DIV（ms－controller）
         },
         initialize: function (opts) {
             this.setOptions(opts);
@@ -65,28 +66,29 @@ define([], function () {
                 this.setAttr(o, opts[o]);
             }
         },
-        render: function () {
+        render: function (parent) {
             this.fireEvent("beforeRender", [this.vmodel]);
             //var element = this.getElement();
             var $this = this;
-            //mmPromise
-            /*
-             Promise.all([this.getTemplate()]).then(function (element) {
-             $this.getParentElement().adopt(element);
-             $this.element = element;
-             $this.fireEvent("afterRender", [this.vmodel]);
-             });
-             */
-            var tmp = this.getTemplate();
-            //var e = new Element("div." + $this.getAttr('$xtype'));
-            //e.set("ms-controller", $this.getId());
-            //e.appendHTML(tmp);
 
-            var e = jQuery("<div></div>").addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
-            e.append(tmp);
-            $this.getParentElement().html(e);
+            var tmp = this.getTemplate();
+
+
+            var e = jQuery("<div></div>");
+            if(!this.options._addWrapDiv){
+                e = jQuery(tmp);
+            }else {
+                e.append(tmp);
+            }
+            e.addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
+            var parentDOM = parent;
+            if(!parentDOM) {
+                parentDOM = $this.getParentElement();
+            }
+            parentDOM.append(e);
+            $this.$element = e;
             $this.element = e[0];
-            avalon.scan($this.getParentElement()[0]);
+            avalon.scan(parentDOM[0]);
             $this.fireEvent("afterRender", [this.vmodel]);
             if (this["_afterRender"]) {
                 this["_afterRender"](this.vmodel);

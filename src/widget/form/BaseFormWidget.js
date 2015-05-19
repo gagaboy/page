@@ -53,7 +53,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             }
             this.parent(opts);
         },
-        render: function () {
+        render: function (parent) {
             this.fireEvent("beforeRender", [this.vmodel]);
             var $this = this;
             var tmp = this.getTemplate();
@@ -72,8 +72,14 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
 
             var e = jQuery("<div></div>").addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
             e.append(compTemp);
-            $this.getParentElement().html(e);
+            var parentDOM = parent;
+            if(!parentDOM) {
+                parentDOM = $this.getParentElement();
+            }
+            parentDOM.html(e);
+            $this.$element = e;
             $this.element = e[0];
+
             avalon.scan($this.getParentElement()[0]);
             $this.fireEvent("afterRender", [this.vmodel]);
             if (this["_afterRender"]) {

@@ -16,7 +16,8 @@
   "dependencies": {
     "avalon": "~1.4.2",
     "requirejs": "~2.1.17",
-    "mootools": "~1.5.1"
+    "mootools": "~1.5.1",
+    "pure": "~0.6.0"
   },
   "devDependencies": {
     "r.js": "~2.1.17"

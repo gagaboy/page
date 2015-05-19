@@ -5,11 +5,14 @@ define([], function (Constant) {
         add: "$add$",
         update: "$update$",
         remove: "$remove$",
+        //pageSize:'pageSize',
+        //pageNo:'pageNo',
+        //totalSize:'totalSize',
+        //data:'data'
         pageSize:'pageSize',
         pageNo:'pageNo',
         totalSize:'totalSize',
         data:'data'
-
     }
     return constant;
 })
