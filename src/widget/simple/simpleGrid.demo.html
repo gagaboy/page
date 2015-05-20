@@ -69,7 +69,7 @@
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
                 {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
-                    sortDisabled:true,xtype:"combobox",isOpColumn:true,template:"<b>{{rowdata.sex}}</b>",
+                    sortDisabled:true,xtype:"combobox",isOpColumn:true,template:"<b>{{rowdata.sexDisplay}}</b>",
                     editContent:"<div id='__currentEditField_sex'></div>"},//显示Display字段
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
@@ -175,6 +175,7 @@
        if(row){
            var dt = null;
            var datas = vm.data?vm.data:vm.getAttr("data");
+
            var dataArr = [];
            for(var t=0;t<datas.length;t++){
                if(datas[t]==row){
