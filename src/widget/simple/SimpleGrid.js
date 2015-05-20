@@ -73,11 +73,11 @@ define(['../Base',"./../../data/DataConstant", 'text!./SimpleGridWidget.html', '
                 }
                 vm.allChecked = all;
             },
-            sortByCol:function(vid,row,orderType){
+            sortByCol:function(vid,col,orderType){
                 var vm = avalon.vmodels[vid];
-                row.orderType = orderType;
+                col.orderType = orderType;
                 if(vm.onChangeOrder){
-                    vm.onChangeOrder(vm,row,orderType);
+                    vm.onChangeOrder(vm,col,orderType);
                 }else{
                     var grid = Page.manager.components[vid];
                     grid.reloadData();// 调用dataset接口进行查询
