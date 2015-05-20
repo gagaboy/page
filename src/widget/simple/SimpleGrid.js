@@ -186,6 +186,9 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
         getActiveRowDom:function(){
             return this.getAttr("activedRowDom");
         },
+        getData:function(){
+            return this.getAttr("data");
+        },
         /**
          * 新增一行数据
          */

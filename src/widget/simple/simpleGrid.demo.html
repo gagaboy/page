@@ -58,20 +58,24 @@
         simpleGrid = Page.create("simpleGrid", {
             $parentId: 'simpleGrid',
             idField:"aa",
+            $id:"simpleGrid",
             totalNum:200,
             showCheckbox:true,
             usePager:true,
             allChecked:false,
             dataSetId: ds.getId(),
+            editComps:[],
             columns:[
-                {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
+                {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
                 {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
-                {title:"性别",dataField:"sex",width:"4%",showDisplay:true,sortDisabled:true},//显示Display字段
-                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"date"},
-                {title:"入学时间",dataField:"rxDate",width:"12%"},
-                {title:"是否党员",dataField:"isParty"},
-                {title:"所在班级",dataField:"className"},
-                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true}
+                {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
+                    sortDisabled:true,xtype:"combobox",isOpColumn:true,template:"<b>{{rowdata.sexDisplay}}</b>",
+                    editContent:"<div id='__currentEditField_sex'></div>"},//显示Display字段
+                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
+                {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
+                {title:"是否党员",dataField:"isParty",xtype:"combobox",editContent:"<div id='__currentEditField_isParty'></div>"},
+                {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>"},
+                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true,editContent:"<div id='__currentEditField_notes'></div>"}
             ],
             opColumns:[{title:"自定义操作",
                     width:'15%',
@@ -81,63 +85,77 @@
                     {title:"编辑",
                     width:'12%',
                     position:'end',
-                    template:"<a ms-click='editMyRow(rowdata,this);'>Edit Row of {{rowdata.name}}</a>"}],
+                    template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
             canEdit:true,
-            dbClickToEditRow:false,
-            clickToEditField:true,
+            dbClickToEditRow:true,
+            clickToEditField:false,
             editRowFunc:function(vm,row,rowDom){
-                alert("row~~~~");
-                myEditPro(vm,row,rowDom);
-            },//编辑行事件
-            editFieldFunc:function(vm,row,fieldName,fieldXtype,tdDom){
-                var rowData = null;
-                var datas = vm.data;
-                var dataArr = [];
-                for(var t=0;t<datas.length;t++){
-                    if(datas[t]==row){
-                        datas[t].state = "edit";
-                        if(!datas[t]["editContent_"+fieldName]){
-                            datas[t]["editContent_"+fieldName]= "<div id='__currentEditField'></div>";
+                if(!row.state||row.state=="view"){
+                    myEditPro(vm,row,rowDom);
+                }else{
+                    if(vm.editComps&&vm.editComps.length>0) {
+                        for(var s=0;s<vm.editComps.length;s++){
+                            if(vm.editComps[s]&&vm.editComps[s].getAttr){
+                                row[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
+                                //vm.editComps[s].destroy();
+                            }
                         }
                     }
-                    dataArr.push(datas[t]);
-                }
-                vm.data = dataArr;
-                if(!fieldXtype||fieldXtype=="input"){//根据类型判断渲染何种组件,fieldXtype
-                    var editField = Page.create("input", {
-                        $parentId: '__currentEditField',
-                        value: row[fieldName],
-                        width:"100px",
-                        showLabel: false,
-                        valueChange:function(){
-                            row[fieldName] = editField.getValue();
-                        }
-                    });
-                    editField.render();
-                    editField.focus();
-                    editField._getInputElement().onblur = function(){
-                        var dataArr = [];
-                        for(var t=0;t<datas.length;t++){
-                            if(datas[t]==row){
-                                datas[t].state = "view";
-                                datas[t][fieldName] = editField.getValue();
-                                datas[t]["editContent_"+fieldName]= null;
-                            }
-                            dataArr.push(datas[t]);
-                        }
-                        editField.destroy();
-                        vm.data = dataArr;
-                    };
+                    vm.editComps = [];
+                    row.state = "view";
                 }
 
-            }//编辑单属性事件
+            },//编辑行事件
+            editFieldFunc:function(vm,row,fieldName,fieldXtype,tdDom){
+                var ytdDom = tdDom.innerHTML;
+                tdDom.innerHTML = "<div id='__currentEditField'></div>";
+                fieldXtype = fieldXtype?fieldXtype:"input";
+                //根据类型判断渲染何种组件,fieldXtype
+                var editField = Page.create(fieldXtype, {
+                    $parentId: '__currentEditField',
+                    value: row[fieldName],
+                    showLabel: false,
+                    valueChange:function(){
+                        row[fieldName] = editField.getValue();
+                    }
+                });
+                editField.render();
+                //自动聚焦
+                editField.focus();
+                //回车时变为查看状态 * 失去焦点时变为查看状态，有下拉时出现异常，不建议
+                if(editField._getInputElement()){
+                    editField._getInputElement().bind('keyup', function(event) {
+                        if (event.keyCode == "13") {
+                            //回车执行查询
+                            tdDom.innerHTML  = ytdDom;
+                            row[fieldName] = editField.getValue();
+                            editField.destroy();
+                        }
+                    });
+                }
+            },
+            //自定义函数
+            editMyRow:function(vid,rowData,rowObj) {
+                if(!rowData.state||rowData.state=="view"){
+                    myEditPro(simpleGrid,rowData,rowObj);
+                }else{
+                    var vm = avalon.vmodels[vid];
+                    if(vm.editComps&&vm.editComps.length>0) {
+                       for(var s=0;s<vm.editComps.length;s++){
+                           if(vm.editComps[s]&&vm.editComps[s].getAttr){
+                               rowData[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
+                               //vm.editComps[s].destroy();
+                           }
+                       }
+                    }
+                    vm.editComps = [];
+                    rowData.state = "view";
+                }
+            }
+            //编辑单属性事件
         });
         simpleGrid.render();
-        simpleGrid.setAttr("editMyRow",function(rowData,rowObj){
-            alert("执行行编辑操作:"+rowData.name);
-            myEditPro(simpleGrid,simpleGrid.getActiveRow(),simpleGrid.getActiveRowDom());
-        });
 
     });
     function addRow(){
@@ -154,15 +172,48 @@
     }
 
     function myEditPro(vm,row,rowDom){
-        if(rowDom&&rowDom.children&&rowDom.children.length>0){
-            //rowDom
-            for(var s=0;s<rowDom.children.length;s++){
-                var fiedObj = rowDom.children[s];
-                if(fiedObj.bindField){
-                    //fiedObj
-                }
-            }
-        }
+       if(row){
+           var dt = null;
+           var datas = vm.data?vm.data:vm.getAttr("data");
+
+           var dataArr = [];
+           for(var t=0;t<datas.length;t++){
+               if(datas[t]==row){
+                   datas[t].state = "edit";
+               }
+               dataArr.push(datas[t]);
+           }
+           if(vm.data){
+               vm.data = dataArr;
+           }else{
+               vm.setAttr("data",dataArr);
+           }
+           var cols = vm.columns?vm.columns:vm.getAttr("columns");
+           var editComps = vm.editComps?vm.columns:vm.getAttr("editComps");
+           for(var s=0;s<cols.length;s++){
+               var coli = cols[s];
+               if(coli&&coli.dataField) {
+                   var fieldName = coli.dataField;
+                   var xtype = coli.xtype || "input";
+                   var editField = Page.create(xtype, {
+                       $parentId: '__currentEditField_'+fieldName,
+                       value: row[fieldName],
+                       showLabel: false,
+                       bindField:fieldName,
+                       valueChange:function(){
+                           row[fieldName] = editField.getValue();
+                       }
+                   });
+                   editComps.push(editField);
+                   editField.render();
+               }
+           }
+           if(vm.editComps){
+               vm.editComps = editComps;
+           }else{
+               vm.setAttr("editComps",editComps);
+           }
+       }
     }
 
 //    <td ms-attr-rowIndex="$index">
