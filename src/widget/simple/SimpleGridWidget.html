@@ -40,16 +40,16 @@
                 <div ms-if="!col.isOpColumn">
                     <div ms-attr-bindField="col.dataField" style="padding:0px;"
                          ms-click="!col.disabledEdit&&clickToEditField&&!dbClickToEditRow&&canEdit?editField(vid,rowdata,col.dataField,col.xtype,this):''"
-                         ms-if="rowdata.state=='view'">
+                         ms-if="col.editContent==null||rowdata.state=='view'">
                         <div ms-attr-id="" ms-if="col.showDisplay">
-                            {{rowdata[col.dataField+"Display"]}}
+                            {{rowdata[col.dataField+"Display"]}|html}
                         </div>
                         <div ms-if="!col.showDisplay">
                             {{rowdata[col.dataField]}}
                         </div>
                     </div>
-                    <div ms-attr-bindField="col.dataField" ms-if="rowdata['editContent_'+col.dataField]&&rowdata.state=='edit'">
-                        {{rowdata["editContent_"+col.dataField]|html}}
+                    <div ms-attr-bindField="col.dataField" ms-if="col.editContent!=null&&rowdata.state=='edit'">
+                        {{col["editContent"]|html}}
                     </div>
                 </div>
             </td>
