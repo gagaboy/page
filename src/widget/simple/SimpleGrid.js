@@ -20,6 +20,12 @@ define(['../Base',"./../../data/DataConstant", 'text!./SimpleGridWidget.html', '
             pageSize:15,
             totalNum:0,
             totalPage:1,
+            showPageIndexInput: true,//显示跳转到某页输入框
+            showPageSizeInput: true,//显示每页条数输入框]
+            showFirstPage: true,//显示第一页按钮
+            showLastPage: true,//显示最后一页按钮
+            showPreviousAndNextPage: true,//显示上一页和下一页按钮
+            showPageDetail: true,//显示分页详情
             //操作列
             opColumns:[],//{title:"操作",width:'10%',position:2,template:''}//position支持值为front、end和具体数字
             //行编辑
@@ -125,6 +131,12 @@ define(['../Base',"./../../data/DataConstant", 'text!./SimpleGridWidget.html', '
                 $parentId: "pager_" + this.getAttr("vid"),
                 totalNum: this.getAttr("totalNum"),
                 pageSize: this.getAttr("pageSize"),
+                showPageIndexInput: this.getAttr("showPageIndexInput"),//显示跳转到某页输入框
+                showPageSizeInput: this.getAttr("showPageSizeInput"),//显示每页条数输入框]
+                showFirstPage: this.getAttr("showFirstPage"),//显示第一页按钮
+                showLastPage: this.getAttr("showLastPage"),//显示最后一页按钮
+                showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
+                showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
                 pageChangeEvent: function (pager) {
                     that.reloadData()// 调用dataset接口进行查询
                 }
