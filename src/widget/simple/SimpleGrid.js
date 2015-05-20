@@ -1,7 +1,7 @@
 /**
  * Created by qianqianyi on 15/5/8.
  */
-define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css'], function (Base, template) {
+define(['../Base',"./../../data/DataConstant", 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css'], function (Base,Constant,template) {
     var xtype = "simpleGrid";
     var SimpleGridWidget = new Class({
         Extends: Base,
@@ -136,8 +136,8 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             if(!ds) return;
             //配置分页信息
             if(this.getAttr("usePager")){
-                ds.setAttr("pageNo",this.getAttr("pageIndex"));
-                ds.setAttr("pageSize",this.getAttr("pageSize"));
+                ds.setAttr(Constant.pageNo,this.getAttr("pageIndex"));
+                ds.setAttr(Constant.pageSize,this.getAttr("pageSize"));
             }
             //配置查询条件
             var fetchParams = {};
