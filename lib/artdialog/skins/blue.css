@@ -65,8 +65,10 @@ button.aui_state_highlight:active{
 /* common end */
 
 .aui_inner { background:#f7f7f7; }
+.confirmDialog .aui_inner{background:#fff; }
 .aui_titleBar { width:100%; height:0; position:relative; bottom:40px; _bottom:0; _margin-top:-40px; }
-.aui_title { height:29px; line-height:29px; padding:0 25px 0 0; color:#676a6c; font-weight:bold; font-size: 16px;font-family:"microsoft yahei";}
+.confirmDialog .aui_titleBar{bottom:35px; _bottom:0; _margin-top:-35px; }
+.aui_title { height:29px; line-height:29px; padding:0 25px 0 0; color:#676a6c; font-weight:bold; font-size: 14px;font-family:"microsoft yahei";}
 .aui_nw, .aui_ne, .aui_sw, .aui_se, .aui_n, .aui_s, .aui_close { background-image:url(blue/bg.png); background-repeat:no-repeat; }
 .aui_nw { width:15px; height:38px; }
 .aui_ne { width:15px; height:38px; }
@@ -97,9 +99,28 @@ button.aui_state_highlight:active{
 	.aui_n {background: white;}
 	.aui_s {background: white; }
 	.aui_w, .aui_e {background: white;}
+
+    .confirmDialog .aui_nw,.confirmDialog .aui_ne,.confirmDialog .aui_n{background: #1ab394;height:40px;}
+    .confirmDialog .aui_title{color:white;}
+    .confirmDialog .aui_close { background-position:0 -111px; }
+    .confirmDialog .aui_close:hover { background-position:0 -130px; }
 }
 .aui_state_noTitle .aui_nw, .aui_state_noTitle .aui_ne, .aui_state_noTitle .aui_sw, .aui_state_noTitle .aui_se { width:3px; height:3px; }
-.aui_state_noTitle .aui_inner { border:1px solid #666; background:#FFF; }
+.aui_state_noTitle .aui_inner {
+    border:none;
+    color: #fff;
+    font-size:14px;
+    font-family: "microsoft yahei";
+    background:#1ab394;
+    width: 300px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 0 12px #999;
+    -webkit-box-shadow: 0 0 12px #999;
+    box-shadow: 0 0 12px #999;
+    opacity: .8;
+}
 .aui_state_noTitle .aui_outer { box-shadow:none; }
 .aui_state_noTitle .aui_nw, .aui_state_noTitle .aui_n, .aui_state_noTitle .aui_ne, .aui_state_noTitle .aui_w, .aui_state_noTitle .aui_e, .aui_state_noTitle .aui_sw, .aui_state_noTitle .aui_s, .aui_state_noTitle .aui_se { background:rgba(0, 0, 0, .05); background:#000\9!important; filter:alpha(opacity=5)!important; }
 .aui_state_noTitle .aui_titleBar { bottom:0; _bottom:0; _margin-top:0; }
