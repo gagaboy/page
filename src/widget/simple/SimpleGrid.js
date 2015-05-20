@@ -141,6 +141,12 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
             }
             //配置查询条件
             var fetchParams = {};
+            //===合并ds缓存的查询条件===TODO，有疑问
+            var fetchParamy = ds.getAttr("fetchParam");
+            if(fetchParamy) {
+                jQuery.extend(fetchParams, fetchParamy);
+            }
+            //===新设置的查询条件===
             if(this.getAttr("queryParams")){
                 jQuery.extend(fetchParams,this.getAttr("queryParams"));
             }
@@ -154,14 +160,7 @@ define(['../Base', 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css']
                 }
                 fetchParams.orders = orders;
             }
-            //===合并查询条件===
-            var fetchParamy = ds.getAttr("fetchParam");
-            if(fetchParamy){
-                jQuery.extend(fetchParamy,fetchParams);
-                ds.setAttr("fetchParam",fetchParamy);
-            }else{
-                ds.setAttr("fetchParam",fetchParams);
-            }
+            ds.setAttr("fetchParam",fetchParams);
 
             //发送获取数据请求
             var that = this;
