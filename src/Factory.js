@@ -31,6 +31,7 @@ define([
     "./widget/layout/panel/Panel",
     "./widget/layout/row/Row",
     "./widget/layout/col/Col",
+    "./widget/layout/fragment/Fragment",
     "./widget/dataTable/DataTableWidget",
     "./widget/simple/SimpleGrid",
     "./widget/form/checkbox/CheckboxWidget",

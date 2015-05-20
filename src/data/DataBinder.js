@@ -8,8 +8,8 @@ define([], function () {
         options: {
             $id: "",
             $xtype: xtype,
-            dataValueId: null,
-            fieldId: null,
+            dataValueId: null,// 可以为dataValue  也可以为dataSet
+            fieldId: null, //如果为空，则widget要实现绑定机制,即setValue，getValue,参数为对象
             widgetId: null
         },
         initialize: function (opts) {
@@ -26,7 +26,11 @@ define([], function () {
             this.widgetValueChangeCallback = function (value) {
                 var fieldId = $this.options.fieldId;
                 var val = {};
-                val[fieldId] = value ;
+                if (fieldId) {
+                    val[fieldId] = value;
+                } else {
+                    val = value;
+                }
                 dataValue.updateRecord(val, true);
             }
             this.dataValueChangeCallback = function (record) {

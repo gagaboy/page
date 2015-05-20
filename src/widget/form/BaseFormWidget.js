@@ -23,7 +23,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             showLabel: true,
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            hasMessageBar:true,
+            hasMessageBar: true,
 
             message: '',
             showMessage: true,
@@ -64,7 +64,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             var widgetType = $this.options.$xtype;
 
             var compTemp = formTpl;
-            if("grid" == $this.options.parentTpl) {
+            if ("grid" == $this.options.parentTpl) {
                 compTemp = formTpl;  //待扩展，设置为表格的模板 gridTpl
             }
             //替换模板中的子模板名称
@@ -73,13 +73,13 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             compTemp = compTemp.replace(/\{\{TEMPLATEVALUE\}\}/g, tmp);
 
 
-            var e = jQuery("<div></div>").addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
+            var e = jQuery("<div></div>").addClass("page_" + $this.getAttr('$xtype')).attr("ms-controller", $this.getId());
             e.append(compTemp);
             var parentDOM = parent;
-            if(!parentDOM) {
+            if (!parentDOM) {
                 parentDOM = $this.getParentElement();
             }
-            parentDOM.html(e);
+            parentDOM.append(e);
             $this.$element = e;
             $this.element = e[0];
 
@@ -176,7 +176,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 this.setAttr("errorMessage", "");
             }
         },
-        isValid:function(){
+        isValid: function () {
             var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
 
             var valRes = null;
@@ -191,6 +191,9 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             } else {//清空错误信息
                 return true;
             }
+        },
+        isFormWidget: function () {
+            return true;
         }
     });
     BaseFormWidget.xtype = xtype;

@@ -24,11 +24,11 @@ define([], function () {
             status: "default",
             name: "", //中文名称
             extendModelId: "", //继承至模型
-            inputParams: {}, //输入参数
-            outputParams: {}, //输出参数
+            inputParams: {}, //输入参数 eg:[{name:'', value:'', scope:'request|session'},{}]
+            outputParams: {}, //输出参数 eg:{a:function(){}, b:1}
             dataSource: {}, // dataSet, dataValue,可能有多个
             services: {}, //后台服务, id:url
-            dataBinders: {},
+            dataBinders: {}, //{$id:'',dsId:'', fieldId:''}
             layout: {},// eg: {$id:'page', xtype:'page', items: [{$id:'row1', xtype:'row'}]}
             _cache: {}//缓存
         },
@@ -49,6 +49,7 @@ define([], function () {
                 }
             }
         },
+
 
         getId: function () {
             return this.options.$id;

@@ -17,6 +17,9 @@ define(['../Base'], function (Base) {
                     this._renderWidget(it);
                 }
             }
+            if(this._afterLayoutRender) {
+                this._afterLayoutRender();
+            }
         },
         _renderWidget: function (it) {
             if (it['$xtype']) {

@@ -38,7 +38,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             totalSize: -1,
             model: {
                 id: 'wid',
-                mainAlias:'',
+                mainAlias: '',
                 status: Constant.status,
                 notModify: Constant.notModify,
                 add: Constant.add,
@@ -127,19 +127,26 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 return this.options._dataMap[id];
             }
         },
-        deleteRecord: function (id) {
+        /**
+         *
+         * @param id
+         * @param real 是否真实删除
+         */
+        deleteRecord: function (id, real) {
             if (id) {
                 var r = this.readRecord(id);
                 if (r) {
                     var status = r.options.data[this.options.model.status];
                     this.fireEvent("beforeDeleteRecord", [r]);
-                    if (status == this.options.model.add) {
+
+                    if (status == this.options.model.add || real) {
                         //real delete
                         this.options._dataArray.erase(r);
                         delete this.options._dataMap[id];
                     } else {
                         r.changeStatus(this.options.model.remove);
                     }
+
                     this.fireEvent("afterDeleteRecord", [r]);
                     this._valueChanged();
                 }
@@ -168,17 +175,33 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 window.console.log("纪录没有指定ID.");
             }
         },
-        updateRecord: function (record) {
+        updateRecord: function (record, notFireEvent) {
             var vid = this.options.model.id;
             if (!vid) {
                 //error
                 window.console.log("纪录没有指定ID.");
                 return;
             }
-            var r = this.readRecord(record[vid]);
-            if (r) {
-                r.updateRecord(record);
-                this._valueChanged();
+            if(typeOf(record) == 'array'){
+                var flag = false;
+                for(var i=0; i<record.length; i++){
+                    var re = record[i];
+                    var r = this.readRecord(re[vid]);
+                    if (r) {
+                        r.updateRecord(re);
+                        flag = true ;
+                    }
+                }
+                if(flag) {
+                    this._valueChanged();
+                }
+            }else {
+                //object
+                var r = this.readRecord(record[vid]);
+                if (r) {
+                    r.updateRecord(record);
+                    this._valueChanged();
+                }
             }
         }
     });
