@@ -95,6 +95,7 @@ button.aui_state_highlight:active{
 	.aui_sw { width:15px; height:15px;background: white;border-bottom-left-radius: 4px; }
 	.aui_se { width:15px; height:15px; background: white;border-bottom-right-radius: 4px;}
 	.aui_close { background-position:0 -72px; }
+    .aui_close:focus{outline: 0;}
 	.aui_close:hover { background-position:0 -92px; }
 	.aui_n {background: white;}
 	.aui_s {background: white; }
