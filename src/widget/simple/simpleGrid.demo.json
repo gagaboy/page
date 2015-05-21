@@ -12,6 +12,7 @@
             "rxDate": "2007-09-02",
             "isParty": "是",
             "className": "信息0701班",
+            "checked":"false",
             "notes": ""
           },
           {
@@ -23,6 +24,7 @@
             "rxDate": "2007-09-02",
             "isParty": "是",
             "className": "信息0701班",
+            "checked":"true",
             "notes": ""
           },
           {

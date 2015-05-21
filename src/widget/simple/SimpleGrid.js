@@ -35,6 +35,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editRowFunc:null,//编辑行事件
             editFieldFunc:null,//编辑单属性事件
             //事件
+            beforeCheckRow:null,
             afterCheckRow:null,
             onChangeOrder:null,
 
@@ -59,8 +60,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 vm.activedRowDom = rowObj;
             },
             checkRow: function (vid,row) {
-                row.checked = !row.checked;
                 var vm = avalon.vmodels[vid];
+                if(vm.beforeCheckRow&&row.checked){
+                    vm.beforeCheckRow(row);//选中后事件
+                }
+                row.checked = !row.checked;
                 if(vm.afterCheckRow&&row.checked){
                     vm.afterCheckRow(row);//选中后事件
                 }
@@ -476,8 +480,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }else{
                     for (var i = 0; i < datas.length; i++) {
-                        if (datas[i].checked == undefined) {
-                            datas[i].checked = false;//未设置，默认不选中
+                        if(datas[i]){
+                            datas[i].checked = (datas[i].checked==true||datas[i].checked=="true")?true:false;//未设置，默认不选中
                             datas[i].state = datas[i].state?datas[i].state:'view';
                         }
                     }
