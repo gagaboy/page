@@ -5,6 +5,7 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
         options: {
             $xtype: xtype,
             value:null,
+            cols:null,
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
                 if(vm.status == 'readonly'){
