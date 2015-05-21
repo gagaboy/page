@@ -167,7 +167,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         orders[columns[k].dataField] = columns[k].orderType;
                     }
                 }
-                fetchParams.orders = orders;
+                if(orders!={}){
+                    fetchParams.orders = orders;
+                }
             }
             ds.setAttr("fetchParam",fetchParams);
 
