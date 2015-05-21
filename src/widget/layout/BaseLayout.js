@@ -39,7 +39,7 @@ define(['../Base'], function (Base) {
             this._renderWidget(config);
         },
         removeItem: function (index) {
-            var widgetId = this.itemsArr.splice(index, 1);
+            var widgetId = this.itemsArr.splice(index, 1)[0];
             this.options.items.splice(index, 1);
             Page.manager.components[widgetId].destroy();
         },

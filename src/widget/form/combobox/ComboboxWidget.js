@@ -21,14 +21,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
             model: "normal",   //grid | tree
             data: [],
-            $valueField: "value",
-            $textField: "display",
+            valueField: "value",
+            textField: "display",
             $pageSize: 10,
             $split: ",",
             $firstLoad: true,
             usePager: true,
             showPager: true,
             dataSetId: null,
+            url: null,
             $pagination: null,
             downShow: true,
             clearShow: false,
@@ -72,14 +73,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         var cmpMgr = vm.getCmpMgr();
                         if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
                             var el = vm.selectedItems[vm.selectedItems.length-1];
-                            var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                            var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr);
                             if(res == false) {
                                 return;
                             }
                         }
                         var el = vm.selectedItems.pop();
                         if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                            var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                            var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr);
                             if(res == false) {
                                 return;
                             }
@@ -137,7 +138,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 for(var i=0; i<optionData.length; i++) {
                     optionData[i].checked = false;
                     //匹配搜索值
-                    var text = optionData[i][vm.$textField];
+                    var text = optionData[i][vm.textField];
                     var textArr = [];
                     var searchValue = vm.searchValue;
                     if(!vm.multi && vm.searchable) {
@@ -169,7 +170,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
 
                     for(var j=0; j<vm.selectedItems.length; j++) {
-                        if(vm.selectedItems[j][vm.$valueField] == optionData[i][vm.$valueField]) {
+                        if(vm.selectedItems[j][vm.valueField] == optionData[i][vm.valueField]) {
                             optionData[i].checked = true;
                             break;
                         }
@@ -181,7 +182,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
-                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
+                    var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr, el.$model);
                     if(res == false) {
                         return;
                     }
@@ -192,7 +193,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.focused = false;
                 }
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
+                    var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr, el.$model);
                     if(res == false) {
                         return;
                     }
@@ -201,20 +202,20 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             changeSelectedItems: function(el, addFlag) {
                 var vm = this;
                 var item = {};
-                item[vm.$valueField] = el[vm.$valueField];
-                item[vm.$textField] = el[vm.$textField];
+                item[vm.valueField] = el[vm.valueField];
+                item[vm.textField] = el[vm.textField];
                 //增加选中项
                 if(addFlag) {
                     if(!vm.multi) {
                         vm.selectedItems.clear();   //单选模式下，先删除，再插入，才能监控到selecetedItems数据的变化
                     }
-                    //vm.clickItem = true;            //单选模式下，选中后，不再发送查询请求
+                    vm.clickItem = true;            //单选模式下，选中后，不再发送查询请求
                     vm.selectedItems.push(item);
                 }
                 //删除选中项
                 else {
                     for(var i=0; i<vm.selectedItems.length; i++) {
-                        if(vm.selectedItems[i][vm.$valueField] ==  item[vm.$valueField] ) {
+                        if(vm.selectedItems[i][vm.valueField] ==  item[vm.valueField] ) {
                             vm.selectedItems.removeAt(i);
                             break;
                         }
@@ -228,14 +229,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
 
-                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                    var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
                 }
                 vm.selectedItems.removeAt(index);
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                    var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
@@ -250,7 +251,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
 
-                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                    var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
@@ -259,7 +260,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.display = "";
                 vm.selectedItems.clear();
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
+                    var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
@@ -273,17 +274,25 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
         },
         initialize: function (opts) {
-            if (opts && opts.value && opts.display) {
-                var splitChar = opts.$split || this.options.$split;
-                var valueArr = opts.value.split(splitChar);
-                var displayArr = opts.display.split(splitChar);
-                for(var i=0; i<valueArr.length; i++) {
-                    var item = {};
-                    item[opts.$valueField || this.options.$valueField] = valueArr[i];
-                    item[opts.$textField || this.options.$textField] = displayArr[i];
-                    this.options.selectedItems.push(item);
+            if(opts) {
+                if(opts.dataSetId && opts.url) {
+                    Page.dialog.alert("dataSetId和url属于互斥属性，只能设置一个！");
+                    return;
                 }
+                if (opts.value && opts.display) {
+                    var splitChar = opts.$split || this.options.$split;
+                    var valueArr = opts.value.split(splitChar);
+                    var displayArr = opts.display.split(splitChar);
+                    for(var i=0; i<valueArr.length; i++) {
+                        var item = {};
+                        item[opts.valueField || this.options.valueField] = valueArr[i];
+                        item[opts.textField || this.options.textField] = displayArr[i];
+                        this.options.selectedItems.push(item);
+                    }
+                }
+
             }
+
             this.parent(opts);
             var that = this;
             //点击其它区域，隐藏掉下拉面板
@@ -313,8 +322,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var display = "";
                 for(var i=0; i<vm.selectedItems.length; i++) {
                     var item = vm.selectedItems[i];
-                    value += item[vm.$valueField];
-                    display += item[vm.$textField];
+                    value += item[vm.valueField];
+                    display += item[vm.textField];
                     if(i != vm.selectedItems.length-1) {
                         value += vm.$split;
                         display += vm.$split;
@@ -342,7 +351,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     pageNo: "1",
                     pageSize: this.options.usePager ? this.options.$pageSize : "10000"
                 };
-                this._getSelectData(page);
+                this._getSelectData(page, newValue);
             }
         },
         _renderPanel: function() {
@@ -360,9 +369,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
             }
         },
-        _getSelectData: function(page, needSearchValue) {
+        _getSelectData: function(page, searchValue) {
             var vm = this._getCompVM();
-            var searchValue="";
+/*            var searchValue="";
             if(needSearchValue || needSearchValue==undefined) {
                 if(vm.multi) {
                     searchValue = vm.searchValue;
@@ -370,11 +379,11 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 else if(vm.searchable){
                     searchValue = vm.display;
                 }
-            }
+            }*/
             var ds = this._getDataSet();
             if(!ds) return;
             //配置查询条件
-            if(searchValue.trim() != "") {
+            if(searchValue && searchValue.trim() != "") {
                 var fetchParam = {};
                 fetchParam[vm.searchKey] = searchValue;
                 ds.setAttr("fetchParam", fetchParam);
@@ -390,9 +399,16 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             page && page.pageSize && ds.setAttr("pageSize",page.pageSize);
             //发送获取数据请求
             var that = this;
-            Promise.all([ds.fetch()]).then(function() {
+            if(!ds.getAttr("fetchUrl")) {
                 that._renderSelectData();
-            });
+
+            }
+            else {
+                Promise.all([ds.fetch()]).then(function() {
+                    that._renderSelectData();
+                });
+            }
+
         },
         //可作为回调传递
         _renderSelectData: function() {
@@ -407,14 +423,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.data = vm.optionData;
                 }
                 var totalSize = ds.getTotalSize();
-                if(totalSize <= vm.$pageSize) {
+                if(totalSize <= vm.$pageSize || undefined==totalSize) {
                     //如果第一次加载数据时，总条数小于pageSize，则禁分页条和搜索功能
                     vm.showPager = false;
                 }
                 else {
                     vm.showPager = true;
                 }
-                if(!vm.usePager && !vm.showPager) return;
+                if(!vm.usePager || !vm.showPager) return;
                 var that = this;
                 if(!this.options.pagination) {
                     this.options.pagination = Page.create("pagination", {
@@ -444,7 +460,17 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             return avalon.vmodels[vid]
         },
         _getDataSet: function() {
-            return Page.manager.components[this.options.dataSetId];
+            if(this.options.dataSetId) {
+                return Page.manager.components[this.options.dataSetId];
+            }
+            else if(this.options.url) {
+                if(!this.dataSet) {
+                    this.dataSet = Page.create("dataSet", {
+                        fetchUrl: this.options.url
+                    });
+                }
+                return this.dataSet;
+            }
         },
         getTemplate: function () {
             return template;
@@ -453,6 +479,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             var vm = this._getCompVM();
             return vm.display;
         },
+        //设置选中项，参数为{value|display}或者[{value|display}]
         setSelect: function(item) {
             if(item) {
                 var vm = this._getCompVM();
@@ -468,33 +495,68 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         vm.selectedItems.push(item[0]);
                     }
                 }
+
+                //更新组件值
+                var value = "";
+                var display = "";
+                for(var i=0; i<vm.selectedItems.length; i++) {
+                    var item = vm.selectedItems[i];
+                    value += item[vm.valueField];
+                    display += item[vm.textField];
+                    if(i != vm.selectedItems.length-1) {
+                        value += vm.$split;
+                        display += vm.$split;
+                    }
+                }
+                vm.value = value;
+                vm.display = display;
+                if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
+                    var res = vm.selectedEvent(value, display, this);
+                    if(res == false) {
+                        return;
+                    }
+                }
             }
         },
         clearSelect: function() {
             var vm = this._getCompVM();
             vm.removeAll(vm.vid);
         },
+        reloadSelectData: function() {
+            this._renderSelectData();
+        },
+        //设置值，参数为{value|display}
+        setValue: function(value) {
+            if(!value) return;
+            this.parent(value);
+            //修改选中项
+            var vm = this._getCompVM();
+            if(vm.multi || !vm.searchable) {
+                var splitChar = this.options.$split;
+                var valueArr = value.value ? value.value.split(splitChar) : [];
+                var displayArr = value.display ? value.display.split(splitChar) : [];
+                //vm.selectedItems.clear();
+                var array = [];
+                for(var i=0; i<valueArr.length; i++) {
+                    var item = {};
+                    item[this.options.valueField] = valueArr[i];
+                    item[this.options.textField] = displayArr[i];
+                    array.push(item);
+                }
+                vm.selectedItems = array;
+            }
+            if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
+                var res = vm.selectedEvent(this.getValue(), this.getDisplay(), this);
+                if(res == false) {
+                    return;
+                }
+            }
+        },
         reset: function () {
             this.setValue({
                 value: this.getInitValue(),
                 display: this.getInitDisplay()
             });
-            //修改选中项
-            var vm = this._getCompVM();
-            if(vm.multi || !vm.searchable) {
-                var splitChar = this.options.$split;
-                var valueArr = this.getInitValue() ? this.getInitValue().split(splitChar) : [];
-                var displayArr = this.getInitDisplay() ? this.getInitDisplay().split(splitChar) : [];
-                //vm.selectedItems.clear();
-                var array = [];
-                for(var i=0; i<valueArr.length; i++) {
-                    var item = {};
-                    item[this.options.$valueField] = valueArr[i];
-                    item[this.options.$textField] = displayArr[i];
-                    array.push(item);
-                }
-                vm.selectedItems = array;
-            }
         },
         _valueChange: function (value) {
             this.setAttr("display", value);

@@ -9,7 +9,6 @@
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
     <link href="/page/src/css/page.css" rel="stylesheet">
-    <link href="/page/src/css/amp-common.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
@@ -28,7 +27,7 @@
             <div class="ibox-content">
                 <div class="row">
                     我只是一个div：<br/>
-                    <div class="col-md-4" id="container">
+                    <div class="col-md-5" id="container">
 
                     </div>
                 </div>
@@ -36,6 +35,7 @@
         </div>
     </div>
 </div>
+
 <script src="/page/bower_components/mootools/Source/Core/Core.js"></script>
 <script src="/page/bower_components/mootools/Source/Types/Array.js"></script>
 <script src="/page/bower_components/mootools/Source/Types/String.js"></script>
@@ -55,32 +55,45 @@
 <!-- Dialog End -->
 
 <script src="/page/bower_components/avalon/avalon.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/inspinia.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/pace/pace.min.js"></script>
 <script>
     require(["../../../page/src/Bootstrap"], function () {
+
+        var ds = Page.create("dataSet", {
+            $id: 'customSearchDS',
+            fetchUrl: 'Data.demo.json'
+        });
 
         var customSearcher = Page.create('customSearcher', {
             $id: "customSearcher",
             $parentId: "container",
             controls: [{
                 id: "stuName",
-                xtype: "input",
+                $xtype: "input",
                 label: "姓名",
+                showLabel: false,
                 filterName: "stuName",
                 bindField: "stuName",
                 builderList: "nameOpers"
             },{
                 id: "stuSex",
-                xtype: "comboBox",
+                $xtype: "combobox",
                 label: "性别",
+                showLabel: false,
                 filterName: "stuSex",
                 bindField: "stuSex",
-                builderList: "nameOpers",
+                url:'SexData.demo.json',
+                builderList: "sexOpers",
                 quickSearch: true
             }],
             builderLists: {
-                nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}]
-            }
-
+                nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}],
+                sexOpers: [{name: "contain", caption: "包含"}]
+            },
+            dataSetId: "customSearchDS"
 
         });
         customSearcher.render();
@@ -92,9 +105,11 @@
         {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
         ]}*/
 
-        /*{"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
+        /*
+        {"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
         {"show": false, "name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
         {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
+
 */
 
     });
