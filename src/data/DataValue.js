@@ -56,9 +56,13 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
         _initData: function (forceNotModify) {
             var $this = this;
+            if(this.options.data) {
+                
+            }
             if (!this.options.data[this.options.model.status] || forceNotModify) {
                 this.options.data[this.options.model.status] = this.options.model.notModify;
             }
+
             this.options.model.childAlias.each(function (v, i) {
                 if ($this.options.data[v]) {
                     var child = Page.create("dataSet", {

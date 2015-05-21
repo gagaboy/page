@@ -52,7 +52,7 @@ define(["./DataConstant"], function (Constant) {
                         result = result[$this.options.model.mainAlias];
                     }
                     if ($this.options.model.childAlias && $this.options.model.childAlias.length > 0) {
-                        for(var i=0; i<$this.options.model.childAlias.length; i++) {
+                        for (var i = 0; i < $this.options.model.childAlias.length; i++) {
                             var calias = $this.options.model.childAlias[i];
                             result[calias] = ((data.result)[Constant.data])[calias];
                         }
@@ -94,6 +94,9 @@ define(["./DataConstant"], function (Constant) {
             }
             this.fireEvent(key + "Change", [value, oldValue]);
             return this;
+        },
+        destroy: function () {
+            Page.manager.remove(this.getId());
         }
     });
     return DataSource;

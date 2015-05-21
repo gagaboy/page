@@ -140,6 +140,7 @@ define([], function () {
         destroy: function () {
             this.$element.remove();
             Page.manager.remove(this.getId());
+            delete avalon.vmodels[this.options.$id];
         }
     });
     Base.xtype = xtype;

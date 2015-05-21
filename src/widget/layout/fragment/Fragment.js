@@ -57,7 +57,19 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
 
         getDataSource: function (id) {
             return this.DS[id];
+        },
+
+        destroy: function () {
+            this.parent();
+            //删除DS，DB
+            Object.each(this.DB, function (value, key) {
+                value.destory();
+            });
+            Object.each(this.DS, function (value, key) {
+                value.destory();
+            });
         }
+
     });
     Fragment.xtype = xtype;
     return Fragment;
