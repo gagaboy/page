@@ -4,7 +4,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            cols: 3,//布局列数
+            cols: null,//布局列数
             items:[],//选项
             value:null,
             //valueFiled:"value",//值字段

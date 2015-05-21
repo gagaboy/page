@@ -1,9 +1,10 @@
-<div class="form-widget-container">
-            <label ms-repeat="items" ms-click="itemCheck(vid,el)" style="margin-bottom:0">
+<div class="form-widget-container" ms-each="items">
+            <label ms-click="itemCheck(vid,el)" style="margin-bottom:0">
                 <div class="icheckbox_square-green" ms-class-checked="el.checked"
                      style="position: relative;">
                 </div>
                 {{el.display}} &nbsp;&nbsp;&nbsp;
             </label>
+            <div ms-if="/^\d+$/.test(cols) && ($index+1)/cols==1" style="margin-bottom: 10px;"></div>
             </div>
 
