@@ -58,6 +58,22 @@ body {
 .has-error .form-widget-container {
     /*border-bottom: 1px solid red;*/
 }
-.ms-controller,.ms-important,[ms-controller],[ms-important]{
+
+.ms-controller, .ms-important, [ms-controller], [ms-important] {
     visibility: hidden;
+}
+
+.form-widget-message {
+    position: absolute;
+    z-index: 2000;
+    border-color: #ffe79e;
+    background-color: #fff4c9;
+    color: #635145;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.3);
+    padding: 3px;
+}
+
+.form-widget-message-error {
+    border-color:red;
 }

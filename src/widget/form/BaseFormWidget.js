@@ -1,7 +1,7 @@
 /**
  * Created by qianqianyi on 15/4/23.
  */
-define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
+define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inline.html'], function (Base, formTpl, inlineTpl) {
     var xtype = "baseFormWidget";
     var BaseFormWidget = new Class({
         Extends: Base,
@@ -65,7 +65,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
 
             var compTemp = formTpl;
             if ("grid" == $this.options.parentTpl) {
-                compTemp = formTpl;  //待扩展，设置为表格的模板 gridTpl
+                compTemp = inlineTpl;  //待扩展，设置为表格的模板 gridTpl
             }
             //替换模板中的子模板名称
 //            compTemp = compTemp.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
