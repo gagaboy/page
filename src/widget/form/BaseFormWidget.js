@@ -1,7 +1,7 @@
 /**
  * Created by qianqianyi on 15/4/23.
  */
-define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
+define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inline.html'], function (Base, formTpl, inlineTpl) {
     var xtype = "baseFormWidget";
     var BaseFormWidget = new Class({
         Extends: Base,
@@ -9,7 +9,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             $xtype: xtype,
             status: 'edit',//default = edit |edit|readonly
 
-            parentTpl: "form",  //组件的父模板类型 default=form |form|grid
+            parentTpl: "form",  //组件的父模板类型 default=form |form|inline
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             initValue: '',// 初始值
             initDisplay: '',
@@ -64,8 +64,8 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
             var widgetType = $this.options.$xtype;
 
             var compTemp = formTpl;
-            if ("grid" == $this.options.parentTpl) {
-                compTemp = formTpl;  //待扩展，设置为表格的模板 gridTpl
+            if ("inline" == $this.options.parentTpl) {
+                compTemp = inlineTpl;  //待扩展，设置为表格的模板 gridTpl
             }
             //替换模板中的子模板名称
 //            compTemp = compTemp.replace(/\{\{TEMPLATENAME\}\}/g, widgetType+"_temp_"+$this.options.uuid);
@@ -176,7 +176,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 this.setAttr("errorMessage", "");
             }
         },
-        isValid: function () {
+        isValid: function (notShowMessage) {
             var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
 
             var valRes = null;
@@ -187,8 +187,18 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
             }
             if (valRes && !valRes.result) {//将错误信息赋值给属性
+                if (notShowMessage) {
+
+                } else {
+                    this.setAttr("errorMessage", valRes.errorMsg);
+                }
                 return false;
             } else {//清空错误信息
+                if (notShowMessage) {
+
+                } else {
+                    this.setAttr("errorMessage", "");
+                }
                 return true;
             }
         },

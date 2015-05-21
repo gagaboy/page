@@ -74,9 +74,9 @@ define(["./DataConstant"], function (Constant) {
             return new Promise(function (resolve) {
                 var params = $this.getSyncParam();
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
-                    //TODO reset $status$
+                    //TODO reset $status$ 返回ID ??
                     $this._initData(true);
-                    resolve();
+                    resolve(data);
 
                 }, null);
             });
