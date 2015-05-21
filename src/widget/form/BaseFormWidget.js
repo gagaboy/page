@@ -176,7 +176,7 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 this.setAttr("errorMessage", "");
             }
         },
-        isValid: function () {
+        isValid: function (notShowMessage) {
             var validateTool = Page.create("validation", {onlyError: true});//后续由系统统一创建，只需调用即可
 
             var valRes = null;
@@ -187,8 +187,18 @@ define(['../Base', 'text!./BaseFormWidget.html'], function (Base, formTpl) {
                 valRes = validateTool.validateValue(this.getValue(), this.getAttr("validationRules"));
             }
             if (valRes && !valRes.result) {//将错误信息赋值给属性
+                if (notShowMessage) {
+
+                } else {
+                    this.setAttr("errorMessage", valRes.errorMsg);
+                }
                 return false;
             } else {//清空错误信息
+                if (notShowMessage) {
+
+                } else {
+                    this.setAttr("errorMessage", "");
+                }
                 return true;
             }
         },
