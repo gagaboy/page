@@ -3,7 +3,7 @@ require(["../../../page/src/Bootstrap"], function () {
     var form = [];
 
     var inp = Page.create("input", {
-        $parentId: 'input',
+        parentId: 'input',
         value: '张三',
         required: false,
         glyphicon: 'glyphicon-ok',
