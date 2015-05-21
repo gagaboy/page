@@ -9,7 +9,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             $xtype: xtype,
             status: 'edit',//default = edit |edit|readonly
 
-            parentTpl: "form",  //组件的父模板类型 default=form |form|grid
+            parentTpl: "form",  //组件的父模板类型 default=form |form|inline
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             initValue: '',// 初始值
             initDisplay: '',
@@ -64,7 +64,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             var widgetType = $this.options.$xtype;
 
             var compTemp = formTpl;
-            if ("grid" == $this.options.parentTpl) {
+            if ("inline" == $this.options.parentTpl) {
                 compTemp = inlineTpl;  //待扩展，设置为表格的模板 gridTpl
             }
             //替换模板中的子模板名称
