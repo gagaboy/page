@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="" width="200px">
                     <div class="col-md-12" id="simpleGrid">
 
                     </div>
@@ -64,6 +64,7 @@
             usePager:true,
             allChecked:false,
             dataSetId: ds.getId(),
+            showPageDetail:false,
             editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
@@ -92,6 +93,28 @@
             clickToEditField:false,
             editRowFunc:function(vm,row,rowDom){
                 if(!row.state||row.state=="view"){
+                    //检查是否有未完成的编辑
+                    var datas = vm.data;
+                    if(datas&&datas.length>0){
+                        for(var t=0;t<datas.length;t++){
+                            var daRow = datas[t];
+                            if(daRow&&daRow.state=='edit'){
+                                if(false){
+                                    return false;//校验失败直接返回，提示修改
+                                }
+                                if(vm.editComps&&vm.editComps.length>0) {
+                                    for(var s=0;s<vm.editComps.length;s++){
+                                        if(vm.editComps[s]&&vm.editComps[s].getAttr){
+                                            daRow[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
+                                            //vm.editComps[s].destroy();
+                                        }
+                                    }
+                                }
+                                vm.editComps = [];
+                                daRow.state = "view";
+                            }
+                        }
+                    }
                     myEditPro(vm,row,rowDom);
                 }else{
                     if(vm.editComps&&vm.editComps.length>0) {
@@ -128,7 +151,7 @@
                     editField._getInputElement().bind('keyup', function(event) {
                         if (event.keyCode == "13") {
                             //回车执行查询
-                            tdDom.innerHTML  = ytdDom;
+                            tdDom.innerHTML  = "<div>"+editField.getValue()+"</div>";
                             row[fieldName] = editField.getValue();
                             editField.destroy();
                         }
@@ -137,10 +160,32 @@
             },
             //自定义函数
             editMyRow:function(vid,rowData,rowObj) {
+                var vm = avalon.vmodels[vid];
                 if(!rowData.state||rowData.state=="view"){
+                    //检查是否有未完成的编辑
+                    var datas = vm.data;
+                    if(datas&&datas.length>0){
+                        for(var t=0;t<datas.length;t++){
+                            var daRow = datas[t];
+                            if(daRow&&daRow.state=='edit'){
+                                if(false){
+                                    return false;//校验失败直接返回，提示修改
+                                }
+                                if(vm.editComps&&vm.editComps.length>0) {
+                                    for(var s=0;s<vm.editComps.length;s++){
+                                        if(vm.editComps[s]&&vm.editComps[s].getAttr){
+                                            daRow[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
+                                            //vm.editComps[s].destroy();
+                                        }
+                                    }
+                                }
+                                vm.editComps = [];
+                                daRow.state = "view";
+                            }
+                        }
+                    }
                     myEditPro(simpleGrid,rowData,rowObj);
                 }else{
-                    var vm = avalon.vmodels[vid];
                     if(vm.editComps&&vm.editComps.length>0) {
                        for(var s=0;s<vm.editComps.length;s++){
                            if(vm.editComps[s]&&vm.editComps[s].getAttr){
