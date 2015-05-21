@@ -153,7 +153,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }
             //配置查询条件
             var fetchParams = {};
-            //===合并ds缓存的查询条件===TODO，有疑问
+            //===合并ds缓存的查询条件===
             var fetchParamy = ds.getAttr("fetchParam");
             if(fetchParamy) {
                 jQuery.extend(fetchParams, fetchParamy);
@@ -161,14 +161,17 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //===新设置的查询条件===
             var columns = this.getAttr("columns");
             if(columns&&columns.length>0){
-                var orders = {};
+                var orders = "";
                 for(var k=0;k<columns.length;k++){
                     if(columns[k].orderType){
-                        orders[columns[k].dataField] = columns[k].orderType;
+                        if(orders!=""){
+                            orders += ",";
+                        }
+                        orders += columns[k].orderType=="desc"?"-"+columns[k].dataField:"+"+columns[k].dataField;
                     }
                 }
                 if(orders!={}){
-                    fetchParams.orders = orders;
+                    fetchParams.order = orders;
                 }
             }
             ds.setAttr("fetchParam",fetchParams);
@@ -208,6 +211,47 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             return this.getAttr("data");
         },
         /**
+         * 选中某些行
+         */
+        checkRows: function (rows,checked) {
+            if(checked==undefined){
+                checked = true;
+            }
+            if(rows&&rows.length>0){
+                for(var t=0;t<rows.length;t++){
+                    var row = rows[t];
+                    if(row){
+                        row.checked = checked?checked:false;
+                    }
+                }
+            }
+            this._updateAllCheckedByDatas();
+        },
+        /**
+         * 根据主键选中某些行
+         */
+        checkRowsByDataId: function (dataIds,checked) {
+            if(checked==undefined){
+                checked = true;
+            }
+            if(dataIds&&dataIds.length>0&&this.getAttr("idField")){
+                var idField = this.getAttr("idField");
+                var datas = this.getAttr("data");
+                for (var i = 0; i < datas.length; i++) {
+                    if(datas[i]&&datas[i][idField]){
+                        for(var t=0;t<dataIds.length;t++){
+                            var da = dataIds[t];
+                            if(da&&da==datas[i][idField]){
+                                datas[i].checked = checked?checked:false;
+                            }
+                        }
+                    }
+                }
+                this.setAttr("data",this._formArr(datas));
+            }
+            this._updateAllCheckedByDatas();
+        },
+        /**
          * 新增一行数据
          */
         addRow:function(rowData,pos){//{}则表示新增空行,pos指新增位置，表示放到第几行，默认表示最后一行
@@ -217,7 +261,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var newDataArr = [];
                 for(var t=0;t<pSize;t++){
                     if(t==(pos-1)){
-                        newDataArr.push(rowData);
+                        newDataArr.push(this._formatData(rowData));
                         if(datas[t]){
                             newDataArr.push(datas[t]);
                         }
@@ -227,7 +271,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 this.setAttr("data",newDataArr);
             }else{
-                this.getAttr("data").push(rowData);
+                this.getAttr("data").push(this._formatData(rowData));
             }
             this._updateAllCheckedByDatas();
         },
@@ -440,6 +484,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }
             return datas;
+        },
+        _formatData:function(data){
+            //是否默认全部勾选
+            if(data){
+                if(this.getAttr("allChecked")){
+                    data.checked = true;
+                }else{
+                    data.checked = false;//未设置，默认不选中
+                }
+                data.state = data.state?data.state:'view';
+            }
+            return data;
         },
         _formArr:function(arr){
             if(arr){

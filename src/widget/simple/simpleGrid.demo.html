@@ -23,10 +23,18 @@
                 <div class="row">
                     <div class="col-md-12" id="ops" style="padding-bottom: 30px;">
                         <a class="btn btn-primary" href="javascript:addRow();">新增行</a>
-                        <a class="btn btn-primary" href="javascript:delCheckedRow();">删除所选行</a>
-                        <a class="btn btn-primary" href="javascript:delCustomRow(141);">删除值AACode为141的行</a>
-                        * 双击属性进行编辑
+                        <a class="btn btn-primary" href="javascript:delCheckedRow();">删除勾选的行</a>
+                        <a class="btn btn-primary" href="javascript:simpleGrid.deleteActiveRow();">删除激活的行</a>
+
+
+                        <a class="btn btn-primary" href="javascript:simpleGrid.checkRowsByDataId(['001','002'],true);">勾选前两行</a>
+                        <a class="btn btn-primary" href="javascript:simpleGrid.checkRowsByDataId(['001','002'],false);">取消勾选前两行</a>
+                        <a class="btn btn-primary" href="javascript:cancelAllChecked();">取消全部勾选</a>
+
                     </div>
+                </div>
+                <div class="row">
+                    * 双击行进行编辑
                 </div>
 
                 <div class="row" style="" width="200px">
@@ -57,7 +65,7 @@
 
         simpleGrid = Page.create("simpleGrid", {
             $parentId: 'simpleGrid',
-            idField:"aa",
+            idField:"wid",
             $id:"simpleGrid",
             totalNum:200,
             showCheckbox:true,
@@ -70,7 +78,7 @@
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
                 {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
-                    sortDisabled:true,xtype:"combobox",isOpColumn:true,template:"<b>{{rowdata.sexDisplay}}</b>",
+                    sortDisabled:true,xtype:"combobox",isOpColumn:true,template:"<div style='color:#F0F;'><B>{{rowdata.sexDisplay}}</B></div>",
                     editContent:"<div id='__currentEditField_sex'></div>"},//显示Display字段
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
@@ -216,6 +224,13 @@
         simpleGrid.deleteActiveRow();
     }
 
+    function CheckSomeRowsByIds(ids){
+        simpleGrid.checkRowsByDataId(ids);
+    }
+    function cancelAllChecked(){
+        var checkedRows = simpleGrid.getCheckedRows();
+        simpleGrid.checkRows(checkedRows,false);
+    }
     function myEditPro(vm,row,rowDom){
        if(row){
            var dt = null;
