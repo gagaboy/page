@@ -1,7 +1,7 @@
 /**
  * Created by qianqianyi on 15/5/8.
  */
-define(['../Base',"./../../data/DataConstant", 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css'], function (Base,Constant,template) {
+define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css'], function (Base,Constant,template) {
     var xtype = "simpleGrid";
     var SimpleGridWidget = new Class({
         Extends: Base,
