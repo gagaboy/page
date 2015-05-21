@@ -1,5 +1,5 @@
 define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./SliderWidget.html', 'css!./SliderWidget.css'], function (BaseFormWidget,slider, template) {
-    var xtype = "slider";
+    var xtype = "slider";//
     var SliderWidget = new Class({
         Extends: BaseFormWidget,
         options: {
@@ -19,7 +19,8 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
             tooltip: { format: "{0:#,#.##}" },
             value: null,
             enabled: true,
-            tickPlacement: "both"
+            tickPlacement: "both",
+            showTick:true //是否先刻度线
         },
         sliderObj:null,
         getTemplate: function () {
@@ -36,6 +37,9 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
             }else{
                 this.sliderObj = this._getInputElement().kendoSlider(this.options).data("kendoSlider");
             }
+            if(!this.options.showTick){
+                this.sliderObj.wrapper.find(".k-tick").css({"background":"none"});
+            }
         },
         getValue:function(){
             return this.sliderObj.value();
@@ -46,10 +50,13 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
         },
         _statusChange:function(value, oldValue, model){
             if(value !== oldValue){
+                var sliderWidget = this.sliderObj.wrapper;
                 if(value === "readonly"){
-                    this.sliderObj.disable();
+                    sliderWidget.hide();
+                    sliderWidget.parent().append(jQuery('<input class="sliderValue form-control form-text" readonly value="'+this.getValue()+'"></input>'));
                 }else if(value === "edit"){
-                    this.sliderObj.enable();
+                    sliderWidget.show();
+                    sliderWidget.parent().find(".sliderValue").remove();
                 }
             }
         }

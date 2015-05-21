@@ -88,6 +88,10 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             }
             return o;
         },
+        setData: function (data) {
+            this.options.data = data;
+            this._initData();
+        },
 
         getModifiedValue: function () {
             var o = [];

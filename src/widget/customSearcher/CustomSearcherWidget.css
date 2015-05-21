@@ -31,3 +31,132 @@
     z-index: 999;
     url(../widget/emap/images/taskbar/taskbar_menu_close.png) no-repeat;
 }
+
+.amp-search-icon {
+    position: absolute;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    color: #999999;
+    cursor: pointer;
+}
+.amp-search-expand {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: #999999;
+    font-size: 14px;
+    cursor: pointer;
+}
+.amp-seach-mh {
+    width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 35px;
+    background-color: #ffffff;
+    border-radius: 1px;
+    box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+    padding: 0;
+    text-shadow: none;
+    z-index: 1000;
+    color: #999999;
+}
+.amp-seach-mh ul {
+    padding: 0;
+}
+.amp-seach-mh ul li{
+    width: 100%;
+    padding: 0 5px 0 30px;
+    height: 30px;
+    line-height: 30px;
+    list-style: none;
+    cursor: pointer;
+}
+.amp-seach-mh ul li span:last-child{
+    font-weight: bold;
+}
+.amp-seach-mh ul li:hover{
+    background-color: #1ab394;
+    color: white;
+}
+
+.amp-seach-jx {
+    padding: 20px 20px 0px 20px;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background-color: #ffffff;
+    border-radius: 1px;
+    box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+    text-shadow: none;
+    z-index: 1000;
+    color: #999999;
+    min-width: 443px;
+}
+.amp-search-addoptions {
+    color: #1ab394;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn-w80-h30 {
+    width: 80px;
+    height: 30px;
+    padding: 0;
+    line-height: 27px;
+}
+.amp-seach-jx .fgroup {
+    position: relative;
+}
+.amp-option-minus {
+    position: absolute;
+    right: -12px;
+    top: 7px;
+    cursor: pointer;
+    color: #1ab394;
+}
+
+.jx-title {
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.oe_searchview_custom_private {
+    cursor: pointer;
+    position: relative;
+    line-height: 14px;
+    padding: 2px 4px 5px 0px;
+}
+.oe_searchview_custom_private.oe_selected {
+    color: #83D1E4;
+}
+.oe_searchview_custom_private:hover {
+    background-color: #f0f0fa;
+}
+.oe_searchview_custom_private .oe_searchview_custom_delete {
+    display: none;
+    color: gray;
+    position: absolute;
+    right: 10px;
+}
+.oe_searchview_advanced {
+    border-top: 1px solid #CCC;
+}
+
+.page_fragment .col-md-4{
+    padding: 0px;
+}

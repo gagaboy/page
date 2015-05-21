@@ -23,9 +23,25 @@ define([], function () {
             $parentId: null,
             $appendEl: null,
             show: true,
-            _addWrapDiv:true//是否在组件外边套DIV（ms－controller）
+            _addWrapDiv: true//是否在组件外边套DIV（ms－controller）
+        },
+        mix$: function (opts) {
+            var result = {};
+            for (var o in opts) {
+                if (o.slice(0, 1) != '$') {
+                    if (this.options["$" + o] === undefined) {
+                        result[o] = opts[o];
+                    } else {
+                        result["$" + o] = opts[o];
+                    }
+                } else {
+                    result[o] = opts[o];
+                }
+            }
+            return result;
         },
         initialize: function (opts) {
+            opts = this.mix$(opts);
             this.setOptions(opts);
             if (!this.options || this.options.$id == "") {
                 this.options.$id = this.options.$xtype + String.uniqueID();
@@ -75,14 +91,14 @@ define([], function () {
 
 
             var e = jQuery("<div></div>");
-            if(!this.options._addWrapDiv){
+            if (!this.options._addWrapDiv) {
                 e = jQuery(tmp);
-            }else {
+            } else {
                 e.append(tmp);
             }
-            e.addClass("page_"+$this.getAttr('$xtype')).attr("ms-controller", $this.getId());
+            e.addClass("page_" + $this.getAttr('$xtype')).attr("ms-controller", $this.getId());
             var parentDOM = parent;
-            if(!parentDOM) {
+            if (!parentDOM) {
                 parentDOM = $this.getParentElement();
             }
             parentDOM.append(e);
@@ -128,7 +144,7 @@ define([], function () {
             if (this.options.$parentId == null) {
                 return jQuery(document.body);
             } else {
-                return jQuery("#"+this.options.$parentId);
+                return jQuery("#" + this.options.$parentId);
             }
         },
         show: function () {
@@ -140,7 +156,7 @@ define([], function () {
         destroy: function () {
             this.$element.remove();
             Page.manager.remove(this.getId());
-            delete avalon.vmodels[this.options.$id];
+            delete avalon.vmodels[this.getId()];
         }
     });
     Base.xtype = xtype;

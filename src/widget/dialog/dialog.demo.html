@@ -27,7 +27,7 @@
             <div class="ibox-content">
                 <div class="row">
                     我只是一个div：<br/>
-                    <button onclick="openD()">click me</button>
+                    <button onclick="openD()" id="abc">click me</button>
                     <div class="col-md-12" id="dialogContainer">
 
                     </div>
@@ -61,8 +61,8 @@
 
         var dialog = Page.create('dialog', {
             $id: "dialog",
-            url: "http://www.baidu.com",
-//            content: "测试一下，哈哈",
+//            url: "http://www.baidu.com",
+            content: "测试一下，哈哈",
             width: "400px",
             height: "200px",
             button: [{
