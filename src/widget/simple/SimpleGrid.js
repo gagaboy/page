@@ -261,7 +261,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var newDataArr = [];
                 for(var t=0;t<pSize;t++){
                     if(t==(pos-1)){
-                        newDataArr.push(rowData);
+                        newDataArr.push(this._formatData(rowData));
                         if(datas[t]){
                             newDataArr.push(datas[t]);
                         }
@@ -271,7 +271,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 this.setAttr("data",newDataArr);
             }else{
-                this.getAttr("data").push(rowData);
+                this.getAttr("data").push(this._formatData(rowData));
             }
             this._updateAllCheckedByDatas();
         },
@@ -484,6 +484,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }
             return datas;
+        },
+        _formatData:function(data){
+            //是否默认全部勾选
+            if(data){
+                if(this.getAttr("allChecked")){
+                    data.checked = true;
+                }else{
+                    data.checked = false;//未设置，默认不选中
+                }
+                data.state = data.state?data.state:'view';
+            }
+            return data;
         },
         _formArr:function(arr){
             if(arr){
