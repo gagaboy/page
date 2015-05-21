@@ -10,7 +10,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             columns: [],
             data: [],
             dataSetId: null,//数据集
-            queryParams:null,//查询条件
+            //queryParams:null,//查询条件
             idField:"wid",
             showCheckbox:true,
             checkboxWidth:"10%",
@@ -159,9 +159,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 jQuery.extend(fetchParams, fetchParamy);
             }
             //===新设置的查询条件===
-            if(this.getAttr("queryParams")){
-                jQuery.extend(fetchParams,this.getAttr("queryParams"));
-            }
             var columns = this.getAttr("columns");
             if(columns&&columns.length>0){
                 var orders = {};
@@ -170,7 +167,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         orders[columns[k].dataField] = columns[k].orderType;
                     }
                 }
-                fetchParams.orders = orders;
+                if(orders!={}){
+                    fetchParams.orders = orders;
+                }
             }
             ds.setAttr("fetchParam",fetchParams);
 
