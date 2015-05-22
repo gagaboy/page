@@ -97,7 +97,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             return this.getAttr("display");
         },
         setValue: function (value) {
-            if (typeOf(value) == 'string') {
+            if (typeOf(value) == 'string' || typeOf(value) == 'number') {
                 this.setAttr("value", value);
                 this.setAttr("display", value);
                 this.setAttr("valueChanged", true);
