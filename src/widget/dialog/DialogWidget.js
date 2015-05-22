@@ -36,10 +36,10 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
             }
 
             if(options.url){
-                this.dialogObj = art.dialog.open(url, dialogParams);
+                this.dialogObj = artDialog.open(url, dialogParams);
             }else{
                 dialogParams.content = options.content;
-                this.dialogObj = art.dialog(dialogParams);;
+                this.dialogObj = artDialog(dialogParams);;
             }
 
 
