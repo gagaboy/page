@@ -268,7 +268,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 //发送删除查询方案请求
                 var ds = vm._getDataSet();
                 ds.deleteRecord(el.viewId, false);
-                Promise.all([ds.sync()]).then(function(data) {
+                Promise.all([ds.sync(true)]).then(function(data) {
                     if(data) {
                         if(vm.viewSearchArr.length>0 && vm.viewSearchArr[0].viewName == el.viewName) {
                             vm.viewSearchArr.clear();
@@ -309,7 +309,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 };
                 var ds = vm._getDataSet()
                 ds.addRecord(param);
-                Promise.all([ds.sync()]).then(function(data) {
+                Promise.all([ds.sync(true)]).then(function(data) {
                     if(data) {
                         var viewId = data;
                         param.viewId = viewId;
