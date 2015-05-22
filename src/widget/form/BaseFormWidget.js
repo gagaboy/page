@@ -172,8 +172,10 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             }
             if (valRes && !valRes.result) {//将错误信息赋值给属性
                 this.setAttr("errorMessage", valRes.errorMsg);
+                this.setAttr("showErrorMessage", true);
             } else {//清空错误信息
                 this.setAttr("errorMessage", "");
+                this.setAttr("showErrorMessage", false);
             }
         },
         isValid: function (notShowMessage) {
