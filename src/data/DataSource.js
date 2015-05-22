@@ -30,9 +30,9 @@ define(["./DataConstant"], function (Constant) {
             return fp;
         },
 
-        getSyncParam: function () {
+        getSyncParam: function (filterNotModify) {
             var p = {};
-            var value = this.getValue();
+            var value = this.getUploadValue(filterNotModify);
             Object.merge(p, {data: value});
             Object.merge(p, this.options.syncParam);
             return p;
@@ -69,10 +69,10 @@ define(["./DataConstant"], function (Constant) {
             });
 
         },
-        sync: function () {
+        sync: function (filterNotModify) {
             var $this = this;
             return new Promise(function (resolve) {
-                var params = $this.getSyncParam();
+                var params = $this.getSyncParam(filterNotModify);
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
                     //TODO reset $status$ 返回ID ??
                     $this._initData(true);

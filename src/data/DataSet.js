@@ -105,6 +105,24 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             }
             return o;
         },
+
+        getUploadValue: function (filterNotModify) {
+            var o = [];
+            var array = this.options._dataArray;
+            for (var i = 0; i < array.length; i++) {
+                var value = array[i];
+                if(filterNotModify) {
+                    if(value[this.options.model.status] == this.options.model.notModify) {
+
+                    }else {
+                        o.push(value.getUploadValue(filterNotModify));
+                    }
+                }else {
+                    o.push(value.getUploadValue(filterNotModify));
+                }
+            }
+            return o;
+        },
         setData: function (data) {
             this.options.data = data;
             this._initData();
@@ -203,20 +221,20 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 window.console.log("纪录没有指定ID.");
                 return;
             }
-            if(typeOf(record) == 'array'){
+            if (typeOf(record) == 'array') {
                 var flag = false;
-                for(var i=0; i<record.length; i++){
+                for (var i = 0; i < record.length; i++) {
                     var re = record[i];
                     var r = this.readRecord(re[vid]);
                     if (r) {
                         r.updateRecord(re);
-                        flag = true ;
+                        flag = true;
                     }
                 }
-                if(flag) {
+                if (flag) {
                     this._valueChanged();
                 }
-            }else {
+            } else {
                 //object
                 var r = this.readRecord(record[vid]);
                 if (r) {
