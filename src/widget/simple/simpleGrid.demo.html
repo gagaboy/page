@@ -83,15 +83,26 @@
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",editContent:"<div id='__currentEditField_isParty'></div>"},
-                {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>"},
+                {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>",
+                    validationRules: {
+                        required:true,//options中为false时，此处可重开启校验
+                        length: {
+                            maxLen: 5,
+                            minLen: 2
+                        },
+                        regex: {
+                            regexStr: "/^[\u4e00-\u9fa5]+$/",
+                            customErrMsg:"只能输入汉字"
+                        }
+                    }},
                 {title:"备注",dataField:"notes",hidden:true,sortDisabled:true,editContent:"<div id='__currentEditField_notes'></div>"}
             ],
             opColumns:[{title:"自定义操作",
-                    width:'15%',
-                    position:1,
-                    template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
-                                "<a href='javascript:deleteActive();'>Delete This Row</a>"},
-                    {title:"编辑",
+                width:'15%',
+                position:1,
+                template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
+                "<a href='javascript:deleteActive();'>Delete This Row</a>"},
+                {title:"编辑",
                     width:'12%',
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
@@ -195,12 +206,12 @@
                     myEditPro(simpleGrid,rowData,rowObj);
                 }else{
                     if(vm.editComps&&vm.editComps.length>0) {
-                       for(var s=0;s<vm.editComps.length;s++){
-                           if(vm.editComps[s]&&vm.editComps[s].getAttr){
-                               rowData[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
-                               //vm.editComps[s].destroy();
-                           }
-                       }
+                        for(var s=0;s<vm.editComps.length;s++){
+                            if(vm.editComps[s]&&vm.editComps[s].getAttr){
+                                rowData[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
+                                //vm.editComps[s].destroy();
+                            }
+                        }
                     }
                     vm.editComps = [];
                     rowData.state = "view";
@@ -232,53 +243,57 @@
         simpleGrid.checkRows(checkedRows,false);
     }
     function myEditPro(vm,row,rowDom){
-       if(row){
-           var dt = null;
-           var datas = vm.data?vm.data:vm.getAttr("data");
+        if(row){
+            var dt = null;
+            var datas = vm.data?vm.data:vm.getAttr("data");
 
-           var dataArr = [];
-           for(var t=0;t<datas.length;t++){
-               if(datas[t]==row){
-                   datas[t].state = "edit";
-               }
-               dataArr.push(datas[t]);
-           }
-           if(vm.data){
-               vm.data = dataArr;
-           }else{
-               vm.setAttr("data",dataArr);
-           }
-           var cols = vm.columns?vm.columns:vm.getAttr("columns");
-           var editComps = vm.editComps?vm.columns:vm.getAttr("editComps");
-           for(var s=0;s<cols.length;s++){
-               var coli = cols[s];
-               if(coli&&coli.dataField) {
-                   var fieldName = coli.dataField;
-                   var xtype = coli.xtype || "input";
-                   var editField = Page.create(xtype, {
-                       $parentId: '__currentEditField_'+fieldName,
-                       value: row[fieldName],
-                       showLabel: false,
-                       bindField:fieldName,
-                       valueChange:function(){
-                           row[fieldName] = editField.getValue();
-                       }
-                   });
-                   editComps.push(editField);
-                   editField.render();
-               }
-           }
-           if(vm.editComps){
-               vm.editComps = editComps;
-           }else{
-               vm.setAttr("editComps",editComps);
-           }
-       }
+            var dataArr = [];
+            for(var t=0;t<datas.length;t++){
+                if(datas[t]==row){
+                    datas[t].state = "edit";
+                }
+                dataArr.push(datas[t]);
+            }
+            if(vm.data){
+                vm.data = dataArr;
+            }else{
+                vm.setAttr("data",dataArr);
+            }
+            var cols = vm.columns?vm.columns:vm.getAttr("columns");
+            var editComps = vm.editComps?vm.columns:vm.getAttr("editComps");
+            for(var s=0;s<cols.length;s++){
+                var coli = cols[s];
+                if(coli&&coli.dataField) {
+                    var fieldName = coli.dataField;
+                    var xtype = coli.xtype || "input";
+                    var editField = Page.create(xtype, {
+                        $parentId: '__currentEditField_'+fieldName,
+                        parentTpl:"inline",
+                        value: row[fieldName],
+                        showLabel: false,
+                        bindField:fieldName,
+                        validationRules:coli.validationRules,
+                        showErrorMessage:true,
+                        valueChange:function(){
+                            row[fieldName] = editField.getValue();
+                        },
+                        status:"readonly"
+                    });
+                    editComps.push(editField);
+                    editField.render();
+                }
+            }
+            if(vm.editComps){
+                vm.editComps = editComps;
+            }else{
+                vm.setAttr("editComps",editComps);
+            }
+        }
     }
 
-//    <td ms-attr-rowIndex="$index">
-//    {{opColumn.template|html}}
-//    </td>
+    //    <td ms-attr-rowIndex="$index">
+    //    {{opColumn.template|html}}
+    //    </td>
 
 
 

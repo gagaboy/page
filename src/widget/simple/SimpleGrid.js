@@ -212,7 +212,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             return this.getAttr("activedRowDom");
         },
         getData:function(){
-            return this.getAttr("data");
+            return this.getAttr("data").$model;
         },
         /**
          * 选中某些行
@@ -263,14 +263,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             var pSize = datas.length;
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
-                for(var t=0;t<pSize;t++){
-                    if(t==(pos-1)){
-                        newDataArr.push(this._formatData(rowData));
-                        if(datas[t]){
+                if(pSize<1){
+                    newDataArr.push(this._formatData(rowData));
+                }else{
+                    for(var t=0;t<pSize;t++){
+                        if(t==(pos-1)){
+                            newDataArr.push(this._formatData(rowData));
+                            if(datas[t]){
+                                newDataArr.push(datas[t]);
+                            }
+                        }else if(datas[t]){
                             newDataArr.push(datas[t]);
                         }
-                    }else if(datas[t]){
-                        newDataArr.push(datas[t]);
                     }
                 }
                 this.setAttr("data",newDataArr);
