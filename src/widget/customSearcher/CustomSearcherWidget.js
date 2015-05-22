@@ -1,5 +1,6 @@
 /**
  * Created by BIKUI on 15/4/23.
+ * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求；
  */
 define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidget.css'
     ,'css!../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (Base, template) {
@@ -11,11 +12,17 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             value: null,
             dataSetId: null,
             groupOper: "or", //条件分组之间的连接符
-            autoSubmit: true, //自动提交查询条件
             matchAllFields: false,//查询条件是否匹配所有字段
             controls: [],
             builderLists: null,
             dataSetId: null,
+            $fetchUrl: null,
+            $syncUrl: null,
+            $dsModel: {
+                id: 'viewId'
+            },
+            autoSubmit: true, //自动提交查询条件
+            searchSubmit: null,
 
             focused: false,
             quickSearchArr: [],  //快速查询的选中项
@@ -23,18 +30,11 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             customSearchArr: [], //自定义查询选中项
             tipsArr: [],
             fragmentArr: [],
-            viewsArr: [{viewId: "testView1", viewName: "查询方案（默认）", defaultView: "1", viewValue: [
-                {"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
-                {"show": false, "name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
-                {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
-            ]},{viewId: "testView2", viewName: "test", defaultView: "0", viewValue: [
-                {"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
-                {"show": false, "name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
-                {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
-            ]}], //查询视图的数据
+            viewsArr: [], //查询视图的数据
             viewSelectedIndex: null,
 
             showPanel: "",   // quickPanel | viewPanel
+            $firstLoad: true,
             showTips: false,  //查询条件详情面板显示控制
             customSearchPanel: true, //控制自定义查询区域面板
             saveViewPanel: true,  //控制保存视图区域面板
@@ -42,10 +42,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             searchValue: "", //查询输入值
             inputWidth: 25, //查询输入框的宽度
             iconShowIndex: null,  //删除图标显示控制
+            viewIconShowIndex: null,
             QuickSearchShow: false,
             customSearchShow: false,
             clearShow: false,  //清空图标是否显示
-            searchSubmit: null,
+
+
 
             searcherFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
@@ -67,13 +69,25 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var vm = avalon.vmodels[vid];
                 vm.clearShow = false;
             },
-            showRemoveIcon: function(vid, index, $event) {
+            showRemoveIcon: function(vid, index, $event, type) {
                 var vm = avalon.vmodels[vid];
-                vm.iconShowIndex = index;
+
+                if(type=='view') {
+                    vm.viewIconShowIndex = index;
+                }
+                else {
+                    vm.iconShowIndex = index;
+                }
+
             },
-            displayRemoveIcon: function(vid, $event) {
+            displayRemoveIcon: function(vid, $event, type) {
                 var vm = avalon.vmodels[vid];
-                vm.iconShowIndex = null;
+                if(type=='view') {
+                    vm.viewIconShowIndex = null;
+                }
+                else {
+                    vm.iconShowIndex = null;
+                }
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
@@ -90,6 +104,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                        vm.viewSearchArr.clear();
                         vm.viewSelectedIndex = null;
                     }
+                    vm.callSubmit();
                     vm.showPanel = "";
                 }
                 else {
@@ -109,7 +124,52 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
 
 
             },
+            toggleViewPanel: function(vid, event) {
+                var vm = avalon.vmodels[vid];
+//                vm.searchValue = "";
+                if("viewPanel" == vm.showPanel) {
+                    vm.showPanel = null;
+                }
+                else {
+                    vm.showPanel = "viewPanel";
+                    vm.showTips = false;
+                }
+                //第一次展开视图查询面板时加载
+                if(vm.$firstLoad) {
+                    //渲染视图面板
+                    var viewData = vm.viewData;
+                    if(viewData && viewData.viewValue) {
+                        for(var i=0; i<viewData.viewValue.length; i++) {
+                            vm.addCustomFilter(vm.vid, viewData.viewValue[i]);
+                        }
+                    }
+                    //渲染保存视图面板
+                    Page.create("input", {
+                        $parentId: 'viewName',
+                        $id: 'viewName',
+                        value: viewData ? viewData.viewName:"",
+                        required: true,
+                        showRequired: true,
+                        showLabel: false,
+                        showErrorMessage: true
+                    }).render();
+                    Page.create('checkbox', {
+                        $parentId: 'defaultView',
+                        $id: 'defaultView',
+                        parentTpl: "inline",
+                        required: false,
+                        showErrorMessage: false,
+                        items: [{
+                            value: '1',
+                            display: '默认方案',
+                            checked: viewData ? true:false
+                        }]
+                    }).render();
+                    vm.$firstLoad = false;
 
+                    event.stopPropagation();
+                }
+            },
             selectQuickItem: function(vid, el, event) {
                 var vm = avalon.vmodels[vid];
                 var searchValue = vm.searchValue;
@@ -131,6 +191,8 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         value: [searchValue]
                     });
                 }
+
+                vm.callSubmit();
             },
 
             removeItem: function(vid, type, event, item, index) {
@@ -147,6 +209,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 }
                 vm.showTips = false;
 
+                vm.callSubmit();
                 event.stopPropagation();
             },
             removeAll: function(vid, event) {
@@ -157,6 +220,8 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 vm.customSearchArr.clear();
                 vm.showTips = false;
                 vm.viewSelectedIndex = null;
+
+                vm.callSubmit();
             },
             showTipsPanel: function(vid, type, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
@@ -172,47 +237,84 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
 
             selectView: function(vid, el, index, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
+                vm.customSearchArr.clear();
                 vm.viewSearchArr = [el.$model];
                 vm.viewSelectedIndex = index;
+
+                var viewData = el;
+                //清空原有有的自定义条件
+
+                if(vm.fragmentArr.length>0) {
+                    var arr = jQuery.extend([],  vm.fragmentArr.$model);   //克隆一个数组，因为要操作vm.fragmentArr，长度会发生变化
+                    for(var i=arr.length-1; i>=0; i--) {
+                        var el = arr[i];
+                        vm.removeCustomFilter(vm.vid, el, i);
+                    }
+                }
+                //渲染视图对应的自定义条件
+                if(viewData.viewValue) {
+                    for(var i=0; i<viewData.viewValue.length; i++) {
+                        vm.addCustomFilter(vm.vid, viewData.viewValue[i]);
+                    }
+                }
+
+                vm.callSubmit();
                 event.stopPropagation();
             },
             deleteView: function(vid, el, index, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
                 //发送删除查询方案请求
-
-                //如果该方案已被选中，则清空
-
-                //放入回调中
-                if(vm.viewSearchArr.length>0 && vm.viewSearchArr[0].viewName == el.viewName) {
-                    vm.viewSearchArr.clear();
-                    vm.viewSelectedIndex = null;
-                }
-                vm.viewsArr.removeAt(index);
-                //切换选中项，数组长度发生变化
-                if(vm.viewSelectedIndex == index) {
-                    vm.viewSelectedIndex = null;
-                }
-                else if(vm.viewSelectedIndex > index) {
-                    vm.viewSelectedIndex--;
-                }
+                var ds = vm._getDataSet();
+                ds.deleteRecord(el.viewId, false);
+                Promise.all([ds.sync()]).then(function(data) {
+                    if(data) {
+                        if(vm.viewSearchArr.length>0 && vm.viewSearchArr[0].viewName == el.viewName) {
+                            vm.viewSearchArr.clear();
+                            vm.viewSelectedIndex = null;
+                            vm.callSubmit();
+                        }
+                        vm.viewsArr.removeAt(index);
+                        //切换选中项，数组长度发生变化
+                        if(vm.viewSelectedIndex == index) {
+                            vm.viewSelectedIndex = null;
+                        }
+                        else if(vm.viewSelectedIndex > index) {
+                            vm.viewSelectedIndex--;
+                        }
+                    }
+                });
 
                 event.stopPropagation();
             },
             saveView: function(vid, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
                 if(!Page.manager.components.viewName.isValid()) {
-                    Page.dialog.alert("请填写查询视图的名称后，再作保存！");
                     return;
                 }
                 var viewName = Page.manager.components.viewName.getValue();
                 var defaultView = "0";
                 var checkBoxArr = Page.manager.components.defaultView.getValue();
-                if(checkBoxArr.length>1) {
+                if(checkBoxArr &&  checkBoxArr.length>1) {
                     defaultView = "1";
                 }
-                // TODO 获取条件值
+                var viewValue = vm._getCustomFilter();
 
-
+                var param = {
+                    viewName: viewName,
+                    defaultView: defaultView,
+                    viewValue: JSON.stringify(viewValue),
+                    searchId: vid
+                };
+                var ds = vm._getDataSet()
+                ds.addRecord(param);
+                Promise.all([ds.sync()]).then(function(data) {
+                    if(data) {
+                        var viewId = data;
+                        param.viewId = viewId;
+                        param.viewValue = viewValue;
+                        vm.viewsArr.push(param);
+                    }
+                });
             },
             toggleCustomPanel: function(vid, type, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
@@ -246,37 +348,23 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             viewData = views[i];
                             vm.viewSearchArr.push(views[i]);
                             vm.viewSelectedIndex = i;
+                            vm.callSubmit();
                             break;
                         }
                     }
                     vm.viewsArr = views;
-                    //TODO 渲染自定义查询
+                    vm.viewData = viewData;
+                    //渲染自定义查询
+                    /*if(viewData.viewValue) {
+                        for(var i=0; i<viewData.viewValue.length; i++) {
+                            vm.addCustomFilter(vm.vid, viewData.viewValue[i]);
+                        }
+                    }*/
 
                 }
-                //渲染保存视图面板
-                Page.create("input", {
-                    $parentId: 'viewName',
-                    $id: 'viewName',
-                    value: viewData ? viewData.viewName:"",
-                    required: true,
-                    showLabel: false,
-                    showErrorMessage: true
-                }).render();
-                Page.create('checkbox', {
-                    $parentId: 'defaultView',
-                    $id: 'defaultView',
-                    showLabel: false,
-                    required: false,
-                    showErrorMessage: false,
-                    items: [{
-                        value: '1',
-                        display: '默认方案',
-                        checked: viewData ? true:false
-                    }]
-                }).render();
+
             },
             addCustomFilter: function(vid, initData) {
-//                initData = {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "contain", "builderDisplay": "包含", "group": "1"};
                 var vm = vid ? avalon.vmodels[vid] : this;
                 if(undefined == vm.filterIndex)
                     vm.filterIndex = 0;
@@ -298,7 +386,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         items: [{
                             $id: 'field_'+index,
                             $xtype: 'combobox',
-                            showLabel: false,
+                            parentTpl: "inline",
                             multi: false,
                             value: "",
                             display: "",
@@ -330,7 +418,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         items: [{
                             $id: 'oper_'+index,
                             $xtype: 'combobox',
-                            showLabel: false,
+                            parentTpl: "inline",
                             multi: false,
                             searchable: false,
                             value: "",
@@ -360,15 +448,108 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var valueObj = Page.manager.components['value_'+index];
                 valueObj.setValue({value: initData.value, display: initData.valueDisplay});
             },
-            removeCustomFilter: function(vid, el, index, $event) {
+            removeCustomFilter: function(vid, el, index, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
                 vm.fragmentArr.removeAt(index);
+//                vm.removeFilter = true;
                 //销毁行内所有组件
                 vm.getCmpMgr(el).destroy();
 
+                event && event.stopPropagation();
+            },
+            addCustomSearch: function(vid, $event) {
+                var vm = vid ? avalon.vmodels[vid] : this;
+                vm.viewSearchArr.clear();
+                vm.quickSearchArr.clear();
+                var res = vm._getCustomFilter();
+                vm.customSearchArr = res;
+
+                vm.callSubmit();
+            },
+            _getCustomFilter: function() {
+                var result = [];
+                var vm = this;
+                if(vm.fragmentArr.length>0) {
+                    var allFields = "";
+                    for(var i=0; i<vm.fragmentArr.length; i++) {
+                        var rowId = vm.fragmentArr[i];
+                        var index = rowId.split("_")[1];
+                        var fieldObj = vm.getCmpMgr('field_'+index);
+                        var operObj = vm.getCmpMgr('oper_'+index);
+                        var valueObj = vm.getCmpMgr('value_'+index);
+
+                        var item = {};
+                        //计算show属性
+                        var bindField = fieldObj.getValue();
+                        if(allFields.indexOf(bindField)>-1) {
+                            item.show = false;
+                        }
+                        else {
+                            allFields += bindField +",";
+                        }
+
+                        item.name = fieldObj.getValue();
+                        item.nameDisplay = fieldObj.getDisplay();
+                        item.builder = operObj.getValue();
+                        item.builderDisplay = operObj.getDisplay();
+                        item.value = valueObj.getValue();
+                        item.valueDisplay = valueObj.getDisplay();
+                        if(i!=0) {
+                            item.linkOpt = vm.groupOper;
+                        }
+
+                        result.push(item);
+                    }
+                }
+                return result;
+            },
+            callSubmit: function(isClick) {
+                var vm = this;
+                var searchValue = vm.getSearchValue();
+                if(isClick) {
+                    vm.searchSubmit && "function"==typeof vm.searchSubmit && vm.searchSubmit(searchValue);
+                }
+                else {
+                    if(this.autoSubmit) {
+                        vm.searchSubmit && "function"==typeof vm.searchSubmit && vm.searchSubmit(searchValue);
+                    }
+                }
+            },
+            sendSearch: function(vid, event){
+                var vm = vid ? avalon.vmodels[vid] : this;
+                vm.callSubmit(true);
+                event.stopPropagation();
+            },
+            getSearchValue: function(vid) {
+                var vm = vid ? avalon.vmodels[vid] : this;
+                var res = [];
+                if(vm.customSearchArr.length>0) {
+                    res = vm.customSearchArr.$model;
+                }
+                else {
+                    vm.quickSearchArr;
+                    if(vm.viewSearchArr.length>0) {
+                        res.push(vm.viewSearchArr[0].viewValue.$model);
+                    }
+                    for(var i=0; i<vm.quickSearchArr.length; i++) {
+                        var quickSearch = vm.quickSearchArr[i];
+                        var item = {
+                            linkOpt: "and",
+                            name: quickSearch.bindField,
+                            nameDisplay: quickSearch.label,
+                            value: quickSearch.value.join(","),
+                            valueDisplay: quickSearch.value.join(","),
+                            builder: "m_value_include",
+                            builderDisplay: "多值包含"
+                        };
+                        res.push(item);
+                    }
+                }
+                return res;
             },
             _getDataSet: function() {
-                return Page.manager.components[this.dataSetId];
+                var cmpMgr = this.getCmpMgr();
+                return cmpMgr._getDataSet();
             },
             getCmpMgr: function(vid) {
                 return Page.manager.components[vid ? vid:this.vid];
@@ -377,8 +558,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
 
         },
         initialize: function (opts) {
-            if (opts && opts.value && opts.display) {
-
+            if(opts) {
+                if(opts.dataSetId && opts.fetchUrl) {
+                    Page.dialog.alert("自定义查询组件中dataSetId和url属于互斥属性，只能设置一个！");
+                    return;
+                }
+                this._setUrl(opts);
             }
 
             //处理Control模型数据：1、判断哪些字段可以快速查询
@@ -391,13 +576,36 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var name = "CustomSearcherWidget_"+that.options.vid;
                 if(!jQuery(event.target).closest("[name='"+name+"']").length) {
                     var vm = that._getCompVM();
+//                    if(!vm || vm.removeFilter) {
+//                        vm.removeFilter = false;
+//                        return;
+//                    }
+                    if(!vm)  return;
                     vm.showPanel = "";
                     vm.focused = false;
+                    vm.inputWidth = 25;
                     vm.showTips = false;
                     vm.searchValue = "";
                 }
             });
+        },
+        _setUrl: function(opts){
+            if(!opts.dataSetId) {
+                var path = document.location.pathname;
+                var contentPath = path.split("/")[1];
+                if(!opts.fetchUrl) {
+                    opts.fetchUrl = "/"+contentPath+"/emap/web/getSearchViewsInfo";
+                }
+                if(!opts.syncUrl) {
+                    opts.syncUrl = "/"+contentPath+"/emap/web/addSearchView";
+                }
+            }
 
+            //TODO test
+            opts.fetchUrl = 'Data.demo.json';
+            opts.syncUrl = "Update.demo.json";
+        },
+        _afterRender: function() {
             var vm = this._getCompVM();
             vm._renderView();
         },
@@ -409,7 +617,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 for(var i=0; i<opts.controls.length; i++) {
                     var fieldModel = opts.controls[i];
                     if(undefined == fieldModel.quickSearch) {
-                        if(quickType.contains(fieldModel.xtype)) {
+                        if(quickType.contains(fieldModel.$xtype)) {
                             fieldModel.quickSearch = true;
                         }
                     }
@@ -435,7 +643,19 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             return avalon.vmodels[vid]
         },
         _getDataSet: function() {
-            return Page.manager.components[this.options.dataSetId];
+            if(this.options.dataSetId) {
+                return Page.manager.components[this.options.dataSetId];
+            }
+            else if(this.options.$fetchUrl && this.options.$syncUrl) {
+                if(!this.dataSet) {
+                    this.dataSet = Page.create("dataSet", {
+                        fetchUrl: this.options.$fetchUrl,
+                        syncUrl: this.options.$syncUrl,
+                        model: this.options.$dsModel
+                    });
+                }
+                return this.dataSet;
+            }
         },
         getTemplate: function () {
             return template;

@@ -107,7 +107,6 @@
 .amp-search-addoptions {
     color: #1ab394;
     margin-bottom: 5px;
-    margin-top: 5px;
     cursor: pointer;
     display: inline-block;
 }
@@ -122,9 +121,6 @@
     position: relative;
 }
 .amp-option-minus {
-    position: absolute;
-    right: -12px;
-    top: 7px;
     cursor: pointer;
     color: #1ab394;
 }
@@ -158,5 +154,5 @@
 }
 
 .page_fragment .col-md-4{
-    padding: 0px;
+    padding: 0px 5px 0px 0px;
 }
