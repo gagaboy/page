@@ -22,19 +22,12 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
         },
 
         _afterLayoutRender: function () {
-            //1. createDataSources
-            //2. createDataBinders
-            this.DS = {};
-            this.DB = {};
-            for (var d in this.options.dataSources) {
-                var ds = this.options.dataSources[d];
-                this.addDataSource(d, ds);
-            }
-            for (var d in this.options.dataBinders) {
-                var ds = this.options.dataBinders[d];
-                this.addDataBinder(d, ds);
-            }
-
+            var ds = this.options.dataSources;
+            var db = this.options.dataBinders;
+            this._widgetContainer = Page.create("widgetContainer", {
+                dataSources:ds,
+                dataBinders:db
+            });
         },
 
         /**
@@ -42,8 +35,7 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
          * @param ds {ds1:{type:'', options:{}}}
          */
         addDataSource: function (id, ds) {
-            var dataSource = Page.create(ds['type'], Object.merge(ds['options'], {$id: id}));
-            this.DS[id] = dataSource;
+            this._widgetContainer.addDataBinder(id,ds);
         },
 
         /**
@@ -51,23 +43,16 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
          * @param ds
          */
         addDataBinder: function (id, ds) {
-            var dataBind = Page.create('dataBinder', ds);
-            this.DB[id] = dataBind;
+            this._widgetContainer.addDataBinder(id, ds);
         },
 
         getDataSource: function (id) {
-            return this.DS[id];
+            return this._widgetContainer.getDataSource(id);
         },
 
         destroy: function () {
             this.parent();
-            //删除DS，DB
-            Object.each(this.DB, function (value, key) {
-                value.destory();
-            });
-            Object.each(this.DS, function (value, key) {
-                value.destory();
-            });
+            this._widgetContainer.destory();
         }
 
     });

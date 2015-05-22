@@ -47,7 +47,24 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             }
         },
 
+        mix$: function (opts) {
+            var result = {};
+            for (var o in opts) {
+                if (o.slice(0, 1) != '$') {
+                    if (this.options["$" + o] === undefined) {
+                        result[o] = opts[o];
+                    } else {
+                        result["$" + o] = opts[o];
+                    }
+                } else {
+                    result[o] = opts[o];
+                }
+            }
+            return result;
+        },
+
         initialize: function (opts) {
+            opts = this.mix$(opts);
             this.setOptions(opts);
             if (!this.options || this.options.$id == "") {
                 this.options.$id = this.options.$xtype + String.uniqueID();

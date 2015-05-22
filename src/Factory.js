@@ -21,6 +21,7 @@ define([
     "./data/DataSet",
     "./data/DataBinder",
     "./widget/Base",
+    "./widget/WidgetContainer",
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
     "./widget/form/maskedtextbox/MaskedtextboxWidget",

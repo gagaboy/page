@@ -128,6 +128,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             if (!notFireEvent) {
                 this.fireEvent("afterUpdateRecord", [value]);
             }
+            this.fireEvent("recordUpdated", r);
             this._valueChanged();
         },
 
