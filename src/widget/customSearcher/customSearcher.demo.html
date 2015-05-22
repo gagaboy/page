@@ -26,7 +26,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="row">
-                    我只是一个div：<br/>
+                    我是一个自定义查询组件：<br/>
                     <div class="col-md-5" id="container">
 
                     </div>
@@ -62,10 +62,14 @@
 <script>
     require(["../../../page/src/Bootstrap"], function () {
 
-        var ds = Page.create("dataSet", {
-            $id: 'customSearchDS',
-            fetchUrl: 'Data.demo.json'
-        });
+//        var ds = Page.create("dataSet", {
+//            $id: 'customSearchDS',
+//            fetchUrl: 'Data.demo.json',
+//            syncUrl: "Update.demo.json",
+//            model: {
+//                id: 'viewId'
+//            }
+//        });
 
         var customSearcher = Page.create('customSearcher', {
             $id: "customSearcher",
@@ -74,7 +78,7 @@
                 id: "stuName",
                 $xtype: "input",
                 label: "姓名",
-                showLabel: false,
+                parentTpl: "inline",
                 filterName: "stuName",
                 bindField: "stuName",
                 builderList: "nameOpers"
@@ -82,7 +86,7 @@
                 id: "stuSex",
                 $xtype: "combobox",
                 label: "性别",
-                showLabel: false,
+                parentTpl: "inline",
                 filterName: "stuSex",
                 bindField: "stuSex",
                 url:'SexData.demo.json',
@@ -93,7 +97,9 @@
                 nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}],
                 sexOpers: [{name: "contain", caption: "包含"}]
             },
-            dataSetId: "customSearchDS"
+            searchSubmit: function(searchValue) {
+                console.log(JSON.stringify(searchValue));
+            }
 
         });
         customSearcher.render();

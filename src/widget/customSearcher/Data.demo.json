@@ -4,11 +4,11 @@
       "rows": [
           {"viewId": "testView1", "viewName": "查询方案（默认）", "defaultView": "0", "viewValue": [
               {"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
-              {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不、等于", "group": "1"}
+              {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "contain", "builderDisplay": "包含", "group": "1"}
           ]},{"viewId": "testView2", "viewName": "测试", "defaultView": "1", "viewValue": [
               {"name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
               {"show": false, "name": "stuName", "nameDisplay": "姓名", "value": "234", "valueDisplay": "234", "builder": "notequal", "builderDisplay": "不等于", "group": "1"},
-              {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "equal", "builderDisplay": "不等于", "group": "1"}
+              {"name": "stuSex", "nameDisplay": "性别", "value": "1", "valueDisplay": "男", "builder": "contain", "builderDisplay": "包含", "group": "1"}
           ]}
       ],
       "pageSize": 5,

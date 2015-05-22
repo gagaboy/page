@@ -178,7 +178,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
             },
             initGridItem: function() {},
-            toggleItemSelect: function(vid, el) {
+            toggleItemSelect: function(vid, el, index, event) {
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
@@ -198,6 +198,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         return;
                     }
                 }
+                event.stopPropagation();
             },
             changeSelectedItems: function(el, addFlag) {
                 var vm = this;
@@ -276,7 +277,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         initialize: function (opts) {
             if(opts) {
                 if(opts.dataSetId && opts.url) {
-                    Page.dialog.alert("dataSetId和url属于互斥属性，只能设置一个！");
+                    Page.dialog.alert("下拉框组件中dataSetId和url属于互斥属性，只能设置一个！");
                     return;
                 }
                 if (opts.value && opts.display) {
@@ -300,6 +301,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var name = "ComboBoxWidget_"+that.options.vid;
                 if(!jQuery(event.target).closest("[name='"+name+"']").length) {
                     var vm = that._getCompVM();
+                    if(!vm) return;
                     vm.showPanel = false;
                     vm.focused = false;
                     vm.searchValue = "";
@@ -531,7 +533,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             this.parent(value);
             //修改选中项
             var vm = this._getCompVM();
-            if(vm.multi || !vm.searchable) {
+//            if(vm.multi || !vm.searchable) {
+            if(true) {
                 var splitChar = this.options.$split;
                 var valueArr = value.value ? value.value.split(splitChar) : [];
                 var displayArr = value.display ? value.display.split(splitChar) : [];
@@ -582,6 +585,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _valueChange:function(){//值改变时校验
             this.validate();
+        },
+        destroy: function() {
+            if(this.options.pagination) {
+                this.options.pagination.destroy();
+            }
+            if(this.dataSet) {
+                this.dataSet.destroy();
+            }
+            this.parent();
         }
     });
     ComboBoxWidget.xtype = xtype;
