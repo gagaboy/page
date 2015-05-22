@@ -1,6 +1,6 @@
 /**
  * Created by BIKUI on 15/4/23.
- * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求；2、复写Destroy方法，销毁所有组件
+ * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求;
  */
 define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidget.css'
     ,'css!../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (Base, template) {
@@ -437,7 +437,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         items: initData ? [] : [{
                             $id: 'value_'+index,
                             $xtype: 'input',
-                            showLabel: false}]
+                            parentTpl: "inline"}]
                     }]
                 }).render();
 
@@ -482,7 +482,10 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         var fieldObj = vm.getCmpMgr('field_'+index);
                         var operObj = vm.getCmpMgr('oper_'+index);
                         var valueObj = vm.getCmpMgr('value_'+index);
-
+                        //校验一下
+                        if(!fieldObj.isValid() || !operObj.isValid() || !valueObj.isValid()) {
+                            return;
+                        }
                         var item = {};
                         //计算show属性
                         var bindField = fieldObj.getValue();

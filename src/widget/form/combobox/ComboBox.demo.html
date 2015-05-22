@@ -72,10 +72,10 @@
 <script>
     require(["../../src/Bootstrap"], function () {
 
-//        var ds = Page.create("dataSet", {
-//            $id: 'comboBoxDS',
-//            fetchUrl: 'Data.demo.json'
-//        });
+        var ds = Page.create("dataSet", {
+            $id: 'comboBoxDS',
+            fetchUrl: 'Data.demo.json'
+        });
 
         var combo1 = Page.create('combobox', {
             $parentId: 'multi',
@@ -104,18 +104,17 @@
             }
         })
         combo1.render();
-/*
         var combo2 = Page.create('combobox', {
             $parentId: 'singleSearchable',
             $id: 'sex2',
             label: '学院（单选可搜索）',
             multi: false,
             searchable: true,
-//            $valueField: "id",
-//            $textField: "text",
+            url: "Data1.demo.json",
+            valueField: "id",
+            textField: "name",
             value: "1",
-            display: "计算机学院",
-            dataSetId: "comboBoxDS"
+            display: "计算机学院"
 
         })
         combo2.render();
@@ -135,7 +134,7 @@
 //                return false;
             }
         })
-        combo3.render();*/
+        combo3.render();
         Page.manager.components.sex1.focus()
     });
 </script>
