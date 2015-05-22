@@ -165,6 +165,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
         getModifiedValue: function () {
             var arr = {};
+            arr[this.options.model.id] = this.options.data[this.options.model.id];
             this.dataStack.each(function (v) {
                 Object.merge(arr, v);
             });

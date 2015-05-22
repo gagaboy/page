@@ -84,11 +84,13 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
         _initData: function () {
             this.options._dataMap = {};
             this.options._dataArray = [];
+            var $this = this;
             if (this.options.data && this.options.data.length > 0) {
                 for (var i = 0; i < this.options.data.length; i++) {
                     var d = this.options.data[i];
                     var dv = Page.create("dataValue", {
-                        data: d
+                        data: d,
+                        model :$this.options.model
                     });
                     this.options._dataMap[d[this.options.model.id]] = dv;
                     this.options._dataArray.push(dv);
@@ -112,7 +114,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             for (var i = 0; i < array.length; i++) {
                 var value = array[i];
                 if(filterNotModify) {
-                    if(value[this.options.model.status] == this.options.model.notModify) {
+                    if(value.options.data[this.options.model.status] == this.options.model.notModify) {
 
                     }else {
                         o.push(value.getUploadValue(filterNotModify));
