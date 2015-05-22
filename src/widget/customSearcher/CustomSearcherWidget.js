@@ -1,6 +1,6 @@
 /**
  * Created by BIKUI on 15/4/23.
- * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求；
+ * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求；2、复写Destroy方法，销毁所有组件
  */
 define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidget.css'
     ,'css!../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (Base, template) {
@@ -46,6 +46,8 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             QuickSearchShow: false,
             customSearchShow: false,
             clearShow: false,  //清空图标是否显示
+
+            $objIdArr: [],   //组件中所创建的子组件Id集合，用于销毁
 
 
 
@@ -439,6 +441,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     }]
                 }).render();
 
+                vm.$objIdArr.push('operSelectDs_'+index);
+                vm.$objIdArr.push(fragmentId);
+
                 //初始化值
                 if(!initData) return;
                 var fieldObj = Page.manager.components['field_'+index];
@@ -616,6 +621,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 opts.$fieldSelectData = [];
                 for(var i=0; i<opts.controls.length; i++) {
                     var fieldModel = opts.controls[i];
+                    if(fieldModel.hidden) {
+                        continue;
+                    }
                     if(undefined == fieldModel.quickSearch) {
                         if(quickType.contains(fieldModel.$xtype)) {
                             fieldModel.quickSearch = true;
@@ -635,7 +643,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     $id: 'fieldSelectDs',
                     data: opts.$fieldSelectData
                 });
-
+                this.options.$objIdArr.push("fieldSelectDs");
             }
         },
         _getCompVM: function() {
@@ -653,6 +661,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         syncUrl: this.options.$syncUrl,
                         model: this.options.$dsModel
                     });
+                    this.options.$objIdArr.push(this.dataSet.getId());
                 }
                 return this.dataSet;
             }
@@ -685,6 +694,17 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
         },
         _valueChange:function(){//值改变时校验
             this.validate();
+        },
+        destroy: function() {
+            //销毁组件所创建的DataSet
+            for(var i=0; i<this.options.$objIdArr.length; i++) {
+                var id = this.options.$objIdArr[i];
+                var obj = Page.manager.components[id];
+                if(obj) {
+                    obj.destroy();
+                }
+            }
+            this.parent();
         }
     });
     CustomSearcherWidget.xtype = xtype;

@@ -585,6 +585,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _valueChange:function(){//值改变时校验
             this.validate();
+        },
+        destroy: function() {
+            if(this.options.pagination) {
+                this.options.pagination.destroy();
+            }
+            if(this.dataSet) {
+                this.dataSet.destroy();
+            }
+            this.parent();
         }
     });
     ComboBoxWidget.xtype = xtype;

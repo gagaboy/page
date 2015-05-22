@@ -32,7 +32,7 @@
     url(../widget/emap/images/taskbar/taskbar_menu_close.png) no-repeat;
 }
 
-.amp-search-icon {
+.page-search-icon {
     position: absolute;
     top: 0;
     width: 30px;
@@ -43,7 +43,7 @@
     color: #999999;
     cursor: pointer;
 }
-.amp-search-expand {
+.page-search-expand {
     position: absolute;
     top: 0;
     right: 0;
@@ -55,7 +55,7 @@
     font-size: 14px;
     cursor: pointer;
 }
-.amp-seach-mh {
+.page-seach-mh {
     width: 200px;
     max-height: 300px;
     overflow-y: auto;
@@ -70,10 +70,10 @@
     z-index: 1000;
     color: #999999;
 }
-.amp-seach-mh ul {
+.page-seach-mh ul {
     padding: 0;
 }
-.amp-seach-mh ul li{
+.page-seach-mh ul li{
     width: 100%;
     padding: 0 5px 0 30px;
     height: 30px;
@@ -81,15 +81,15 @@
     list-style: none;
     cursor: pointer;
 }
-.amp-seach-mh ul li span:last-child{
+.page-seach-mh ul li span:last-child{
     font-weight: bold;
 }
-.amp-seach-mh ul li:hover{
+.page-seach-mh ul li:hover{
     background-color: #1ab394;
     color: white;
 }
 
-.amp-seach-jx {
+.page-seach-jx {
     padding: 20px 20px 0px 20px;
     width: 100%;
     overflow: hidden;
@@ -104,28 +104,28 @@
     color: #999999;
     min-width: 443px;
 }
-.amp-search-addoptions {
+.page-search-addoptions {
     color: #1ab394;
     margin-bottom: 5px;
     cursor: pointer;
     display: inline-block;
 }
 
-.btn-w80-h30 {
+.page-search-btn {
     width: 80px;
     height: 30px;
     padding: 0;
     line-height: 27px;
 }
-.amp-seach-jx .fgroup {
+.page-seach-jx .fgroup {
     position: relative;
 }
-.amp-option-minus {
+.page-option-minus {
     cursor: pointer;
     color: #1ab394;
 }
 
-.jx-title {
+.view-title {
     font-size: 14px;
     margin-bottom: 10px;
     font-weight: bold;

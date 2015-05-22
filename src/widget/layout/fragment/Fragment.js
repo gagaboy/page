@@ -52,7 +52,7 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
 
         destroy: function () {
             this.parent();
-            this._widgetContainer.destory();
+            this._widgetContainer.destroy();
         }
 
     });

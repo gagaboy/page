@@ -2,7 +2,7 @@
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
         <!--多选区域-->
         <div ms-if="multi" ms-class="div-focus: focused"
-             style="width: 350px;border: 1px solid #CBD5DD;  border-radius: 2px;" title="" ms-click="comboBoxFocus(vid, this)">
+             style="min-width: 350px;border: 1px solid #CBD5DD;  border-radius: 2px;" title="" ms-click="comboBoxFocus(vid, this)">
             <ul class="chosen-choices" style="border: 0px;">
                 <li ms-repeat-item="selectedItems" class="search-choice">
                     <span ms-text="item[textField]"></span>
