@@ -1723,10 +1723,6 @@ a.k-draghandle:focus{
 .k-slider-tooltip .k-callout-n, .k-slider-tooltip .k-callout-s {
     margin-left: -6px;
 }
-.k-callout-s {
-    left: 50%;
-    bottom: -13px;
-}
 .k-callout {
     position: absolute;
     width: 0;
@@ -1737,4 +1733,52 @@ a.k-draghandle:focus{
 }
 .k-callout-s {
     border-top-color: #c5c5c5;
+}
+.k-callout {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px;
+    border-color: transparent;
+}
+.k-callout-n {
+    top: -13px;
+    left: 50%;
+}
+.k-callout-w {
+    top: 50%;
+    left: -13px;
+}
+.k-callout-s {
+    left: 50%;
+    bottom: -13px;
+}
+.k-callout-e {
+    top: 50%;
+    right: -13px;
+}
+.k-callout-n {
+    border-bottom-color: #c5c5c5;
+}
+.k-callout-w {
+    border-right-color: #c5c5c5;
+}
+.k-callout-s {
+    border-top-color: #c5c5c5;
+}
+.k-callout-e {
+    border-left-color: #c5c5c5;
+}
+.k-tooltip-validation .k-callout-n {
+    border-bottom-color: #ffe79e;
+}
+.k-tooltip-validation .k-callout-w {
+    border-right-color: #ffe79e;
+}
+.k-tooltip-validation .k-callout-s {
+    border-top-color: #ffe79e;
+}
+.k-tooltip-validation .k-callout-e {
+    border-left-color: #ffe79e;
 }

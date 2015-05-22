@@ -40,7 +40,8 @@ define([
     "./widget/form/textarea/TextareaWidget",
     "./widget/form/slider/SliderWidget",
     "./widget/dialog/DialogWidget",
-    "./widget/customSearcher/CustomSearcherWidget"
+    "./widget/customSearcher/CustomSearcherWidget",
+    "./widget/form/tooltip/TooltipWidget"
 ], function () {
     var allComps = arguments;
 
