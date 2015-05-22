@@ -5,6 +5,6 @@
                 </div>
                 {{el.display}} &nbsp;&nbsp;&nbsp;
             </label>
-     <div ms-if="/^\d+$/.test(cols) && ($index+1)/cols==1" style="margin-bottom: 10px;"></div>
+     <div ms-if="/^\d+$/.test(cols) && (cols!=0) && ($index+1)%cols==0" style="margin-bottom: 10px;"></div>
             </div>
 
