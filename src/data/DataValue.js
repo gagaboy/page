@@ -115,6 +115,31 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             });
             return value;
         },
+
+        getUploadValue:function(filterNotModify){
+            var value = {};
+            var $this = this;
+            if(filterNotModify) {
+                Object.merge(value, this.getModifiedValue());
+            }else {
+                Object.merge(value, this.options.data);
+            }
+
+            this.options.model.childAlias.each(function (v, i) {
+                if ($this.childDS[v]) {
+                    var cvalue = $this.childDS[v].getUploadValue(filterNotModify);
+                    value[v] = cvalue;
+                }
+            });
+            this.options.model.refAlias.each(function (v, i) {
+                if ($this.refDS[v]) {
+                    var cvalue = $this.refDS[v].getUploadValue(filterNotModify);
+                    value[v] = cvalue;
+                }
+            });
+            return value;
+        },
+
         updateRecord: function (value, notFireEvent) {
             var r = this.options.data;
             if (!notFireEvent) {
@@ -140,6 +165,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
         getModifiedValue: function () {
             var arr = {};
+            arr[this.options.model.id] = this.options.data[this.options.model.id];
             this.dataStack.each(function (v) {
                 Object.merge(arr, v);
             });

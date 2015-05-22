@@ -23,6 +23,11 @@ define([], function () {
             var dataValue = Page.manager.components[this.options.dataValueId];
             var widget = Page.manager.components[this.options.widgetId];
             var $this = this;
+            var v = dataValue.getValue();
+            if($this.options.fieldId) {
+                v = v[$this.options.fieldId];
+            }
+            widget.setValue(v);
             this.widgetValueChangeCallback = function (value) {
                 var fieldId = $this.options.fieldId;
                 var val = {};

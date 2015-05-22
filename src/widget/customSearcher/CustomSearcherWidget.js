@@ -1,6 +1,6 @@
 /**
  * Created by BIKUI on 15/4/23.
- * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求；
+ * todo 1、查询视图的更新，如果视图名已存在，则发送更新请求;
  */
 define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidget.css'
     ,'css!../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (Base, template) {
@@ -46,6 +46,8 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             QuickSearchShow: false,
             customSearchShow: false,
             clearShow: false,  //清空图标是否显示
+
+            $objIdArr: [],   //组件中所创建的子组件Id集合，用于销毁
 
 
 
@@ -266,7 +268,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 //发送删除查询方案请求
                 var ds = vm._getDataSet();
                 ds.deleteRecord(el.viewId, false);
-                Promise.all([ds.sync()]).then(function(data) {
+                Promise.all([ds.sync(true)]).then(function(data) {
                     if(data) {
                         if(vm.viewSearchArr.length>0 && vm.viewSearchArr[0].viewName == el.viewName) {
                             vm.viewSearchArr.clear();
@@ -307,7 +309,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 };
                 var ds = vm._getDataSet()
                 ds.addRecord(param);
-                Promise.all([ds.sync()]).then(function(data) {
+                Promise.all([ds.sync(true)]).then(function(data) {
                     if(data) {
                         var viewId = data;
                         param.viewId = viewId;
@@ -435,9 +437,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         items: initData ? [] : [{
                             $id: 'value_'+index,
                             $xtype: 'input',
-                            showLabel: false}]
+                            parentTpl: "inline"}]
                     }]
                 }).render();
+
+                vm.$objIdArr.push('operSelectDs_'+index);
+                vm.$objIdArr.push(fragmentId);
 
                 //初始化值
                 if(!initData) return;
@@ -477,7 +482,10 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         var fieldObj = vm.getCmpMgr('field_'+index);
                         var operObj = vm.getCmpMgr('oper_'+index);
                         var valueObj = vm.getCmpMgr('value_'+index);
-
+                        //校验一下
+                        if(!fieldObj.isValid() || !operObj.isValid() || !valueObj.isValid()) {
+                            return;
+                        }
                         var item = {};
                         //计算show属性
                         var bindField = fieldObj.getValue();
@@ -616,6 +624,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 opts.$fieldSelectData = [];
                 for(var i=0; i<opts.controls.length; i++) {
                     var fieldModel = opts.controls[i];
+                    if(fieldModel.hidden) {
+                        continue;
+                    }
                     if(undefined == fieldModel.quickSearch) {
                         if(quickType.contains(fieldModel.$xtype)) {
                             fieldModel.quickSearch = true;
@@ -635,7 +646,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     $id: 'fieldSelectDs',
                     data: opts.$fieldSelectData
                 });
-
+                this.options.$objIdArr.push("fieldSelectDs");
             }
         },
         _getCompVM: function() {
@@ -653,6 +664,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         syncUrl: this.options.$syncUrl,
                         model: this.options.$dsModel
                     });
+                    this.options.$objIdArr.push(this.dataSet.getId());
                 }
                 return this.dataSet;
             }
@@ -685,6 +697,17 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
         },
         _valueChange:function(){//值改变时校验
             this.validate();
+        },
+        destroy: function() {
+            //销毁组件所创建的DataSet
+            for(var i=0; i<this.options.$objIdArr.length; i++) {
+                var id = this.options.$objIdArr[i];
+                var obj = Page.manager.components[id];
+                if(obj) {
+                    obj.destroy();
+                }
+            }
+            this.parent();
         }
     });
     CustomSearcherWidget.xtype = xtype;

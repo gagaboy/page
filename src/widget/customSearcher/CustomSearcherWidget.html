@@ -1,7 +1,7 @@
 <div   ms-attr-name="CustomSearcherWidget_{{vid}}" class="form-group" style=" margin-bottom: 0px;">
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
         <div ms-class="div-focus: focused" class="searcherContainer" ms-click="searcherFocus(vid, this)">
-            <div ms-click="sendSearch(vid, $event)" class="amp-search-icon"><i class="fa fa-search"></i></div>
+            <div ms-click="sendSearch(vid, $event)" class="page-search-icon"><i class="fa fa-search"></i></div>
 
             <ul class="chosen-choices itemContainer">
                 <!--视图查询项-->
@@ -50,11 +50,11 @@
                     <input type="text" ms-duplex="searchValue" ms-attr-readonly="customSearchArr.length>0" autocomplete="off" tabindex="4" ms-css-width="inputWidth" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
                 </li>
             </ul>
-            <div ms-click="toggleViewPanel(vid, $event)" class="amp-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'"></i></div>
+            <div ms-click="toggleViewPanel(vid, $event)" class="page-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'"></i></div>
         </div>
 
         <!--快速查询面板区域-->
-        <div class="amp-seach-mh animated fadeIn" ms-visible="showPanel=='quickPanel'" style="top: 100%;">
+        <div class="page-seach-mh animated fadeIn" ms-visible="showPanel=='quickPanel'" style="top: 100%;">
             <ul ms-each-el="controls">
                 <li ms-if="el.quickSearch" ms-click="selectQuickItem(vid, el, $event)">
                     <span>搜索</span>&nbsp;
@@ -75,9 +75,9 @@
             </div>
         </div>
         <!--视图查询面板区域-->
-        <div ms-if="showPanel=='viewPanel'"class="amp-seach-jx animated fadeIn" style="display: block;">
+        <div ms-if="showPanel=='viewPanel'"class="page-seach-jx animated fadeIn" style="display: block;">
             <!--查询方案区域-->
-            <div class="jx-title"><a href="#"><i class="fa fa-check-circle"></i> 查询方案</a></div>
+            <div class="view-title"><a href="#"><i class="fa fa-check-circle"></i> 查询方案</a></div>
             <ul style="list-style-type:none; padding: 0px">
                 <li ms-repeat-item="viewsArr" class="oe_searchview_custom_private" ms-class-1="oe_selected: viewSelectedIndex==$index"
                     ms-click="selectView(vid, item, $index, $event)">
@@ -107,15 +107,15 @@
                                 <div class="row" ms-attr-id="fragment" style=" margin-top: 5px;"></div>
                             </div>
                             <div class="col-md-1" style=" margin-top: 15px;">
-                                <span ms-click="removeCustomFilter(vid, fragment, $index, $event)" class="amp-option-minus">
+                                <span ms-click="removeCustomFilter(vid, fragment, $index, $event)" class="page-option-minus">
                                     <i class="fa fa-minus"></i>
                                 </span>
                             </div>
                         </div>
-                        <span ms-click="addCustomFilter(vid)" class="amp-search-addoptions">
+                        <span ms-click="addCustomFilter(vid)" class="page-search-addoptions">
                             <i class="fa fa-plus"></i>&nbsp;添加条件
                         </span>
-                        <a ms-click="addCustomSearch(vid, $event)" class="btn btn-primary btn-w80-h30" style="display: block;" type="button">查询</a>
+                        <a ms-click="addCustomSearch(vid, $event)" class="btn btn-primary page-search-btn" style="display: block;" type="button">查询</a>
                     </div>
 
                     <div class="ibox float-e-margins" style="margin-bottom: 5px;">

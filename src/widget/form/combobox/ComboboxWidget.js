@@ -21,8 +21,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
             model: "normal",   //grid | tree
             data: [],
-            valueField: "value",
-            textField: "display",
+            $valueField: "value",
+            $textField: "display",
             $pageSize: 10,
             $split: ",",
             $firstLoad: true,
@@ -73,14 +73,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         var cmpMgr = vm.getCmpMgr();
                         if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
                             var el = vm.selectedItems[vm.selectedItems.length-1];
-                            var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr);
+                            var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                             if(res == false) {
                                 return;
                             }
                         }
                         var el = vm.selectedItems.pop();
                         if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                            var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr);
+                            var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                             if(res == false) {
                                 return;
                             }
@@ -138,7 +138,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 for(var i=0; i<optionData.length; i++) {
                     optionData[i].checked = false;
                     //匹配搜索值
-                    var text = optionData[i][vm.textField];
+                    var text = optionData[i][vm.$textField];
                     var textArr = [];
                     var searchValue = vm.searchValue;
                     if(!vm.multi && vm.searchable) {
@@ -170,7 +170,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
 
                     for(var j=0; j<vm.selectedItems.length; j++) {
-                        if(vm.selectedItems[j][vm.valueField] == optionData[i][vm.valueField]) {
+                        if(vm.selectedItems[j][vm.$valueField] == optionData[i][vm.$valueField]) {
                             optionData[i].checked = true;
                             break;
                         }
@@ -182,7 +182,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
-                    var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr, el.$model);
+                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
                     if(res == false) {
                         return;
                     }
@@ -193,7 +193,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.focused = false;
                 }
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr, el.$model);
+                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
                     if(res == false) {
                         return;
                     }
@@ -203,8 +203,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             changeSelectedItems: function(el, addFlag) {
                 var vm = this;
                 var item = {};
-                item[vm.valueField] = el[vm.valueField];
-                item[vm.textField] = el[vm.textField];
+                item[vm.$valueField] = el[vm.$valueField];
+                item[vm.$textField] = el[vm.$textField];
                 //增加选中项
                 if(addFlag) {
                     if(!vm.multi) {
@@ -216,7 +216,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 //删除选中项
                 else {
                     for(var i=0; i<vm.selectedItems.length; i++) {
-                        if(vm.selectedItems[i][vm.valueField] ==  item[vm.valueField] ) {
+                        if(vm.selectedItems[i][vm.$valueField] ==  item[vm.$valueField] ) {
                             vm.selectedItems.removeAt(i);
                             break;
                         }
@@ -230,14 +230,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
 
-                    var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr);
+                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
                 }
                 vm.selectedItems.removeAt(index);
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr);
+                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
@@ -252,7 +252,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var cmpMgr = vm.getCmpMgr();
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
 
-                    var res = vm.beforeSelectEvent(el[vm.valueField], el[vm.textField], cmpMgr);
+                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
@@ -261,7 +261,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 vm.display = "";
                 vm.selectedItems.clear();
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
-                    var res = vm.selectedEvent(el[vm.valueField], el[vm.textField], cmpMgr);
+                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
@@ -281,13 +281,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     return;
                 }
                 if (opts.value && opts.display) {
-                    var splitChar = opts.$split || this.options.$split;
+                    var splitChar = opts.split || this.options.$split;
                     var valueArr = opts.value.split(splitChar);
                     var displayArr = opts.display.split(splitChar);
                     for(var i=0; i<valueArr.length; i++) {
                         var item = {};
-                        item[opts.valueField || this.options.valueField] = valueArr[i];
-                        item[opts.textField || this.options.textField] = displayArr[i];
+                        item[opts.valueField || this.options.$valueField] = valueArr[i];
+                        item[opts.textField || this.options.$textField] = displayArr[i];
                         this.options.selectedItems.push(item);
                     }
                 }
@@ -324,8 +324,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var display = "";
                 for(var i=0; i<vm.selectedItems.length; i++) {
                     var item = vm.selectedItems[i];
-                    value += item[vm.valueField];
-                    display += item[vm.textField];
+                    value += item[vm.$valueField];
+                    display += item[vm.$textField];
                     if(i != vm.selectedItems.length-1) {
                         value += vm.$split;
                         display += vm.$split;
@@ -503,8 +503,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var display = "";
                 for(var i=0; i<vm.selectedItems.length; i++) {
                     var item = vm.selectedItems[i];
-                    value += item[vm.valueField];
-                    display += item[vm.textField];
+                    value += item[vm.$valueField];
+                    display += item[vm.$textField];
                     if(i != vm.selectedItems.length-1) {
                         value += vm.$split;
                         display += vm.$split;
@@ -542,8 +542,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var array = [];
                 for(var i=0; i<valueArr.length; i++) {
                     var item = {};
-                    item[this.options.valueField] = valueArr[i];
-                    item[this.options.textField] = displayArr[i];
+                    item[this.options.$valueField] = valueArr[i];
+                    item[this.options.$textField] = displayArr[i];
                     array.push(item);
                 }
                 vm.selectedItems = array;
@@ -585,6 +585,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _valueChange:function(){//值改变时校验
             this.validate();
+        },
+        destroy: function() {
+            if(this.options.pagination) {
+                this.options.pagination.destroy();
+            }
+            if(this.dataSet) {
+                this.dataSet.destroy();
+            }
+            this.parent();
         }
     });
     ComboBoxWidget.xtype = xtype;
