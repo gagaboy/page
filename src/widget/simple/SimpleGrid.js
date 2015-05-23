@@ -29,9 +29,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //操作列
             opColumns:[],//{title:"操作",width:'10%',position:2,template:''}//position支持值为front、end和具体数字
             //行编辑
-            canEdit:true,//是否可编辑
+            canEdit:false,//是否可编辑
             dbClickToEditRow:false,//双击编辑行
             clickToEditField:true,//单击编辑事件
+            editMultiRow:false,//同时编辑多行
             editRowFunc:null,//编辑行事件
             editFieldFunc:null,//编辑单属性事件
             //事件
@@ -41,6 +42,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
 
             //中间参数，不可初始化
             opColumnMap:{},//操作列
+            editCompMap:{},
             allColumns:[],
             activedRow:null,//激活的行
             editComp:null,//行编辑对象
@@ -91,12 +93,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var vm = avalon.vmodels[vid];
                 if(vm.editRowFunc){
                     vm.editRowFunc(vm,row,rowDom);
+                }else{
+                    var grid = Page.manager.components[vid];
+                    grid._defaultEditRow(vm,row,rowDom);
                 }
             },
             editField:function(vid,row,fieldName,fieldXtype,tdDom){
                 var vm = avalon.vmodels[vid];
                 if(vm.editFieldFunc){
                     vm.editFieldFunc(vm,row,fieldName,fieldXtype,tdDom);
+                }else{
+                    var grid = Page.manager.components[vid];
+                    grid._defaultEditField(vm,row,fieldName,fieldXtype,tdDom);
                 }
             },
             deleteRow: function (vid,row) {
@@ -129,7 +137,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             this.parent();
             if(!this.getAttr("data")||this.getAttr("data").length<1){
                 this.reloadData();
+            }else{
+                this._renderEditComp();
             }
+
             var that = this;
             this.pagination = Page.create("pagination", {
                 $parentId: "pager_" + this.getAttr("vid"),
@@ -349,8 +360,68 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         getTemplate: function () {
             return template;
         },
+        _renderEditComp:function(){
+            if(this.getAttr("canEdit")){
+                var datas = this.getAttr("data");
+                var cols = this.getAttr("columns");
+                var editCompMap = this.getAttr("editCompMap");
+                for (var i = 0; i < datas.length; i++) {
+                    if(datas[i]&&datas[i].uuid){
+                        var data = datas[i];
+                        var rowEditComps = [];
+                        for(var t=0;t<cols.length;t++){
+                            var col = cols[t];
+                            if(col.dataField&&col.xtype){
+                                var fieldName = col.dataField;
+                                var xtype = col.xtype || "input";
+                                if(!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
+                                    var editField = Page.create(xtype, {
+                                        $parentId: 'con_'+fieldName+"_"+data.uuid,
+                                        $id:'comp_'+fieldName+"_"+data.uuid,
+                                        parentTpl:"inline",
+                                        value: data[fieldName],
+                                        showLabel: false,
+                                        bindField:fieldName,
+                                        disabledEdit:col.disabledEdit,
+                                        validationRules:col.validationRules,
+                                        showErrorMessage:true,
+                                        valueChange:function(){
+                                            data[fieldName] = editField.getValue();
+                                        },
+                                        status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
+                                    });
+                                    rowEditComps.push(editField);
+                                    editField.render();
+                                }
+                            }
+                        }
+                        editCompMap[data.uuid] = rowEditComps;
+                    }
+                }
+            }
+        },
         _getDataSet: function() {
             return Page.manager.components[this.getAttr("dataSetId")];
+        },
+        _defaultEditRow:function(vm,row,rowDom){
+            var toStatus = (row.state&&row.state=="view")?"edit":"readonly";
+            var editCompMap = this.getAttr("editCompMap");
+            if(editCompMap&&editCompMap[row.uuid]&&editCompMap[row.uuid].length>0){
+                var editComps = editCompMap[row.uuid];
+                for(var t=0;t<editComps.length;t++){
+                    if(editComps[t]&&!editComps[t].getAttr("disabledEdit")){
+                       editComps[t].switchStatus(toStatus);
+                    }
+                }
+            }
+            if(row.state=="view"){
+                row.state = "edit";
+            }else{
+                row.state = "view";
+            }
+        },
+        _defaultEditField:function(){
+
         },
         _updateAllCheckedByDatas:function(){
             var datas = this.getAttr("data");
@@ -380,6 +451,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _dataChange:function(){
             //this._updateAllCheckedByDatas();
+            this._renderEditComp();
         },
         _formatOptions:function(opts){
             var d = opts.data||[];
@@ -389,6 +461,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if (d[i]) {
                         d[i].checked = true;
                         d[i].state = d[i].state?d[i].state:'view';
+                        if(!d[i].uuid){
+                            d[i].uuid = String.uniqueID();
+                        }
                     }
                 }
             }else{
@@ -396,6 +471,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if (d[i].checked == undefined) {
                         d[i].checked = false;//未设置，默认不选中
                         d[i].state = d[i].state?d[i].state:'view';
+                        if(!d[i].uuid){
+                            d[i].uuid = String.uniqueID();
+                        }
                     }
                 }
             }
@@ -480,6 +558,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if (datas[i]) {
                             datas[i].checked = true;
                             datas[i].state = datas[i].state?datas[i].state:'view';
+                            if(!datas[i].uuid){
+                                datas[i].uuid = String.uniqueID();
+                            }
                         }
                     }
                 }else{
@@ -487,6 +568,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if(datas[i]){
                             datas[i].checked = (datas[i].checked==true||datas[i].checked=="true")?true:false;//未设置，默认不选中
                             datas[i].state = datas[i].state?datas[i].state:'view';
+                            if(!datas[i].uuid){
+                                datas[i].uuid = String.uniqueID();
+                            }
                         }
                     }
                 }
@@ -502,6 +586,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     data.checked = false;//未设置，默认不选中
                 }
                 data.state = data.state?data.state:'view';
+                if(!data.uuid){
+                    data.uuid = String.uniqueID();
+                }
             }
             return data;
         },
