@@ -36,6 +36,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editRowFunc:null,//编辑行事件
             editFieldFunc:null,//编辑单属性事件
             //事件
+            beforeSetData:null,
             beforeCheckRow:null,
             afterCheckRow:null,
             onChangeOrder:null,
@@ -194,7 +195,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //发送获取数据请求
             var that = this;
             Promise.all([ds.fetch()]).then(function() {
-                that.setAttr("data",that._formatDatas(ds.getValue()));
+                var newDatas = ds.getValue();
+                if(that.getAttr("beforeSetData")){
+                    that.getAttr("beforeSetData")(newDatas);
+                }
+                that.setAttr("data",that._formatDatas(newDatas));
                 that.setAttr("totalNum",ds.getTotalSize());
                 that.setAttr("pageSize",ds.getPageSize());
                 that.setAttr("pageIndex",ds.getPageNo());
@@ -405,7 +410,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _defaultEditRow:function(vm,row,rowDom){
             var toStatus = (row.state&&row.state=="view")?"edit":"readonly";
-            var editCompMap = this.getAttr("editCompMap");
+            var editCompMap = this.getAttr("editCompMap").$model;
             if(editCompMap&&editCompMap[row.uuid]&&editCompMap[row.uuid].length>0){
                 var editComps = editCompMap[row.uuid];
                 for(var t=0;t<editComps.length;t++){

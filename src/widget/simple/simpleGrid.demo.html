@@ -108,9 +108,18 @@
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
-            canEdit:true,
+            canEdit:false,
             dbClickToEditRow:true,
             clickToEditField:false,
+            beforeSetData:function(datas){
+                if(datas&&datas.length>0){
+                    for(var s=0;s<datas.length;s++){
+                        if(datas[s]){
+                            datas[s].name = "姓名被篡改";
+                        }
+                    }
+                }
+            },
             //自定义函数
             editMyRow:function(vid,rowData,rowObj) {
                 var vm = avalon.vmodels[vid];
