@@ -36,7 +36,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editRowFunc:null,//编辑行事件
             editFieldFunc:null,//编辑单属性事件
             //事件
-            beforeSetData:null,
+            beforeSetData:null,//设置数据前
+            afterSetData:null,//设置数据后
             beforeCheckRow:null,
             afterCheckRow:null,
             onChangeOrder:null,
@@ -456,6 +457,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _dataChange:function(){
             //this._updateAllCheckedByDatas();
+            if(this.getAttr("afterSetData")){
+                this.getAttr("afterSetData")(this.getAttr("data").$model);
+            }
             this._renderEditComp();
         },
         _formatOptions:function(opts){

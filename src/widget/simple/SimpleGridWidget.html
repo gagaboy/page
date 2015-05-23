@@ -33,6 +33,9 @@
                      ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                 </div>
             </td>
+            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']">
+                {{opcolumn.template|html}}
+            </td>
             <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype">
                 <div ms-if="col.isOpColumn">
                     {{col.template|html}}
