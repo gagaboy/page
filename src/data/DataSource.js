@@ -69,10 +69,13 @@ define(["./DataConstant"], function (Constant) {
             });
 
         },
-        sync: function (filterNotModify) {
+        sync: function (filterNotModify, uploadString) {
             var $this = this;
             return new Promise(function (resolve) {
                 var params = $this.getSyncParam(filterNotModify);
+                if(uploadString) {
+                    params.data = JSON.stringify(params.data);
+                }
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
                     //TODO reset $status$ 返回ID ??
                     $this._initData(true);

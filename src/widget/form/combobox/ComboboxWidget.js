@@ -525,7 +525,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             vm.removeAll(vm.vid);
         },
         reloadSelectData: function() {
-            this._renderSelectData();
+            this._renderPanel();
         },
         //设置值，参数为{value|display}
         setValue: function(value) {

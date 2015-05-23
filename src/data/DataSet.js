@@ -215,7 +215,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             });
             this.options._dataMap[rid] = dv;
             this.options._dataArray.push(dv);
-            this.fireEvent("afterAddRecord", [r]);
+            this.fireEvent("afterAddRecord", [record]);
             this._valueChanged();
             //} else {
             //    window.console.log("纪录没有指定ID.");
