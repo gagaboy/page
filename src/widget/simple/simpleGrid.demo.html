@@ -79,7 +79,7 @@
                 {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
                     sortDisabled:true,xtype:"combobox",isOpColumn:true,
-                    template:"<div style='color:#F0F;'><B>{{rowdata.sexDisplay}}</B></div>",
+                    template:"<a style='color:#F0F;' ms-click='showSex(rowdata.sexDisplay)'><B>{{rowdata.sexDisplay}}</B></a>",
                     editContent:"<div id='__currentEditField_sex'></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
@@ -165,6 +165,9 @@
         simpleGrid.render();
 
     });
+    function showSex(sexDisplay){
+        alert("hi,"+sexDisplay);
+    }
     function addRow(){
         simpleGrid.addRow({"name":"南农保安","sex":0,"sexDisplay":"未知"},1);
     }
