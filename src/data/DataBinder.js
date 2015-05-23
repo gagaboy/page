@@ -24,10 +24,10 @@ define([], function () {
             var widget = Page.manager.components[this.options.widgetId];
             var $this = this;
             var v = dataValue.getValue();
-            if($this.options.fieldId) {
+            if ($this.options.fieldId) {
                 v = v[$this.options.fieldId];
             }
-            widget.setValue(v);
+            widget.setValue(v == undefined ? "": v);
             this.widgetValueChangeCallback = function (value) {
                 var fieldId = $this.options.fieldId;
                 var val = {};
@@ -40,7 +40,11 @@ define([], function () {
             }
             this.dataValueChangeCallback = function (record) {
                 var fieldId = $this.options.fieldId;
-                widget.setValue(record[fieldId]);
+                var v = record[fieldId];
+                if(!v) {
+                    v = "";
+                }
+                widget.setValue(v, true);
             }
             widget.addEvent("valueChange", this.widgetValueChangeCallback);
             dataValue.addEvent("afterUpdateRecord", this.dataValueChangeCallback);

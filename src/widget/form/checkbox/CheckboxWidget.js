@@ -34,11 +34,11 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         getTemplate: function () {
             return template;
         },
-        setValue: function (valueArr) {
+        setValue: function (valueArr, notFireFormValueChangeEvent) {
             //重写
             if(valueArr&&this.getAttr("items")){
                 var items = this.getAttr("items");
-                this.setAttr("value",valueArr);
+                this.setAttr("value",valueArr, notFireFormValueChangeEvent);
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     items[i].checked = false;
                 }

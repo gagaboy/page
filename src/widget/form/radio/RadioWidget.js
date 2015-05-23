@@ -35,11 +35,11 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
         getTemplate: function () {
             return template;
         },
-        setValue: function (value) {
+        setValue: function (value, notFireFormValueChangeEvent) {
             //重写
             if(value&&this.getAttr("items")){
                 var items = this.getAttr("items");
-                this.setAttr("value",value);
+                this.setAttr("value",value, notFireFormValueChangeEvent);
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     if(items[i]&&value==items[i].value){
                         items[i].checked = true;

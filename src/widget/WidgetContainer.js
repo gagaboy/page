@@ -74,6 +74,9 @@ define(['./Base'], function (Base) {
         getDataSource: function (id) {
             return this.DS[id];
         },
+        getDataSources: function () {
+            return this.DS;
+        },
 
         destroy: function () {
             //删除DS，DB
