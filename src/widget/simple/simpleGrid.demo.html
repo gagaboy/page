@@ -78,8 +78,9 @@
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
                 {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
-                    sortDisabled:true,xtype:"combobox",isOpColumn:true,template:"<div style='color:#F0F;'><B>{{rowdata.sexDisplay}}</B></div>",
-                    editContent:"<div id='__currentEditField_sex'></div>"},//显示Display字段
+                    sortDisabled:true,xtype:"combobox",isOpColumn:true,
+                    template:"<div style='color:#F0F;'><B>{{rowdata.sexDisplay}}</B></div>",
+                    editContent:"<div id='__currentEditField_sex'></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",editContent:"<div id='__currentEditField_isParty'></div>"},
@@ -110,73 +111,6 @@
             canEdit:true,
             dbClickToEditRow:true,
             clickToEditField:false,
-            editRowFunc:function(vm,row,rowDom){
-                if(!row.state||row.state=="view"){
-                    //检查是否有未完成的编辑
-                    var datas = vm.data;
-                    if(datas&&datas.length>0){
-                        for(var t=0;t<datas.length;t++){
-                            var daRow = datas[t];
-                            if(daRow&&daRow.state=='edit'){
-                                if(false){
-                                    return false;//校验失败直接返回，提示修改
-                                }
-                                if(vm.editComps&&vm.editComps.length>0) {
-                                    for(var s=0;s<vm.editComps.length;s++){
-                                        if(vm.editComps[s]&&vm.editComps[s].getAttr){
-                                            daRow[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
-                                            //vm.editComps[s].destroy();
-                                        }
-                                    }
-                                }
-                                vm.editComps = [];
-                                daRow.state = "view";
-                            }
-                        }
-                    }
-                    myEditPro(vm,row,rowDom);
-                }else{
-                    if(vm.editComps&&vm.editComps.length>0) {
-                        for(var s=0;s<vm.editComps.length;s++){
-                            if(vm.editComps[s]&&vm.editComps[s].getAttr){
-                                row[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
-                                //vm.editComps[s].destroy();
-                            }
-                        }
-                    }
-                    vm.editComps = [];
-                    row.state = "view";
-                }
-
-            },//编辑行事件
-            editFieldFunc:function(vm,row,fieldName,fieldXtype,tdDom){
-                var ytdDom = tdDom.innerHTML;
-                tdDom.innerHTML = "<div id='__currentEditField'></div>";
-                fieldXtype = fieldXtype?fieldXtype:"input";
-                //根据类型判断渲染何种组件,fieldXtype
-                var editField = Page.create(fieldXtype, {
-                    $parentId: '__currentEditField',
-                    value: row[fieldName],
-                    showLabel: false,
-                    valueChange:function(){
-                        row[fieldName] = editField.getValue();
-                    }
-                });
-                editField.render();
-                //自动聚焦
-                editField.focus();
-                //回车时变为查看状态 * 失去焦点时变为查看状态，有下拉时出现异常，不建议
-                if(editField._getInputElement()){
-                    editField._getInputElement().bind('keyup', function(event) {
-                        if (event.keyCode == "13") {
-                            //回车执行查询
-                            tdDom.innerHTML  = "<div>"+editField.getValue()+"</div>";
-                            row[fieldName] = editField.getValue();
-                            editField.destroy();
-                        }
-                    });
-                }
-            },
             //自定义函数
             editMyRow:function(vid,rowData,rowObj) {
                 var vm = avalon.vmodels[vid];
