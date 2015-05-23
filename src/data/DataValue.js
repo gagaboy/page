@@ -82,6 +82,13 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 }
             });
             this.dataStack = [];
+            if(this.options.data[this.options.model.status] == this.options.model.add){
+                var obj = {}
+                Object.merge(obj, this.options.data);
+                delete obj[this.options.model.status];
+                this.dataStack.push(obj);
+            }
+
         },
 
         getChildDS: function (alias) {
