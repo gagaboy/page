@@ -44,7 +44,7 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
         getValue:function(){
             return this.sliderObj.value();
         },
-        setValue:function(value){
+        setValue:function(value, notFireFormValueChangeEvent){
             this.sliderObj.value(value);
             this.setAttr("valueChanged", true);
         },

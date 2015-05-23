@@ -528,9 +528,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             this._renderPanel();
         },
         //设置值，参数为{value|display}
-        setValue: function(value) {
+        setValue: function(value , notFireFormValueChangeEvent) {
             if(!value) return;
-            this.parent(value);
+            this.parent(value, notFireFormValueChangeEvent);
             //修改选中项
             var vm = this._getCompVM();
 //            if(vm.multi || !vm.searchable) {

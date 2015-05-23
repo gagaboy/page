@@ -96,14 +96,14 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
         getDisplay: function () {
             return this.getAttr("display");
         },
-        setValue: function (value) {
+        setValue: function (value, notFireFormValueChangeEvent) {
             if (typeOf(value) == 'string' || typeOf(value) == 'number') {
-                this.setAttr("value", value);
+                this.setAttr("value", value, notFireFormValueChangeEvent);
                 this.setAttr("display", value);
                 this.setAttr("valueChanged", true);
             } else if (typeOf(value) == 'object') {
                 if (value['value'] != undefined) {
-                    this.setAttr("value", value['value']);
+                    this.setAttr("value", value['value'], notFireFormValueChangeEvent);
                     if (value['display']) {
                         this.setAttr("display", value['display']);
                     } else {
@@ -114,6 +114,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             } else {
                 window.console.log('set value error,unknown structure ...' + value);
             }
+
         },
         getInitValue: function () {
             return this.getAttr("initValue");

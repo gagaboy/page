@@ -50,6 +50,11 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
             return this._widgetContainer.getDataSource(id);
         },
 
+        getDataSources: function () {
+            return this._widgetContainer.getDataSources();
+        },
+
+
         destroy: function () {
             this.parent();
             this._widgetContainer.destroy();

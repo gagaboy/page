@@ -91,6 +91,11 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
 
         },
 
+        _otherFetchParam: function () {
+            var page = {};
+            return page;
+        },
+
         getChildDS: function (alias) {
             return this.childDS[alias];
         },

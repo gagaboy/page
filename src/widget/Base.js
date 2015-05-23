@@ -65,7 +65,7 @@ define([], function () {
         getAttr: function (key) {
             return this.vmodel[key];
         },
-        setAttr: function (key, value) {
+        setAttr: function (key, value, notFireEvent) {
             var oldValue = this.vmodel[key];
             this.vmodel[key] = value;
             var privateMethod2Invoke = '_' + key + "Change";
@@ -73,7 +73,11 @@ define([], function () {
                 this[privateMethod2Invoke](value, oldValue, this.vmodel.model);
                 // old value, new value, vm.model
             }
-            this.fireEvent(key + "Change", [value, oldValue, this.vmodel.model]);
+            if(notFireEvent)  {
+
+            }else {
+                this.fireEvent(key + "Change", [value, oldValue, this.vmodel.model]);
+            }
             return this;
         },
         setAttrs: function (opts) {
