@@ -90,7 +90,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                     var d = this.options.data[i];
                     var dv = Page.create("dataValue", {
                         data: d,
-                        model :$this.options.model
+                        model: $this.options.model
                     });
                     this.options._dataMap[d[this.options.model.id]] = dv;
                     this.options._dataArray.push(dv);
@@ -113,13 +113,13 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             var array = this.options._dataArray;
             for (var i = 0; i < array.length; i++) {
                 var value = array[i];
-                if(filterNotModify) {
-                    if(value.options.data[this.options.model.status] == this.options.model.notModify) {
+                if (filterNotModify) {
+                    if (value.options.data[this.options.model.status] == this.options.model.notModify) {
 
-                    }else {
+                    } else {
                         o.push(value.getUploadValue(filterNotModify));
                     }
-                }else {
+                } else {
                     o.push(value.getUploadValue(filterNotModify));
                 }
             }
@@ -203,18 +203,23 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
                 return;
             }
             var rid = record[this.options.model.id];
-            if (rid) {
-                this.fireEvent("beforeAddRecord", [r]);
-                var dv = Page.create("dataValue", {
-                    data: record
-                });
-                this.options._dataMap[rid] = dv;
-                this.options._dataArray.push(dv);
-                this.fireEvent("afterAddRecord", [r]);
-                this._valueChanged();
-            } else {
-                window.console.log("纪录没有指定ID.");
+            //if (rid) {
+            this.fireEvent("beforeAddRecord", [record]);
+            if(record[this.options.model.status]) {
+
+            }else {
+                record[this.options.model.status] = this.options.model.add;
             }
+            var dv = Page.create("dataValue", {
+                data: record
+            });
+            this.options._dataMap[rid] = dv;
+            this.options._dataArray.push(dv);
+            this.fireEvent("afterAddRecord", [r]);
+            this._valueChanged();
+            //} else {
+            //    window.console.log("纪录没有指定ID.");
+            //}
         },
         updateRecord: function (record, notFireEvent) {
             var vid = this.options.model.id;
