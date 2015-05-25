@@ -8,6 +8,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         Extends: Base,
         options: {
             $xtype: xtype,
+            tableClass:"table table-striped",
             columns: [],/**
                          * 列信息,每列可配置属性如下：
                          *｛title:"性别",
@@ -18,7 +19,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                          * sortDisabled:true,
                          * xtype:"combobox",
                          * isOpColumn:true,//isOpColumn，自定义显示，
-                         * template:""} //template：自定义显示的内容
+                         * template:""} //template：自定义显示的内容（html，可以是avalon片段），内容中可通过avalon访问grid信息，如，rowdata，行数据，col，列模型
                          */
             data: [],    //静态数据
             dataSetId: null,    //数据集ID，设置了dataSetId则data无效

@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    * 双击行进行编辑
+                    * 双击行进行编辑，正在改进中的功能，请不要使用
                 </div>
 
                 <div class="row" style="" width="200px">
@@ -79,12 +79,11 @@
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
                     sortDisabled:true,xtype:"combobox",isOpColumn:true,
-                    template:"<a style='color:#F0F;' ms-click='showSex(rowdata.sexDisplay)'><B>{{rowdata.sexDisplay}}</B></a>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
+                    template:"<div style='color:#F0F;' ms-on-onload='mm(rowdata.sexDisplay,this)' ms-click='showSex(rowdata.sexDisplay)'><B>{{rowdata.sexDisplay}}</B></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",editContent:"<div id='__currentEditField_isParty'></div>"},
                 {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>",
-
                     validationRules: {
                         required:true,//options中为false时，此处可重开启校验
                         length: {
@@ -173,6 +172,10 @@
     });
     function showSex(sexDisplay){
         alert("hi,"+sexDisplay);
+    }
+    function mm(sexDis,dom){
+        //alert("sexDis:"+sexDis);
+        dom.innerHTML = "~~";
     }
     function addRow(){
         simpleGrid.addRow({"name":"南农保安","sex":0,"sexDisplay":"未知"},1);
