@@ -17,6 +17,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             allChecked: false,//设置为true，则默认全部选中
             //分页信息
             usePager:true,
+            pageIndex:1,
             pageSize:15,
             totalNum:0,
             totalPage:1,
@@ -137,36 +138,39 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         render:function(){
             this.parent();
+            var that = this;
+            if(this.getAttr("usePager")){
+                this.pagination = Page.create("pagination", {
+                    $parentId: "pager_" + this.getAttr("vid"),
+                    totalNum: this.getAttr("totalNum"),
+                    pageIndex:this.getAttr("pageIndex"),
+                    pageSize: this.getAttr("pageSize"),
+                    showPageIndexInput: this.getAttr("showPageIndexInput"),//显示跳转到某页输入框
+                    showPageSizeInput: this.getAttr("showPageSizeInput"),//显示每页条数输入框]
+                    showFirstPage: this.getAttr("showFirstPage"),//显示第一页按钮
+                    showLastPage: this.getAttr("showLastPage"),//显示最后一页按钮
+                    showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
+                    showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
+                    pageChangeEvent: function (pager) {
+                        that.reloadData()// 调用dataset接口进行查询
+                    }
+                });
+                this.pagination.render();
+            }
             if(!this.getAttr("data")||this.getAttr("data").length<1){
                 this.reloadData();
             }else{
                 this._renderEditComp();
             }
 
-            var that = this;
-            this.pagination = Page.create("pagination", {
-                $parentId: "pager_" + this.getAttr("vid"),
-                totalNum: this.getAttr("totalNum"),
-                pageSize: this.getAttr("pageSize"),
-                showPageIndexInput: this.getAttr("showPageIndexInput"),//显示跳转到某页输入框
-                showPageSizeInput: this.getAttr("showPageSizeInput"),//显示每页条数输入框]
-                showFirstPage: this.getAttr("showFirstPage"),//显示第一页按钮
-                showLastPage: this.getAttr("showLastPage"),//显示最后一页按钮
-                showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
-                showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
-                pageChangeEvent: function (pager) {
-                    that.reloadData()// 调用dataset接口进行查询
-                }
-            });
-            this.pagination.render();
         },
         reloadData:function(){
             var ds = this._getDataSet();
             if(!ds) return;
             //配置分页信息
             if(this.getAttr("usePager")){
-                ds.setAttr(Constant.pageNo,this.getAttr("pageIndex"));
-                ds.setAttr(Constant.pageSize,this.getAttr("pageSize"));
+                ds.setAttr(Constant.pageNo,this.pagination?this.pagination.getAttr("pageIndex"):this.getAttr("pageIndex"));
+                ds.setAttr(Constant.pageSize,this.pagination?this.pagination.getAttr("pageSize"):this.getAttr("pageSize"));
             }
             //配置查询条件
             var fetchParams = {};
@@ -201,9 +205,15 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     that.getAttr("beforeSetData")(newDatas);
                 }
                 that.setAttr("data",that._formatDatas(newDatas));
-                that.setAttr("totalNum",ds.getTotalSize());
-                that.setAttr("pageSize",ds.getPageSize());
-                that.setAttr("pageIndex",ds.getPageNo());
+                if(that.pagination){
+                    that.pagination.setAttr("totalNum",ds.getTotalSize());
+                    that.pagination.setAttr("pageSize",ds.getPageSize());
+                    //that.pagination.setAttr("pageIndex",ds.getPageNo());
+                }else{
+                    that.setAttr("totalNum",ds.getTotalSize());
+                    that.setAttr("pageSize",ds.getPageSize());
+                    that.setAttr("pageIndex",ds.getPageNo());
+                }
             });
         },
         /**
@@ -268,7 +278,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         }
                     }
                 }
-                this.setAttr("data",this._formArr(datas));
+                this._formArr(datas);
+                //this.setAttr("data",this._formArr(datas));
             }
             this._updateAllCheckedByDatas();
         },
@@ -324,9 +335,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         datas[i] = null;
                     }
                 }
-                this.setAttr("data",this._formArr(datas));
+                this._formArr(datas);
+                //this.setAttr("data",this._formArr(datas));
             }
-            this._updateAllCheckedByDatas();
+            //this._updateAllCheckedByDatas();
         },
         /**
          * 删除当前行
@@ -380,7 +392,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                             if(col.dataField&&col.xtype){
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
-                                if(!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
+                                if(!$("#con_"+fieldName+"_"+data.uuid)||!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
                                     var editField = Page.create(xtype, {
                                         $parentId: 'con_'+fieldName+"_"+data.uuid,
                                         $id:'comp_'+fieldName+"_"+data.uuid,
@@ -398,6 +410,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                     });
                                     rowEditComps.push(editField);
                                     editField.render();
+                                }else{
+                                    rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data.uuid]);
                                 }
                             }
                         }
@@ -439,21 +453,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }
             this.setAttr("allChecked",all);
-        },
-        _totalNumChange:function(totalNum){
-            if(totalNum!=this.pagination.getAttr("totalNum")) {
-                this.pagination.setAttr("totalNum", totalNum);
-            }
-        },
-        _pageSizeChange:function(pageSize){
-            if(pageSize!=this.pagination.getAttr("pageSize")){
-                this.pagination.setAttr("pageSize",pageSize);
-            }
-        },
-        _pageIndexChange:function(pageIndex){
-            if(pageIndex!=this.pagination.getAttr("pageIndex")){
-                this.pagination.setAttr("pageIndex",pageIndex);
-            }
         },
         _dataChange:function(){
             //this._updateAllCheckedByDatas();

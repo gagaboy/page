@@ -76,7 +76,6 @@
             editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
-                {title:"性别编码",dataField:"sex",width:"8%",orderType:"asc"},//编码
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
                     sortDisabled:true,xtype:"combobox",isOpColumn:true,
                     template:"<a style='color:#F0F;' ms-click='showSex(rowdata.sexDisplay)'><B>{{rowdata.sexDisplay}}</B></a>",
@@ -85,6 +84,8 @@
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",editContent:"<div id='__currentEditField_isParty'></div>"},
                 {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>",
+
+
                     validationRules: {
                         required:true,//options中为false时，此处可重开启校验
                         length: {
