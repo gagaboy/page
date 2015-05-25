@@ -1,5 +1,6 @@
 /**
  * Created by qianqianyi on 15/5/8.
+ *
  */
 define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css'], function (Base,Constant,template) {
     var xtype = "simpleGrid";
@@ -7,50 +8,65 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         Extends: Base,
         options: {
             $xtype: xtype,
-            columns: [],
-            data: [],
-            dataSetId: null,//数据集
-            //queryParams:null,//查询条件
-            idField:"wid",
-            canSort:true,//是否排序
-            showCheckbox:true,
-            checkboxWidth:"10%",
-            allChecked: false,//设置为true，则默认全部选中
+            columns: [],/**
+                         * 列信息,每列可配置属性如下：
+                         *｛title:"性别",
+                         * dataField:"sex",
+                         * width:"4%",
+                         * showDisplay:true,//showDisplay：显示Display字段，
+                         * disabledEdit:true,
+                         * sortDisabled:true,
+                         * xtype:"combobox",
+                         * isOpColumn:true,//isOpColumn，自定义显示，
+                         * template:""} //template：自定义显示的内容
+                         */
+            data: [],    //静态数据
+            dataSetId: null,    //数据集ID，设置了dataSetId则data无效
+            //queryParams:null, //默认查询条件，目前不需要，请设置到ds中
+            idField:"wid",  //主键属性
+            canSort:true,   //是否可排序
+            showCheckbox:true,  //是否显示复选框
+            checkboxWidth:"10%",    //复选框宽度
+            allChecked: false,  //设置为true，则默认全部选中
             //分页信息
-            usePager:true,
-            pageIndex:1,
-            pageSize:15,
-            totalNum:0,
-            totalPage:1,
-            showPageIndexInput: true,//显示跳转到某页输入框
-            showPageSizeInput: true,//显示每页条数输入框]
-            showFirstPage: true,//显示第一页按钮
-            showLastPage: true,//显示最后一页按钮
-            showPreviousAndNextPage: true,//显示上一页和下一页按钮
-            showPageDetail: true,//显示分页详情
+            usePager:true,  //是否分页
+            pageIndex:1,    //默认当前页
+            pageSize:15,    //默认每页条数
+            totalNum:0, //总数据条数
+            totalPage:1,    //总页数
+            showPageIndexInput: true,   //显示跳转到某页输入框
+            showPageSizeInput: true,    //显示每页条数输入框]
+            showFirstPage: true,    //显示第一页按钮
+            showLastPage: true, //显示最后一页按钮
+            showPreviousAndNextPage: true,  //显示上一页和下一页按钮
+            showPageDetail: true,   //显示分页详情
             //操作列
-            opColumns:[],//{title:"操作",width:'10%',position:2,template:''}//position支持值为front、end和具体数字
+            opColumns:[],/**操作列信息
+                         * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
+                         * position支持值为front、end和具体数字
+                         */
             //行编辑
-            canEdit:false,//是否可编辑
-            dbClickToEditRow:false,//双击编辑行
-            clickToEditField:true,//单击编辑事件
-            editMultiRow:false,//同时编辑多行
-            editRowFunc:null,//编辑行事件
-            editFieldFunc:null,//编辑单属性事件
+            canEdit:false,  //是否可编辑
+            dbClickToEditRow:false, //双击编辑行
+            clickToEditField:true,  //单击编辑事件
+            editMultiRow:false, //同时编辑多行
+            editRowFunc:null,   //编辑行事件
+            editFieldFunc:null, //编辑单属性事件
             //事件
-            beforeSetData:null,//设置数据前
-            afterSetData:null,//设置数据后
-            beforeCheckRow:null,
-            afterCheckRow:null,
-            beforeChangeOrder:null,
-            beforeChangePageNo:null,
+            beforeSetData:null, //设置数据前，参数：即将设置的数据datas
+            afterSetData:null,  //设置数据后，参数：已经设置的数据datas
+            beforeCheckRow:null,    //勾选行事件
+            afterCheckRow:null, //勾选行后事件
+            beforeChangeOrder:null, //改变排序前事件
+            beforeChangePageNo:null,    //改变页码前事件
+
             //中间参数，不可初始化
-            opColumnMap:{},//操作列
+            opColumnMap:{},
             editCompMap:{},
             allColumns:[],
-            activedRow:null,//激活的行
-            editComp:null,//行编辑对象
-            activedRowDom:null,//行编辑Dom
+            activedRow:null,    //激活的行
+            editComp:null,  //行编辑对象
+            activedRowDom:null, //行编辑Dom
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
                 vm.allChecked = !vm.allChecked;
