@@ -83,6 +83,22 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             $this.$element = e;
             $this.element = e[0];
 
+            if ("inline" == $this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))) {
+                var msgs = "";
+                if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
+                    msgs = this.getAttr("errorMessage");
+                }else if(this.getAttr("showMessage")){
+                    msgs = this.getAttr("message");
+                }
+                this.toolTip = Page.create("tooltip", {
+                    content: msgs,
+                    target:this.options.$parentId,
+                    position:'bottom',
+                    autoHide:false
+                });
+                this.toolTip.render();
+            }
+
             avalon.scan($this.getParentElement()[0]);
             $this.fireEvent("afterRender", [this.vmodel]);
             if (this["_afterRender"]) {
@@ -207,6 +223,17 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
         },
         isFormWidget: function () {
             return true;
+        },
+        _errorMessageChange:function(errmsg){
+            if(this.toolTip){
+                if(errmsg&&this.getAttr("showErrorMessage")){
+                    this.toolTip.setAttr("content",errmsg);
+                }else if(this.getAttr("showMessage")){
+                    this.toolTip.setAttr("content",this.getAttr("message"));
+                }else{
+                    this.toolTip.setAttr("content","");
+                }
+            }
         }
     });
     BaseFormWidget.xtype = xtype;
