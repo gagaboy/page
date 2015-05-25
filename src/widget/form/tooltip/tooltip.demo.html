@@ -71,8 +71,10 @@
 </script>
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
+    tip1 = null;
+    tip2 = null;
     require(["../../src/Bootstrap"], function () {
-        var tip1 = Page.create("tooltip", {
+        tip1 = Page.create("tooltip", {
            content: '从左边出提示信息内容<br />111111',
             $id: 'tip1',
             target:'btn1',
@@ -80,9 +82,9 @@
             autoHide:true
         });
         tip1.render();
-        var tip2 = Page.create("tooltip", {
+        tip2 = Page.create("tooltip", {
             //content: '从右边出提示信息内容',
-            $id: 'tip1',
+            $id: 'tip2',
             target:'btn2',
             position:'right',
             autoHide:false
