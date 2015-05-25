@@ -290,7 +290,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         /**
          * 根据主键选中某些行
          */
-        checkRowsByDataId: function (dataIds,checked) {
+            checkRowsByDataId: function (dataIds,checked) {
             if(checked==undefined){
                 checked = true;
             }
