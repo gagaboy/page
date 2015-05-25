@@ -404,6 +404,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             this.setAttr("data",this._formArr(datas));
             this._updateAllCheckedByDatas();
         },
+        /**
+         * 跳转到某页
+         */
+        goPage: function(pageNo) {
+            if(pageNo){
+                this.pagination.setAttr("pageIndex",pageNo);
+            }
+        },
         getTemplate: function () {
             return template;
         },

@@ -122,7 +122,7 @@ define([], function () {
 
         refresh: function () {
             this.element = null;
-            render();
+            this.render();
         },
 
         /*
@@ -158,7 +158,9 @@ define([], function () {
             this.setAttr("show", false);
         },
         destroy: function () {
-            this.$element.remove();
+            if(this.$element){
+                this.$element.remove();
+            }
             Page.manager.remove(this.getId());
             delete avalon.vmodels[this.getId()];
         }
