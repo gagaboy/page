@@ -70,6 +70,7 @@
             totalNum:200,
             showCheckbox:true,
             usePager:true,
+            canSort:true,
             allChecked:false,
             dataSetId: ds.getId(),
             showPageDetail:true,
@@ -84,7 +85,6 @@
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",editContent:"<div id='__currentEditField_isParty'></div>"},
                 {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>",
-
 
                     validationRules: {
                         required:true,//options中为false时，此处可重开启校验

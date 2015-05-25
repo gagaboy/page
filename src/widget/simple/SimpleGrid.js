@@ -12,6 +12,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             dataSetId: null,//数据集
             //queryParams:null,//查询条件
             idField:"wid",
+            canSort:true,//是否排序
             showCheckbox:true,
             checkboxWidth:"10%",
             allChecked: false,//设置为true，则默认全部选中
@@ -84,6 +85,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             },
             sortByCol:function(vid,col,orderType){
                 var vm = avalon.vmodels[vid];
+                var cols = vm.columns;
+                for(var s=0;s<cols.length;s++){
+                    if(cols[s]==col||cols[s].dataField==col.dataField){
+                        cols[s].orderType = orderType;
+                    }
+                }
                 col.orderType = orderType;
                 if(vm.onChangeOrder){
                     vm.onChangeOrder(vm,col,orderType);
@@ -196,7 +203,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         orders += columns[k].orderType=="desc"?"-"+columns[k].dataField:"+"+columns[k].dataField;
                     }
                 }
-                if(orders!={}){
+                if(orders!=""){
                     fetchParams.order = orders;
                 }
             }

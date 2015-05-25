@@ -12,10 +12,10 @@
                 {{opcolumn.title}}
             </th>
             <th ms-repeat-col="allColumns" ms-attr-width="col.width" style="text-align:center;">
-                <div ms-if="col.isOpColumn">
+                <div ms-if="col.isOpColumn||!canSort">
                     {{col.title}}
                 </div>
-                <div ms-if="!col.isOpColumn">
+                <div ms-if="!col.isOpColumn&&canSort">
                     <div ms-if="!col.sortDisabled&&col.orderType=='asc'" ms-click="sortByCol(vid,col,'desc')">{{col.title}} <div class="fa fa-caret-down"></div></div>
                     <div ms-if="!col.sortDisabled&&col.orderType=='desc'" ms-click="sortByCol(vid,col,'asc')">{{col.title}} <div class="fa fa-caret-up"></div></div>
                     <div ms-if="!col.sortDisabled&&!col.orderType" ms-click="sortByCol(vid,col,'asc')">{{col.title}} <div class="fa fa-unsorted"></div></div>
