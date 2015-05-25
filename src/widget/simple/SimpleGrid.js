@@ -42,8 +42,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             afterSetData:null,//设置数据后
             beforeCheckRow:null,
             afterCheckRow:null,
-            onChangeOrder:null,
-            onChangePageNo:null,
+            beforeChangeOrder:null,
+            beforeChangePageNo:null,
             //中间参数，不可初始化
             opColumnMap:{},//操作列
             editCompMap:{},
@@ -92,8 +92,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
                 col.orderType = orderType;
-                if(vm.onChangeOrder){
-                    vm.onChangeOrder(vm,col,orderType);
+                if(vm.beforeChangeOrder){
+                    vm.beforeChangeOrder(vm,col,orderType);
                 }else{
                     var grid = Page.manager.components[vid];
                     grid.reloadData();// 调用dataset接口进行查询
@@ -159,8 +159,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
                     showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
                     pageChangeEvent: function (pager) {
-                        if(that.getAttr("onChangePageNo")){
-                            that.getAttr("onChangePageNo")(pager,that);//参数为分页对象,grid对象
+                        if(that.getAttr("beforeChangePageNo")){
+                            that.getAttr("beforeChangePageNo")(pager,that);//参数为分页对象,grid对象
                         }
                         that.reloadData()// 调用dataset接口进行查询
                     }

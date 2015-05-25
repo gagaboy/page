@@ -112,6 +112,12 @@
             canEdit:false,
             dbClickToEditRow:true,
             clickToEditField:false,
+            beforeChangePageNo:function(pager,grid){
+                alert("要改页码了： "+pager.getAttr("pageIndex"));
+            },
+            beforeChangeOrder:function(){
+               alert("change order!");
+            },
             beforeSetData:function(datas){
                 if(datas&&datas.length>0){
                     for(var s=0;s<datas.length;s++){
