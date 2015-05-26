@@ -151,11 +151,22 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 else {
                     vm.panelTop = offset.top+obj.scrollTop()-panelHeight;
                 }
-                vm.panelLeft = offset.left-obj.scrollLeft();
+
                 panelObj.width(obj.outerWidth()-2);
+
+                //判断下拉面板打开之前是否有滚动条
+                var existScroll = false;
+                if(document.body.scrollHeight > document.body.clientHeight) {
+                    existScroll = true;
+                }
 
                 vm.focused = true;
                 vm.showPanel = !vm.showPanel;
+                vm.panelLeft = offset.left;
+                //有可能出现滚动条，宽度最后设置
+                if(!existScroll && document.body.scrollHeight > document.body.clientHeight) {
+                    vm.panelLeft -= 9;
+                }
             },
 
             initNormalItem: function() {
