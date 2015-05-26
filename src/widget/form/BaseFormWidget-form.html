@@ -3,14 +3,15 @@
         <tr>
             <td class="form-label" ms-class="col-md-{{labelSpan}}" ms-if="showLabel">
                 <span class="form-required" ms-visible="required && showRequired" >*</span>
-                {{label}}
+
+                <label class="control-label">{{label}}</label>
             </td>
-            <td class="has-feedback" ms-class="has-error:showErrorMessage&&errorMessage"
+            <td class="has-feedback col-md-7" ms-class="has-error:showErrorMessage&&errorMessage"
                 ms-css-padding="controlPadding">
                 <!--调用组件模板-->
                 {{TEMPLATEVALUE}}
             </td>
-            <td class="form-icon-container">
+            <td class="form-icon-container  col-md-1">
                 <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
             </td>
         </tr>

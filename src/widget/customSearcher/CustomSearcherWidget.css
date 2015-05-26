@@ -80,6 +80,9 @@
     line-height: 30px;
     list-style: none;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .page-seach-mh ul li span:last-child{
     font-weight: bold;

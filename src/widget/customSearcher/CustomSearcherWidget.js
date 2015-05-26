@@ -11,7 +11,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             $xtype: xtype,
             value: null,
             dataSetId: null,
-            groupOper: "or", //条件分组之间的连接符
+            groupOper: "and", //条件分组之间的连接符
             matchAllFields: false,//查询条件是否匹配所有字段
             controls: [],
             builderLists: null,
@@ -37,7 +37,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             $firstLoad: true,
             showTips: false,  //查询条件详情面板显示控制
             customSearchPanel: true, //控制自定义查询区域面板
-            saveViewPanel: true,  //控制保存视图区域面板
+            saveViewPanel: false,  //控制保存视图区域面板
 
             searchValue: "", //查询输入值
             inputWidth: 25, //查询输入框的宽度
@@ -269,7 +269,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var ds = vm._getDataSet();
                 ds.deleteRecord(el.viewId, false);
                 Promise.all([ds.sync(true, true)]).then(function(data) {
-                    if(data) {
+                    if("true" == data) {
                         if(vm.viewSearchArr.length>0 && vm.viewSearchArr[0].viewName == el.viewName) {
                             vm.viewSearchArr.clear();
                             vm.viewSelectedIndex = null;
@@ -284,6 +284,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             vm.viewSelectedIndex--;
                         }
                     }
+                    else {
+                        Page.dialog.alert("删除查询方案失败！");
+                    }
                 });
 
                 event.stopPropagation();
@@ -296,13 +299,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var viewName = Page.manager.components.viewName.getValue();
                 var defaultView = "0";
                 var checkBoxArr = Page.manager.components.defaultView.getValue();
-                if(checkBoxArr &&  checkBoxArr.length>1) {
+                if(checkBoxArr &&  checkBoxArr.length>0) {
                     defaultView = "1";
                 }
                 var viewValue = vm._getCustomFilter();
 
                 var param = {
-                    viewId: "123",
                     viewName: viewName,
                     defaultView: defaultView,
                     viewValue: JSON.stringify(viewValue),
@@ -316,6 +318,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         param.viewId = viewId;
                         param.viewValue = viewValue;
                         vm.viewsArr.push(param);
+                    }
+                    else {
+                        Page.dialog.alert("保存查询方案失败！");
                     }
                 });
             },
@@ -413,6 +418,10 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                                 }
 
                                 fieldModel.id = 'value_'+index;
+                                fieldModel.parentTpl = 'inline';
+                                if(undefined == Page.classMap[fieldModel.$xtype]) {
+                                    fieldModel.$xtype = 'input';
+                                }
                                 valColObj.addItem(fieldModel);
                             }
                         }]
@@ -607,13 +616,13 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     opts.fetchUrl = "/"+contentPath+"/emap/web/getSearchViewsInfo";
                 }
                 if(!opts.syncUrl) {
-                    opts.syncUrl = "/"+contentPath+"/emap/web/addSearchView";
+                    opts.syncUrl = "/"+contentPath+"/emap/web/updateSearchView";
                 }
             }
-
-            //TODO test
-            opts.fetchUrl = 'Data.demo.json';
-            opts.syncUrl = "Update.demo.json";
+//
+//            //TODO test
+//            opts.fetchUrl = 'Data.demo.json';
+//            opts.syncUrl = "Update.demo.json";
         },
         _afterRender: function() {
             var vm = this._getCompVM();
@@ -628,6 +637,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     var fieldModel = opts.controls[i];
                     if(fieldModel.hidden) {
                         continue;
+                    }
+                    if(undefined == Page.classMap[fieldModel.$xtype]) {
+                        fieldModel.$xtype = 'input';
                     }
                     if(undefined == fieldModel.quickSearch) {
                         if(quickType.contains(fieldModel.$xtype)) {

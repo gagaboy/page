@@ -48,17 +48,17 @@
             cols: 2,
             dataSources: {
                 ds1: {
-                    type: 'dataValue', options: {
-                        data: {xy:'XXX学院'},
-                        fetchUrl: 'demo.json',
+                    type: 'dataValue',
+                    options: {
+                        fetchUrl: 'demo.jso n',
                         syncUrl:''
                     }
                 }
             },
             widgets: [
-                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xb'},
+                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm'},
                 {$id: 'interest', $xtype: 'input', label: '兴趣', bind: 'ds1.xq'},
-                {$id: 'birthday', $xtype: 'input', label: '性别', bind: 'ds1.csrq'},
+                {$id: 'birthday', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
                 {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
                 {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj"},
                 {$id: 'xy', $xtype: 'input', label: '学院', bind: "ds1.xy"}
@@ -69,14 +69,14 @@
         Page.manager.components["ds1"].addEvent("recordUpdated", function (v) {
             $("#valArea").html(JSON.stringify(v));
         });
-
+        Page.manager.components["ds1"].sync()
         $("#loadData").click(function () {
             Promise.all([Page.manager.components["ds1"].fetch()]).then(function(){
                 Page.manager.components["ds1"].updateRecord({xq:'xq'});
             });
         });
         $("#submitData").click(function () {
-
+            form.submitForm();
         });
     });
 </script>

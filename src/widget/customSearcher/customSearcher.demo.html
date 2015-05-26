@@ -76,7 +76,7 @@
             $parentId: "container",
             controls: [{
                 id: "stuName",
-                $xtype: "input",
+                $xtype: "datepicker",
                 label: "姓名",
                 parentTpl: "inline",
                 filterName: "stuName",
@@ -94,12 +94,13 @@
                 quickSearch: true
             }],
             builderLists: {
-                nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}],
+                nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "qual", caption: "等于"}, {name: "equal", caption: "等于"}],
                 sexOpers: [{name: "contain", caption: "包含"}]
             },
             searchSubmit: function(searchValue) {
                 console.log(JSON.stringify(searchValue));
             }
+
 
         });
         customSearcher.render();

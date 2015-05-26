@@ -75,7 +75,7 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
 
         },
 
-        submitForm: function () {
+        submitForm: function (callBack) {
             if (this.isValid()) {
                 for (var v in this.options.dataSources) {
                     Page.manager.components[v].sync();

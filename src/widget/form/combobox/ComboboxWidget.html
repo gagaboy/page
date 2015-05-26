@@ -16,7 +16,7 @@
         </div>
         <!--单选可搜索-->
         <div ms-if="!multi && searchable" ms-class="div-focus: focused" class="form-control" >
-            <input ms-duplex="display" style="outline: none;border: none;width: 100%"  ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
+            <input ms-duplex="display" style="outline: none;border: none;width: 48%"  ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
             <a ms-visible="clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
             <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
                   style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;" ms-on-click="changePanelShow(vid, $event)"></span>
@@ -30,7 +30,7 @@
         </div>
 
         <!--下拉面板区域-->
-        <div name="panel" ms-class-1="chosen-drop:downShow" ms-class-2="chosen-up:!downShow"  ms-visible="showPanel" >
+        <div ms-attr-id="comboBox_panel_{{vid}}"  ms-css-left="panelLeft" ms-css-top="panelTop" class="chosen-drop" ms-visible="showPanel" >
             <div ms-if="model=='normal'">
                 <ul class="chosen-results" ms-each-el="data" ms-css-height="showPager ? '150px':'100%'">
                     <li class="active-result" style="width: 100%;" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index, $event)"><span ms-repeat-item="el['displayArr']" ms-class-matchSearch="(multi || searchable ) && (item == searchValue || (!multi && item == display))">{{item}}</span></li>

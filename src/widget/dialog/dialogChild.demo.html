@@ -26,8 +26,8 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="row">
-                    我只是一个div：<br/>
-                    <button onclick="openD()" id="abc">click me</button>
+                    我是子页面：<br/>
+                    <button onclick="openD()" id="abc">取父页面参数</button>
                     <div class="col-md-12" id="dialogContainer">
 
                     </div>
@@ -57,41 +57,10 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
 
-    var topParam = "top";
+    var childParam = "child";
 
-    require(["../../../page/src/Bootstrap"], function () {
-
-        var dialog = Page.create('dialog', {
-            $id: "dialog",
-            url: "dialogChild.demo.html",
-//            content: "测试一下，哈哈",
-            width: "400px",
-            height: "200px",
-            button: [{
-                name: "点击试试",
-                callback: function(dialog) {
-                    alert("子页面参数："+dialog.frames[0].childParam);
-                    Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
-                        Page.dialog.tips('执行确定操作');
-                    }, function () {
-                        Page.dialog.alert('执行取消操作');
-                    });
-                },
-                focus:true
-            },{
-                name: "测试Prompt",
-                callback: function() {
-                    Page.dialog.prompt('请输入图片网址', function (val) {
-                        Page.dialog.tips(val);
-                    }, 'http://');
-                }
-            }]
-        });
-//        dialog.render();
-        window.dialog = dialog;
-    });
     function openD(){
-        dialog.render();
+        alert("父页面参数："+(window.parent.topParam))
     }
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

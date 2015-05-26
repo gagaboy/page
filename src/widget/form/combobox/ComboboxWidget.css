@@ -26,19 +26,40 @@
 .div-focus {
     border-color: #1ab394 !important;
 }
-.chosen-up {
+
+.chosen-drop {
     position: absolute;
-    bottom: 100%;
-    left: -9999px;
     z-index: 1010;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
     border: 1px solid #aaa;
-    border-top: 0;
+    /*border-top: 0;*/
     background: #fff;
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+}
+
+.chosen-results {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0px;
+    padding: 0px;
+    max-height: 240px;
+    -webkit-overflow-scrolling: touch;
+}
+.chosen-results li {
+    display: none;
+    margin: 0;
+    padding: 5px 6px;
+    list-style: none;
+    line-height: 15px;
+    -webkit-touch-callout: none;
+}
+.chosen-results li.active-result {
+    display: list-item;
+    cursor: pointer;
 }
 .chosen-container.chosen-with-drop .chosen-up{
     left: 0;

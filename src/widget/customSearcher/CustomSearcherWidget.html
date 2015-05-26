@@ -95,7 +95,7 @@
                         </a>
                     </div>
                 </div>
-                <div ms-if="customSearchPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
+                <div ms-if="customSearchPanel" class="ibox-content" style="border-width: 0px;padding: 0px;overflow: auto">
                     <div>
                         <div ms-repeat-fragment="fragmentArr" style="height: 45px">
                             <div class="col-md-1" style=" width: 5.333333%;margin-top: 15px;padding:0px">
@@ -116,6 +116,7 @@
                             <i class="fa fa-plus"></i>&nbsp;添加条件
                         </span>
                         <a ms-click="addCustomSearch(vid, $event)" class="btn btn-primary page-search-btn" style="display: block;" type="button">查询</a>
+                        <br style="clear:both;" />
                     </div>
 
                     <div class="ibox float-e-margins" style="margin-bottom: 5px;">
@@ -140,8 +141,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
