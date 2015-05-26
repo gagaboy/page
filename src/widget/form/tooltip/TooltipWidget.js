@@ -53,10 +53,11 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
         _contentChange:function(content,oldContent){
             this.tipObj.options.content = content;
             if(!content){
+                this.tipObj.refresh();
                 this.hide();
             }else{
-                this.show();
                 this.tipObj.refresh();
+                this.show();
             }
         }
 
