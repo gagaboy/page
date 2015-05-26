@@ -8,7 +8,7 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
             content:"",
             showAfter: 100,
             position: "bottom",
-            showOn: "mouseenter",
+            showOn: "none",
             autoHide: true,
             show:null
         },
