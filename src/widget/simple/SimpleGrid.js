@@ -417,13 +417,30 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _renderEditComp:function(){
             if(this.getAttr("canEdit")){
-                var datas = this.getAttr("data");
+                var datas = this.getAttr("data").$model;
                 var cols = this.getAttr("columns");
                 var editCompMap = this.getAttr("editCompMap");
+                var dsId = "ds_"+this.getAttr("vid");
+                //dataSources
+                //var dsSetting = {
+                //    type:'dataSet',
+                //    options:{data: datas}
+                //};
                 var dataSources = {};
+                //dataSources[dsId] = dsSetting;
+                //dataBinders
                 var dataBinders = {}
+
                 for (var i = 0; i < datas.length; i++) {
                     if(datas[i]&&datas[i].uuid){
+                        //行ds
+                        var idsId = "ds_"+datas[i].uuid;
+                        var idsSetting = {
+                            type:'dataValue',
+                            options:{data: datas[i]}
+                        };
+                        dataSources[idsId] = idsSetting;
+
                         var data = datas[i];
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
@@ -432,23 +449,38 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
                                 if(!$("#con_"+fieldName+"_"+data.uuid)||!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
-                                    var editField = Page.create(xtype, {
-                                        $parentId: 'con_'+fieldName+"_"+data.uuid,
-                                        $id:'comp_'+fieldName+"_"+data.uuid,
-                                        parentTpl:"inline",
-                                        value: data[fieldName],
-                                        showLabel: false,
-                                        bindField:fieldName,
-                                        disabledEdit:col.disabledEdit,
-                                        validationRules:col.validationRules,
-                                        showErrorMessage:true,
-                                        valueChange:function(){
+                                    (function(xtype,fieldName,data,rowEditComps,dataBinders){
+                                        var editField = Page.create(xtype, {
+                                            $parentId: 'con_'+fieldName+"_"+data.uuid,
+                                            $id:'comp_'+fieldName+"_"+data.uuid,
+                                            parentTpl:"inline",
+                                            value: data[fieldName],
+                                            showLabel: false,
+                                            bindField:fieldName,
+                                            disabledEdit:col.disabledEdit,
+                                            validationRules:col.validationRules,
+                                            showErrorMessage:true,
+                                            status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
+                                        });
+                                        //在属性中写displayChange无效，暂时用以下写法代替，TODO
+                                        editField._displayChange = function(){
                                             data[fieldName] = editField.getValue();
-                                        },
-                                        status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
-                                    });
-                                    rowEditComps.push(editField);
-                                    editField.render();
+                                        };
+                                        rowEditComps.push(editField);
+
+                                        editField.render();
+
+                                        //行dataBinder
+                                        var idbId = "db_"+datas[i].uuid+"_"+fieldName;
+                                        var idbSetting = {
+                                            dataValueId: "ds_"+data.uuid,
+                                            fieldId: fieldName,
+                                            widgetId: editField.getId()
+                                        };
+                                        //if(fieldName=="name"){
+                                            dataBinders[idbId] = idbSetting;
+                                        //}
+                                    }(xtype,fieldName,data,rowEditComps,dataBinders));
                                 }else{
                                     rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data.uuid]);
                                 }
@@ -457,6 +489,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         editCompMap[data.uuid] = rowEditComps;
                     }
                 }
+                this.widgetContainer = Page.create("widgetContainer", {
+                    dataSources:dataSources,
+                    dataBinders:dataBinders
+                });
             }
         },
         _getDataSet: function() {

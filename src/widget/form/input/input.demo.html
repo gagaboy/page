@@ -138,6 +138,9 @@
             message: '请输入手机号',
             label: '联系方式',
             placeholder: '联系方式',
+            valueChange:function(val){
+                alert("value:"+val);
+            },
             validationRules: {
                 lengthFix: {
                     fixLen: 11
