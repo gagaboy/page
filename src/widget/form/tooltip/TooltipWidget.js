@@ -7,10 +7,11 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
             target:"", //绑定tip的对象id
             content:"",
             showAfter: 100,
-            position: "bottom",
-            showOn: "mouseenter",//TODO none
+            position: "right",
+            showOn: "mouseenter",//直接传给kendoTooltip组件，tips显示的交互事件
             autoHide: true,
-            show:null
+            show:null,
+            className:"bluetip" //组件提供bluetip,whitetip
         },
         tipObj:{},
         _getInputElement: function () {
@@ -22,8 +23,12 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
             }
         },
         render: function (opts) {
-            var p = jQuery.extend({}, this.options, opts || {})
-            var that = this;
+            if(this.options.className && this.options.target != ""){
+                this.options.show = function(){
+                    jQuery("#"+this.options.target+"_tt_active").parent().addClass(this.options.className);
+                };
+            }
+            var p = jQuery.extend({}, this.options, opts || {});
             if(this._getInputElement()){
                 this._getInputElement().kendoTooltip(p);
                 this.tipObj = this._getInputElement().data("kendoTooltip");

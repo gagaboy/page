@@ -1734,14 +1734,6 @@ a.k-draghandle:focus{
 .k-callout-s {
     border-top-color: #c5c5c5;
 }
-.k-callout {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 6px;
-    border-color: transparent;
-}
 .k-callout-n {
     top: -13px;
     left: 50%;

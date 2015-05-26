@@ -79,16 +79,18 @@
             $id: 'tip1',
             target:'btn1',
             position:'left',
-            autoHide:true
+            autoHide:true,
+            className:"whitetip"
         });
         tip1.render();
         tip2 = Page.create("tooltip", {
-            //content: '从右边出提示信息内容',
+            content: '从右边出提示信息内容',
             $id: 'tip2',
             target:'btn2',
             position:'right',
             autoHide:false
         });
+
         tip2.render();
     });
 </script>
