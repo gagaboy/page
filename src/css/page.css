@@ -85,7 +85,7 @@ body {
     border-color: red;
 }
 
-.oni-datepicker-input-wrapper .form-text {
+.oni-datepicker-input-wrapper{
     background-color:transparent;
 }
 
