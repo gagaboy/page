@@ -420,13 +420,15 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var datas = this.getAttr("data");
                 var cols = this.getAttr("columns");
                 var editCompMap = this.getAttr("editCompMap");
+                var dataSources = {};
+                var dataBinders = {}
                 for (var i = 0; i < datas.length; i++) {
                     if(datas[i]&&datas[i].uuid){
                         var data = datas[i];
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
                             var col = cols[t];
-                            if(col.dataField&&col.xtype){
+                            if(col.dataField&&col.xtype&&!col.isOpColumn&&!col.hidden){
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
                                 if(!$("#con_"+fieldName+"_"+data.uuid)||!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){

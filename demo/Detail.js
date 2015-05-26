@@ -6,7 +6,10 @@ require(["../../../page/src/Bootstrap"], function () {
         parentId: 'input',
         value: '张三',
         required: false,
+        status:"eidt",
         glyphicon: 'glyphicon-ok',
+        parentTpl:"inline",
+        showMessage:true,
         message: '请输入2-5个汉字',
         label: '您的姓名',
         validationRules: {
@@ -31,7 +34,10 @@ require(["../../../page/src/Bootstrap"], function () {
         $parentId: 'checkbox',
         label: '兴趣',
         required: true,
+        message: '选择2-3个兴趣',
+        showMessage:false,
         showErrorMessage: true,
+        parentTpl:"inline",
         validationRules: {
             required: true,//options中为false时，此处可重开启校验
             length: {
