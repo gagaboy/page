@@ -24,20 +24,9 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
         render: function (opts) {
             var p = jQuery.extend({}, this.options, opts || {})
             var that = this;
-            if(!p.filter){
-                p.filter = function(){
-                    if(!that.getAttr("content")){
-                        that.tipObj.hide();
-                        return false;
-                    }
-                }
-            }
             if(this._getInputElement()){
                 this._getInputElement().kendoTooltip(p);
                 this.tipObj = this._getInputElement().data("kendoTooltip");
-                if(!this.getAttr("content")){
-                    this.tipObj.hide();
-                }
             }
         },
         destroy:function(){
@@ -50,15 +39,10 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
         hide:function(){
             this.tipObj.hide();
         },
-        _contentChange:function(content,oldContent){
+        _contentChange:function(content,oldContent) {
             this.tipObj.options.content = content;
-            if(!content){
-                this.tipObj.refresh();
-                this.hide();
-            }else{
-                this.tipObj.refresh();
-                this.show();
-            }
+            this.tipObj.refresh();
+            this.show();
         }
 
     });

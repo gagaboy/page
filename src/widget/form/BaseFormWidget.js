@@ -85,18 +85,20 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
 
             if ("inline" == $this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))) {
                 var msgs = "";
-                if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
-                    msgs = this.getAttr("errorMessage");
-                }else if(this.getAttr("showMessage")){
-                    msgs = this.getAttr("message");
+                if(this.getAttr("showMessage")){
+                    msgs += this.getAttr("message");
+                }else if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
+                    msgs += this.getAttr("errorMessage")+" ";
                 }
-                this.toolTip = Page.create("tooltip", {
-                    content: msgs,
-                    target:this.options.$parentId,
-                    position:'bottom',
-                    autoHide:false
-                });
-                this.toolTip.render();
+                if(msgs){
+                    this.toolTip = Page.create("tooltip", {
+                        content: msgs,
+                        target:this.options.$parentId,
+                        position:'bottom',
+                        autoHide:false
+                    });
+                    this.toolTip.render();
+                }
             }
 
             avalon.scan($this.getParentElement()[0]);
@@ -225,15 +227,39 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             return true;
         },
         _errorMessageChange:function(errmsg){
-            if(this.toolTip){
-                if(errmsg&&this.getAttr("showErrorMessage")){
-                    this.toolTip.setAttr("content",errmsg);
-                }else if(this.getAttr("showMessage")){
-                    this.toolTip.setAttr("content",this.getAttr("message"));
-                }else{
-                    this.toolTip.setAttr("content","");
-                }
+            var msgs = "";
+            if(this.getAttr("showMessage")){
+                msgs += this.getAttr("message");
+            }else if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
+                msgs += this.getAttr("errorMessage")+" ";
             }
+            if(!msgs){
+                if(this.toolTip){
+                    this.toolTip.destroy();
+                    this.toolTip = null;
+                }
+            }else if("inline" == this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))){
+                if(this.toolTip){
+                    if(errmsg&&this.getAttr("showErrorMessage")){
+                        this.toolTip.setAttr("content",errmsg);
+                    }else if(this.getAttr("showMessage")){
+                        this.toolTip.setAttr("content",this.getAttr("message"));
+                    }else{
+                        this.toolTip.setAttr("content","");
+                    }
+                }else{
+                    this.toolTip = Page.create("tooltip", {
+                        content: msgs,
+                        target:this.options.$parentId,
+                        position:'bottom',
+                        autoHide:false
+                    });
+                    this.toolTip.render();
+                }
+            }else if(this.toolTip){
+                this.toolTip.destroy();
+            }
+
         }
     });
     BaseFormWidget.xtype = xtype;
