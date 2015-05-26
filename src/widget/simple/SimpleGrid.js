@@ -8,7 +8,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         Extends: Base,
         options: {
             $xtype: xtype,
-            tableClass:"table table-striped",
+            tableClass:"table table-bordered",
             columns: [],/**
                          * 列信息,每列可配置属性如下：
                          *｛title:"性别",

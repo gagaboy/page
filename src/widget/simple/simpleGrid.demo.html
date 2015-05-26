@@ -67,6 +67,7 @@
             $parentId: 'simpleGrid',
             idField:"wid",
             $id:"simpleGrid",
+            tableClass:"table table-striped",
             totalNum:200,
             showCheckbox:true,
             usePager:true,
@@ -107,7 +108,7 @@
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
-            canEdit:true,
+            canEdit:false,
             dbClickToEditRow:true,
             clickToEditField:false,
             beforeChangePageNo:function(pager,grid){
