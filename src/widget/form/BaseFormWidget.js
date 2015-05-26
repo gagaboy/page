@@ -83,7 +83,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             $this.$element = e;
             $this.element = e[0];
 
-            if ("inline" == $this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))) {
+            if (this.getAttr("status")=='edit'&&"inline" == $this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))) {
                 var msgs = "";
                 if(this.getAttr("showMessage")){
                     msgs += this.getAttr("message");
@@ -240,7 +240,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
                     this.toolTip.destroy();
                     this.toolTip = null;
                 }
-            }else if("inline" == this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))){
+            }else if(this.getAttr("status")=='edit'&&"inline" == this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))){
                 if(this.toolTip){
                     if(errmsg&&this.getAttr("showErrorMessage")){
                         this.toolTip.setAttr("content",errmsg);

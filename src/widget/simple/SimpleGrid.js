@@ -510,7 +510,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }
             if(row.state=="view"){
-                row.state = "edit";
+                if(this.getAttr("editMultiRow")){
+                    //校验，将其他编辑设置为只读,校验不通过不更改状态
+
+                }else{
+                    row.state = "edit";
+                }
             }else{
                 row.state = "view";
             }
