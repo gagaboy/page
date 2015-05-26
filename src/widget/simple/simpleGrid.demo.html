@@ -25,12 +25,9 @@
                         <a class="btn btn-primary" href="javascript:addRow();">新增行</a>
                         <a class="btn btn-primary" href="javascript:delCheckedRow();">删除勾选的行</a>
                         <a class="btn btn-primary" href="javascript:simpleGrid.deleteActiveRow();">删除激活的行</a>
-
-
                         <a class="btn btn-primary" href="javascript:simpleGrid.checkRowsByDataId(['001','002'],true);">勾选前两行</a>
                         <a class="btn btn-primary" href="javascript:simpleGrid.checkRowsByDataId(['001','002'],false);">取消勾选前两行</a>
                         <a class="btn btn-primary" href="javascript:cancelAllChecked();">取消全部勾选</a>
-
                     </div>
                 </div>
                 <div class="row">
@@ -108,7 +105,7 @@
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
-            canEdit:false,
+            canEdit:true,
             dbClickToEditRow:true,
             clickToEditField:false,
             beforeChangePageNo:function(pager,grid){

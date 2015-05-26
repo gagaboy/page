@@ -233,7 +233,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 if(that.getAttr("beforeSetData")){
                     that.getAttr("beforeSetData")(newDatas);
                 }
-                that.setAttr("data",that._formatDatas(newDatas));
                 if(that.pagination){
                     that.pagination.setAttr("totalNum",ds.getTotalSize());
                     that.pagination.setAttr("pageSize",ds.getPageSize());
@@ -243,6 +242,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     that.setAttr("pageSize",ds.getPageSize());
                     that.setAttr("pageIndex",ds.getPageNo());
                 }
+                that.setAttr("data",that._formatDatas(newDatas));
             });
         },
         /**
@@ -290,7 +290,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         /**
          * 根据主键选中某些行
          */
-            checkRowsByDataId: function (dataIds,checked) {
+        checkRowsByDataId: function (dataIds,checked) {
             if(checked==undefined){
                 checked = true;
             }
@@ -464,7 +464,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _defaultEditRow:function(vm,row,rowDom){
             var toStatus = (row.state&&row.state=="view")?"edit":"readonly";
-            var editCompMap = this.getAttr("editCompMap").$model;
+            var editCompMap = this.getAttr("editCompMap");
             if(editCompMap&&editCompMap[row.uuid]&&editCompMap[row.uuid].length>0){
                 var editComps = editCompMap[row.uuid];
                 for(var t=0;t<editComps.length;t++){

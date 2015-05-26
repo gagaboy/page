@@ -87,7 +87,8 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
                 var msgs = "";
                 if(this.getAttr("showMessage")){
                     msgs += this.getAttr("message");
-                }else if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
+                }
+                if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
                     msgs += this.getAttr("errorMessage")+" ";
                 }
                 if(msgs){
@@ -230,7 +231,8 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             var msgs = "";
             if(this.getAttr("showMessage")){
                 msgs += this.getAttr("message");
-            }else if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
+            }
+            if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
                 msgs += this.getAttr("errorMessage")+" ";
             }
             if(!msgs){
