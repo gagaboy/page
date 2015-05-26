@@ -422,10 +422,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var editCompMap = this.getAttr("editCompMap");
                 var dsId = "ds_"+this.getAttr("vid");
                 //dataSources
-                var dsSetting = {
-                    type:'dataSet',
-                    options:{data: datas}
-                };
+                //var dsSetting = {
+                //    type:'dataSet',
+                //    options:{data: datas}
+                //};
                 var dataSources = {};
                 //dataSources[dsId] = dsSetting;
                 //dataBinders
@@ -493,7 +493,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     dataSources:dataSources,
                     dataBinders:dataBinders
                 });
-                //this.widgetContainer.render();
             }
         },
         _getDataSet: function() {
