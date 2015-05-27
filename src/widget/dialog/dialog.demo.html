@@ -61,6 +61,8 @@
 
     require(["../../../page/src/Bootstrap"], function () {
 
+        Page.dialog.data("topParam", "我是父页面参数");
+        Page.dialog.data("topFunc", topFunc);
         var dialog = Page.create('dialog', {
             $id: "dialog",
             url: "dialogChild.demo.html",
@@ -69,7 +71,7 @@
             height: "200px",
             button: [{
                 name: "点击试试",
-                callback: function(dialog) {
+                callback: function(dialog, window, param) {
                     alert("子页面参数："+dialog.frames[0].childParam);
                     Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
                         Page.dialog.tips('执行确定操作');
@@ -92,6 +94,10 @@
     });
     function openD(){
         dialog.render();
+    }
+
+    function topFunc() {
+        alert("我是父页面的方法")
     }
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

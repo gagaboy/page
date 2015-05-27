@@ -48,8 +48,9 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../../page/src/Bootstrap"], function () {
-        var checkbox = Page.create('radio', {
+        var radio = Page.create('radio', {
             $parentId: 'radioContainer',
+            $id: "radio",
             label: '性别',
             required:true,
             showErrorMessage:true,
@@ -67,7 +68,7 @@
                 checked: false
             }]
         });
-        checkbox.render();
+        radio.render();
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

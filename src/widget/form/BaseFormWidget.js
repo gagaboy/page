@@ -7,7 +7,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
         Extends: Base,
         options: {
             $xtype: xtype,
-            status: 'edit',//default = edit |edit|readonly
+            status: 'edit',//default = edit |edit|readonly|disabled
 
             parentTpl: "form",  //组件的父模板类型 default=form |form|inline
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,7 +165,14 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
                     showMessage: false,
                     showRequired: false
                 });
-            } else if (status == 'ready2edit') {
+            } else if (status == 'disabled') {
+                this.setAttrs({
+                    status: status,
+                    showErrorMessage: false,
+                    showMessage: false,
+                    showRequired: false
+                });
+            }else if (status == 'ready2edit') {
 
             } else {
                 window.console.error("unknown status, it should be in edit|readonly|ready2edit");
