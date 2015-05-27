@@ -30,6 +30,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             showPager: true,
             dataSetId: null,
             url: null,
+            mainAlias: null,
             $pagination: null,
             downShow: true,
             clearShow: false,
@@ -329,7 +330,6 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         this.options.selectedItems.push(item);
                     }
                 }
-
             }
 
             this.parent(opts);
@@ -514,7 +514,10 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             else if(this.options.url) {
                 if(!this.dataSet) {
                     this.dataSet = Page.create("dataSet", {
-                        fetchUrl: this.options.url
+                        fetchUrl: this.options.url,
+                        model: {
+                            mainAlias: this.options.mainAlias
+                        }
                     });
                 }
                 return this.dataSet;
