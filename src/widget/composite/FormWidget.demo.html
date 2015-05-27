@@ -50,7 +50,7 @@
                 ds1: {
                     type: 'dataValue',
                     options: {
-                        fetchUrl: 'demo.jso n',
+                        fetchUrl: 'demo.json',
                         syncUrl:''
                     }
                 }
@@ -58,10 +58,10 @@
             widgets: [
                 {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm'},
                 {$id: 'interest', $xtype: 'input', label: '兴趣', bind: 'ds1.xq'},
-                {$id: 'birthday', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
+                {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
                 {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
                 {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj"},
-                {$id: 'xy', $xtype: 'input', label: '学院', bind: "ds1.xy"}
+                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}
             ]
         });
         form.render();
@@ -69,10 +69,13 @@
         Page.manager.components["ds1"].addEvent("recordUpdated", function (v) {
             $("#valArea").html(JSON.stringify(v));
         });
-        Page.manager.components["ds1"].sync()
+
+
+        var ds1 =  Page.manager.components["ds1"];
+        ds1.sync();
         $("#loadData").click(function () {
-            Promise.all([Page.manager.components["ds1"].fetch()]).then(function(){
-                Page.manager.components["ds1"].updateRecord({xq:'xq'});
+            Promise.all([ds1.fetch()]).then(function(){
+                ds1.updateRecord(ds1.getValue());
             });
         });
         $("#submitData").click(function () {
