@@ -16,10 +16,10 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             recordBegin:0,//显示从第几条开始,计算所得，设置无效
             recordTo: 0,//显示到第几条,计算所得，设置无效
 
-            showPageIndexInput: true,//显示跳转到某页输入框
-            showPageSizeInput: true,//显示每页条数输入框]
-            showFirstPage: true,//显示第一页按钮
-            showLastPage: true,//显示最后一页按钮
+            showPageIndexInput: false,//显示跳转到某页输入框
+            showPageSizeInput: false,//显示每页条数输入框
+            showFirstPage: false,//显示第一页按钮
+            showLastPage: false,//显示最后一页按钮
             showPreviousAndNextPage: true,//显示上一页和下一页按钮
             showPageDetail: true,//显示分页详情
             showTipWhenNull: false,//无数据时显示提示信息
@@ -70,18 +70,26 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             this.setAttr("show", false);
         },
         _pageIndexChange: function (pindex, oldIndex, model) {
-            //if(pindex!=oldIndex){
-            //属性扩展
-            this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model)
-            //}
+            if(pindex&&pindex<(this.getAttr("totalPage")+1)){
+                //属性扩展
+                this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model)
+            }else{
+                this.setAttr("pageIndex",this.getAttr("totalPage"));
+            }
         },
         _totalNumChange: function (tNum, oldNum, model) {
             this._calculateTotalPage();
             this._calculateBeginAndTo();
         },
         _pageSizeChange: function (tNum, oldNum, model) {
-            this._calculateTotalPage();
-            this._calculateBeginAndTo();
+            if(tNum&&tNum<(this.getAttr("totalNum")+1)){
+                this.options.pageChangeEvent(this,this.getAttr("pageIndex"),this.getAttr("pageIndex"),this.getAttr("pageSize"),model)
+            }else{
+                this.setAttr("pageSize",this.getAttr("totalNum"));
+                if(this.getAttr("pageIndex")>1){
+                    this.setAttr("pageIndex",1);
+                }
+            }
         },
         _calculateTotalPage: function () {
             if (this.getAttr("totalNum") && this.getAttr("pageSize")) {

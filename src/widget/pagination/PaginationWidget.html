@@ -2,12 +2,30 @@
     <tr ms-if="!showTipWhenNull||(totalNum&&totalNum>0)">
         <td class="col-md-6" ms-if="showPageDetail">
             <div class="dataTables_info" role="status" aria-live="polite">
-                {{pageIndex}}/{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
+                <div ms-if="showPageIndexInput" style="display: inline-block;">
+                    <input style="width:30px;height:23px;" style="text-align:right" ms-duplex-number="pageIndex">
+                </div>
+                <div ms-if="!showPageIndexInput" style="display: inline-block;">
+                    {{pageIndex}}
+                </div>
+                /{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
+                <div ms-if="showPageSizeInput" style="display: inline-block;">
+                    每页
+                    <div style="display: inline-block;">
+                        <input style="width:60px;height:25px;" class="form-control input-sm" aria-controls="editable" ms-duplex-number="pageSize">
+                    </div>
+                    条.
+                </div>
             </div>
         </td>
         <td class="col-md-6">
             <div class="dataTables_paginate paging_simple_numbers" style="float:right">
                 <ul class="pagination" style="margin:3px;">
+                    <li style="display:initial" ms-if="showFirstPage&&pageIndex!=1" class="paginate_button previous disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
+                        <a href="javascript:void(0);" ms-click="goPage(vid,1)">
+                            首页
+                        </a>
+                    </li>
                     <li style="display:initial" ms-if="showPreviousAndNextPage" class="paginate_button previous disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
                         <a href="javascript:void(0);" ms-click="goPreviousPage(vid)">
                             上一页
@@ -34,6 +52,11 @@
                         <a href="javascript:void(0);" ms-click="goNextPage(vid)"
                            ms-attr-data-pageIndex="pageIndex<totalPage?pageIndex+1:pageIndex">
                             下一页
+                        </a>
+                    </li>
+                    <li style="display:initial" ms-if="showLastPage&&pageIndex!=totalPage" class="paginate_button previous disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
+                        <a href="javascript:void(0);" ms-click="goPage(vid,totalPage)">
+                            末页
                         </a>
                     </li>
                 </ul>
