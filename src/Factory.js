@@ -42,7 +42,8 @@ define([
     "./widget/form/slider/SliderWidget",
     "./widget/dialog/DialogWidget",
     "./widget/customSearcher/CustomSearcherWidget",
-    "./widget/form/tooltip/TooltipWidget"
+    "./widget/form/tooltip/TooltipWidget",
+    "./widget/form/my97date/My97DateWidget"
 ], function () {
     var allComps = arguments;
 

@@ -25,9 +25,12 @@ define([], function () {
             var $this = this;
             var v = dataValue.getValue();
             if ($this.options.fieldId) {
-                v = v[$this.options.fieldId];
+                var value = v[$this.options.fieldId] ? v[$this.options.fieldId]:"";
+                var display = v[$this.options.fieldId+"_DISPLAY"];
+                widget.setValue({value: value, display: display});
+//                widget.setValue(v == undefined ? "": v);
             }
-            widget.setValue(v == undefined ? "": v);
+
             this.widgetValueChangeCallback = function (value) {
                 var fieldId = $this.options.fieldId;
                 var val = {};
@@ -44,7 +47,8 @@ define([], function () {
                 if(!v) {
                     v = "";
                 }
-                widget.setValue(v, true);
+                var display = record[fieldId+"_DISPLAY"];
+                widget.setValue({value: v, display: display}, true);
             }
             widget.addEvent("valueChange", this.widgetValueChangeCallback);
             dataValue.addEvent("afterUpdateRecord", this.dataValueChangeCallback);

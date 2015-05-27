@@ -1,4 +1,4 @@
-define(['../BaseFormWidget','../../../../lib/My97DatePicker/WdatePicker', 'text!./My97DateWidget.html'], function (BaseFormWidget,my97datepicker,template) {
+define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], function (BaseFormWidget, template, my97DatePicker) {
     var xtype = "my97datepicker";
     var My97DateWidget = new Class({
         Extends: BaseFormWidget,

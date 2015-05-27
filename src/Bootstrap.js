@@ -1,7 +1,8 @@
 require.config({
     paths: {
-        art: '../../../../../page/lib/artdialog/artDialog.source',
-        artIframe: '../../../../../page/lib/artdialog/iframeTools.source'
+        art: '../../../../page/lib/artdialog/artDialog.source',
+        artIframe: '../../../../page/lib/artdialog/iframeTools.source',
+        my97DatePicker: "../../../../../../page/lib/My97DatePicker/WdatePicker"
     },
     shim: {
         art: {
@@ -10,6 +11,9 @@ require.config({
         artIframe: {
             deps: ['art'],
             exports: 'artIframe'
+        },
+        my97DatePicker: {
+            exports: "my97DatePicker"
         }
     }
 });
