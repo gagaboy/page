@@ -75,14 +75,14 @@
             editComps:[],
             noDataTip:"没有找到数据2！",
             columns:[
-                {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true,editContent:"<div id='__currentEditField_name'></div>"},
+                {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:true},
                 {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
                     sortDisabled:true,xtype:"combobox",isOpColumn:true,
                     template:"<div style='color:#F0F;' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>{{rowdata.sexDisplay}}</B></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
-                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",editContent:"<div id='__currentEditField_birthDate'></div>"},
-                {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker",editContent:"<div id='__currentEditField_rxDate'></div>"},
-                {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true,editContent:"<div id='__currentEditField_isParty'></div>"},
-                {title:"所在班级",dataField:"className",editContent:"<div id='__currentEditField_className'></div>",
+                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker"},
+                {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker"},
+                {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true},
+                {title:"所在班级",dataField:"className",
                     validationRules: {
                         required:true,//options中为false时，此处可重开启校验
                         length: {
@@ -94,7 +94,7 @@
                             customErrMsg:"只能输入汉字"
                         }
                     }},
-                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true,editContent:"<div id='__currentEditField_notes'></div>"}
+                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true}
             ],
             opColumns:[{title:"自定义操作",
                 width:'15%',
@@ -110,58 +110,18 @@
             dbClickToEditRow:true,
             clickToEditField:false,
             beforeChangePageNo:function(pager,grid){
-                alert("要改页码了： "+pager.getAttr("pageIndex"));
+                //alert("要改页码了： "+pager.getAttr("pageIndex"));
             },
             beforeChangeOrder:function(){
-               alert("change order!");
+               //alert("change order!");
             },
             beforeSetData:function(datas){
                 if(datas&&datas.length>0){
                     for(var s=0;s<datas.length;s++){
-                        if(datas[s]){
+                        if(s==0&&datas[s]){
                             datas[s].name = "被篡改";
                         }
                     }
-                }
-            },
-            //自定义函数
-            editMyRow:function(vid,rowData,rowObj) {
-                var vm = avalon.vmodels[vid];
-                if(!rowData.state||rowData.state=="view"){
-                    //检查是否有未完成的编辑
-                    var datas = vm.data;
-                    if(datas&&datas.length>0){
-                        for(var t=0;t<datas.length;t++){
-                            var daRow = datas[t];
-                            if(daRow&&daRow.state=='edit'){
-                                if(false){
-                                    return false;//校验失败直接返回，提示修改
-                                }
-                                if(vm.editComps&&vm.editComps.length>0) {
-                                    for(var s=0;s<vm.editComps.length;s++){
-                                        if(vm.editComps[s]&&vm.editComps[s].getAttr){
-                                            daRow[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
-                                            //vm.editComps[s].destroy();
-                                        }
-                                    }
-                                }
-                                vm.editComps = [];
-                                daRow.state = "view";
-                            }
-                        }
-                    }
-                    myEditPro(simpleGrid,rowData,rowObj);
-                }else{
-                    if(vm.editComps&&vm.editComps.length>0) {
-                        for(var s=0;s<vm.editComps.length;s++){
-                            if(vm.editComps[s]&&vm.editComps[s].getAttr){
-                                rowData[vm.editComps[s].getAttr("bindField")] = vm.editComps[s].getValue();
-                                //vm.editComps[s].destroy();
-                            }
-                        }
-                    }
-                    vm.editComps = [];
-                    rowData.state = "view";
                 }
             }
             //编辑单属性事件

@@ -178,7 +178,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
                     showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
                     showTipWhenNull: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
-                    noDataTip: this.getAttr("noDataTip"),
+                    noDataTip: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
+
                     pageChangeEvent: function (pager) {
                         if(that.getAttr("beforeChangePageNo")){
                             that.getAttr("beforeChangePageNo")(pager,that);//参数为分页对象,grid对象
@@ -239,7 +240,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 if(that.pagination){
                     that.pagination.setAttr("totalNum",ds.getTotalSize());
-                    that.pagination.setAttr("pageSize",ds.getPageSize());
+                    //that.pagination.setAttr("pageSize",ds.getPageSize());
                     //that.pagination.setAttr("pageIndex",ds.getPageNo());
                 }else{
                     that.setAttr("totalNum",ds.getTotalSize());
