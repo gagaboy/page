@@ -47,10 +47,12 @@ define(['./Base'], function (Base) {
                 var ds = this.options.dataSources[d];
                 this.addDataSource(d, ds);
             }
+            /*
             for (var d in this.options.dataBinders) {
                 var ds = this.options.dataBinders[d];
                 this.addDataBinder(d, ds);
             }
+            */
         },
 
         /**
