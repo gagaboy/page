@@ -88,6 +88,9 @@ define([], function () {
         },
         render: function (parent) {
             this.fireEvent("beforeRender", [this.vmodel]);
+            if (this["_beforeRender"]) {
+                this["_beforeRender"](this.vmodel);
+            }
             //var element = this.getElement();
             var $this = this;
 

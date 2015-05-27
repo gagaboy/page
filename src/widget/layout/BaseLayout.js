@@ -10,6 +10,9 @@ define(['../Base'], function (Base) {
             this.itemsArr = [];
         },
         render: function (parent) {
+            if(this._beforLayoutRender) {
+                this._beforLayoutRender();
+            }
             this.parent(parent);
             if (this.options.items) {
                 for (var i = 0; i < this.options.items.length; i++) {
