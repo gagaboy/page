@@ -66,15 +66,18 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../src/Bootstrap"], function () {
-        var inp = Page.create("my97datepicker", {
+        var inp = Page.create("datepicker", {
             $parentId: 'nameContainer',
-            value: '',
+            $id: 'begintime',
+            value: '2015-09-08',
             required: false,
             glyphicon: 'glyphicon-ok',
             message: '请选择开始日期',
             label: '开始日期',
-            $id: 'begintime',
 
+            onValueChange: function(value) {
+                alert(value)
+            },
             dateFmt:'yyyy-MM-dd'          //yyyy-MM
         });
         inp.render();
