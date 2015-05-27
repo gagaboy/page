@@ -4,14 +4,17 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            doubleCalendar:true,
-            dateFmt:'yyyy-MM-dd'
+            $opts:{
+                doubleCalendar:true,
+                dateFmt:'yyyy-MM-dd',
+                firstDayOfWeek:1
+            }
         },
         render: function (opts) {
             var p = jQuery.extend({}, this.options, opts || {});
             this.parent(opts);
             this._getInputElement().bind("focus",function(){
-                WdatePicker(p);
+                WdatePicker(p.$opts);
             });
         },
         getTemplate: function () {
