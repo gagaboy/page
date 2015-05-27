@@ -43,13 +43,6 @@
                     <div class="col-md-4" id="nameContainer">
 
                     </div>
-
-                    <div class="col-md-4" id="phoneContainer">
-
-                    </div>
-                    <div class="col-md-4" id="btnContainer">
-                        <button onclick="valForm();">校验表单</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -72,86 +65,19 @@
 </script>
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
-    function valForm(){
-        var validateTool = Page.create("validation",{onlyError:true});//后续由系统统一创建，只需调用即可
-
-        //获取数据
-        var comps = Page.manager.components;
-        var formValues = {};
-        formValues.username = comps.username.getValue();
-        formValues.phone = comps.phone.getValue();
-
-        //获取校验规则
-        var formRules = {};
-        formRules.username =  comps.username.getAttr("validationRules");
-        formRules.phone =  comps.phone.getAttr("validationRules");
-        formRules._global = [//_global 为固定
-            {
-                "ruleId": "notEqualField",
-                "field1": "username",
-                "field2": "phone"
-            }
-//            ,
-//            {
-//                "ruleId": "greaterThan",
-//                "field1": "username",
-//                "field2": "phone"
-//            }
-        ];
-        //进行校验
-        var valRes = validateTool.validateObject(formValues,formRules);
-        if(valRes.result){
-            alert("校验通过");
-        }else{
-            alert("校验结果："+JSON.stringify(valRes.errorMsg));
-        }
-    }
     require(["../../src/Bootstrap"], function () {
-        var inp = Page.create("maskedtextbox", {
+        var inp = Page.create("my97datepicker", {
             $parentId: 'nameContainer',
             value: '',
             required: false,
             glyphicon: 'glyphicon-ok',
-            message: '请输入2-5个汉字',
-            label: '您的姓名',
-            status:"disabled",
-            validationRules: {
-                required:true,//options中为false时，此处可重开启校验
-                length: {
-                    maxLen: 5,
-                    minLen: 2
-                },
-                regex: {
-                    regexStr: "/^[\u4e00-\u9fa5]+$/",
-                    customErrMsg:"只能输入汉字"
-                }
-            },
-            showErrorMessage:true,
-            $id: 'username',
-            mask:"(000)000000"
+            message: '请选择开始日期',
+            label: '开始日期',
+            $id: 'begintime',
+
+            dateFmt:'yyyy-MM-dd'          //yyyy-MM
         });
         inp.render();
-        var inq = Page.create("maskedtextbox", {
-            $parentId: 'phoneContainer',
-            value: '',
-            required: false,
-            glyphicon: 'glyphicon-ok',
-            message: '请输入手机号',
-            label: '联系方式',
-            validationRules: {
-                lengthFix: {
-                    fixLen: 11
-                },
-                required:true,//设置为false可关闭校验
-                mobilePhone:false
-            },
-            showErrorMessage:true,
-            $id: 'phone',
-            mask:"00000000000",
-            promptChar:"-"
-        });
-        inq.render();
-        //console.log(inq);
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

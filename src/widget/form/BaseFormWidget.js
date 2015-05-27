@@ -191,13 +191,13 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                 this.setAttrs({
                     status: status,
                     showErrorMessage: false,
-                    showMessage: false,
-                    showRequired: false
+                    showMessage: true,
+                    showRequired: that.getAttr("required")
                 });
             }else if (status == 'ready2edit') {
 
             } else {
-                window.console.error("unknown status, it should be in edit|readonly|ready2edit");
+                window.console.error("unknown status, it should be in edit|readonly|ready2edit|disabled");
             }
         },
         focus: function () {

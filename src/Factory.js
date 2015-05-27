@@ -26,6 +26,7 @@ define([
     "./widget/form/input/InputWidget",
     "./widget/form/maskedtextbox/MaskedtextboxWidget",
     "./widget/form/combobox/ComboboxWidget",
+    "./widget/form/my97date/My97DateWidget",
     "./widget/form/datepicker/DatepickerWidget",
     "./widget/pagination/PaginationWidget",
     "./widget/layout/BaseLayout",
@@ -42,7 +43,8 @@ define([
     "./widget/form/slider/SliderWidget",
     "./widget/dialog/DialogWidget",
     "./widget/customSearcher/CustomSearcherWidget",
-    "./widget/form/tooltip/TooltipWidget"
+    "./widget/form/tooltip/TooltipWidget",
+    "./widget/form/my97date/My97DateWidget"
 ], function () {
     var allComps = arguments;
 

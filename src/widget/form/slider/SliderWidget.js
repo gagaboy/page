@@ -18,7 +18,6 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
             rightDragHandleTitle: "drag",//multi=true时，设置右边的slider滑块标题
             tooltip: { format: "{0:#,#.##}" },
             value: null,
-            enabled: true,
             tickPlacement: "both",
             showTick:true //是否先刻度线
         },
@@ -55,8 +54,11 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
                     sliderWidget.hide();
                     sliderWidget.parent().append(jQuery('<input class="sliderValue form-control form-text" readonly value="'+this.getValue()+'"></input>'));
                 }else if(value === "edit"){
+                    this.sliderObj.enable();
                     sliderWidget.show();
                     sliderWidget.parent().find(".sliderValue").remove();
+                }else if(value === "disabled"){
+                    this.sliderObj.disable();
                 }
             }
         }
