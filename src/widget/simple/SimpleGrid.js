@@ -31,7 +31,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             allChecked: false,  //设置为true，则默认全部选中
             //分页信息
             usePager:true,  //是否分页
-            pageIndex:0,    //默认当前页
+            pageIndex:1,    //默认当前页
             pageSize:15,    //默认每页条数
             totalNum:0, //总数据条数
             totalPage:0,    //总页数
