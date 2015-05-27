@@ -24,3 +24,22 @@ _click: function (name) {
 			}
 		}
 	},
+
+artDialog.source.js 源码有改动：解决对话框拖动时，鼠标释放后，还能拖动的问题
+1953行
+改动前：
+end: function (event) {
+		_$document
+		.bind('mousemove', this.move)
+		.bind('mouseup', this.end);
+
+		this.onend(event.clientX, event.clientY);
+		return false;
+	}
+改动后：
+end: function (event) {
+		_$document.unbind('mousemove').unbind('mouseup');
+
+		this.onend(event.clientX, event.clientY);
+		return false;
+	}
