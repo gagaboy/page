@@ -64,7 +64,7 @@
             $parentId: 'simpleGrid',
             idField:"wid",
             $id:"simpleGrid",
-            //tableClass:"table table-striped",
+            //tableClass:"table table-striped table-bordered table-hover dataTables-example dataTable dtr-inline",
             totalNum:200,
             showCheckbox:true,
             usePager:true,
@@ -169,8 +169,9 @@
         simpleGrid.render();
 
     });
-    function showSex(sexDisplay){
+    function showSex(sexDisplay,tdDom){
         alert("hi,"+sexDisplay);
+
     }
     function mm(rowData){
         if(rowData.sexDisplay&&rowData.sexDisplay.length<2){
