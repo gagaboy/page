@@ -31,16 +31,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             allChecked: false,  //设置为true，则默认全部选中
             //分页信息
             usePager:true,  //是否分页
-            pageIndex:1,    //默认当前页
+            pageIndex:0,    //默认当前页
             pageSize:15,    //默认每页条数
             totalNum:0, //总数据条数
-            totalPage:1,    //总页数
+            totalPage:0,    //总页数
             showPageIndexInput: true,   //显示跳转到某页输入框
             showPageSizeInput: true,    //显示每页条数输入框]
             showFirstPage: true,    //显示第一页按钮
             showLastPage: true, //显示最后一页按钮
             showPreviousAndNextPage: true,  //显示上一页和下一页按钮
             showPageDetail: true,   //显示分页详情
+            showTipWhenNull:true,//没有数据时显示分页提示
+            noDataTip:null,//无数据时分页区的提示信息
             //操作列
             opColumns:[],/**操作列信息
                          * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
@@ -175,6 +177,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showLastPage: this.getAttr("showLastPage"),//显示最后一页按钮
                     showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
                     showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
+                    showTipWhenNull: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
+                    noDataTip: this.getAttr("noDataTip"),
                     pageChangeEvent: function (pager) {
                         if(that.getAttr("beforeChangePageNo")){
                             that.getAttr("beforeChangePageNo")(pager,that);//参数为分页对象,grid对象

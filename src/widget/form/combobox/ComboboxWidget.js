@@ -12,35 +12,35 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             display: null,
             multi: false,
             searchable: true,
-            selectedItems: [],
-            showPanel: false,
-            focused: false,
-            inputWidth: 25,
-            searchValue: "",
             searchKey: "searchValue",
-
+            showClear: true,  //是否要显示清空图标
+            panelCancel: true,  //是否允许从面板中取消
             model: "normal",   //grid | tree
             data: [],
             $valueField: "value",
             $textField: "display",
             $pageSize: 10,
             $split: ",",
-            $firstLoad: true,
             usePager: true,
-            showPager: true,
             dataSetId: null,
             url: null,
             mainAlias: null,
-            $pagination: null,
-            downShow: true,
-            clearShow: false,
-
-            panelLeft: null,
-            panelTop: null,
-
             beforeSelectEvent: null,
             selectedEvent: null,
             beforeOpenEvent: null,
+
+            $pagination: null,
+            downShow: true,
+            clearShow: false, //控制清空图标是否显示
+            showPager: true,
+            $firstLoad: true,
+            selectedItems: [],
+            showPanel: false,
+            focused: false,
+            inputWidth: 25,
+            searchValue: "",
+            panelLeft: null,
+            panelTop: null,
 
             onAfterRender: function(vm) {
 
@@ -220,6 +220,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             toggleItemSelect: function(vid, el, index, event) {
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
+                if(!vm.panelCancel && el.checked) return;
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
                     var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
                     if(res == false) {
