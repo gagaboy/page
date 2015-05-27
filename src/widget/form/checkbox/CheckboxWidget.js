@@ -13,7 +13,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
 
             itemCheck: function (vid,d) {
                 var vm = avalon.vmodels[vid];
-                if(vm.status == 'readonly'){
+                if(vm.status == 'readonly' || vm.status == 'disabled'){
                     return;
                 }
                 d.checked = !d.checked;

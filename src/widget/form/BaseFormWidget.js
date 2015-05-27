@@ -1,13 +1,13 @@
 /**
  * Created by qianqianyi on 15/4/23.
  */
-define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inline.html'], function (Base, formTpl, inlineTpl) {
+define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inline.html'], function (Base, formTpl, inlineTpl) {
     var xtype = "baseFormWidget";
     var BaseFormWidget = new Class({
         Extends: Base,
         options: {
             $xtype: xtype,
-            status: 'edit',//default = edit |edit|readonly
+            status: 'edit',//default = edit |edit|readonly|disabled
 
             parentTpl: "form",  //组件的父模板类型 default=form |form|inline
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +41,10 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
 
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             labelSpan: 4,
-            controlPadding: '0'
+            controlPadding: '0',
+
+            //data binding
+            bind: ''
 
         },
         initialize: function (opts) {
@@ -83,20 +86,20 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             $this.$element = e;
             $this.element = e[0];
 
-            if (this.getAttr("status")=='edit'&&"inline" == $this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))) {
+            if ("inline" == $this.options.parentTpl && (this.getAttr("showMessage") || this.getAttr("showErrorMessage"))) {
                 var msgs = "";
-                if(this.getAttr("showMessage")){
+                if (this.getAttr("showMessage")) {
                     msgs += this.getAttr("message");
                 }
-                if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
-                    msgs += this.getAttr("errorMessage")+" ";
+                if (this.getAttr("showErrorMessage") && this.getAttr("errorMessage")) {
+                    msgs += this.getAttr("errorMessage") + " ";
                 }
-                if(msgs){
+                if (msgs) {
                     this.toolTip = Page.create("tooltip", {
                         content: msgs,
-                        target:this.options.$parentId,
-                        position:'bottom',
-                        autoHide:false
+                        target: this.options.$parentId,
+                        position: 'bottom',
+                        autoHide: false
                     });
                     this.toolTip.render();
                 }
@@ -107,6 +110,25 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
             if (this["_afterRender"]) {
                 this["_afterRender"](this.vmodel);
             }
+            if (this.options.bind != '') {
+                var bindField = this.options.bind;
+                if (bindField) {
+                    var f = bindField.split(".");
+                    if (f.length != 2) {
+                        throw new Error('bind error' + bindField);
+                    }
+                    var dsId = f[0];
+                    var dsField = f[1];
+                    var ds = {
+                        dataValueId: dsId,
+                        fieldId: dsField,
+                        widgetId: this.getId()
+                    };
+                    var dbinder = Page.create('dataBinder', ds);
+                    this.dataBind = dbinder;
+                }
+            }
+
             return this;
         },
         getValue: function () {
@@ -165,7 +187,14 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
                     showMessage: false,
                     showRequired: false
                 });
-            } else if (status == 'ready2edit') {
+            } else if (status == 'disabled') {
+                this.setAttrs({
+                    status: status,
+                    showErrorMessage: false,
+                    showMessage: false,
+                    showRequired: false
+                });
+            }else if (status == 'ready2edit') {
 
             } else {
                 window.console.error("unknown status, it should be in edit|readonly|ready2edit");
@@ -227,38 +256,46 @@ define(['../Base', 'text!./BaseFormWidget-form.html','text!./BaseFormWidget-inli
         isFormWidget: function () {
             return true;
         },
-        _errorMessageChange:function(errmsg){
+
+        destroy: function () {
+            this.parent();
+            if (this.dataBind) {
+                this.dataBind.destroy();
+            }
+        },
+
+        _errorMessageChange: function (errmsg) {
             var msgs = "";
-            if(this.getAttr("showMessage")){
+            if (this.getAttr("showMessage")) {
                 msgs += this.getAttr("message");
             }
-            if(this.getAttr("showErrorMessage")&&this.getAttr("errorMessage")){
-                msgs += this.getAttr("errorMessage")+" ";
+            if (this.getAttr("showErrorMessage") && this.getAttr("errorMessage")) {
+                msgs += this.getAttr("errorMessage") + " ";
             }
-            if(!msgs){
-                if(this.toolTip){
+            if (!msgs) {
+                if (this.toolTip) {
                     this.toolTip.destroy();
                     this.toolTip = null;
                 }
-            }else if(this.getAttr("status")=='edit'&&"inline" == this.options.parentTpl&&(this.getAttr("showMessage")||this.getAttr("showErrorMessage"))){
-                if(this.toolTip){
-                    if(errmsg&&this.getAttr("showErrorMessage")){
-                        this.toolTip.setAttr("content",errmsg);
-                    }else if(this.getAttr("showMessage")){
-                        this.toolTip.setAttr("content",this.getAttr("message"));
-                    }else{
-                        this.toolTip.setAttr("content","");
+            } else if ("inline" == this.options.parentTpl && (this.getAttr("showMessage") || this.getAttr("showErrorMessage"))) {
+                if (this.toolTip) {
+                    if (errmsg && this.getAttr("showErrorMessage")) {
+                        this.toolTip.setAttr("content", errmsg);
+                    } else if (this.getAttr("showMessage")) {
+                        this.toolTip.setAttr("content", this.getAttr("message"));
+                    } else {
+                        this.toolTip.setAttr("content", "");
                     }
-                }else{
+                } else {
                     this.toolTip = Page.create("tooltip", {
                         content: msgs,
-                        target:this.options.$parentId,
-                        position:'bottom',
-                        autoHide:false
+                        target: this.options.$parentId,
+                        position: 'bottom',
+                        autoHide: false
                     });
                     this.toolTip.render();
                 }
-            }else if(this.toolTip){
+            } else if (this.toolTip) {
                 this.toolTip.destroy();
             }
 

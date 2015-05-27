@@ -21,7 +21,7 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
             return this.$element;
         },
 
-        _afterLayoutRender: function () {
+        _beforLayoutRender: function () {
             var ds = this.options.dataSources;
             var db = this.options.dataBinders;
             this._widgetContainer = Page.create("widgetContainer", {

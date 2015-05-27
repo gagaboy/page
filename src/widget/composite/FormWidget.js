@@ -9,7 +9,8 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             _addWrapDiv: false,
             cols: 2, //每行多少列
             widgets: [], //组件列表
-            dataSources: null
+            dataSources: null,
+            dataSourcesId: ''
         },
         getTemplate: function () {
             return formTpl;
@@ -28,26 +29,44 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             col.md = 12 / this.options.cols; //列
             var c = Object.merge({}, cfg);
             //处理绑定
-            var bindField = c['bind'];
-            if (bindField) {
-                var f = bindField.split(".");
-                if (f.length != 2) {
-                    throw new Error('bind error' + bindField);
-                }
-                var dsId = f[0];
-                var dsField = f[1];
-                this.dataBindCfg[bindField] = {
-                    dataValueId: dsId,
-                    fieldId: dsField,
-                    widgetId: cfg['$id'] ? cfg['$id'] : cfg['id']
-                };
-            }
+            /*
+             var bindField = c['bind'];
+             if (bindField) {
+             var f = bindField.split(".");
+             if (f.length != 2) {
+             throw new Error('bind error' + bindField);
+             }
+             var dsId = f[0];
+             var dsField = f[1];
+             this.dataBindCfg[bindField] = {
+             dataValueId: dsId,
+             fieldId: dsField,
+             widgetId: cfg['$id'] ? cfg['$id'] : cfg['id']
+             };
+             }
+             */
             col.items.push(c);
             return col;
         },
 
+        _createPanel: function (title, cols, widgets) {
+            var currentRow = null;
+            var showTitle = false;
+            if (title && title != '') {
+                showTitle = true;
+            }
+            var panel = {$xtype: 'panel', showTitle: showTitle, items: []};
+            for (var i = 0; i < widgets.length; i++) {
+                if (i == 0 || i % cols == 0) {
+                    currentRow = {$xtype: 'row', items: []};
+                    panel.items.push(currentRow);
+                }
+                currentRow.items.push(this._wrapWidgetConfig(widgets[i]));
+            }
+            return panel;
+        },
+
         appendExtend: function () {
-            this.dataBindCfg = {};
             var widgets = this.options.widgets;
             var cols = this.options.cols;
             var currentRow = null;
@@ -59,23 +78,23 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
                 }
                 currentRow.items.push(this._wrapWidgetConfig(widgets[i]));
             }
-            var db = this.dataBindCfg;
+            var db = {};
             var ds = this.options.dataSources;
             this.fragment = Page.create("fragment", {
                 dataSources: ds,
-                dataBinders: db,
+                //dataBinders: db,
                 items: [panel]
             });
             this.fragment.render(this.$element);
             //预先加载数据
             var ds = this.fragment.getDataSources();
-            for(var i=0; i<ds.length; i++) {
+            for (var i = 0; i < ds.length; i++) {
                 ds[i].fetch()
             }
 
         },
 
-        submitForm: function (callBack) {
+        submitForm: function () {
             if (this.isValid()) {
                 for (var v in this.options.dataSources) {
                     Page.manager.components[v].sync();
