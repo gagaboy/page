@@ -12,7 +12,7 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             pageSize: 10,//每页条数
             pageIndex: 1,//当前页，默认显示第一页
 
-            totalPage: 1,//总页数,计算所得，设置无效
+            totalPage: 0,//总页数,计算所得，设置无效
             recordBegin:0,//显示从第几条开始,计算所得，设置无效
             recordTo: 0,//显示到第几条,计算所得，设置无效
 
@@ -22,7 +22,8 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             showLastPage: true,//显示最后一页按钮
             showPreviousAndNextPage: true,//显示上一页和下一页按钮
             showPageDetail: true,//显示分页详情
-            //showTipWhenNull: true,//无数据时显示提示信息
+            showTipWhenNull: false,//无数据时显示提示信息
+            noDataTip:"没有找到数据！",
             pageChangeEvent: null,
             goFirstPage: function (vid) {
                 var vm = avalon.vmodels[vid];
@@ -86,6 +87,11 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             if (this.getAttr("totalNum") && this.getAttr("pageSize")) {
                 var _totalPage = this.getAttr("totalNum") % this.getAttr("pageSize") == 0 ? (this.getAttr("totalNum") / this.getAttr("pageSize")) : parseInt(this.getAttr("totalNum") / this.getAttr("pageSize")) + 1
                 this.setAttr("totalPage",_totalPage);
+            }else{
+                this.setAttr("totalPage",0);
+                if(this.getAttr("pageIndex")!=0){
+                    this.setAttr("pageIndex",0);
+                }
             }
         },
         _calculateBeginAndTo: function () {
@@ -94,6 +100,9 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 var _endNum = this.getAttr("pageSize")*this.getAttr("pageIndex");
                 this.setAttr("recordBegin",_startNum);
                 this.setAttr("recordTo",_endNum>this.getAttr("totalNum")?this.getAttr("totalNum"):_endNum);
+            }else{
+                this.setAttr("recordBegin",0);
+                this.setAttr("recordTo",0);
             }
         }
 
