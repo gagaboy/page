@@ -18,6 +18,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             inputWidth: 25,
             searchValue: "",
             searchKey: "searchValue",
+            showClear: true,  //是否要显示清空图标
+            panelCancel: true,  //是否允许从面板中取消
 
             model: "normal",   //grid | tree
             data: [],
@@ -33,7 +35,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             mainAlias: null,
             $pagination: null,
             downShow: true,
-            clearShow: false,
+            clearShow: false, //控制清空图标是否显示
+
 
             panelLeft: null,
             panelTop: null,
@@ -220,6 +223,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             toggleItemSelect: function(vid, el, index, event) {
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
+                if(!vm.panelCancel && el.checked) return;
                 if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
                     var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], cmpMgr, el.$model);
                     if(res == false) {

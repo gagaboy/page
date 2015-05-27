@@ -17,7 +17,7 @@
         <!--单选可搜索-->
         <div ms-if="!multi && searchable" ms-class="div-focus: focused" class="form-control" >
             <input ms-duplex="display" style="outline: none;border: none;width: 48%"  ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
-            <a ms-visible="clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
+            <a ms-visible="showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
             <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
                   style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;" ms-on-click="changePanelShow(vid, $event)"></span>
         </div>
