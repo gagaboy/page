@@ -49,8 +49,12 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 var panelObj = element.find("#comboBox_panel_"+vm.vid);
                 jQuery('body').append(panelObj);
             },
+            isDisabled: function() {
+                return this.status=='disabled' ? true:false;
+            },
             comboBoxFocus: function (vid, span) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 vm.focused = true;
                 jQuery(this).find('input').focus();
                 if(!vm.showPanel) {
@@ -59,6 +63,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             },
             inputFocus: function(vid, event) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 vm.focused = true;
                 vm.clickItem = false;
                 if(!vm.showPanel) {
@@ -67,14 +72,17 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             },
             showClearIcon: function(vid, $event) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 vm.clearShow = true;
             },
             displayClearIcon: function(vid, $event) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 vm.clearShow = false;
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 //如果是多选，则需要动态改变输入区域的宽度
                 if (vm.multi) {
                     var maxWidth = jQuery(this).parent().parent().width();
@@ -110,6 +118,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             },
             changePanelShow: function(vid, event) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 //下拉面板打开前事件
                 if(!vm.showPanel) {
                     if(vm.beforeOpenEvent && "function"==typeof vm.beforeOpenEvent) {
@@ -265,6 +274,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             },
             removeItem: function(vid, item, index, evnet) {
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 var el = vm.selectedItems[index];
 
                 var cmpMgr = vm.getCmpMgr();
@@ -287,6 +297,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             removeAll: function(vid, event) {
                 event && event.stopPropagation();
                 var vm = avalon.vmodels[vid];
+                if(vm.isDisabled()) return;
                 var el = vm.selectedItems[0];
                 if(!el) return;
                 var cmpMgr = vm.getCmpMgr();
