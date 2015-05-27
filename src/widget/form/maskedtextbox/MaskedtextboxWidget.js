@@ -15,8 +15,9 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
             }
         },
         render: function (opts) {
+            var p = jQuery.extend({}, this.options, opts || {});
             this.parent(opts);
-            this._getInputElement().kendoMaskedTextBox(this.options);
+            this._getInputElement().kendoMaskedTextBox(p);
         },
         getTemplate: function () {
             return template;
@@ -33,6 +34,8 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
                     maskedObj.readonly(true);
                 }else if(value === "edit"){
                     maskedObj.readonly(false);
+                }else if(value === "disabled"){
+                    maskedObj.enable(false);
                 }
             }
         },

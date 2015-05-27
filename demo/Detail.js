@@ -302,7 +302,11 @@ require(["../../../page/src/Bootstrap"], function () {
             var v = c.switchStatus("readonly");
         });
     });
-
+    $("#disableForm").click(function(){
+        form.each(function (c) {
+            var v = c.switchStatus("disabled");
+        });
+    });
     $("#editForm").click(function(){
         form.each(function (c) {
             var v = c.switchStatus("edit");
