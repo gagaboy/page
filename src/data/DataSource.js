@@ -48,7 +48,7 @@ define(["./DataConstant"], function (Constant) {
 
                     ///***************wrap for emp start *****************************
                     result = result[Constant.data];
-                    if ($this.options.model.mainAlias != '') {
+                    if ($this.options.model.mainAlias && $this.options.model.mainAlias != '') {
                         result = result[$this.options.model.mainAlias];
                     }
                     if ($this.options.model.childAlias && $this.options.model.childAlias.length > 0) {
