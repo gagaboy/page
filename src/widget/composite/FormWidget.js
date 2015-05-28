@@ -32,6 +32,9 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             var col = {$xtype: 'col', items: []}
             col.md = 12 / this.options.cols; //列
             var c = Object.merge({}, cfg);
+            if (c.show != undefined) {
+                col.show = c.show;
+            }
             col.items.push(c);
             return col;
         },
@@ -43,7 +46,7 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             var currentRow = null;
             var panel = {$xtype: 'panel', title: this.options.title, showTitle: this.options.showTitle, items: []};
             for (var i = 0; i < widgets.length; i++) {
-                if (i == 0 || i % cols == 0) {
+                if (i == 0 /* || i % cols == 0*/) {
                     currentRow = {$xtype: 'row', items: []};
                     panel.items.push(currentRow);
                 }
@@ -82,7 +85,7 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
         },
 
         isValid: function () {
-            for (var i=0; i<this.formWidgetBag.length; i++) {
+            for (var i = 0; i < this.formWidgetBag.length; i++) {
                 var widget = this.formWidgetBag[i]
                 if (!widget.isValid()) {
                     return false;

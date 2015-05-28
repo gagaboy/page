@@ -16,6 +16,9 @@
 <div id="container">
 
 </div>
+<div id="container2">
+
+</div>
 
 <div>
     <button id="loadData">加载数据</button>
@@ -42,34 +45,48 @@
 
     require(["../../../page/src/Bootstrap"], function () {
         //console.log(inq);
+        var ds = Page.create("dataValue", {
+            $id: 'ds1',
+            fetchUrl: 'demo.json',
+            syncUrl: '',
+            data: {
+                xm: 'zhangsan'
+            }
+        });
         var form = Page.create("form", {
-            $id: 'f',
+            $id: 'f1',
+            title: 'aaa',
             $parentId: 'container',
             cols: 2,
-            initData:false,
-            dataSources: {
-                ds1: {
-                    type: 'dataValue',
-                    options: {
-                        fetchUrl: 'demo.json',
-                        syncUrl: '',
-                        data: {
-                            xm: 'zhangsan'
-                        }
-                    }
-                }
-            },
+            initData: false,
+            dataSourcesIds: ['ds1'],
             widgets: [
-                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required:true},
+                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true},
                 {$id: 'interest', $xtype: 'input', label: '兴趣', bind: 'ds1.xq'},
                 {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
                 {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
-                {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj"},
-                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}//,
-//                {$id: 'id', $xtype: 'input', label: '您的姓名', bind: 'ds1.id', show: false}
+                {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
+                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}
             ]
         });
         form.render();
+
+        /*
+        var form2 = Page.create("form", {
+            $id: 'f',
+            $parentId: 'container2',
+            cols: 2,
+            initData: true,
+            dataSourcesIds: ['ds1'],
+            widgets: [
+                {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
+                {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
+                {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
+                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}
+            ]
+        });
+        form2.render();
+        */
 
         Page.manager.components["ds1"].addEvent("recordUpdated", function (v) {
             $("#valArea").html(JSON.stringify(v));
