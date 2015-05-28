@@ -4,10 +4,11 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
+            showIcon:true,
             $opts:{
                 doubleCalendar: false,
                 dateFmt:'yyyy-MM-dd',
-                firstDayOfWeek:7
+                firstDayOfWeek:1
             },
             showPanel: function(vid) {
                 var vm = vid ? avalon.vmodels[vid] : this;
@@ -16,13 +17,11 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
                 WdatePicker(opt);
             }
         },
-
-
         initialize: function (opts) {
             var $opts = {};
             var formOpt = Page.create("baseFormWidget", {}).options;
             for(var key in opts) {
-                if(!(key in formOpt) && key!="$id" && !key.startsWith("on")) {
+                if(!(key in formOpt) && key!="$id" && !this._startsWith(key,"on")) {
                     $opts[key] = opts[key];
                     if("formatDate" == key) {
                         $opts["dateFmt"] = opts[key];
@@ -30,17 +29,20 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
                     delete opts[key];
                 }
             }
+            $opts["onpicked"] = function(dp){
+                opts.onValueChange && opts.onValueChange(dp.cal.getNewDateStr());
+            };
             opts.$opts = $opts;
             this.parent(opts);
         },
-        render: function(parent) {
+        /*render: function(parent) {
             this.parent(parent);
 
             var that = this;
             this._getInputElement().bind("focus",function(){
                 WdatePicker(that.options.$opts);
             });
-        },
+        },*/
         _valueChange: function (value) {
             this.setAttr("display", value);
             this.validate();//即时校验
@@ -51,6 +53,14 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
         _getInputElement: function () {
             var input = jQuery(this.getElement()).find("input.form-widget-to-focus-class");
             return input;
+        },
+        _startsWith:function(str, prefix){
+            str = this._toString(str);
+            prefix = this._toString(prefix);
+            return str.indexOf(prefix) === 0;
+        },
+        _toString:function(val){
+            return val == null ? '' : val.toString();
         }
     });
     My97DateWidget.xtype = xtype;
