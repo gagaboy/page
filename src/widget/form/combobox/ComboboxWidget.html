@@ -16,17 +16,17 @@
         </div>
         <!--单选可搜索-->
         <div ms-if="!multi && searchable" ms-class="div-focus: focused" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" >
-            <input ms-duplex="display" style="outline: none;border: none;width: 80%"  ms-attr-disabled="status=='disabled'" ms-css-background-color="status=='disabled'?'#eee':''" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
+            <input ms-duplex="display" style="outline: none;border: none;width: 100%"  ms-attr-disabled="status=='disabled'" ms-css-background-color="status=='disabled'?'#eee':''" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
             <a ms-visible="showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
             <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
-                  style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;" ms-on-click="changePanelShow(vid, $event)"></span>
+                  style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 32px;background-color: white" ms-on-click="changePanelShow(vid, $event)"></span>
         </div>
         <!--单选不可搜索-->
         <div ms-if="!multi && !searchable" ms-class="div-focus: showPanel" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" style="cursor: pointer;"ms-on-click="changePanelShow(vid, $event)">
             <span ms-repeat-item="selectedItems" ms-text="item[$textField]"></span>
             <a ms-visible="showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
             <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
-                  style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;"></span>
+                  style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 32px;background-color: white"></span>
         </div>
 
         <!--下拉面板区域-->
