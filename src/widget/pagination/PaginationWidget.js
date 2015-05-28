@@ -74,9 +74,10 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 //属性扩展
                 this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model)
             }else{
-                this.setAttr("pageIndex",this.getAttr("totalPage"),true);
+                this.setAttr("pageIndex",1,true);
             }
         },
+
         _totalNumChange: function (tNum, oldNum, model) {
             this._calculateTotalPage();
             this._calculateBeginAndTo();
