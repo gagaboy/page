@@ -42,7 +42,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             showPreviousAndNextPage: true,  //显示上一页和下一页按钮
             showPageDetail: true,   //显示分页详情
             showTipWhenNull:true,//没有数据时显示分页提示
-            noDataTip:null,//无数据时分页区的提示信息
+            noDataTip:"没有查询到数据!",//无数据时分页区的提示信息
             //操作列
             opColumns:[],/**操作列信息
                          * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
