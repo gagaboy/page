@@ -59,6 +59,11 @@
 
     var childParam = "child";
     require(["../../../page/src/Bootstrap"], function () {
+        Page.dialog.data("childFunc", childFunc);
+
+        function childFunc() {
+            alert("我是子页面方法");
+        }
     });
     function openD(){
         alert("父页面全局变量："+(window.parent.topParam));
