@@ -1,0 +1,9 @@
+.emap_pagination_noDataTip{
+    text-align:left;
+}
+.emap_pagination_pageIndexInput{
+    width:30px;height:23px;text-align:right;
+}
+.emap_pagination_pageNoLink{
+    display:initial;
+}

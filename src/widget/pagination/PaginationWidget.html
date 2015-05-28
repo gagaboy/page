@@ -3,7 +3,7 @@
         <td class="col-md-6" ms-if="showPageDetail">
             <div class="dataTables_info" role="status" aria-live="polite">
                 <div ms-if="showPageIndexInput" style="display: inline-block;">
-                    <input style="width:30px;height:23px;text-align:right;" ms-attr-value="pageIndex" ms-on-keypress="inputPageIndex(event,vid,this)">
+                    <input class="emap_pagination_pageIndexInput" ms-attr-value="pageIndex" ms-on-keypress="inputPageIndex(event,vid,this)">
                 </div>
                 <div ms-if="!showPageIndexInput" style="display: inline-block;">
                     {{pageIndex}}
@@ -21,40 +21,40 @@
         <td class="col-md-6">
             <div class="dataTables_paginate paging_simple_numbers" style="float:right">
                 <ul class="pagination" style="margin:3px;">
-                    <li style="display:initial" ms-if="showFirstPage&&pageIndex!=1" class="paginate_button previous disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
+                    <li ms-if="showFirstPage&&pageIndex!=1" class="paginate_button previous emap_pagination_pageNoLink" aria-controls="DataTables_Table_0" tabindex="0">
                         <a href="javascript:void(0);" ms-click="goPage(vid,1)">
                             首页
                         </a>
                     </li>
-                    <li style="display:initial" ms-if="showPreviousAndNextPage" class="paginate_button previous disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
+                    <li ms-if="showPreviousAndNextPage" class="paginate_button previous emap_pagination_pageNoLink disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
                         <a href="javascript:void(0);" ms-click="goPreviousPage(vid)">
                             上一页
                         </a>
                     </li>
-                    <li style="display:initial" class="paginate_button " ms-if="pageIndex>3" aria-controls="DataTables_Table_0" tabindex="0"><a
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="pageIndex>3" aria-controls="DataTables_Table_0" tabindex="0"><a
                             href="javascript:void(0);" ms-click="goPage(vid,pageIndex-3)">{{pageIndex-3}}</a></li>
-                    <li style="display:initial" class="paginate_button " ms-if="pageIndex>2" aria-controls="DataTables_Table_0" tabindex="0"><a
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="pageIndex>2" aria-controls="DataTables_Table_0" tabindex="0"><a
                             href="javascript:void(0);" ms-click="goPage(vid,pageIndex-2)">{{pageIndex-2}}</a></li>
-                    <li style="display:initial" class="paginate_button " ms-if="pageIndex>1" aria-controls="DataTables_Table_0" tabindex="0"><a
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="pageIndex>1" aria-controls="DataTables_Table_0" tabindex="0"><a
                             href="javascript:void(0);" ms-click="goPage(vid,pageIndex-1)">{{pageIndex-1}}</a></li>
-                    <li style="display:initial" class="paginate_button active" aria-controls="DataTables_Table_0" tabindex="0"><a href="#">{{pageIndex}}</a>
+                    <li class="paginate_button emap_pagination_pageNoLink active" aria-controls="DataTables_Table_0" tabindex="0"><a href="#">{{pageIndex}}</a>
                     </li>
-                    <li style="display:initial" class="paginate_button " ms-if="totalPage>pageIndex" aria-controls="DataTables_Table_0"
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="totalPage>pageIndex" aria-controls="DataTables_Table_0"
                         tabindex="0"><a href="javascript:void(0);"
                                         ms-click="goPage(vid,pageIndex+1)">{{pageIndex+1}}</a></li>
-                    <li style="display:initial" class="paginate_button " ms-if="totalPage>pageIndex+1" aria-controls="DataTables_Table_0"
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="totalPage>pageIndex+1" aria-controls="DataTables_Table_0"
                         tabindex="0"><a href="javascript:void(0);"
                                         ms-click="goPage(vid,pageIndex+2)">{{pageIndex+2}}</a></li>
-                    <li style="display:initial" class="paginate_button " ms-if="totalPage>pageIndex+2" aria-controls="DataTables_Table_0"
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="totalPage>pageIndex+2" aria-controls="DataTables_Table_0"
                         tabindex="0"><a href="javascript:void(0);"
                                         ms-click="goPage(vid,pageIndex+3)">{{pageIndex+3}}</a></li>
-                    <li style="display:initial" ms-if="showPreviousAndNextPage" class="paginate_button next disabled:pageIndex>totalPage-1" aria-controls="DataTables_Table_0" tabindex="0">
+                    <li ms-if="showPreviousAndNextPage" class="paginate_button next emap_pagination_pageNoLink disabled:pageIndex>totalPage-1" aria-controls="DataTables_Table_0" tabindex="0">
                         <a href="javascript:void(0);" ms-click="goNextPage(vid)"
                            ms-attr-data-pageIndex="pageIndex<totalPage?pageIndex+1:pageIndex">
                             下一页
                         </a>
                     </li>
-                    <li style="display:initial" ms-if="showLastPage&&pageIndex!=totalPage" class="paginate_button previous disabled:pageIndex<2" aria-controls="DataTables_Table_0" tabindex="0">
+                    <li ms-if="showLastPage&&pageIndex!=totalPage" class="paginate_button emap_pagination_pageNoLink" aria-controls="DataTables_Table_0" tabindex="0">
                         <a href="javascript:void(0);" ms-click="goPage(vid,totalPage)">
                             末页
                         </a>
@@ -64,6 +64,6 @@
         </td>
     </tr>
     <tr ms-if="showTipWhenNull&&(!totalNum||totalNum<1)">
-        <td>{{noDataTip}}</td>
+        <td><div class="emap_pagination_noDataTip">{{noDataTip}}</div></td>
     </tr>
 </table>

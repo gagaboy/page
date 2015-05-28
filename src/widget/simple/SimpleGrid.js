@@ -178,7 +178,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
                     showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
                     showTipWhenNull: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
-                    noDataTip: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
+                    noDataTip: this.getAttr("noDataTip"),//无数据时显示提示信息
 
                     pageChangeEvent: function (pager) {
                         if(that.getAttr("beforeChangePageNo")){
