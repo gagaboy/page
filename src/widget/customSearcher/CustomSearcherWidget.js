@@ -392,6 +392,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     items: [{
                         $xtype: 'col',
                         md: 4,
+                        sm: 4,
+                        xs: 4,
+                        lg: 4,
                         items: [{
                             $id: 'field_'+index,
                             $xtype: 'combobox',
@@ -428,6 +431,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     },{
                         $xtype: 'col',
                         md: 4,
+                        sm: 4,
+                        xs: 4,
+                        lg: 4,
                         items: [{
                             $id: 'oper_'+index,
                             $xtype: 'combobox',
@@ -445,6 +451,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     },{
                         $xtype: 'col',
                         md: 4,
+                        sm: 4,
+                        xs: 4,
+                        lg: 4,
                         items: initData ? [] : [{
                             $id: 'value_'+index,
                             $xtype: 'input',
