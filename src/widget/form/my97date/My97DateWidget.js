@@ -4,7 +4,6 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            value: null,
             $opts:{
                 doubleCalendar: false,
                 dateFmt:'yyyy-MM-dd',

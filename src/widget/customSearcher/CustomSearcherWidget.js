@@ -417,7 +417,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                                     valColObj.removeItem(0);
                                 }
 
-                                fieldModel.id = 'value_'+index;
+                                fieldModel.$id = 'value_'+index;
                                 fieldModel.parentTpl = 'inline';
                                 if(undefined == Page.classMap[fieldModel.$xtype]) {
                                     fieldModel.$xtype = 'input';
