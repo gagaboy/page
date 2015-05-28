@@ -63,6 +63,7 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                             vm.pageIndex = 1;
                         }else{
                             vm.pageIndex = vm.totalPage;
+                            dom.value = vm.totalPage;
                         }
                     }
                 }
@@ -79,6 +80,7 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                             vm.pageSize = 1;
                         }else{
                             vm.pageSize = vm.totalNum;
+                            dom.value = vm.totalNum;
                         }
                     }
                 }
@@ -133,7 +135,7 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 var _totalPage = this.getAttr("totalNum") % this.getAttr("pageSize") == 0 ? (this.getAttr("totalNum") / this.getAttr("pageSize")) : parseInt(this.getAttr("totalNum") / this.getAttr("pageSize")) + 1
                 this.setAttr("totalPage",_totalPage,true);
                 if(this.getAttr("pageIndex")>this.getAttr("totalPage")){
-                    this.setAttr("pageIndex",this.getAttr("totalPage"),true);
+                    this.setAttr("pageIndex",this.getAttr("totalPage"));
                 }
             }else{
                 this.setAttr("totalPage",0);
