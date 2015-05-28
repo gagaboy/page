@@ -29,20 +29,21 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
                     delete opts[key];
                 }
             }
+            var that = this;
             $opts["onpicked"] = function(dp){
-                opts.onValueChange && opts.onValueChange(dp.cal.getNewDateStr());
+                that._getInputElement().blur();
             };
             opts.$opts = $opts;
             this.parent(opts);
         },
-        /*render: function(parent) {
+        render: function(parent) {
             this.parent(parent);
 
             var that = this;
             this._getInputElement().bind("focus",function(){
                 WdatePicker(that.options.$opts);
             });
-        },*/
+        },
         _valueChange: function (value) {
             this.setAttr("display", value);
             this.validate();//即时校验
