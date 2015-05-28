@@ -64,6 +64,10 @@ define(["./DataConstant"], function (Constant) {
                     $this.options.pageNo = result[Constant.pageNo];
                     $this.options.totalSize = result[Constant.totalSize];
                     $this._initData();
+                    $this.fireEvent("afterUpdateRecord", [result[Constant.rows], true]);
+                    if($this.setStatus){
+                        $this.setStatus($this.options.model.notModify);
+                    }
                     resolve();
                 }, null);
             });
@@ -73,7 +77,7 @@ define(["./DataConstant"], function (Constant) {
             var $this = this;
             return new Promise(function (resolve) {
                 var params = $this.getSyncParam(filterNotModify);
-                if(uploadString) {
+                if (uploadString) {
                     params.data = JSON.stringify(params.data);
                 }
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
