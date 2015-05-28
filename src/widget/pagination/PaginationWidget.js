@@ -97,13 +97,13 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 this.setAttr("totalPage",_totalPage,true);
             }else{
                 this.setAttr("totalPage",0);
-                if(this.getAttr("pageIndex")!=0){
-                    this.setAttr("pageIndex",0,true);
+                if(this.getAttr("pageIndex")!=1){
+                    this.setAttr("pageIndex",1,true);
                 }
             }
         },
         _calculateBeginAndTo: function () {
-            if (this.getAttr("pageIndex") && this.getAttr("pageSize")) {
+            if (this.getAttr("totalNum") && this.getAttr("pageIndex") && this.getAttr("pageSize")) {
                 var _startNum = this.getAttr("pageSize")*(this.getAttr("pageIndex")-1)+1;
                 var _endNum = this.getAttr("pageSize")*this.getAttr("pageIndex");
                 this.setAttr("recordBegin",_startNum);
