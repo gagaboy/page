@@ -12,7 +12,7 @@ define(['../BaseFormWidget',
     'text!./DatepickerWidget.html',
     'css!./DatepickerWidget.css'], function (BaseFormWidget, datepicker, template) {
     //组件类型
-    var xtype = "datepicker";
+    var xtype = "datepicker1";
     //组件可以配置的选项
     var configs = {
         startDay: 1, //@config 设置每一周的第一天是哪天，0代表Sunday，1代表Monday，依次类推, 默认从周一开始
