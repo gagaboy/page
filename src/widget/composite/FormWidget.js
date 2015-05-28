@@ -27,6 +27,9 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             //预处理widget 得配置
             var col = {$xtype: 'col', items: []}
             col.md = 12 / this.options.cols; //列
+            col.sm = 12 / this.options.cols; //列
+            col.xs = 12 / this.options.cols; //列
+            col.lg = 12 / this.options.cols; //列
             var c = Object.merge({}, cfg);
             //处理绑定
             /*
