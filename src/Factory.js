@@ -26,8 +26,6 @@ define([
     "./widget/form/input/InputWidget",
     "./widget/form/maskedtextbox/MaskedtextboxWidget",
     "./widget/form/combobox/ComboboxWidget",
-    "./widget/form/my97date/My97DateWidget",
-    "./widget/form/datepicker/DatepickerWidget",
     "./widget/pagination/PaginationWidget",
     "./widget/layout/BaseLayout",
     "./widget/layout/panel/Panel",

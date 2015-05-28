@@ -24,7 +24,7 @@
         <!--单选不可搜索-->
         <div ms-if="!multi && !searchable" ms-class="div-focus: showPanel" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" style="cursor: pointer;"ms-on-click="changePanelShow(vid, $event)">
             <span ms-repeat-item="selectedItems" ms-text="item[$textField]"></span>
-            <a ms-visible="clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
+            <a ms-visible="showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
             <span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
                   style="pointer-events:auto; cursor: pointer;border-left: 1px solid #d1d1d1;height: 33px;"></span>
         </div>
