@@ -10,6 +10,7 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
             $xtype: xtype,
             status: "default",
             dataSources: {}, // dataSet, dataValue,可能有多个,{ds1:{type:'', options:{}}}
+            dataSourcesIds: [],
             dataBinders: {} //{db1:{componentId:'',dsId:'', fieldId:''}}
         },
 
@@ -24,9 +25,11 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
         _beforLayoutRender: function () {
             var ds = this.options.dataSources;
             var db = this.options.dataBinders;
+            var dsId = this.options.dataSourcesIds;
             this._widgetContainer = Page.create("widgetContainer", {
-                dataSources:ds,
-                dataBinders:db
+                dataSources: ds,
+                dataBinders: db,
+                dataSourcesIds:dsId
             });
         },
 
@@ -35,7 +38,7 @@ define(['../BaseLayout', 'text!./Fragment.html'], function (BaseLayout, tpl) {
          * @param ds {ds1:{type:'', options:{}}}
          */
         addDataSource: function (id, ds) {
-            this._widgetContainer.addDataBinder(id,ds);
+            this._widgetContainer.addDataBinder(id, ds);
         },
 
         /**

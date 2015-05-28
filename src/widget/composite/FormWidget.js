@@ -7,10 +7,14 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
         Extends: Base,
         options: {
             _addWrapDiv: false,
+            title: '',
+            initData: true,
+            showTitle: true,
+            title: '',
+            dataSources: {},
+            dataSourcesIds: [],
             cols: 2, //每行多少列
-            widgets: [], //组件列表
-            dataSources: null,
-            dataSourcesId: ''
+            widgets: [] //组件列表
         },
         getTemplate: function () {
             return formTpl;
@@ -27,88 +31,63 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             //预处理widget 得配置
             var col = {$xtype: 'col', items: []}
             col.md = 12 / this.options.cols; //列
-            col.sm = 12 / this.options.cols; //列
-            col.xs = 12 / this.options.cols; //列
-            col.lg = 12 / this.options.cols; //列
             var c = Object.merge({}, cfg);
-            //处理绑定
-            /*
-             var bindField = c['bind'];
-             if (bindField) {
-             var f = bindField.split(".");
-             if (f.length != 2) {
-             throw new Error('bind error' + bindField);
-             }
-             var dsId = f[0];
-             var dsField = f[1];
-             this.dataBindCfg[bindField] = {
-             dataValueId: dsId,
-             fieldId: dsField,
-             widgetId: cfg['$id'] ? cfg['$id'] : cfg['id']
-             };
-             }
-             */
+            if (c.show != undefined) {
+                col.show = c.show;
+            }
             col.items.push(c);
             return col;
         },
 
-        _createPanel: function (title, cols, widgets) {
-            var currentRow = null;
-            var showTitle = false;
-            if (title && title != '') {
-                showTitle = true;
-            }
-            var panel = {$xtype: 'panel', showTitle: showTitle, items: []};
-            for (var i = 0; i < widgets.length; i++) {
-                if (i == 0 || i % cols == 0) {
-                    currentRow = {$xtype: 'row', items: []};
-                    panel.items.push(currentRow);
-                }
-                currentRow.items.push(this._wrapWidgetConfig(widgets[i]));
-            }
-            return panel;
-        },
 
         appendExtend: function () {
             var widgets = this.options.widgets;
             var cols = this.options.cols;
             var currentRow = null;
-            var panel = {$xtype: 'panel', showTitle: false, items: []};
+            var panel = {$xtype: 'panel', title: this.options.title, showTitle: this.options.showTitle, items: []};
             for (var i = 0; i < widgets.length; i++) {
-                if (i == 0 || i % cols == 0) {
+                if (i == 0 /* || i % cols == 0*/) {
                     currentRow = {$xtype: 'row', items: []};
                     panel.items.push(currentRow);
                 }
                 currentRow.items.push(this._wrapWidgetConfig(widgets[i]));
             }
-            var db = {};
             var ds = this.options.dataSources;
+            var dsids = this.options.dataSourcesIds;
             this.fragment = Page.create("fragment", {
                 dataSources: ds,
-                //dataBinders: db,
-                items: [panel]
+                items: [panel],
+                dataSourcesIds: dsids
             });
-            this.fragment.render(this.$element);
+            this.formWidgetBag = [];
+            this.fragment.render(this.$element, this.formWidgetBag);
             //预先加载数据
-            var ds = this.fragment.getDataSources();
-            for (var i = 0; i < ds.length; i++) {
-                ds[i].fetch()
+            if (this.options.initData) {
+                var ds = this.fragment.getDataSources();
+                var dsfetch = [];
+                for (var i in ds) {
+                    dsfetch.push(ds[i].fetch());
+                }
+            } else {
+                //不加载数据
             }
-
         },
 
         submitForm: function () {
             if (this.isValid()) {
+                var pros = [];
                 for (var v in this.options.dataSources) {
-                    Page.manager.components[v].sync();
+                    var p = Page.manager.components[v].sync();
+                    pros.push(p);
                 }
+                return pros;
             }
         },
 
         isValid: function () {
-            for (var c in this.dataBindCfg) {
-                var widId = this.dataBindCfg[c].widgetId
-                if (!Page.manager.components[widId].isValid()) {
+            for (var i = 0; i < this.formWidgetBag.length; i++) {
+                var widget = this.formWidgetBag[i]
+                if (!widget.isValid()) {
                     return false;
                 }
             }

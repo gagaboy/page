@@ -10,6 +10,7 @@ define(['./Base'], function (Base) {
             $id: "",
             $xtype: xtype,
             dataSources: {}, // dataSet, dataValue,可能有多个,{ds1:{type:'', options:{}}}
+            dataSourcesIds:[],
             dataBinders: {} //{db1:{componentId:'',dsId:'', fieldId:''}}
         },
 
@@ -46,6 +47,10 @@ define(['./Base'], function (Base) {
             for (var d in this.options.dataSources) {
                 var ds = this.options.dataSources[d];
                 this.addDataSource(d, ds);
+            }
+            for(var i=0; i<this.options.dataSourcesIds.length; i++){
+                var id = this.options.dataSourcesIds[i];
+                this.DS[id] = Page.manager.components[id];
             }
             /*
             for (var d in this.options.dataBinders) {
