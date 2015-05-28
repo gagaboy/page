@@ -8,7 +8,19 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
             $opts:{
                 doubleCalendar: false,
                 dateFmt:'yyyy-MM-dd',
-                firstDayOfWeek:1
+                firstDayOfWeek:1,
+                autoUpdateOnChanged:null,
+                minDate:"1900-01-01 00:00:00",
+                maxDate:"2099-12-31 23:59:59",
+                startDate:"",
+                alwaysUseStartDate:false,
+                isShowClear:true,
+                isShowToday:true,
+                isShowOK:true,
+                readOnly:false,
+                errDealMode:0,
+                qsEnabled:true,
+                autoShowQS:false
             },
             showPanel: function(vid) {
                 var vm = vid ? avalon.vmodels[vid] : this;
