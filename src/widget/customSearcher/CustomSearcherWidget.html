@@ -1,7 +1,7 @@
 <div   ms-attr-name="CustomSearcherWidget_{{vid}}" class="form-group" style=" margin-bottom: 0px;">
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
         <div ms-class="div-focus: focused" class="searcherContainer" ms-click="searcherFocus(vid, this)">
-            <div ms-click="sendSearch(vid, $event)" class="page-search-icon"><i class="fa fa-search"></i></div>
+            <div ms-click="sendSearch(vid, $event)" class="page-search-icon"><i class="fa fa-search" style=" line-height: 30px;"></i></div>
 
             <ul class="chosen-choices itemContainer">
                 <!--视图查询项-->
@@ -50,7 +50,7 @@
                     <input type="text" ms-duplex="searchValue" ms-attr-readonly="customSearchArr.length>0" autocomplete="off" tabindex="4" ms-css-width="inputWidth" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
                 </li>
             </ul>
-            <div ms-click="toggleViewPanel(vid, $event)" class="page-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'"></i></div>
+            <div ms-click="toggleViewPanel(vid, $event)" class="page-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'" style=" line-height: 30px;"></i></div>
         </div>
 
         <!--快速查询面板区域-->
