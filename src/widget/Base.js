@@ -68,14 +68,15 @@ define([], function () {
         setAttr: function (key, value, notFireEvent) {
             var oldValue = this.vmodel[key];
             this.vmodel[key] = value;
-            var privateMethod2Invoke = '_' + key + "Change";
-            if (this[privateMethod2Invoke]) {
-                this[privateMethod2Invoke](value, oldValue, this.vmodel.model);
-                // old value, new value, vm.model
-            }
+
             if(notFireEvent)  {
 
             }else {
+                var privateMethod2Invoke = '_' + key + "Change";
+                if (this[privateMethod2Invoke]) {
+                    this[privateMethod2Invoke](value, oldValue, this.vmodel.model);
+                    // old value, new value, vm.model
+                }
                 this.fireEvent(key + "Change", [value, oldValue, this.vmodel.model]);
             }
             return this;

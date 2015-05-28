@@ -74,7 +74,7 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 //属性扩展
                 this.options.pageChangeEvent(this,pindex,oldIndex,this.getAttr("pageSize"),model)
             }else{
-                this.setAttr("pageIndex",this.getAttr("totalPage"));
+                this.setAttr("pageIndex",this.getAttr("totalPage"),true);
             }
         },
         _totalNumChange: function (tNum, oldNum, model) {
@@ -87,18 +87,18 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             }else{
                 this.setAttr("pageSize",this.getAttr("totalNum"));
                 if(this.getAttr("pageIndex")>1){
-                    this.setAttr("pageIndex",1);
+                    this.setAttr("pageIndex",1,true);
                 }
             }
         },
         _calculateTotalPage: function () {
             if (this.getAttr("totalNum") && this.getAttr("pageSize")) {
                 var _totalPage = this.getAttr("totalNum") % this.getAttr("pageSize") == 0 ? (this.getAttr("totalNum") / this.getAttr("pageSize")) : parseInt(this.getAttr("totalNum") / this.getAttr("pageSize")) + 1
-                this.setAttr("totalPage",_totalPage);
+                this.setAttr("totalPage",_totalPage,true);
             }else{
                 this.setAttr("totalPage",0);
                 if(this.getAttr("pageIndex")!=0){
-                    this.setAttr("pageIndex",0);
+                    this.setAttr("pageIndex",0,true);
                 }
             }
         },
