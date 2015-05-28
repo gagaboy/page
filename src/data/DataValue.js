@@ -54,6 +54,10 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             return this.options.$id;
         },
 
+        setStatus:function(status){
+            this.options.data[this.options.model.status] = status;
+        },
+
         _initData: function (forceNotModify) {
             var $this = this;
             if(this.options.data) {

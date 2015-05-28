@@ -3,34 +3,36 @@ define(['../Base'], function (Base) {
         Extends: Base,
         options: {
             _addWrapDiv: false
-
         },
         initialize: function (opts) {
             this.parent(opts);
             this.itemsArr = [];
         },
-        render: function (parent) {
-            if(this._beforLayoutRender) {
+        render: function (parent, formWidgetBag) {
+            if (this._beforLayoutRender) {
                 this._beforLayoutRender();
             }
             this.parent(parent);
             if (this.options.items) {
                 for (var i = 0; i < this.options.items.length; i++) {
                     var it = this.options.items[i];
-                    this._renderWidget(it);
+                    this._renderWidget(it, formWidgetBag);
                 }
             }
-            if(this._afterLayoutRender) {
+            if (this._afterLayoutRender) {
                 this._afterLayoutRender();
             }
         },
-        _renderWidget: function (it) {
+        _renderWidget: function (it, formWidgetBag) {
             if (it['$xtype']) {
                 var config = {};
                 Object.merge(config, it);
                 delete config['$xtype'];
                 var widget = Page.create(it['$xtype'], config);
-                widget.render(this.getElementToAppend());
+                if (widget.isFormWidget && widget.isFormWidget()) {
+                    formWidgetBag.push(widget);
+                }
+                widget.render(this.getElementToAppend(), formWidgetBag);
                 this.itemsArr.push(widget.getId());
             }
         },
