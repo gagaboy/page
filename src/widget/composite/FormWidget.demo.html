@@ -46,22 +46,27 @@
             $id: 'f',
             $parentId: 'container',
             cols: 2,
+            initData:false,
             dataSources: {
                 ds1: {
                     type: 'dataValue',
                     options: {
                         fetchUrl: 'demo.json',
-                        syncUrl:''
+                        syncUrl: '',
+                        data: {
+                            xm: 'zhangsan'
+                        }
                     }
                 }
             },
             widgets: [
-                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm'},
+                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required:true},
                 {$id: 'interest', $xtype: 'input', label: '兴趣', bind: 'ds1.xq'},
                 {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
                 {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
                 {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj"},
-                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}
+                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}//,
+//                {$id: 'id', $xtype: 'input', label: '您的姓名', bind: 'ds1.id', show: false}
             ]
         });
         form.render();
@@ -71,10 +76,10 @@
         });
 
 
-        var ds1 =  Page.manager.components["ds1"];
-        ds1.sync();
+        var ds1 = Page.manager.components["ds1"];
+//        ds1.sync();
         $("#loadData").click(function () {
-            Promise.all([ds1.fetch()]).then(function(){
+            Promise.all([ds1.fetch()]).then(function () {
                 ds1.updateRecord(ds1.getValue());
             });
         });
