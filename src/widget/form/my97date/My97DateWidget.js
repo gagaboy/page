@@ -14,6 +14,9 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
                 var vm = vid ? avalon.vmodels[vid] : this;
                 var opt = Object.merge({}, vm.$opts);
                 opt.el = "datePicker_"+vid;
+                if(vm && (vm["status"] === "readonly" || vm["status"] === "disabled")){
+                    return;
+                }
                 WdatePicker(opt);
             }
         },
@@ -21,7 +24,7 @@ define(['../BaseFormWidget', 'text!./My97DateWidget.html', 'my97DatePicker'], fu
             var $opts = {};
             var formOpt = Page.create("baseFormWidget", {}).options;
             for(var key in opts) {
-                if(!(key in formOpt) && key!="$id" && !this._startsWith(key,"on")) {
+                if(!(key in formOpt) && key!="$id" && !this._startsWith(key,"on") && key!="showIcon") {
                     $opts[key] = opts[key];
                     if("formatDate" == key) {
                         $opts["dateFmt"] = opts[key];
