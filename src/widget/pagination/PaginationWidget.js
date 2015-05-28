@@ -50,6 +50,38 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 if (pindex > 0 && pindex < (vm.totalPage + 1)) {
                     vm.pageIndex = pindex;
                 }
+            },
+            inputPageIndex:function(event,vid,dom){
+                if(event.keyCode == "13")
+                {
+                    if(dom&&dom.value){
+                        var vm = avalon.vmodels[vid];
+                        var pIndex = parseInt(dom.value);
+                        if(pIndex&&pIndex>0&&pIndex<(vm.totalPage+1)){
+                            vm.pageIndex = pIndex;
+                        }else if(!pIndex){
+                            vm.pageIndex = 1;
+                        }else{
+                            vm.pageIndex = vm.totalPage;
+                        }
+                    }
+                }
+            },
+            inputPageSize:function(event,vid,dom){
+                if(event.keyCode == "13")
+                {
+                    if(dom&&dom.value){
+                        var vm = avalon.vmodels[vid];
+                        var pSize = parseInt(dom.value);
+                        if(pSize&&pSize>0&&pSize<(vm.totalNum+1)){
+                            vm.pageSize = pSize;
+                        }else if(!pSize){
+                            vm.pageSize = 1;
+                        }else{
+                            vm.pageSize = vm.totalNum;
+                        }
+                    }
+                }
             }
         },
         initialize: function (opts) {
@@ -86,7 +118,11 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             if(tNum&&tNum<(this.getAttr("totalNum")+1)){
                 this.options.pageChangeEvent(this,this.getAttr("pageIndex"),this.getAttr("pageIndex"),this.getAttr("pageSize"),model)
             }else{
-                this.setAttr("pageSize",this.getAttr("totalNum"));
+                if(tNum==0){
+                    this.setAttr("pageSize",0);
+                }else{
+                    this.setAttr("pageSize",this.getAttr("totalNum"));
+                }
                 if(this.getAttr("pageIndex")>1){
                     this.setAttr("pageIndex",1,true);
                 }
@@ -96,6 +132,9 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             if (this.getAttr("totalNum") && this.getAttr("pageSize")) {
                 var _totalPage = this.getAttr("totalNum") % this.getAttr("pageSize") == 0 ? (this.getAttr("totalNum") / this.getAttr("pageSize")) : parseInt(this.getAttr("totalNum") / this.getAttr("pageSize")) + 1
                 this.setAttr("totalPage",_totalPage,true);
+                if(this.getAttr("pageIndex")>this.getAttr("totalPage")){
+                    this.setAttr("pageIndex",this.getAttr("totalPage"),true);
+                }
             }else{
                 this.setAttr("totalPage",0);
                 if(this.getAttr("pageIndex")!=1){
