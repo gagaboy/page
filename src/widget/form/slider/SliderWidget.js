@@ -49,16 +49,10 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.slider', 'text!./S
         },
         _statusChange:function(value, oldValue, model){
             if(value !== oldValue){
-                var sliderWidget = this.sliderObj.wrapper;
-                if(value === "readonly"){
-                    sliderWidget.hide();
-                    sliderWidget.parent().append(jQuery('<input class="sliderValue form-control form-text" readonly value="'+this.getValue()+'"></input>'));
-                }else if(value === "edit"){
-                    this.sliderObj.enable();
-                    sliderWidget.show();
-                    sliderWidget.parent().find(".sliderValue").remove();
+                if(value === "edit"){
+                    this.sliderObj && this.sliderObj.enable();
                 }else if(value === "disabled"){
-                    this.sliderObj.disable();
+                    this.sliderObj && this.sliderObj.disable();
                 }
             }
         }
