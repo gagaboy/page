@@ -31,11 +31,11 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
                 var input = this._getInputElement();
                 var maskedObj = input.data("kendoMaskedTextBox");
                 if(value === "readonly"){
-                    maskedObj.readonly(true);
+                    maskedObj && maskedObj.readonly(true);
                 }else if(value === "edit"){
-                    maskedObj.readonly(false);
+                    maskedObj && maskedObj.readonly(false);
                 }else if(value === "disabled"){
-                    maskedObj.enable(false);
+                    maskedObj && maskedObj.enable(false);
                 }
             }
         },
