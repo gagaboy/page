@@ -84,6 +84,15 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             }
         },
 
+        getFormValue: function () {
+            var value = {};
+            for (var i = 0; i < this.formWidgetBag.length; i++) {
+                var widget = this.formWidgetBag[i]
+                value[widget.getId()] = widget.getValue();
+            }
+            return value;
+        },
+
         isValid: function () {
             for (var i = 0; i < this.formWidgetBag.length; i++) {
                 var widget = this.formWidgetBag[i]

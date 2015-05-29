@@ -42,7 +42,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             showPreviousAndNextPage: true,  //显示上一页和下一页按钮
             showPageDetail: true,   //显示分页详情
             showTipWhenNull:true,//没有数据时显示分页提示
-            noDataTip:null,//无数据时分页区的提示信息
+            noDataTip:"暂无数据",//无数据时分页区的提示信息
             //操作列
             opColumns:[],/**操作列信息
                          * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
@@ -178,13 +178,23 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
                     showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
                     showTipWhenNull: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
-                    noDataTip: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
+                    noDataTip: this.getAttr("noDataTip"),//无数据时显示提示信息
 
                     pageChangeEvent: function (pager) {
                         if(that.getAttr("beforeChangePageNo")){
                             that.getAttr("beforeChangePageNo")(pager,that);//参数为分页对象,grid对象
                         }
                         that.reloadData()// 调用dataset接口进行查询
+                    },
+                    //TODO 以下未生效
+                    totalNumChange:function(totalNum){
+                        that.setAttr("totalNum",totalNum);//参数为分页对象,grid对象
+                    },
+                    pageIndexChange:function(pageIndex){
+                        that.setAttr("pageIndex",pageIndex);//参数为分页对象,grid对象
+                    },
+                    pageSizeChange:function(pageSize){
+                        that.setAttr("pageSize",pageSize);//参数为分页对象,grid对象
                     }
                 });
                 this.pagination.render();
@@ -242,10 +252,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     that.pagination.setAttr("totalNum",ds.getTotalSize());
                     //that.pagination.setAttr("pageSize",ds.getPageSize());
                     //that.pagination.setAttr("pageIndex",ds.getPageNo());
-                }else{
-                    that.setAttr("totalNum",ds.getTotalSize());
-                    that.setAttr("pageSize",ds.getPageSize());
-                    that.setAttr("pageIndex",ds.getPageNo());
+
+                    that.setAttr("totalNum",that.pagination.getAttr("totalNum"),true);
+                    that.setAttr("pageSize",that.pagination.getAttr("pageSize"),true);
+                    that.setAttr("pageIndex",that.pagination.getAttr("pageIndex"),true);
                 }
                 that.setAttr("data",that._formatDatas(newDatas));
             });
