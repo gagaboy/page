@@ -83,7 +83,7 @@
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true},
-                {title:"所在班级",dataField:"className",
+                {title:"所在班级",dataField:"className",editParams:{},
                     validationRules: {
                         required:true,//options中为false时，此处可重开启校验
                         length: {
@@ -107,7 +107,7 @@
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
-            canEdit:false,
+            canEdit:true,
             dbClickToEditRow:true,
             clickToEditField:false,
             beforeChangePageNo:function(pager,grid){
@@ -149,7 +149,7 @@
         simpleGrid.deleteRowByDataId(aid);
     }
     function deleteActive(){
-        simpleGrid.deleteActiveRow();
+        simpleGrid.deleteActiveRow(true);
     }
 
     function CheckSomeRowsByIds(ids){
