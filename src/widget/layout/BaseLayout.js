@@ -30,7 +30,7 @@ define(['../Base'], function (Base) {
                 delete config['$xtype'];
                 var widget = Page.create(it['$xtype'], config);
                 if (widget.isFormWidget && widget.isFormWidget()) {
-                    formWidgetBag.push(widget);
+                    formWidgetBag && formWidgetBag.push(widget);
                 }
                 widget.render(this.getElementToAppend(), formWidgetBag);
                 this.itemsArr.push(widget.getId());
