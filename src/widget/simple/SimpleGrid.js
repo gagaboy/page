@@ -18,6 +18,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                          * disabledEdit:true,
                          * sortDisabled:true,
                          * xtype:"combobox",
+                         * editParams:编辑组件属性
                          * isOpColumn:true,//isOpColumn，自定义显示，
                          * template:""} //template：自定义显示的内容（html，可以是avalon片段），内容中可通过avalon访问grid信息，如，rowdata，行数据，col，列模型
                          */
@@ -139,26 +140,13 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     grid._defaultEditField(vm,row,fieldName,fieldXtype,tdDom);
                 }
             },
-            deleteRow: function (vid,row) {
+            deleteRow: function (vid,row,real) {
                 //删除行，remove掉
                 var vm = avalon.vmodels[vid];
-                row = null;
-                var nArr = [];
-                for (var i = 0; i < vm.data.length; i++) {
-                    if (vm.data[i]) {
-                        nArr.push(vm.data[i]);
-                    }
+                var grid = Page.manager.components[vid];
+                if(grid){
+                    grid.deleteRow(row,real);
                 }
-                vm.data = nArr;
-                //重新判断全选属性
-                var all = true;
-                for (var i = 0; i < vm.data.$model.length; i++) {
-                    if (!vm.data[i]['checked']) {
-                        all = false;
-                        break;
-                    }
-                }
-                vm.allChecked = all;
             }
         },
         pagination:null,//分页条对象
@@ -336,14 +324,21 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         addRow:function(rowData,pos){//{}则表示新增空行,pos指新增位置，表示放到第几行，默认表示最后一行
             var datas = this.getAttr("data");
             var pSize = datas.length;
+            var formatData = this._formatData(rowData);
+            if(this.getAttr("canEdit")){
+                var ds = this._getDataSet();
+                if(ds){
+                    ds.addRecord(formatData);
+                }
+            }
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 if(pSize<1){
-                    newDataArr.push(this._formatData(rowData));
+                    newDataArr.push();
                 }else{
                     for(var t=0;t<pSize;t++){
                         if(t==(pos-1)){
-                            newDataArr.push(this._formatData(rowData));
+                            newDataArr.push(formatData);
                             if(datas[t]){
                                 newDataArr.push(datas[t]);
                             }
@@ -352,17 +347,22 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         }
                     }
                 }
+
                 this.setAttr("data",newDataArr);
             }else{
-                this.getAttr("data").push(this._formatData(rowData));
+                this.getAttr("data").push(formatData);
             }
             this._updateAllCheckedByDatas();
         },
         /**
          * 删除某行
          */
-        deleteRow: function (row) {
+        deleteRow: function (row,real) {
             //删除行，remove掉
+            var ds = this._getDataSet();
+            if(ds){
+                ds.deleteRecord(row.wid,real);
+            }
             row = null;
             var upFlag = false;
             var datas = this.getAttr("data");
@@ -372,14 +372,19 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         /**
          * 根据主键删除某行
          */
-        deleteRowByDataId: function (dataId) {
+        deleteRowByDataId: function (dataId,real) {
             if(dataId&&this.getAttr("idField")){
                 var idField = this.getAttr("idField");
                 var datas = this.getAttr("data");
                 for (var i = 0; i < datas.length; i++) {
                     if(datas[i]&&datas[i][idField]
                     &&datas[i][idField]==dataId){
+                        var ds = this._getDataSet();
+                        if(ds){
+                            ds.deleteRecord(datas[i].wid,real);
+                        }
                         datas[i] = null;
+
                     }
                 }
                 this._formArr(datas);
@@ -390,13 +395,17 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         /**
          * 删除当前行
          */
-        deleteActiveRow: function () {
+        deleteActiveRow: function (real) {
             //删除行，remove掉
             var datas = this.getAttr("data");
             var acRow = this.getActiveRow();
             if(acRow){
                 for(var s=0;s<datas.length;s++){
                     if(datas[s]&&acRow==datas[s]){
+                        var ds = this._getDataSet();
+                        if(ds){
+                            ds.deleteRecord(datas[s].wid,real);
+                        }
                         datas[s] = null;
                         this.setAttr("data",this._formArr(datas));
                         this._updateAllCheckedByDatas();
@@ -408,13 +417,17 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         /**
          * 删除选中的行
          */
-        deleteCheckedRows: function () {
+        deleteCheckedRows: function (real) {
             //删除行，remove掉
             var datas = this.getAttr("data");
             var cdatas = this.getCheckedRows();
             for(var s=0;s<datas.length;s++){
                 for (var i = 0; i < cdatas.length; i++) {
                     if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
+                        var ds = this._getDataSet();
+                        if(ds){
+                            ds.deleteRecord(datas[s].wid,real);
+                        }
                         datas[s] = null;
                     }
                 }
@@ -461,7 +474,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                 var xtype = col.xtype || "input";
                                 if(!$("#con_"+fieldName+"_"+data.uuid)||!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
                                     (function(that,xtype,idField,fieldName,data,rowEditComps){
-                                        var editField = Page.create(xtype, {
+                                        var editParams = col.editParams?col.editParams.$model:{};
+                                        var baseParams = {
                                             $parentId: 'con_'+fieldName+"_"+data.uuid,
                                             $id:'comp_'+fieldName+"_"+data.uuid,
                                             parentTpl:"inline",
@@ -473,7 +487,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             showErrorMessage:true,
                                             bind:that._getDataValueIdByDataId(data[idField]).getId()+"."+fieldName,
                                             status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
-                                        });
+                                        };
+                                        var allParams = jQuery.extend(baseParams,editParams);
+                                        var editField = Page.create(xtype,allParams);
                                         //在属性中写displayChange无效，暂时用以下写法代替，TODO
                                         editField._displayChange = function(){
                                             data[fieldName] = editField.getValue();
@@ -706,6 +722,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 data.state = data.state?data.state:'view';
                 if(!data.uuid){
                     data.uuid = String.uniqueID();
+                }
+                //TODO widgetContainer必须wid的处理，后续会删除
+                if(!data.wid){
+                    data.wid = String.uniqueID();
                 }
             }
             return data;
