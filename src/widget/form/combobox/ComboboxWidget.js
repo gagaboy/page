@@ -392,7 +392,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             });
             //单选时，输入区绑定了display
             vm.$watch("display", function (newValue, oldValue)  {
-                if(!vm.multi && vm.searchable &&  !vm.clickItem) {
+                if(!vm.multi && vm.searchable && !vm.clickItem && vm.showPanel) {
                     that._handleSearch(newValue);
                 }
             });

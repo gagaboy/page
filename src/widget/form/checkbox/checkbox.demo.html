@@ -22,7 +22,7 @@
 
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4" id="comboboxContainer">
+                    <div class="col-md-6" id="comboboxContainer">
 
                     </div>
                 </div>
@@ -45,12 +45,21 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../../page/src/Bootstrap"], function () {
+        var ds = Page.create("dataSet", {
+            $id: 'checkboxDS',
+            fetchUrl: 'checkbox.data.json'
+        });
+
         var checkbox = Page.create('checkbox', {
             $parentId: 'comboboxContainer',
+            $id: 'checkbox',
             label: '兴趣',
+            value: "1,2",
+            display: "足球, 台球",
             required:true,
             showErrorMessage:true,
-            cols:2,
+            cols: 3,
+            dataSetId: "checkboxDS",
             validationRules: {
                 required:true,//options中为false时，此处可重开启校验
                 length: {
@@ -59,47 +68,9 @@
                     customErrMsg:"请选择2-5个兴趣"
                 }
             },
-            items:[{
-                value: '1',
-                display: '足球',
-                checked: false
-            }, {
-            value: '11',
-                display: '足球1',
-                checked: false
-            }, {
-                value: '12',
-                display: '足球2',
-                checked: false
-            }, {
-                value: '13',
-                display: '足球3',
-                checked: false
-            }, {
-                value: '2',
-                display: '台球',
-                checked: false
-            }, {
-                value: '21',
-                display: '台球1',
-                checked: false
-            }, {
-                value: '22',
-                display: '台球2',
-                checked: false
-            }, {
-                value: '23',
-                display: '台球3',
-                checked: false
-            }, {
-                value: '24',
-                display: '台球4',
-                checked: false
-            }, {
-                value: '25',
-                display: '台球5',
-                checked: false
-            }]
+            onValueChange: function(value) {
+                alert(value)
+            }
         });
         checkbox.render();
     });
