@@ -1,4 +1,4 @@
-<div class="table-responsive" ms-visible="show">
+<div class="table-responsive" ms-visible="show" style="vertical-align: middle;">
     <table ms-attr-class="tableClass">
         <thead>
         <tr>
@@ -33,10 +33,10 @@
                      ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                 </div>
             </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']">
+            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" style="vertical-align:middle;">
                 {{opcolumn.template|html}}
             </td>
-            <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype">
+            <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
                 <div ms-if="col.isOpColumn">
                     {{col.template|html}}
                 </div>
@@ -57,12 +57,12 @@
                     </div>
                 </div>
             </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
+            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" style="vertical-align:middle;">
                 {{opcolumn.template|html}}
             </td>
         </tr>
         <tr ms-if="totalNum<1">
-            <td colspan="20"><div class="simpleGrid_noDataTip">{{noDataTip}}</div></td>
+            <td colspan="100"><div class="simpleGrid_noDataTip">{{noDataTip}}</div></td>
         </tr>
     </table>
     <nav ms-if="usePager&&totalNum>0">

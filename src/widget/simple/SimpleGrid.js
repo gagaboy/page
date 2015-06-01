@@ -51,11 +51,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //行编辑
             canEdit:false,  //是否可编辑
             dbClickToEditRow:false, //双击编辑行
-            clickToEditField:true,  //单击编辑事件
             editMultiRow:false, //同时编辑多行
             editRowFunc:null,   //编辑行事件
             editFieldFunc:null, //编辑单属性事件
             //事件
+            onClickRow:null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
             beforeSetData:null, //设置数据前，参数：即将设置的数据datas
             afterSetData:null,  //设置数据后，参数：已经设置的数据datas
             beforeCheckRow:null,    //勾选行事件
@@ -83,6 +83,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var vm = avalon.vmodels[vid];
                 vm.activedRow = row;
                 vm.activedRowDom = rowObj;
+                if(vm.onClickRow){
+                    vm.onClickRow(vm,row,rowObj);
+                }
             },
             checkRow: function (vid,row) {
                 var vm = avalon.vmodels[vid];
@@ -436,25 +439,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var cols = this.getAttr("columns");
                 var editCompMap = this.getAttr("editCompMap");
                 var dsId = "ds_"+this.getAttr("vid");
-                //dataSources
-                //var dsSetting = {
-                //    type:'dataSet',
-                //    options:{data: datas}
-                //};
-                var dataSources = {};
-                //dataSources[dsId] = dsSetting;
-                //dataBinders
-                var dataBinders = {}
+                //var dataSources = {};//
+                //var dataBinders = {};组件中设置bind属性即可//
 
                 for (var i = 0; i < datas.length; i++) {
                     if(datas[i]&&datas[i].uuid){
                         //行ds
-                        var idsId = "ds_"+datas[i].uuid;
-                        var idsSetting = {
-                            type:'dataValue',
-                            options:{data: datas[i]}
-                        };
-                        dataSources[idsId] = idsSetting;
+                        //var idsId = "ds_"+datas[i].uuid;
+                        //var idsSetting = {
+                        //    type:'dataValue',
+                        //    options:{data: datas[i]}
+                        //};
+                        //dataSources[idsId] = idsSetting;
 
                         var data = datas[i];
                         var rowEditComps = [];
@@ -464,17 +460,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
                                 if(!$("#con_"+fieldName+"_"+data.uuid)||!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
-                                    (function(xtype,fieldName,data,rowEditComps,dataBinders){
+                                    (function(that,xtype,idField,fieldName,data,rowEditComps){
                                         var editField = Page.create(xtype, {
                                             $parentId: 'con_'+fieldName+"_"+data.uuid,
                                             $id:'comp_'+fieldName+"_"+data.uuid,
                                             parentTpl:"inline",
-                                            value: data[fieldName],
+                                            value: data[fieldName]||"",
                                             showLabel: false,
                                             bindField:fieldName,
                                             disabledEdit:col.disabledEdit,
                                             validationRules:col.validationRules,
                                             showErrorMessage:true,
+                                            bind:that._getDataValueIdByDataId(data[idField]).getId()+"."+fieldName,
                                             status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
                                         });
                                         //在属性中写displayChange无效，暂时用以下写法代替，TODO
@@ -486,16 +483,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         editField.render();
 
                                         //行dataBinder
-                                        var idbId = "db_"+datas[i].uuid+"_"+fieldName;
-                                        var idbSetting = {
-                                            dataValueId: "ds_"+data.uuid,
-                                            fieldId: fieldName,
-                                            widgetId: editField.getId()
-                                        };
-                                        //if(fieldName=="name"){
-                                            dataBinders[idbId] = idbSetting;
-                                        //}
-                                    }(xtype,fieldName,data,rowEditComps,dataBinders));
+                                        //var idbId = "db_"+datas[i].uuid+"_"+fieldName;
+                                        //var idbSetting = {
+                                        //    dataValueId: "ds_"+data.uuid,
+                                        //    fieldId: fieldName,
+                                        //    widgetId: editField.getId()
+                                        //};
+                                        //dataBinders[idbId] = idbSetting;
+                                    }(this,xtype,this.options.idField,fieldName,data,rowEditComps));
                                 }else{
                                     rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data.uuid]);
                                 }
@@ -505,13 +500,33 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
                 this.widgetContainer = Page.create("widgetContainer", {
-                    dataSources:dataSources,
-                    dataBinders:dataBinders
+                    dataSourcesIds:this._getDataValuesByDataSet(),
                 });
             }
         },
         _getDataSet: function() {
             return Page.manager.components[this.getAttr("dataSetId")];
+        },
+        _getDataValuesByDataSet:function(){
+            var dataValues = [];
+            if(this._getDataSet()){
+                var dataSet = this._getDataSet();
+                if(dataSet.getAttr("_dataArray")){
+                    var array = dataSet.getAttr("_dataArray");
+                    for (var i = 0; i < array.length; i++) {
+                        var value = array[i];
+                        dataValues.push(value.getId());
+                    }
+                }
+            }
+            return dataValues;
+        },
+        _getDataValueIdByDataId:function(did){
+            var dataSet = this._getDataSet();
+            if(dataSet.getAttr("_dataMap")){
+                return dataSet.getAttr("_dataMap")[did];
+            }
+            return null;
         },
         _defaultEditRow:function(vm,row,rowDom){
             var toStatus = (row.state&&row.state=="view")?"edit":"readonly";
