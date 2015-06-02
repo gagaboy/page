@@ -42,7 +42,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             showLastPage: true, //显示最后一页按钮
             showPreviousAndNextPage: true,  //显示上一页和下一页按钮
             showPageDetail: true,   //显示分页详情
-            showTipWhenNull:true,//没有数据时显示分页提示
+            showTipWhenNull:false,//没有数据时显示分页提示
+            hidePagerWhenNull:true,//没有数据时隐藏提示
             noDataTip:"暂无数据",//无数据时分页区的提示信息
             //操作列
             opColumns:[],/**操作列信息
@@ -170,6 +171,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showPreviousAndNextPage: this.getAttr("showPreviousAndNextPage"),//显示上一页和下一页按钮
                     showPageDetail: this.getAttr("showPageDetail"),//显示分页详情
                     showTipWhenNull: this.getAttr("showTipWhenNull"),//无数据时显示提示信息
+                    hidePagerWhenNull:this.getAttr("hidePagerWhenNull"),
                     noDataTip: this.getAttr("noDataTip"),//无数据时显示提示信息
 
                     pageChangeEvent: function (pager) {

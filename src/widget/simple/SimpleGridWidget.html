@@ -61,11 +61,11 @@
                 {{opcolumn.template|html}}
             </td>
         </tr>
-        <tr ms-if="totalNum<1&&data.length<1">
+        <tr ms-if="(!totalNum||totalNum<1)&&(!data||data.length<1)">
             <td colspan="100"><div class="simpleGrid_noDataTip">{{noDataTip}}</div></td>
         </tr>
     </table>
-    <nav ms-if="usePager&&(totalNum>0||data.length>0)">
+    <nav ms-if="usePager">
         <div ms-attr-id="'pager_'+vid"></div>
     </nav>
 </div>
