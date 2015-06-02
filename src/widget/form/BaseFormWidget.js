@@ -138,6 +138,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
             return this.getAttr("display");
         },
         setValue: function (value, notFireFormValueChangeEvent) {
+            if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
             if (typeOf(value) == 'string' || typeOf(value) == 'number') {
                 this.setAttr("value", value, notFireFormValueChangeEvent);
                 this.setAttr("display", value);
@@ -191,7 +192,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                 this.setAttrs({
                     status: status,
                     showErrorMessage: false,
-                    showMessage: true,
+                    showMessage: false,
                     showRequired: that.getAttr("required")
                 });
             }else if (status == 'ready2edit') {
@@ -263,7 +264,12 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                 this.dataBind.destroy();
             }
         },
-
+        _showMessageChange:function(){
+            this._errorMessageChange();
+        },
+        _showErrorMessageChange:function(){
+            this._errorMessageChange();
+        },
         _errorMessageChange: function (errmsg) {
             var msgs = "";
             if (this.getAttr("showMessage")) {
@@ -272,7 +278,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
             if (this.getAttr("showErrorMessage") && this.getAttr("errorMessage")) {
                 msgs += this.getAttr("errorMessage") + " ";
             }
-            if (!msgs) {
+            if (msgs === "") {
                 if (this.toolTip) {
                     this.toolTip.destroy();
                     this.toolTip = null;

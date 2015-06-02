@@ -26,8 +26,14 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="row">
-                    我是一个自定义查询组件：<br/>
+                    我是一个自定义查询组件1：<br/>
                     <div class="col-md-5" id="container">
+
+                    </div>
+                </div>
+                <div class="row">
+                    我是一个自定义查询组件2：<br/>
+                    <div class="col-md-5 col-md-push-7" id="container2">
 
                     </div>
                 </div>
@@ -105,6 +111,41 @@
 
         });
         customSearcher.render();
+
+        var customSearcher2 = Page.create('customSearcher', {
+            $id: "customSearcher2",
+            $parentId: "container2",
+            controls: [{
+                id: "stuName",
+                $xtype: "datepicker",
+                label: "姓名",
+                parentTpl: "inline",
+                requier: true,
+                filterName: "stuName",
+                bindField: "stuName",
+                builderList: "nameOpers"
+            },{
+                id: "stuSex",
+                $xtype: "combobox",
+                label: "性别",
+                parentTpl: "inline",
+                filterName: "stuSex",
+                bindField: "stuSex",
+                url:'SexData.demo.json',
+                builderList: "sexOpers",
+                quickSearch: true
+            }],
+            builderLists: {
+                nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "qual", caption: "等于"}, {name: "equal", caption: "等于"}],
+                sexOpers: [{name: "contain", caption: "包含"}]
+            },
+            searchSubmit: function(searchValue) {
+                console.log(JSON.stringify(searchValue));
+            }
+
+
+        });
+        customSearcher2.render();
 
 
        /* {viewId: "testView1", viewName: "查询方案（默认）", defaultView: "0", viewValue: [

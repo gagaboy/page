@@ -5,31 +5,102 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         options: {
             $xtype: xtype,
             cols: null,//布局列数
-            items:[],//选项
-            value:null,
-            //valueFiled:"value",//值字段
-            //textFiled:"display",//显示字段
+            value: null,
+            display: null,
+            $valueFiled: "value",//值字段
+            $textFiled: "display",//显示字段
+            $split: ",",
+            dataSetId: null,
+            url: null,
+            mainAlias: null,
             //showAllcheckBtn: false,//提供全选按钮
 
-            itemCheck: function (vid,d) {
+            items: [],//选项
+
+            itemCheck: function (vid,el) {
                 var vm = avalon.vmodels[vid];
                 if(vm.status == 'readonly' || vm.status == 'disabled'){
                     return;
                 }
-                d.checked = !d.checked;
+                el.checked = !el.checked;
                 var values = [];
+                var display = "";
                 for (var i = 0; i < vm.items.length; i++) {
                     if (vm.items[i].checked) {
-                        values.push(vm.items[i].value);
+                        values.push(vm.items[i][vm.$valueFiled]);
+                        if("" !== display) {
+                            display += vm.$split;
+                        }
+                        display += vm.items[i][vm.$textFiled];
                     }
                 }
                 vm.value = values;
+                vm.display = display;
+            },
+            _preProcessData: function() {
+                var vm = this;
+                var obj = vm.getCmpMgr();
+                var ds = obj._getDataSet();
+                if(ds) {
+                    Promise.all([ds.fetch()]).then(function() {
+                        var data = ds.getValue();
+                        if(data) {
+                            for(var i=0; i<data.length; i++) {
+                                var el = data[i];
+                                el.checked = false;
+                                if(vm.value) {
+                                    var valueArr = vm.value.split(vm.$split);
+                                    for(var j=0; j<valueArr.length; j++) {
+                                        if(el[vm.$valueFiled] == valueArr[j]) {
+                                            el.checked = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            vm.items = data;
+                        }
+                    });
+                }
+            },
+            getCmpMgr: function() {
+                return Page.manager.components[this.vid];
             }
         },
         initialize: function (opts) {
+            if(opts) {
+                if(opts.dataSetId && opts.url) {
+                    Page.dialog.alert("复选框组件中dataSetId和url属于互斥属性，只能设置一个！");
+                    return;
+                }
+            }
             this.parent(opts);
-            this._setValueByItems();
-            //this.validate();
+        },
+        render: function (parent) {
+            this.parent(parent);
+            //处理items的数据
+            var vm = this._getCompVM();
+            vm._preProcessData();
+        },
+        _getCompVM: function() {
+            var vid = this.options.vid;
+            return avalon.vmodels[vid]
+        },
+        _getDataSet: function() {
+            if(this.options.dataSetId) {
+                return Page.manager.components[this.options.dataSetId];
+            }
+            else if(this.options.url) {
+                if(!this.dataSet) {
+                    this.dataSet = Page.create("dataSet", {
+                        fetchUrl: this.options.url,
+                        model: {
+                            mainAlias: this.options.mainAlias
+                        }
+                    });
+                }
+                return this.dataSet;
+            }
         },
         getTemplate: function () {
             return template;
@@ -38,7 +109,9 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             //重写
             if(valueArr&&this.getAttr("items")){
                 var items = this.getAttr("items");
+                if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
                 this.setAttr("value",valueArr, notFireFormValueChangeEvent);
+                //this._getCompVM().value = valueArr;
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     items[i].checked = false;
                 }
@@ -90,42 +163,6 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         },
         _valueChange:function(){//值改变时校验
             this.validate();
-        },
-        _statusChange:function(value, oldValue, model){
-            if(value !== oldValue){
-                var formWidgetContainer = jQuery(this.getElement()).find(".form-widget-container");
-                if(value === "readonly"){
-                    formWidgetContainer.hide();
-                    var items = this.getAttr("items");
-                    var displays = " ";
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].checked) {
-                            displays+=items[i].display+" ";
-                        }
-                    }
-                    formWidgetContainer.parent().append(jQuery('<input class="checkedValue form-control form-text" readonly value="'+displays+'"></input>'));
-                }else if(value === "edit"){
-                    formWidgetContainer.show();
-                    formWidgetContainer.parent().find(".checkedValue").remove();
-                }
-            }
-        },
-        _itemCheck: function (item) {
-            item.checked = !item.checked;
-            this._setValueByItems();
-        },
-        _setValueByItems:function(){
-            var items = this.getAttr("items");
-
-            var values = [];
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].checked) {
-                    values.push(items[i].value);
-                }
-            }
-            if(values.length>0){
-                this.setAttr("value",values);
-            }
         }
     });
     CheckboxWidget.xtype = xtype;
