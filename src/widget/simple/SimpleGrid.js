@@ -473,6 +473,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             parentTpl:"inline",
                                             value: data[fieldName]||"",
                                             showLabel: false,
+                                            bindField:fieldName,
                                             disabledEdit:col.disabledEdit,
                                             validationRules:col.validationRules,
                                             showErrorMessage:true,
