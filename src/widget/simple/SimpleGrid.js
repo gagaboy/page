@@ -455,19 +455,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var cols = this.getAttr("columns");
                 var editCompMap = this.getAttr("editCompMap");
                 var dsId = "ds_"+this.getAttr("vid");
-                //var dataSources = {};//
-                //var dataBinders = {};组件中设置bind属性即可//
-
                 for (var i = 0; i < datas.length; i++) {
                     if(datas[i]&&datas[i].uuid){
-                        //行ds
-                        //var idsId = "ds_"+datas[i].uuid;
-                        //var idsSetting = {
-                        //    type:'dataValue',
-                        //    options:{data: datas[i]}
-                        //};
-                        //dataSources[idsId] = idsSetting;
-
                         var data = datas[i];
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
@@ -501,15 +490,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         rowEditComps.push(editField);
 
                                         editField.render();
-
-                                        //行dataBinder
-                                        //var idbId = "db_"+datas[i].uuid+"_"+fieldName;
-                                        //var idbSetting = {
-                                        //    dataValueId: "ds_"+data.uuid,
-                                        //    fieldId: fieldName,
-                                        //    widgetId: editField.getId()
-                                        //};
-                                        //dataBinders[idbId] = idbSetting;
                                     }(this,xtype,this.options.idField,fieldName,data,rowEditComps));
                                 }else{
                                     rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data.uuid]);
