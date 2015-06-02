@@ -128,15 +128,15 @@
                                 </a>
                             </div>
                         </div>
-                        <div ms-if="saveViewPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
+                        <div  ms-if="saveViewPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
                             <div class="row" style=" margin-top: 10px;">
-                                <div class="col-md-8" id="viewName"></div>
-                                <div class="col-md-4" >
+                                <div class="col-md-8" ms-attr-id="viewName_{{vid}}"></div>
+                                <div class="col-md-4" style="margin-top: 3px;">
                                     <a class="btn btn-primary" type="button" ms-click="saveView(vid, $event)">保存</a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6" id="defaultView"></div>
+                                <div class="col-md-6" ms-attr-id="defaultView_{{vid}}"></div>
                             </div>
                         </div>
                     </div>

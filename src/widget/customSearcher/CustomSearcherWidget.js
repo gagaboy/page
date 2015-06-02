@@ -37,7 +37,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             $firstLoad: true,
             showTips: false,  //查询条件详情面板显示控制
             customSearchPanel: true, //控制自定义查询区域面板
-            saveViewPanel: false,  //控制保存视图区域面板
+            saveViewPanel: true,  //控制保存视图区域面板
 
             searchValue: "", //查询输入值
             inputWidth: 25, //查询输入框的宽度
@@ -138,6 +138,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 }
                 //第一次展开视图查询面板时加载
                 if(vm.$firstLoad) {
+                    vm.saveViewPanel = false;
                     //渲染视图面板
                     var viewData = vm.viewData;
                     if(viewData && viewData.viewValue) {
@@ -147,17 +148,18 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     }
                     //渲染保存视图面板
                     Page.create("input", {
-                        $parentId: 'viewName',
-                        $id: 'viewName',
+                        $parentId: 'viewName_'+vm.vid,
+                        $id: 'viewName_'+vm.vid,
                         value: viewData ? viewData.viewName:"",
+                        parentTpl: "inline",
                         required: true,
                         showRequired: true,
                         showLabel: false,
                         showErrorMessage: true
                     }).render();
                     Page.create('checkbox', {
-                        $parentId: 'defaultView',
-                        $id: 'defaultView',
+                        $parentId: 'defaultView_'+vm.vid,
+                        $id: 'defaultView_'+vm.vid,
                         parentTpl: "inline",
                         required: false,
                         showErrorMessage: false,
@@ -167,8 +169,10 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             checked: viewData ? true:false
                         }]
                     }).render();
-                    vm.$firstLoad = false;
+                    vm.$objIdArr.push('viewName_'+vm.vid);
+                    vm.$objIdArr.push('defaultView_'+vm.vid);
 
+                    vm.$firstLoad = false;
                     event.stopPropagation();
                 }
             },
@@ -293,12 +297,15 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             },
             saveView: function(vid, event) {
                 var vm = vid ? avalon.vmodels[vid] : this;
-                if(!Page.manager.components.viewName.isValid()) {
+                var viewNameObj = Page.manager.components['viewName_'+vm.vid];
+                var defaultViewObj = Page.manager.components['defaultView_'+vm.vid];
+
+                if(!viewNameObj.isValid()) {
                     return;
                 }
-                var viewName = Page.manager.components.viewName.getValue();
+                var viewName = viewNameObj.getValue();
                 var defaultView = "0";
-                var checkBoxArr = Page.manager.components.defaultView.getValue();
+                var checkBoxArr = defaultViewObj.getValue();
                 if(checkBoxArr &&  checkBoxArr.length>0) {
                     defaultView = "1";
                 }
@@ -378,11 +385,15 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 if(undefined == vm.filterIndex)
                     vm.filterIndex = 0;
                 var index = vm.filterIndex++;
-                var fragmentId = "filterIndex_"+index;
-                vm.fragmentArr.push(fragmentId);
+                var fragmentId = "filterIndex_"+index+"_"+vid;
+                var operDSId = 'operSelectDs_'+index+"_"+vid;
+                var fieldObjId = 'field_'+index+"_"+vid;
+                var operObjId = 'oper_'+index+"_"+vid;
+                var valueObjId = 'value_'+index+"_"+vid;
+                vm.fragmentArr.push(fragmentId);            //控制生成的行Dom
                 //创建DS
                 Page.create("dataSet", {
-                    $id: 'operSelectDs_'+index
+                    $id: operDSId
                 });
 
                 //增加行片段
@@ -396,7 +407,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         xs: 4,
                         lg: 4,
                         items: [{
-                            $id: 'field_'+index,
+                            $id: fieldObjId,
                             $xtype: 'combobox',
                             parentTpl: "inline",
                             multi: false,
@@ -408,9 +419,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             selectedEvent: function(value, display, obj) {
                                 //重新刷新操作符的下拉面板数据
                                 var fieldModel = vm.$fieldMap[value];
-                                var operSelectDs = vm.getCmpMgr('operSelectDs_'+index);
+                                var operSelectDs = vm.getCmpMgr(operDSId);
                                 operSelectDs.setData(vm.builderLists[fieldModel.builderList].$model);
-                                var operObj = Page.manager.components['oper_'+index];
+                                var operObj = Page.manager.components[operObjId];
                                 operObj.clearSelect();
                                 operObj.reloadSelectData();
                                 //重新渲染值选择
@@ -420,7 +431,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                                     valColObj.removeItem(0);
                                 }
 
-                                fieldModel.$id = 'value_'+index;
+                                fieldModel.$id = valueObjId;
                                 fieldModel.parentTpl = 'inline';
                                 if(undefined == Page.classMap[fieldModel.$xtype]) {
                                     fieldModel.$xtype = 'input';
@@ -435,7 +446,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         xs: 4,
                         lg: 4,
                         items: [{
-                            $id: 'oper_'+index,
+                            $id: operObjId,
                             $xtype: 'combobox',
                             parentTpl: "inline",
                             multi: false,
@@ -444,7 +455,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             display: "",
                             valueField: "name",
                             textField: "caption",
-                            dataSetId: 'operSelectDs_'+index,
+                            dataSetId: operDSId,
                             showErrorMessage:true,
                             required:true
                         }]
@@ -455,22 +466,22 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         xs: 4,
                         lg: 4,
                         items: initData ? [] : [{
-                            $id: 'value_'+index,
+                            $id: valueObjId,
                             $xtype: 'input',
                             parentTpl: "inline"}]
                     }]
                 }).render();
 
-                vm.$objIdArr.push('operSelectDs_'+index);
+                vm.$objIdArr.push(operDSId);
                 vm.$objIdArr.push(fragmentId);
 
                 //初始化值
                 if(!initData) return;
-                var fieldObj = Page.manager.components['field_'+index];
+                var fieldObj = Page.manager.components[fieldObjId];
                 fieldObj.setValue({value: initData.name, display: initData.nameDisplay});
-                var operObj = Page.manager.components['oper_'+index];
+                var operObj = Page.manager.components[operObjId];
                 operObj.setValue({value: initData.builder, display: initData.builderDisplay});
-                var valueObj = Page.manager.components['value_'+index];
+                var valueObj = Page.manager.components[valueObjId];
                 valueObj.setValue({value: initData.value, display: initData.valueDisplay});
             },
             removeCustomFilter: function(vid, el, index, event) {
@@ -499,9 +510,13 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     for(var i=0; i<vm.fragmentArr.length; i++) {
                         var rowId = vm.fragmentArr[i];
                         var index = rowId.split("_")[1];
-                        var fieldObj = vm.getCmpMgr('field_'+index);
-                        var operObj = vm.getCmpMgr('oper_'+index);
-                        var valueObj = vm.getCmpMgr('value_'+index);
+                        var fieldObjId = 'field_'+index+"_"+vm.vid;
+                        var operObjId = 'oper_'+index+"_"+vm.vid;
+                        var valueObjId = 'value_'+index+"_"+vm.vid;
+
+                        var fieldObj = vm.getCmpMgr(fieldObjId);
+                        var operObj = vm.getCmpMgr(operObjId);
+                        var valueObj = vm.getCmpMgr(valueObjId);
                         //校验一下
                         if(!fieldObj.isValid() || !operObj.isValid() || !valueObj.isValid()) {
                             return;
