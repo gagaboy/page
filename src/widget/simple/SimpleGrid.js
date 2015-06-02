@@ -484,7 +484,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             parentTpl:"inline",
                                             value: data[fieldName]||"",
                                             showLabel: false,
-                                            bindField:fieldName,
                                             disabledEdit:col.disabledEdit,
                                             validationRules:col.validationRules,
                                             showErrorMessage:true,
@@ -493,6 +492,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         };
                                         var allParams = jQuery.extend(baseParams,editParams);
                                         var editField = Page.create(xtype,allParams);
+
+                                        editField.bindField = fieldName;
                                         //在属性中写displayChange无效，暂时用以下写法代替，TODO
                                         editField._displayChange = function(){
                                             data[fieldName] = editField.getValue();
@@ -589,30 +590,36 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             var editCompMap = this.getAttr("editCompMap");
             var editComps = editCompMap?editCompMap[row.uuid]:null;
             for(var t=0;t<editComps.length;t++){
-                if(editComps[t]&&editComps[t].bindField=="fieldName"){
-                    var st = editComps[t].getStatus();
+                if(editComps[t]&&editComps[t].bindField==fieldName){
+                    var st = editComps[t].getAttr("status");
                     var toStatus = "edit";
                     editComps[t].switchStatus(toStatus);
-                    if(!this.getAttr("editMultiRow")){
-                        //校验，将其他编辑设置为只读,校验不通过不更改状态
-                        var datas = this.getAttr("data");
-                        for (var i = 0; i < datas.length; i++) {
-                            if (datas[i]&&datas[i][this.options.idField]!=row[this.options.idField]) {
-                                if(false){//校验不通过
-                                    return null;//直接返回，不再进行后续逻辑
-                                }
-                                var otherToStatus = "readonly";
-                                row.state = otherToStatus;
-                                var editComps = editCompMap?editCompMap[datas[i].uuid]:null;
-                                for(var t=0;t<editComps.length;t++){
-                                    if(editComps[t]){
-                                        editComps[t].switchStatus(otherToStatus);
-                                    }
-                                }
+                    break;
+                }
+            }
+            if(!this.getAttr("editMultiRow")){
+                //校验，将其他编辑设置为只读,校验不通过不更改状态
+                var datas = this.getAttr("data");
+                var otherToStatus = "readonly";
+                for (var i = 0; i < datas.length; i++) {
+                    if (datas[i]&&(datas[i].uuid!=row.uuid)) {
+                        if(false){//校验不通过
+                            return null;//直接返回，不再进行后续逻辑
+                        }
+                        row.state = otherToStatus;
+                        var otherEditComps = editCompMap?editCompMap[datas[i].uuid]:null;
+                        for(var t=0;t<otherEditComps.length;t++){
+                            if(otherEditComps[t]){
+                                otherEditComps[t].switchStatus(otherToStatus);
+                            }
+                        }
+                    }else if(datas[i]){
+                        for(var t=0;t<editComps.length;t++){
+                            if(editComps[t]&&editComps[t].bindField!=fieldName){
+                                editComps[t].switchStatus(otherToStatus);
                             }
                         }
                     }
-                    break;
                 }
             }
         },

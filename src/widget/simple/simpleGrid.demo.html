@@ -72,7 +72,7 @@
             usePager:true,
             canSort:true,
             allChecked:false,
-            editMultiRow:false, //同时编辑多行
+            editMultiRow:true, //同时编辑多行
             dataSetId: ds.getId(),
             showPageDetail:true,
             editComps:[],
@@ -109,8 +109,8 @@
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
             canEdit:true,
-            dbClickToEditRow:true,
-            clickToEditField:false,
+            dbClickToEditRow:false,
+            clickToEditField:true,
             beforeChangePageNo:function(pager,grid){
                 //alert("要改页码了： "+pager.getAttr("pageIndex"));
             },
