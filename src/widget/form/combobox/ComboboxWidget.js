@@ -627,7 +627,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             this.setAttr("display", value);
         },
         _getInputElement: function () {
-            var input = jQuery(this.getElement()).find('input');
+            var input = jQuery(this.getElement()).find('td.col-md-7');
             return input;
         },
         focus: function () {
@@ -656,6 +656,18 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 this.dataSet.destroy();
             }
             this.parent();
+        },
+        switchStatus: function(status) {
+            this.parent(status);
+            if (status == 'edit') {
+                //把下拉面板放到body节点下
+                var vm = this._getCompVM();
+                var element = jQuery(vm.getCmpMgr().getElement());
+                var panelObj = element.find("#comboBox_panel_"+vm.vid);
+                if(panelObj.length>0) {
+                    jQuery('body').append(panelObj);
+                }
+            }
         }
     });
     ComboBoxWidget.xtype = xtype;

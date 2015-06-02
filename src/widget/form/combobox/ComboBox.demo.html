@@ -111,13 +111,14 @@
 //                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
             }
         })
-        combo1.render();
+//        combo1.render();
         var combo2 = Page.create('combobox', {
             $parentId: 'singleSearchable',
             $id: 'sex2',
             label: '学院（单选可搜索）',
             multi: false,
             searchable: true,
+            status: "readonly",
 //            showClear: false,
 //            panelCancel: false,
             url: "Data1.demo.json",
@@ -144,7 +145,7 @@
 //                return false;
             }
         })
-        combo3.render();
+//        combo3.render();
         Page.manager.components.sex1.focus()
     });
 </script>
