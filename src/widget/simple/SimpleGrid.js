@@ -455,19 +455,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var cols = this.getAttr("columns");
                 var editCompMap = this.getAttr("editCompMap");
                 var dsId = "ds_"+this.getAttr("vid");
-                //var dataSources = {};//
-                //var dataBinders = {};组件中设置bind属性即可//
-
                 for (var i = 0; i < datas.length; i++) {
                     if(datas[i]&&datas[i].uuid){
-                        //行ds
-                        //var idsId = "ds_"+datas[i].uuid;
-                        //var idsSetting = {
-                        //    type:'dataValue',
-                        //    options:{data: datas[i]}
-                        //};
-                        //dataSources[idsId] = idsSetting;
-
                         var data = datas[i];
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
@@ -493,6 +482,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         };
                                         var allParams = jQuery.extend(baseParams,editParams);
                                         var editField = Page.create(xtype,allParams);
+
+                                        editField.bindField = fieldName;
                                         //在属性中写displayChange无效，暂时用以下写法代替，TODO
                                         editField._displayChange = function(){
                                             data[fieldName] = editField.getValue();
@@ -500,15 +491,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         rowEditComps.push(editField);
 
                                         editField.render();
-
-                                        //行dataBinder
-                                        //var idbId = "db_"+datas[i].uuid+"_"+fieldName;
-                                        //var idbSetting = {
-                                        //    dataValueId: "ds_"+data.uuid,
-                                        //    fieldId: fieldName,
-                                        //    widgetId: editField.getId()
-                                        //};
-                                        //dataBinders[idbId] = idbSetting;
                                     }(this,xtype,this.options.idField,fieldName,data,rowEditComps));
                                 }else{
                                     rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data.uuid]);
@@ -589,30 +571,36 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             var editCompMap = this.getAttr("editCompMap");
             var editComps = editCompMap?editCompMap[row.uuid]:null;
             for(var t=0;t<editComps.length;t++){
-                if(editComps[t]&&editComps[t].bindField=="fieldName"){
-                    var st = editComps[t].getStatus();
+                if(editComps[t]&&editComps[t].bindField==fieldName){
+                    var st = editComps[t].getAttr("status");
                     var toStatus = "edit";
                     editComps[t].switchStatus(toStatus);
-                    if(!this.getAttr("editMultiRow")){
-                        //校验，将其他编辑设置为只读,校验不通过不更改状态
-                        var datas = this.getAttr("data");
-                        for (var i = 0; i < datas.length; i++) {
-                            if (datas[i]&&datas[i][this.options.idField]!=row[this.options.idField]) {
-                                if(false){//校验不通过
-                                    return null;//直接返回，不再进行后续逻辑
-                                }
-                                var otherToStatus = "readonly";
-                                row.state = otherToStatus;
-                                var editComps = editCompMap?editCompMap[datas[i].uuid]:null;
-                                for(var t=0;t<editComps.length;t++){
-                                    if(editComps[t]){
-                                        editComps[t].switchStatus(otherToStatus);
-                                    }
-                                }
+                    break;
+                }
+            }
+            if(!this.getAttr("editMultiRow")){
+                //校验，将其他编辑设置为只读,校验不通过不更改状态
+                var datas = this.getAttr("data");
+                var otherToStatus = "readonly";
+                for (var i = 0; i < datas.length; i++) {
+                    if (datas[i]&&(datas[i].uuid!=row.uuid)) {
+                        if(false){//校验不通过
+                            return null;//直接返回，不再进行后续逻辑
+                        }
+                        row.state = otherToStatus;
+                        var otherEditComps = editCompMap?editCompMap[datas[i].uuid]:null;
+                        for(var t=0;t<otherEditComps.length;t++){
+                            if(otherEditComps[t]){
+                                otherEditComps[t].switchStatus(otherToStatus);
+                            }
+                        }
+                    }else if(datas[i]){
+                        for(var t=0;t<editComps.length;t++){
+                            if(editComps[t]&&editComps[t].bindField!=fieldName){
+                                editComps[t].switchStatus(otherToStatus);
                             }
                         }
                     }
-                    break;
                 }
             }
         },
