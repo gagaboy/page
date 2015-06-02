@@ -54,8 +54,8 @@ define([], function () {
             }
             var that = this;
             this.vmodel = avalon.define(this.options);
-            this.vmodel.$watch("$all", function (name, value) {
-                that.setAttr(name, value);
+            this.vmodel.$watch("$all", function (name, newValue, oldValue) {
+                that.setAttr(name, newValue);
             });
         },
 
@@ -67,6 +67,7 @@ define([], function () {
         },
         setAttr: function (key, value, notFireEvent) {
             var oldValue = this.vmodel[key];
+
             this.vmodel[key] = value;
 
             if(notFireEvent)  {

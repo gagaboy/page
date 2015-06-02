@@ -10,6 +10,9 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             $valueFiled: "value",//值字段
             $textFiled: "display",//显示字段
             $split: ",",
+            dataSetId: null,
+            url: null,
+            mainAlias: null,
             //showAllcheckBtn: false,//提供全选按钮
 
             items: [],//选项
@@ -42,11 +45,11 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                     Promise.all([ds.fetch()]).then(function() {
                         var data = ds.getValue();
                         if(data) {
-                            if(vm.value) {
-                                var valueArr = vm.value.split(vm.$split);
-                                for(var i=0; i<data.length; i++) {
-                                    var el = data[i];
-                                    el.checked = false;
+                            for(var i=0; i<data.length; i++) {
+                                var el = data[i];
+                                el.checked = false;
+                                if(vm.value) {
+                                    var valueArr = vm.value.split(vm.$split);
                                     for(var j=0; j<valueArr.length; j++) {
                                         if(el[vm.$valueFiled] == valueArr[j]) {
                                             el.checked = true;
@@ -67,7 +70,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         initialize: function (opts) {
             if(opts) {
                 if(opts.dataSetId && opts.url) {
-                    Page.dialog.alert("下拉框组件中dataSetId和url属于互斥属性，只能设置一个！");
+                    Page.dialog.alert("复选框组件中dataSetId和url属于互斥属性，只能设置一个！");
                     return;
                 }
             }
@@ -106,7 +109,9 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             //重写
             if(valueArr&&this.getAttr("items")){
                 var items = this.getAttr("items");
+                if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
                 this.setAttr("value",valueArr, notFireFormValueChangeEvent);
+                //this._getCompVM().value = valueArr;
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     items[i].checked = false;
                 }

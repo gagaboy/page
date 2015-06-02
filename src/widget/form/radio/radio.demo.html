@@ -22,7 +22,7 @@
 
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4" id="radioContainer">
+                    <div class="col-md-6" id="radioContainer">
 
                     </div>
                 </div>
@@ -48,25 +48,25 @@
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../../page/src/Bootstrap"], function () {
+        var ds = Page.create("dataSet", {
+            $id: 'radioDS',
+            fetchUrl: 'radio.data.json'
+        });
+
         var radio = Page.create('radio', {
             $parentId: 'radioContainer',
             $id: "radio",
             label: '性别',
+            cols: 4,
+            value: "2",
+            display: "台球",
             required:true,
             showErrorMessage:true,
-            items:[{
-                value: '1',
-                display: '男',
-                checked: false
-            }, {
-                value: '11',
-                display: '女',
-                checked: false
-            }, {
-                value: '12',
-                display: '未知',
-                checked: false
-            }]
+//            dataSetId: "radioDS",
+            url: "radio.data.json",
+            onValueChange: function(value, oldValue) {
+                alert(value);
+            }
         });
         radio.render();
     });

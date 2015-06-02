@@ -138,6 +138,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
             return this.getAttr("display");
         },
         setValue: function (value, notFireFormValueChangeEvent) {
+            if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
             if (typeOf(value) == 'string' || typeOf(value) == 'number') {
                 this.setAttr("value", value, notFireFormValueChangeEvent);
                 this.setAttr("display", value);

@@ -1,36 +1,101 @@
-define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css'],function(CheckboxWidget, template){
+define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css'],function(BaseFormWidget, template){
     var xtype = "radio";
     var RadioWidget = new Class({
-        Extends: CheckboxWidget,
+        Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            value:null,
             cols:null,
-            itemCheck: function (vid,d) {
+            value:null,
+
+            display: null,
+            $valueFiled: "value",//值字段
+            $textFiled: "display",//显示字段
+            $split: ",",
+            dataSetId: null,
+            url: null,
+            mainAlias: null,
+            //showAllcheckBtn: false,//提供全选按钮
+            items: [],//选项
+
+            itemCheck: function (vid, el) {
                 var vm = avalon.vmodels[vid];
                 if(vm.status == 'readonly' || vm.status == 'disabled'){
                     return;
                 }
-                if(!d.checked){
-                    d.checked = true;
-                    vm._setOthersUnCheck(vid,d);
-                    vm.value = d.value;
+                if(!el.checked){
+                    el.checked = true;
+                    vm._setOthersUnCheck(vid,el);
+                    vm.value = el[vm.$valueFiled];
+                    vm.display = el[vm.$textField];
                 }
             },
-            _setOthersUnCheck:function(vid,d){
+            _setOthersUnCheck:function(vid,el){
                 var vm = avalon.vmodels[vid];
                 for (var i = 0; i < vm.items.length; i++) {
                     var itemi = vm.items[i];
-                    if (itemi.checked&&itemi.value!= d.value) {
+                    if (itemi.checked && itemi.value!= el.value) {
                         itemi.checked = false;
                     }
                 }
+            },
+            _preProcessData: function() {
+                var vm = this;
+                var obj = vm.getCmpMgr();
+                var ds = obj._getDataSet();
+                if(ds) {
+                    Promise.all([ds.fetch()]).then(function() {
+                        var data = ds.getValue();
+                        if(data) {
+                            for(var i=0; i<data.length; i++) {
+                                var el = data[i];
+                                el.checked = false;
+                                if(vm.value && vm.value == el[vm.$valueFiled]) {
+                                    el.checked = true;
+                                }
+                            }
+                            vm.items = data;
+                        }
+                    });
+                }
+            },
+            getCmpMgr: function() {
+                return Page.manager.components[this.vid];
             }
         },
         initialize: function (opts) {
+            if(opts) {
+                if(opts.dataSetId && opts.url) {
+                    Page.dialog.alert("单选框组件中dataSetId和url属于互斥属性，只能设置一个！");
+                    return;
+                }
+            }
             this.parent(opts);
-            this._setValueByItems();
-            //this.validate();
+        },
+        render: function (parent) {
+            this.parent(parent);
+            //处理items的数据
+            var vm = this._getCompVM();
+            vm._preProcessData();
+        },
+        _getCompVM: function() {
+            var vid = this.options.vid;
+            return avalon.vmodels[vid]
+        },
+        _getDataSet: function() {
+            if(this.options.dataSetId) {
+                return Page.manager.components[this.options.dataSetId];
+            }
+            else if(this.options.url) {
+                if(!this.dataSet) {
+                    this.dataSet = Page.create("dataSet", {
+                        fetchUrl: this.options.url,
+                        model: {
+                            mainAlias: this.options.mainAlias
+                        }
+                    });
+                }
+                return this.dataSet;
+            }
         },
         getTemplate: function () {
             return template;
@@ -39,7 +104,9 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
             //重写
             if(value&&this.getAttr("items")){
                 var items = this.getAttr("items");
+                if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
                 this.setAttr("value",value, notFireFormValueChangeEvent);
+                //this._getCompVM().value = value;
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     if(items[i]&&value==items[i].value){
                         items[i].checked = true;
@@ -51,33 +118,6 @@ define(['../checkbox/CheckboxWidget', 'text!./RadioWidget.html', 'css!./RadioWid
         },
         _valueChange:function(){//值改变时校验
             this.validate();
-        },
-        _statusChange:function(value, oldValue, model){
-            if(value !== oldValue){
-                var formWidgetContainer = jQuery(this.getElement()).find(".form-widget-container");
-                if(value === "readonly"){
-                    formWidgetContainer.hide();
-                    var items = this.getAttr("items");
-                    var displays = " ";
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].checked) {
-                            displays+=items[i].display+" ";
-                        }
-                    }
-                    formWidgetContainer.parent().append(jQuery('<input class="checkedValue form-control form-text" readonly value="'+displays+'"></input>'));
-                }else if(value === "edit"){
-                    formWidgetContainer.show();
-                    formWidgetContainer.parent().find(".checkedValue").remove();
-                }
-            }
-        },
-        _setValueByItems:function(){
-            var items = this.getAttr("items");
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].checked) {
-                    this.setAttr("value",items[i].value);
-                }
-            }
         }
     });
     RadioWidget.xtype = xtype;

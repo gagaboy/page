@@ -59,10 +59,12 @@ define(["./DataConstant"], function (Constant) {
                     }
                     ///***************wrap for emp end *****************************
 
-                    $this.options.data = result[Constant.rows];
-                    $this.options.pageSize = result[Constant.pageSize];
-                    $this.options.pageNo = result[Constant.pageNo];
-                    $this.options.totalSize = result[Constant.totalSize];
+                    if("dataSet" === $this.options.$xtype) {
+                        $this.options.data = result[Constant.rows];
+                        $this.options.pageSize = result[Constant.pageSize];
+                        $this.options.pageNo = result[Constant.pageNo];
+                        $this.options.totalSize = result[Constant.totalSize];
+                    }
                     $this._initData();
                     $this.fireEvent("afterUpdateRecord", [result[Constant.rows], true]);
                     if($this.setStatus){
