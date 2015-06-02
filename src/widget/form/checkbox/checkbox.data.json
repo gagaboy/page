@@ -1,0 +1,39 @@
+{
+  "result":{
+    "datas":{
+      "rows": [
+          {
+            "value": "1",
+            "display": "足球"
+          },{
+            "value": "11",
+            "display": "足球1"
+          },{
+            "value": "12",
+            "display": "足球2"
+          },{
+            "value": "13",
+            "display": "足球3"
+          },{
+            "value": "2",
+            "display": "台球"
+          }, {
+            "value": "21",
+            "display": "台球1"
+          },{
+            "value": "22",
+            "display": "台球2"
+          },{
+            "value": "23",
+            "display": "台球3"
+          },{
+            "value": "24",
+            "display": "台球4"
+          } ,{
+            "value": "25",
+            "display": "台球5"
+          }
+      ]
+    }
+  }
+}
