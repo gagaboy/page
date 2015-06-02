@@ -52,6 +52,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //行编辑
             canEdit:false,  //是否可编辑
             dbClickToEditRow:false, //双击编辑行
+            clickToEditField:false, //双击编辑行
             editMultiRow:true, //同时编辑多行
             editRowFunc:null,   //编辑行事件
             editFieldFunc:null, //编辑单属性事件
@@ -582,8 +583,36 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }
         },
-        _defaultEditField:function(){
-
+        _defaultEditField:function(vm,row,fieldName,fieldXtype,tdDom){
+            var editCompMap = this.getAttr("editCompMap");
+            var editComps = editCompMap?editCompMap[row.uuid]:null;
+            for(var t=0;t<editComps.length;t++){
+                if(editComps[t]&&editComps[t].bindField=="fieldName"){
+                    var st = editComps[t].getStatus();
+                    var toStatus = "edit";
+                    editComps[t].switchStatus(toStatus);
+                    if(!this.getAttr("editMultiRow")){
+                        //校验，将其他编辑设置为只读,校验不通过不更改状态
+                        var datas = this.getAttr("data");
+                        for (var i = 0; i < datas.length; i++) {
+                            if (datas[i]&&datas[i][this.options.idField]!=row[this.options.idField]) {
+                                if(false){//校验不通过
+                                    return null;//直接返回，不再进行后续逻辑
+                                }
+                                var otherToStatus = "readonly";
+                                row.state = otherToStatus;
+                                var editComps = editCompMap?editCompMap[datas[i].uuid]:null;
+                                for(var t=0;t<editComps.length;t++){
+                                    if(editComps[t]){
+                                        editComps[t].switchStatus(otherToStatus);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
         },
         _updateAllCheckedByDatas:function(){
             var datas = this.getAttr("data");
