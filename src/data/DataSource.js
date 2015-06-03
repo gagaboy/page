@@ -65,8 +65,11 @@ define(["./DataConstant"], function (Constant) {
                         $this.options.pageNo = result[Constant.pageNo];
                         $this.options.totalSize = result[Constant.totalSize];
                     }
+                    else {
+                        $this.options.data = result;
+                    }
                     $this._initData();
-                    $this.fireEvent("afterUpdateRecord", [result[Constant.rows], true]);
+                    $this.fireEvent("afterUpdateRecord", [$this.options.data, true]);
                     if($this.setStatus){
                         $this.setStatus($this.options.model.notModify);
                     }
