@@ -19,6 +19,22 @@ define([], function () {
                 },
                 error: fail
             });
+        },
+        syncAjax: function (url, params) {
+            var result = null;
+            jQuery.ajax({
+                url: url,
+                async:false,
+                data: params,
+                type:'POST',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    result = data;
+                },
+                error: function() {}
+            });
+            return result;
         }
     });
     return Utils;
