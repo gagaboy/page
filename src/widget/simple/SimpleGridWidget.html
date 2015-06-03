@@ -27,7 +27,7 @@
             </th>
         </tr>
         </thead>
-        <tr ms-repeat-rowdata="data" ms-attr-id="rowdata.uuid" ms-click="activeRow(vid,rowdata,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,rowdata,this):''">
+        <tr ms-repeat-rowdata="data" ms-attr-id="rowdata._uuid" ms-click="activeRow(vid,rowdata,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,rowdata,this):''">
             <td ms-if="showCheckbox">
                 <div class="icheckbox_square-green"
                      ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
@@ -44,7 +44,7 @@
                     <div ms-if="canEdit">
                         <div ms-attr-bindField="col.dataField" style="padding:0px;"
                              ms-click="!col.disabledEdit&&clickToEditField&&!dbClickToEditRow?editField(vid,rowdata,col.dataField,col.xtype,this):''">
-                            <div ms-attr-id="'con_'+col.dataField+'_'+rowdata.uuid"></div>
+                            <div ms-attr-id="'con_'+col.dataField+'_'+rowdata._uuid"></div>
                         </div>
                     </div>
                     <div ms-if="!canEdit">
