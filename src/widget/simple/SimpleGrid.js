@@ -367,7 +367,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //删除行，remove掉
             var ds = this._getDataSet();
             if(ds){
-                ds.deleteRecord(row[this.options.idField],real);
+                ds.deleteRecord(row[this.options._idField],real);
             }
             row = null;
             var upFlag = false;
@@ -387,7 +387,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     &&datas[i][idField]==dataId){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[i][this.options.idField],real);
+                            ds.deleteRecord(datas[i][this.options._idField],real);
                         }
                         datas[i] = null;
 
@@ -410,7 +410,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if(datas[s]&&acRow==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options.idField],real);
+                            ds.deleteRecord(datas[s][this.options._idField],real);
                         }
                         datas[s] = null;
                         this.setAttr("data",this._formArr(datas));
@@ -432,7 +432,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options.idField],real);
+                            ds.deleteRecord(datas[s][this.options._idField],real);
                         }
                         datas[s] = null;
                     }
@@ -459,7 +459,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var editCompMap = this.getAttr("editCompMap");
                 var dsId = "ds_"+this.getAttr("vid");
                 for (var i = 0; i < datas.length; i++) {
-                    if(datas[i]&&datas[i]._uuid){
+                    if(datas[i]&&datas[i][this.options._idField]){
                         var data = datas[i];
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
@@ -467,12 +467,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                             if(col.dataField&&col.xtype&&!col.isOpColumn&&!col.hidden){
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
-                                if(!$("#con_"+fieldName+"_"+data._uuid)||!Page.manager.components['comp_'+fieldName+"_"+data._uuid]){
+                                if(!$("#con_"+fieldName+"_"+data[this.options._idField])||!Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]){
                                     (function(that,xtype,keyField,fieldName,data,rowEditComps){
                                         var editParams = col.editParams?col.editParams.$model:{};
                                         var baseParams = {
-                                            $parentId: 'con_'+fieldName+"_"+data._uuid,
-                                            $id:'comp_'+fieldName+"_"+data._uuid,
+                                            $parentId: 'con_'+fieldName+"_"+data[that.options._idField],
+                                            $id:'comp_'+fieldName+"_"+data[that.options._idField],
                                             parentTpl:"inline",
                                             value: data[fieldName]||"",
                                             showLabel: false,
@@ -496,11 +496,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         editField.render();
                                     }(this,xtype,this.options._idField,fieldName,data,rowEditComps));
                                 }else{
-                                    rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data._uuid]);
+                                    rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]);
                                 }
                             }
                         }
-                        editCompMap[data._uuid] = rowEditComps;
+                        editCompMap[data[this.options._idField]] = rowEditComps;
                     }
                 }
                 this.widgetContainer = Page.create("widgetContainer", {
@@ -548,7 +548,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                             }
                             var otherToStatus = "readonly";
                             row.state = otherToStatus;
-                            var editComps = editCompMap?editCompMap[datas[i]._uuid]:null;
+                            var editComps = editCompMap?editCompMap[datas[i][this.options._idField]]:null;
                             for(var t=0;t<editComps.length;t++){
                                 if(editComps[t]){
                                     editComps[t].switchStatus(otherToStatus);
@@ -561,8 +561,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }else{
                 row.state = "readonly";
             }
-            if(editCompMap&&editCompMap[row._uuid]&&editCompMap[row._uuid].length>0){
-                var editComps = editCompMap[row._uuid];
+            if(editCompMap&&editCompMap[row[this.options._idField]]&&editCompMap[row[this.options._idField]].length>0){
+                var editComps = editCompMap[row[this.options._idField]];
                 for(var t=0;t<editComps.length;t++){
                     if(editComps[t]&&!editComps[t].getAttr("disabledEdit")){
                        editComps[t].switchStatus(toStatus);
@@ -572,7 +572,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _defaultEditField:function(vm,row,fieldName,fieldXtype,tdDom){
             var editCompMap = this.getAttr("editCompMap");
-            var editComps = editCompMap?editCompMap[row._uuid]:null;
+            var editComps = editCompMap?editCompMap[row[this.options._idField]]:null;
             for(var t=0;t<editComps.length;t++){
                 if(editComps[t]&&editComps[t].bindField==fieldName){
                     var st = editComps[t].getAttr("status");
@@ -586,12 +586,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var datas = this.getAttr("data");
                 var otherToStatus = "readonly";
                 for (var i = 0; i < datas.length; i++) {
-                    if (datas[i]&&(datas[i]._uuid!=row._uuid)) {
+                    if (datas[i]&&(datas[i][this.options._idField]!=row[this.options._idField])) {
                         if(false){//校验不通过
                             return null;//直接返回，不再进行后续逻辑
                         }
                         row.state = otherToStatus;
-                        var otherEditComps = editCompMap?editCompMap[datas[i]._uuid]:null;
+                        var otherEditComps = editCompMap?editCompMap[datas[i][this.options._idField]]:null;
                         for(var t=0;t<otherEditComps.length;t++){
                             if(otherEditComps[t]){
                                 otherEditComps[t].switchStatus(otherToStatus);
@@ -633,8 +633,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if (d[i]) {
                         d[i].checked = true;
                         d[i].state = d[i].state?d[i].state:'readonly';
-                        if(!d[i]._uuid){
-                            d[i]._uuid = String.uniqueID();
+                        if(!d[i][this.options._idField]){
+                            d[i][this.options._idField] = String.uniqueID();
                         }
                     }
                 }
@@ -643,8 +643,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if (d[i].checked == undefined) {
                         d[i].checked = false;//未设置，默认不选中
                         d[i].state = d[i].state?d[i].state:'readonly';
-                        if(!d[i]._uuid){
-                            d[i]._uuid = String.uniqueID();
+                        if(!d[i][this.options._idField]){
+                            d[i][this.options._idField] = String.uniqueID();
                         }
                     }
                 }
@@ -730,8 +730,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if (datas[i]) {
                             datas[i].checked = true;
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i]._uuid){
-                                datas[i]._uuid = String.uniqueID();
+                            if(!datas[i][this.options._idField]){
+                                datas[i][this.options._idField] = String.uniqueID();
                             }
                         }
                     }
@@ -740,8 +740,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if(datas[i]){
                             datas[i].checked = (datas[i].checked==true||datas[i].checked=="true")?true:false;//未设置，默认不选中
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i]._uuid){
-                                datas[i]._uuid = String.uniqueID();
+                            if(!datas[i][this.options._idField]){
+                                datas[i][this.options._idField] = String.uniqueID();
                             }
                         }
                     }
