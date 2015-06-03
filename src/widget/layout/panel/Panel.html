@@ -1,16 +1,19 @@
-<div class="ibox float-e-margins" ms-visible="show">
-    <div class="ibox-title" ms-visible="showTitle">
-        <h5>{{title}}</h5>
-        <div class="ibox-tools">
+<div class="ibox float-e-margins" ms-visible="show" style="margin-bottom: 0px;">
+    <div class="ibox-title" ms-visible="showTitle" style="border-top: 0px;padding-left: 19px;padding-top: 0px;">
+        <h5 ms-if="title!=''" style="margin-top: 10px;margin-bottom: 0px; border-bottom: 5px solid #1ab394;padding-left: 10px;padding-right: 10px;padding-bottom: 5px;">
+            {{title}}
+        </h5>
+        <div class="ibox-tools" style="margin-top: 9px;">
             <a class="collapse-link">
                 <i class="fa fa-chevron-up"></i>
             </a>
-            <a class="close-link">
+<!--            <a class="close-link">
                 <i class="fa fa-times"></i>
-            </a>
+            </a>-->
         </div>
+        <div class="hr-line-solid" style=" margin-top: 0px;  margin-bottom: 0px;  border: 0px;  border-bottom: 1px solid #e5e6e7;height: 34px;"></div>
     </div>
-    <div class="ibox-content">
+    <div class="ibox-content" style=" padding-top: 10px;border-top-width: 0px;padding-bottom: 0px;">
 
     </div>
 </div>
