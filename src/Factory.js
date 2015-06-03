@@ -35,6 +35,7 @@ define([
     "./widget/composite/FormWidget",
     "./widget/dataTable/DataTableWidget",
     "./widget/simple/SimpleGrid",
+    "./widget/simple/expandGrid/ExpandGrid",
     "./widget/form/checkbox/CheckboxWidget",
     "./widget/form/radio/RadioWidget",
     "./widget/form/textarea/TextareaWidget",

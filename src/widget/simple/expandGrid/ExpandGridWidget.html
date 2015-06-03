@@ -27,27 +27,21 @@
             </th>
         </tr>
         </thead>
-        <tr ms-repeat-rowdata="data" ms-attr-id="rowdata.uuid" ms-click="activeRow(vid,rowdata,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,rowdata,this):''">
-            <td ms-if="showCheckbox">
-                <div class="icheckbox_square-green"
-                     ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
-                </div>
-            </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" style="vertical-align:middle;">
-                {{opcolumn.template|html}}
-            </td>
-            <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
-                <div ms-if="col.isOpColumn">
-                    {{col.template|html}}
-                </div>
-                <div ms-if="!col.isOpColumn">
-                    <div ms-if="canEdit">
-                        <div ms-attr-bindField="col.dataField" style="padding:0px;"
-                             ms-click="!col.disabledEdit&&clickToEditField&&!dbClickToEditRow?editField(vid,rowdata,col.dataField,col.xtype,this):''">
-                            <div ms-attr-id="'con_'+col.dataField+'_'+rowdata.uuid"></div>
-                        </div>
+        <tbody ms-repeat-rowdata="data" ms-attr-id="rowdata.uuid" style="border:0px;">
+            <tr ms-click="activeRow(vid,rowdata,this)">
+                <td ms-if="showCheckbox">
+                    <div class="icheckbox_square-green"
+                         ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                     </div>
-                    <div ms-if="!canEdit">
+                </td>
+                <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" style="vertical-align:middle;">
+                    {{opcolumn.template|html}}
+                </td>
+                <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
+                    <div ms-if="col.isOpColumn">
+                        {{col.template|html}}
+                    </div>
+                    <div ms-if="!col.isOpColumn">
                         <div ms-if="col.showDisplay">
                             {{rowdata[col.dataField+'_DISPLAY']}}
                         </div>
@@ -55,14 +49,17 @@
                             {{rowdata[col.dataField]}}
                         </div>
                     </div>
-                </div>
-            </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
-                {{opcolumn.template|html}}
-            </td>
-        </tr>
+                </td>
+                <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
+                    {{opcolumn.template|html}}
+                </td>
+            </tr>
+            <tr ms-if="canExpand&&rowdata._customDetailShow">
+                <td colspan="100">{{rowdata._customDetail|html}}</td>
+            </tr>
+        </tbody>
         <tr ms-if="(!totalNum||totalNum<1)&&(!data||data.length<1)">
-            <td colspan="100"><div class="simpleGrid_noDataTip">{{noDataTip}}</div></td>
+            <td colspan="100"><div class="expandGrid_noDataTip">{{noDataTip}}</div></td>
         </tr>
     </table>
     <nav ms-if="usePager">

@@ -1,0 +1,9 @@
+.expandGrid_noDataTip{
+    text-align: center;
+    background: #eee;
+    color: #aaa;
+    cursor: default;
+    font-size: 20px;
+    font-weight: 100;
+    font-family: inherit;
+}

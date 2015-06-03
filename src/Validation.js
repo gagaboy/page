@@ -128,10 +128,12 @@ define([], function () {
         checkFunCall:function(value,fn,params){
             if (typeof(fn) == 'function') {
                 //函数返回true则不允许提交，返回false则允许提交
-                var fn_result = fn(value,params);
-                return fn_result;//要求格式与validation返回一致
+                Promise.all([fn(value,params)]).then(function(res) {
+                    return res;
+                });
+            }else{
+                return {"result":true};
             }
-            return {"result":true};
         },
         checkAjax:function(value,url,valueKey,params){
             if(url){
