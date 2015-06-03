@@ -338,7 +338,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 if(pSize<1){
-                    newDataArr.push();
+                    newDataArr.push(formatData);
                 }else{
                     for(var t=0;t<pSize;t++){
                         if(t==(pos-1)){
