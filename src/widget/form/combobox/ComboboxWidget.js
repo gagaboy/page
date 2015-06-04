@@ -143,9 +143,16 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
                 var obj =  element.find("[name^='ComboBoxWidget_']");
                 var offset = obj.offset();
+                var objHeigth = obj.outerHeight();
 
-                var downHeight =  jQuery(window).height()-offset.top;
-                var upHeight = offset.top;
+                var scrolHeight = jQuery(document).scrollTop();
+                var windowHeight = jQuery(window).height();
+
+                var upHeight = offset.top-scrolHeight;
+                var downHeight = windowHeight-(objHeigth+upHeight);
+
+                //var downHeight =  jQuery(window).height()-offset.top;
+                //var upHeight = offset.top;
                 if(downHeight < panelHeight && downHeight < upHeight && panelHeight<upHeight) {
                     this.downShow = false;
                 }else {
@@ -156,10 +163,10 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
 
                 if(this.downShow) {
-                    vm.panelTop = offset.top + obj.outerHeight()-obj.scrollTop();
+                    vm.panelTop = upHeight + obj.outerHeight()+scrolHeight;    //绝对定位要从document点算起，而不是窗口顶端
                 }
                 else {
-                    vm.panelTop = offset.top+obj.scrollTop()-panelHeight;
+                    vm.panelTop = upHeight-panelHeight+scrolHeight;
                 }
 
                 panelObj.width(obj.outerWidth()-2);

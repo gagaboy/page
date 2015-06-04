@@ -41,6 +41,9 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
 
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             labelSpan: 4,
+            $rowNum: 1,
+            $colNum: 1,
+            height: null,
             controlPadding: '0',
 
             //data binding

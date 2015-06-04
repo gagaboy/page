@@ -1,7 +1,7 @@
 /**
  * Created by JK_YANG on 15/5/22.
  */
-define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
+define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (Base, formTpl) {
     var xtype = "form";
     var Form = new Class({
         Extends: Base,
@@ -10,11 +10,13 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
             title: '',
             initData: true,
             showTitle: true,
-            title: '',
             dataSources: {},
             dataSourcesIds: [],
             cols: 2, //每行多少列
-            widgets: [] //组件列表
+            $rowHeight: 51,
+            $widgetHeight: 34,
+            widgets: [], //组件列表
+            groupWidgets: null
         },
         getTemplate: function () {
             return formTpl;
@@ -30,8 +32,27 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
         _wrapWidgetConfig: function (cfg) {
             //预处理widget 得配置
             var col = {$xtype: 'col', items: []}
-            col.md = 12 / this.options.cols; //列
             var c = Object.merge({}, cfg);
+            //计算跨列
+            var colNum = c.colNum;
+            if(colNum>this.options.cols) {
+                c.colNum = colNum = this.options.cols;
+            }
+            else if(undefined == colNum) {
+                colNum = 1;
+            }
+            col.xs = col.sm = col.lg = col.md = 12 *colNum/ this.options.cols; //列 //暂时不设计成响应式布局
+            //计算跨行: 1、行高计算；2、浮动计算
+            var rowNum = c.rowNum;
+            if(rowNum && rowNum!=1) {
+                if(!c.height) {
+                    c.height = (rowNum-1)*this.options.$rowHeight+this.options.$widgetHeight;
+                }
+                //判断是否该列右浮动
+                if(c.floatDirection) {
+                    col.floatDirection = c.floatDirection;
+                }
+            }
             if (c.show != undefined) {
                 col.show = c.show;
             }
@@ -41,22 +62,35 @@ define(["../Base", "text!./FormWidget.html"], function (Base, formTpl) {
 
 
         appendExtend: function () {
+
+            var items = [];
+            var groupWidgets = this.options.groupWidgets;
             var widgets = this.options.widgets;
-            var cols = this.options.cols;
-            var currentRow = null;
-            var panel = {$xtype: 'panel', title: this.options.title, showTitle: this.options.showTitle, items: []};
-            for (var i = 0; i < widgets.length; i++) {
-                if (i == 0 /* || i % cols == 0*/) {
-                    currentRow = {$xtype: 'row', items: []};
-                    panel.items.push(currentRow);
-                }
-                currentRow.items.push(this._wrapWidgetConfig(widgets[i]));
+            if(!groupWidgets && widgets.length>0) {
+                groupWidgets = {};
+                groupWidgets[this.options.title] = widgets;
             }
+            if(groupWidgets) {
+                for(var attr in groupWidgets) {
+                    var title = attr;
+                    var widgets = groupWidgets[title];
+                    var panel = {$xtype: 'panel', title: title, showTitle: this.options.showTitle, items: []};
+                    for(var i=0; i<widgets.length; i++) {
+                        if (i == 0 /* || i % cols == 0*/) {
+                            currentRow = {$xtype: 'row', items: []};
+                            panel.items.push(currentRow);
+                        }
+                        currentRow.items.push(this._wrapWidgetConfig(widgets[i]));
+                    }
+                    items.push(panel);
+                }
+            }
+
             var ds = this.options.dataSources;
             var dsids = this.options.dataSourcesIds;
             this.fragment = Page.create("fragment", {
                 dataSources: ds,
-                items: [panel],
+                items: items,
                 dataSourcesIds: dsids
             });
             this.formWidgetBag = [];

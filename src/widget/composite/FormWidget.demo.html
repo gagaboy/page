@@ -9,6 +9,14 @@
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
     <link href="/page/src/css/page.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
+    <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
+    <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
 </head>
 <body>
 <br>
@@ -57,17 +65,29 @@
             $id: 'f1',
             title: 'aaa',
             $parentId: 'container',
-            cols: 2,
+            cols: 3,
             initData: false,
             dataSourcesIds: ['ds1'],
-            widgets: [
-                {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true},
-                {$id: 'interest', $xtype: 'input', label: '兴趣', bind: 'ds1.xq'},
-                {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
-                {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
-                {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
-                {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}
-            ]
+
+            groupWidgets: {
+                "aaa":[
+                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'interest', $xtype: 'input', label: '兴趣', rowNum: 3, floatDirection: "right", bind: 'ds1.xq'},
+                    {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
+                    {$id: 'phone', $xtype: 'input', colNum: 1, label: '电话', bind: 'ds1.dh'},
+                    {$id: 'name1', $xtype: 'input', label: '您的姓名1', rowNum: 1, colNum: 1,floatDirection: "right",bind: 'ds1.xm', required: true},
+                    {$id: 'name2', $xtype: 'input', label: '您的姓名2', rowNum: 1, bind: 'ds1.xm', required: true},
+                    {$id: 'name3', $xtype: 'input', label: '您的姓名3', bind: 'ds1.xm', required: true},
+                    {$id: 'name4', $xtype: 'input', label: '您的姓名4', colNum: 2,bind: 'ds1.xm', required: true},
+                    {$id: 'name5', $xtype: 'input', label: '您的姓名5', bind: 'ds1.xm', required: true},
+                    {$id: 'name6', $xtype: 'textarea', label: '您的姓名6', rowNum: 2, colNum: 3,bind: 'ds1.xm', required: true},
+                    {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
+                    {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy", show: false}
+                ],
+                "bbb": [
+                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true}
+                ]
+            }
         });
         form.render();
 

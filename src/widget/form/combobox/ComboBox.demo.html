@@ -53,14 +53,14 @@
                     </div>
                 </div>
             </div>
-            <div class="ibox-content">
+            <div class="ibox-content" >
                 <div class="row">
                     <div class="col-md-6" id="singleSearchable">
 
                     </div>
                 </div>
             </div>
-            <div class="ibox-content">
+            <div class="ibox-content" >
                 <div class="row">
                     <div class="col-md-6" id="single">
 
@@ -111,7 +111,7 @@
 //                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
             }
         })
-//        combo1.render();
+        combo1.render();
         var combo2 = Page.create('combobox', {
             $parentId: 'singleSearchable',
             $id: 'sex2',
@@ -145,7 +145,7 @@
 //                return false;
             }
         })
-//        combo3.render();
+        combo3.render();
         Page.manager.components.sex1.focus()
     });
 </script>

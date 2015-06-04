@@ -146,6 +146,13 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             vm.addCustomFilter(vm.vid, viewData.viewValue[i]);
                         }
                     }
+                    //创建字段选择的下拉框DS
+                    Page.create("dataSet", {
+                        $id: 'fieldSelectDs_'+vm.vid,
+                        data: vm.$fieldSelectData
+                    });
+                    vm.$objIdArr.push('fieldSelectDs_'+vm.vid);
+
                     //渲染保存视图面板
                     Page.create("input", {
                         $parentId: 'viewName_'+vm.vid,
@@ -413,7 +420,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             multi: false,
                             value: "",
                             display: "",
-                            dataSetId: "fieldSelectDs",
+                            dataSetId: 'fieldSelectDs_'+vm.vid,
                             showErrorMessage:true,
                             required:true,
                             selectedEvent: function(value, display, obj) {
@@ -679,12 +686,6 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     opts.$fieldMap[fieldModel.bindField] = fieldModel;
 
                 }
-                //创建字段选择的下拉框DS
-                Page.create("dataSet", {
-                    $id: 'fieldSelectDs',
-                    data: opts.$fieldSelectData
-                });
-                this.options.$objIdArr.push("fieldSelectDs");
             }
         },
         _getCompVM: function() {
