@@ -319,7 +319,10 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
             var datas = this.getAttr("data");
             var pSize = datas.length;
             var formatData = this._formatData(rowData);
-
+            var ds = this._getDataSet();
+            if(ds){
+                ds.addRecord(formatData);
+            }
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 if(pSize<1){
