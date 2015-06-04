@@ -24,6 +24,7 @@ define(['../Base'], function (Base) {
             }
         },
         _renderWidget: function (it, formWidgetBag) {
+
             if (it['$xtype']) {
                 var config = {};
                 Object.merge(config, it);
@@ -34,6 +35,7 @@ define(['../Base'], function (Base) {
                 }
                 widget.render(this.getElementToAppend(), formWidgetBag);
                 this.itemsArr.push(widget.getId());
+                return widget;
             }
         },
         getElementToAppend: function () {
@@ -41,7 +43,7 @@ define(['../Base'], function (Base) {
 
         },
         addItem: function (config) {
-            this._renderWidget(config);
+           return this._renderWidget(config);
         },
         removeItem: function (index) {
             var widgetId = this.itemsArr.splice(index, 1)[0];
