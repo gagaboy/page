@@ -77,9 +77,11 @@
             editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:false},
-                {title:"性别",dataField:"sex",width:"4%",showDisplay:true,disabledEdit:true,
+                {title:"性别",dataField:"sex",width:"8%",showDisplay:true,disabledEdit:true,
                     sortDisabled:true,xtype:"combobox",isOpColumn:true,
-                    xtype:"checkbox",editParams:{"url":""},template:"<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>{{rowdata.sexDisplay}}</B></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
+                    xtype:"checkbox",editParams:{"url":""},
+                    templateGenerator:"genTest"},
+                    //template:"<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>{{rowdata.sexDisplay}}</B></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker"},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true},
@@ -111,6 +113,15 @@
             dbClickToEditRow:true,
             clickToEditField:false,
             editMultiRow:false, //同时编辑多行
+            genTest:function(rowData,col){
+                if(rowData) {
+                    if (rowData.sex ==2) {
+                        return "<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>hi,美{{rowdata.sexDisplay}}</B></div>";
+                    } else {
+                        return "<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>hi,帅{{rowdata.sexDisplay}}</B></div>";
+                    }
+                }
+            },
             beforeChangePageNo:function(pager,grid){
                 //alert("要改页码了： "+pager.getAttr("pageIndex"));
             },
