@@ -14,7 +14,8 @@ module.exports = function(grunt) {
                         "normalize": "bower_components/require-css/normalize",
                         "avalon": "bower_components/oniui/avalon",
                         "art": 'lib/artdialog/artDialog.source',
-                        "artIframe": 'lib/artdialog/iframeTools.source'
+                        "artIframe": 'lib/artdialog/iframeTools.source',
+                        my97DatePicker: "lib/My97DatePicker/WdatePicker"
                     },
                     optimize: 'none',
                     preserveLicenseComments:false,

@@ -43,3 +43,7 @@ end: function (event) {
 		this.onend(event.clientX, event.clientY);
 		return false;
 	}
+
+artDialog.source.js 源码有改动：	解决对话框按钮focus都设置为true时，都应该变成绿色
+1236行被注释掉
+

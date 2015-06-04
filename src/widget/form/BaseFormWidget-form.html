@@ -1,7 +1,7 @@
 <div ms-visible="show">
     <table class="form-horizontal-table">
         <tr>
-            <td class="form-label" ms-class="col-md-{{labelSpan}} col-xs-{{labelSpan}} col-sm-{{labelSpan}} col-lg-{{labelSpan}}" ms-if="showLabel">
+            <td class="form-label" ms-css-width="33.33333333/$colNum+'%'" ms-class="col-md-{{labelSpan}} col-xs-{{labelSpan}} col-sm-{{labelSpan}} col-lg-{{labelSpan}}" ms-if="showLabel">
 
                 <span class="form-required" ms-visible="required && showRequired" >
                     <!--*-->
@@ -9,12 +9,12 @@
 
                 <label class="control-label">{{label}}</label>
             </td>
-            <td class="col-md-7" ms-class="has-error:showErrorMessage&&errorMessage"
+            <td class="col-md-7" ms-css-width="100-8.33333333/$colNum-33.33333333/$colNum+'%'" ms-class="has-error:showErrorMessage&&errorMessage"
                 ms-css-padding="controlPadding">
                 <!--调用组件模板-->
                 {{TEMPLATEVALUE}}
             </td>
-            <td class="form-icon-container  col-md-1">
+            <td class="form-icon-container  col-md-1" ms-css-width="8.33333333/$colNum+'%'">
                 <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
             </td>
         </tr>

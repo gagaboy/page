@@ -7,6 +7,7 @@ define(["../BaseLayout", "text!./Col.html"], function (BaseLayout, colTpl) {
     var Col = new Class({
         Extends: BaseLayout,
         options: {
+            floatDirection: null,
             //span: 6,
             xs:0, //超小屏幕 手机 (<768px)
             sm:0, //小屏幕 平板 (≥768px)
