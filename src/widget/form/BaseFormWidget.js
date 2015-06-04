@@ -243,6 +243,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
 
                 } else {
                     this.setAttr("errorMessage", valRes.errorMsg);
+                    this.setAttr("showErrorMessage", true);
                 }
                 return false;
             } else {//清空错误信息
@@ -250,6 +251,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
 
                 } else {
                     this.setAttr("errorMessage", "");
+                    this.setAttr("showErrorMessage", false);
                 }
                 return true;
             }
