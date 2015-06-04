@@ -25,7 +25,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             data: [],    //静态数据
             dataSetId: null,    //数据集ID，设置了dataSetId则data无效
             //queryParams:null, //默认查询条件，目前不需要，请设置到ds中
-            idField:"wid",  //主键属性
+            idField:"WID",  //主键属性
             canSort:true,   //是否可排序
             showCheckbox:true,  //是否显示复选框
             checkboxWidth:"10%",    //复选框宽度
@@ -67,6 +67,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             beforeChangePageNo:null,    //改变页码前事件
 
             //中间参数，不可初始化
+            _idField:"_uuid",
             opColumnMap:{},
             editCompMap:{},
             allColumns:[],
@@ -328,16 +329,16 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             var datas = this.getAttr("data");
             var pSize = datas.length;
             var formatData = this._formatData(rowData);
-            if(this.getAttr("canEdit")){
+            //if(this.getAttr("canEdit")){
                 var ds = this._getDataSet();
                 if(ds){
                     ds.addRecord(formatData);
                 }
-            }
+            //}
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 if(pSize<1){
-                    newDataArr.push();
+                    newDataArr.push(formatData);
                 }else{
                     for(var t=0;t<pSize;t++){
                         if(t==(pos-1)){
@@ -353,7 +354,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
 
                 this.setAttr("data",newDataArr);
             }else{
-                this.getAttr("data").push(formatData);
+                var nowData = this.getAttr("data");
+                nowData.push(formatData);
+                this.setAttr("data",nowData);
             }
             this._updateAllCheckedByDatas();
         },
@@ -364,7 +367,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //删除行，remove掉
             var ds = this._getDataSet();
             if(ds){
-                ds.deleteRecord(row[this.options.idField],real);
+                ds.deleteRecord(row[this.options._idField],real);
             }
             row = null;
             var upFlag = false;
@@ -384,7 +387,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     &&datas[i][idField]==dataId){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[i][this.options.idField],real);
+                            ds.deleteRecord(datas[i][this.options._idField],real);
                         }
                         datas[i] = null;
 
@@ -407,7 +410,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if(datas[s]&&acRow==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options.idField],real);
+                            ds.deleteRecord(datas[s][this.options._idField],real);
                         }
                         datas[s] = null;
                         this.setAttr("data",this._formArr(datas));
@@ -429,7 +432,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options.idField],real);
+                            ds.deleteRecord(datas[s][this.options._idField],real);
                         }
                         datas[s] = null;
                     }
@@ -456,7 +459,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var editCompMap = this.getAttr("editCompMap");
                 var dsId = "ds_"+this.getAttr("vid");
                 for (var i = 0; i < datas.length; i++) {
-                    if(datas[i]&&datas[i].uuid){
+                    if(datas[i]&&datas[i][this.options._idField]){
                         var data = datas[i];
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
@@ -464,12 +467,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                             if(col.dataField&&col.xtype&&!col.isOpColumn&&!col.hidden){
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
-                                if(!$("#con_"+fieldName+"_"+data.uuid)||!Page.manager.components['comp_'+fieldName+"_"+data.uuid]){
-                                    (function(that,xtype,idField,fieldName,data,rowEditComps){
+                                if(!$("#con_"+fieldName+"_"+data[this.options._idField])||!Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]){
+                                    (function(that,xtype,keyField,fieldName,data,rowEditComps){
                                         var editParams = col.editParams?col.editParams.$model:{};
                                         var baseParams = {
-                                            $parentId: 'con_'+fieldName+"_"+data.uuid,
-                                            $id:'comp_'+fieldName+"_"+data.uuid,
+                                            $parentId: 'con_'+fieldName+"_"+data[that.options._idField],
+                                            $id:'comp_'+fieldName+"_"+data[that.options._idField],
                                             parentTpl:"inline",
                                             value: data[fieldName]||"",
                                             showLabel: false,
@@ -477,7 +480,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             disabledEdit:col.disabledEdit,
                                             validationRules:col.validationRules,
                                             showErrorMessage:true,
-                                            bind:that._getDataValueIdByDataId(data[idField]).getId()+"."+fieldName,
+                                            bind:that._getDataValueIdByDataId(data[keyField]).getId()+"."+fieldName,
                                             status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
                                         };
                                         var allParams = jQuery.extend(baseParams,editParams);
@@ -491,13 +494,13 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         rowEditComps.push(editField);
 
                                         editField.render();
-                                    }(this,xtype,this.options.idField,fieldName,data,rowEditComps));
+                                    }(this,xtype,this.options._idField,fieldName,data,rowEditComps));
                                 }else{
-                                    rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data.uuid]);
+                                    rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]);
                                 }
                             }
                         }
-                        editCompMap[data.uuid] = rowEditComps;
+                        editCompMap[data[this.options._idField]] = rowEditComps;
                     }
                 }
                 this.widgetContainer = Page.create("widgetContainer", {
@@ -539,13 +542,13 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     //校验，将其他编辑设置为只读,校验不通过不更改状态
                     var datas = this.getAttr("data");
                     for (var i = 0; i < datas.length; i++) {
-                        if (datas[i]&&datas[i][this.options.idField]!=row[this.options.idField]) {
+                        if (datas[i]&&datas[i][this.options._idField]!=row[this.options._idField]) {
                             if(false){//校验不通过
                                 return null;//直接返回，不再进行后续逻辑
                             }
                             var otherToStatus = "readonly";
                             row.state = otherToStatus;
-                            var editComps = editCompMap?editCompMap[datas[i].uuid]:null;
+                            var editComps = editCompMap?editCompMap[datas[i][this.options._idField]]:null;
                             for(var t=0;t<editComps.length;t++){
                                 if(editComps[t]){
                                     editComps[t].switchStatus(otherToStatus);
@@ -558,8 +561,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }else{
                 row.state = "readonly";
             }
-            if(editCompMap&&editCompMap[row.uuid]&&editCompMap[row.uuid].length>0){
-                var editComps = editCompMap[row.uuid];
+            if(editCompMap&&editCompMap[row[this.options._idField]]&&editCompMap[row[this.options._idField]].length>0){
+                var editComps = editCompMap[row[this.options._idField]];
                 for(var t=0;t<editComps.length;t++){
                     if(editComps[t]&&!editComps[t].getAttr("disabledEdit")){
                        editComps[t].switchStatus(toStatus);
@@ -569,7 +572,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _defaultEditField:function(vm,row,fieldName,fieldXtype,tdDom){
             var editCompMap = this.getAttr("editCompMap");
-            var editComps = editCompMap?editCompMap[row.uuid]:null;
+            var editComps = editCompMap?editCompMap[row[this.options._idField]]:null;
             for(var t=0;t<editComps.length;t++){
                 if(editComps[t]&&editComps[t].bindField==fieldName){
                     var st = editComps[t].getAttr("status");
@@ -583,12 +586,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var datas = this.getAttr("data");
                 var otherToStatus = "readonly";
                 for (var i = 0; i < datas.length; i++) {
-                    if (datas[i]&&(datas[i].uuid!=row.uuid)) {
+                    if (datas[i]&&(datas[i][this.options._idField]!=row[this.options._idField])) {
                         if(false){//校验不通过
                             return null;//直接返回，不再进行后续逻辑
                         }
                         row.state = otherToStatus;
-                        var otherEditComps = editCompMap?editCompMap[datas[i].uuid]:null;
+                        var otherEditComps = editCompMap?editCompMap[datas[i][this.options._idField]]:null;
                         for(var t=0;t<otherEditComps.length;t++){
                             if(otherEditComps[t]){
                                 otherEditComps[t].switchStatus(otherToStatus);
@@ -630,8 +633,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if (d[i]) {
                         d[i].checked = true;
                         d[i].state = d[i].state?d[i].state:'readonly';
-                        if(!d[i].uuid){
-                            d[i].uuid = String.uniqueID();
+                        if(!d[i][this.options._idField]){
+                            d[i][this.options._idField] = String.uniqueID();
                         }
                     }
                 }
@@ -640,8 +643,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if (d[i].checked == undefined) {
                         d[i].checked = false;//未设置，默认不选中
                         d[i].state = d[i].state?d[i].state:'readonly';
-                        if(!d[i].uuid){
-                            d[i].uuid = String.uniqueID();
+                        if(!d[i][this.options._idField]){
+                            d[i][this.options._idField] = String.uniqueID();
                         }
                     }
                 }
@@ -727,8 +730,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if (datas[i]) {
                             datas[i].checked = true;
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i].uuid){
-                                datas[i].uuid = String.uniqueID();
+                            if(!datas[i][this.options._idField]){
+                                datas[i][this.options._idField] = String.uniqueID();
                             }
                         }
                     }
@@ -737,8 +740,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if(datas[i]){
                             datas[i].checked = (datas[i].checked==true||datas[i].checked=="true")?true:false;//未设置，默认不选中
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i].uuid){
-                                datas[i].uuid = String.uniqueID();
+                            if(!datas[i][this.options._idField]){
+                                datas[i][this.options._idField] = String.uniqueID();
                             }
                         }
                     }
@@ -755,12 +758,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     data.checked = false;//未设置，默认不选中
                 }
                 data.state = data.state?data.state:'readonly';
-                if(!data.uuid){
-                    data.uuid = String.uniqueID();
-                }
                 //TODO widgetContainer必须wid的处理，后续会删除
-                if(!data[this.options.idField]){
-                    data[this.options.idField] = String.uniqueID();
+                if(!data[this.options._idField]){
+                    data[this.options._idField] = String.uniqueID();
                 }
             }
             return data;

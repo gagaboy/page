@@ -61,6 +61,7 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
             beforeChangePageNo:null,    //改变页码前事件
 
             //中间参数，不可初始化
+            _idField:"_uuid",
             opColumnMap:{},
             allColumns:[],
             activedRow:null,    //激活的行
@@ -318,7 +319,10 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
             var datas = this.getAttr("data");
             var pSize = datas.length;
             var formatData = this._formatData(rowData);
-
+            var ds = this._getDataSet();
+            if(ds){
+                ds.addRecord(formatData);
+            }
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 if(pSize<1){
@@ -349,7 +353,7 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
             //删除行，remove掉
             var ds = this._getDataSet();
             if(ds){
-                ds.deleteRecord(row[this.options.idField],real);
+                ds.deleteRecord(row[this.options._idField],real);
             }
             row = null;
             var upFlag = false;
@@ -369,7 +373,7 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                     &&datas[i][idField]==dataId){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[i][this.options.idField],real);
+                            ds.deleteRecord(datas[i][this.options._idField],real);
                         }
                         datas[i] = null;
 
@@ -392,7 +396,7 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                     if(datas[s]&&acRow==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options.idField],real);
+                            ds.deleteRecord(datas[s][this.options._idField],real);
                         }
                         datas[s] = null;
                         this.setAttr("data",this._formArr(datas));
@@ -414,7 +418,7 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                     if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options.idField],real);
+                            ds.deleteRecord(datas[s][this.options._idField],real);
                         }
                         datas[s] = null;
                     }
@@ -484,8 +488,8 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                     if (d[i]) {
                         d[i].checked = true;
                         d[i].state = d[i].state?d[i].state:'readonly';
-                        if(!d[i].uuid){
-                            d[i].uuid = String.uniqueID();
+                        if(!d[i][this.options._idField]){
+                            d[i][this.options._idField] = String.uniqueID();
                         }
                         if(this.getAttr("canExpand")){
                             if(!d[i]._customDetailShow){
@@ -502,8 +506,8 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                     if (d[i].checked == undefined) {
                         d[i].checked = false;//未设置，默认不选中
                         d[i].state = d[i].state?d[i].state:'readonly';
-                        if(!d[i].uuid){
-                            d[i].uuid = String.uniqueID();
+                        if(!d[i][this.options._idField]){
+                            d[i][this.options._idField] = String.uniqueID();
                         }
                         if(this.getAttr("canExpand")){
                             if(!d[i]._customDetailShow){
@@ -597,8 +601,8 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                         if (datas[i]) {
                             datas[i].checked = true;
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i].uuid){
-                                datas[i].uuid = String.uniqueID();
+                            if(!datas[i][this.options._idField]){
+                                datas[i][this.options._idField] = String.uniqueID();
                             }
                             if(this.getAttr("canExpand")){
                                 if(!datas[i]._customDetailShow){
@@ -615,8 +619,8 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                         if(datas[i]){
                             datas[i].checked = (datas[i].checked==true||datas[i].checked=="true")?true:false;//未设置，默认不选中
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i].uuid){
-                                datas[i].uuid = String.uniqueID();
+                            if(!datas[i][this.options._idField]){
+                                datas[i][this.options._idField] = String.uniqueID();
                             }
                             if(this.getAttr("canExpand")){
                                 if(!datas[i]._customDetailShow){
@@ -641,12 +645,9 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                     data.checked = false;//未设置，默认不选中
                 }
                 data.state = data.state?data.state:'readonly';
-                if(!data.uuid){
-                    data.uuid = String.uniqueID();
-                }
                 //TODO widgetContainer必须wid的处理，后续会删除
-                if(!data[this.options.idField]){
-                    data[this.options.idField] = String.uniqueID();
+                if(!data[this.options._idField]){
+                    data[this.options._idField] = String.uniqueID();
                 }
                 if(this.getAttr("canExpand")){
                     if(!data._customDetailShow){

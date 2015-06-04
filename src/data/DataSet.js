@@ -37,7 +37,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             pageNo: 1,
             totalSize: -1,
             model: {
-                id: 'wid',
+                id: '_uuid',
                 mainAlias: '',
                 status: Constant.status,
                 notModify: Constant.notModify,
@@ -72,7 +72,20 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             this._initData();
 
         },
-
+        _formatDatas:function(data){
+            if(data&&data.length>0){
+                for (var i = 0; i < data.length; i++) {
+                    this._formatData(data[i]);
+                }
+            }
+            return data;
+        },
+        _formatData:function(data){
+            if(data&&!data[this.options.model.id]){
+                data[this.options.model.id] = String.uniqueID();
+            }
+            return data;
+        },
         _otherFetchParam: function () {
             var page = {};
             page[Constant.pageNo] = this.options.pageNo;
@@ -82,6 +95,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
         },
 
         _initData: function () {
+            this._formatDatas(this.options.data);
             this.options._dataMap = {};
             this.options._dataArray = [];
             var $this = this;
@@ -126,10 +140,9 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             return o;
         },
         setData: function (data) {
-            this.options.data = data;
+            this.options.data = this._formatDatas(data);
             this._initData();
         },
-
         getModifiedValue: function () {
             var o = [];
             var array = this.options._dataArray;
@@ -196,6 +209,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             }
         },
         addRecord: function (record) {
+            this._formatData(record);
             var vid = this.options.model.id;
             if (!vid) {
                 //error
