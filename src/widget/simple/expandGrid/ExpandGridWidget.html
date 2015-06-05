@@ -34,12 +34,13 @@
                          ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                     </div>
                 </td>
-                <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" style="vertical-align:middle;">
-                    {{opcolumn.template|html}}
+                <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']"
+                    ms-repeat-opcolumn="opColumnMap['op_front']"
+                    style="vertical-align:middle;"
+                    ms-html="getColTemplate(vid,rowdata,opcolumn)">
                 </td>
                 <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
-                    <div ms-if="col.isOpColumn">
-                        {{col.template|html}}
+                    <div ms-if="col.isOpColumn" ms-html="getColTemplate(vid,rowdata,col)">
                     </div>
                     <div ms-if="!col.isOpColumn">
                         <div ms-if="col.showDisplay">
@@ -50,8 +51,10 @@
                         </div>
                     </div>
                 </td>
-                <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
-                    {{opcolumn.template|html}}
+                <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']"
+                    ms-repeat-opcolumn="opColumnMap['op_end']"
+                    style="vertical-align:middle;"
+                    ms-html="getColTemplate(vid,rowdata,opcolumn)">
                 </td>
             </tr>
             <tr ms-if="canExpand&&rowdata._customDetailShow">

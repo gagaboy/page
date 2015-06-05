@@ -125,6 +125,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     grid.reloadData();// 调用dataset接口进行查询
                 }
             },
+            getColTemplate:function(vid,row,col){
+                var vm = avalon.vmodels[vid];
+                if(col.template){
+                    return col.template;
+                }else if(col.templateGenerator&&vm[col.templateGenerator]){
+                    return vm[col.templateGenerator](row,col);
+                }
+            },
             editRow:function(vid,row,rowDom){
                 var vm = avalon.vmodels[vid];
                 if(vm.editRowFunc){

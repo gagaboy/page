@@ -33,13 +33,12 @@
                      ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
                 </div>
             </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']" style="vertical-align:middle;">
-                {{opcolumn.template|html}}
+            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']"
+                ms-repeat-opcolumn="opColumnMap['op_front']" ms-html="getColTemplate(vid,rowdata,opcolumn)"
+                style="vertical-align:middle;">
             </td>
             <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
-                <div ms-if="col.isOpColumn">
-                    {{col.template|html}}
-                </div>
+                <div ms-if="col.isOpColumn" ms-html="getColTemplate(vid,rowdata,col)"></div>
                 <div ms-if="!col.isOpColumn">
                     <div ms-if="canEdit">
                         <div ms-attr-bindField="col.dataField" style="padding:0px;"
@@ -57,8 +56,10 @@
                     </div>
                 </div>
             </td>
-            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']">
-                {{opcolumn.template|html}}
+            <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']"
+                ms-repeat-opcolumn="opColumnMap['op_end']"
+                ms-html="getColTemplate(vid,rowdata,opcolumn)"
+                style="vertical-align:middle;">
             </td>
         </tr>
         <tr ms-if="(!totalNum||totalNum<1)&&(!data||data.length<1)">
