@@ -9,7 +9,7 @@ define([], function () {
         ajax: function (url, params, success, fail) {
             jQuery.ajax({
                 url: url,
-                data: jQuery.param(params, false),
+                data: params,
                 type:'POST',
                 dataType: 'json',
                 cache: false,
@@ -25,7 +25,7 @@ define([], function () {
             jQuery.ajax({
                 url: url,
                 async:false,
-                data: jQuery.param(params, false),
+                data: params,
                 type:'POST',
                 dataType: 'json',
                 cache: false,

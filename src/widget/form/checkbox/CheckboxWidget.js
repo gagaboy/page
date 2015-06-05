@@ -7,8 +7,8 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             cols: null,//布局列数
             value: null,
             display: null,
-            $valueFiled: "value",//值字段
-            $textFiled: "display",//显示字段
+            $valueField: "value",//值字段
+            $textField: "display",//显示字段
             $split: ",",
             dataSetId: null,
             url: null,
@@ -27,11 +27,11 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                 var display = "";
                 for (var i = 0; i < vm.items.length; i++) {
                     if (vm.items[i].checked) {
-                        values.push(vm.items[i][vm.$valueFiled]);
+                        values.push(vm.items[i][vm.$valueField]);
                         if("" !== display) {
                             display += vm.$split;
                         }
-                        display += vm.items[i][vm.$textFiled];
+                        display += vm.items[i][vm.$textField];
                     }
                 }
                 vm.value = values;
@@ -51,7 +51,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                                 if(vm.value) {
                                     var valueArr = vm.value.split(vm.$split);
                                     for(var j=0; j<valueArr.length; j++) {
-                                        if(el[vm.$valueFiled] == valueArr[j]) {
+                                        if(el[vm.$valueField] == valueArr[j]) {
                                             el.checked = true;
                                             break;
                                         }
@@ -109,7 +109,6 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             //重写
             if(valueArr&&this.getAttr("items")){
                 var items = this.getAttr("items");
-                if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
                 this.setAttr("value",valueArr, notFireFormValueChangeEvent);
                 //this._getCompVM().value = valueArr;
                 for (var i = 0; i < items.length; i++) {//清楚原选项
@@ -118,7 +117,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                 for (var t = 0; t < valueArr.length; t++) {//设置新的值
                     var valueT = valueArr[t];
                     for (var i = 0; i < items.length; i++) {
-                        if (valueT==items[i].value) {
+                        if (valueT==items[i][this.options.$valueField]) {
                             items[i].checked = true;
                         }
                     }
@@ -133,7 +132,7 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             var values = [];
             for (var i = 0; i < items.length; i++) {
                 items[i].checked = true;
-                values.push(items[i].value);
+                values.push(items[i][this.options.$valueField]);
             }
             this.setAttr("value",values);
         },
