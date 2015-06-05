@@ -112,12 +112,16 @@
             },
             beforeSelectEvent: function(value, display, obj, el) {
 //                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择前事件："+value + " " +  display);
-            },
-            selectedEvent: function(value, display, obj) {
-                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
             }
+//            selectedEvent: function(value, display, obj, el) {
+//                alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
+//            }
         })
         combo1.render();
+
+        combo1._getCompVM().selectedEvent= function(value, display, obj, el) {
+            alert("已选中值为："+obj.getValue()+"\n已选中文本为："+obj.getDisplay()+"\n选择后事件："+value + " " +  display);
+        }
         var combo2 = Page.create('combobox', {
             $parentId: 'singleSearchable',
             $id: 'sex2',

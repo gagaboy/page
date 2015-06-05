@@ -4,8 +4,8 @@
             {{title}}
         </h5>
         <div class="ibox-tools" style="margin-top: 9px;">
-            <a class="collapse-link">
-                <i class="fa fa-chevron-up"></i>
+            <a class="collapse-link" ms-click="togglePanel(vid)">
+                <i class="fa" ms-class-1="fa-chevron-up: showPanel" ms-class-2="fa-chevron-down:!showPanel"></i>
             </a>
 <!--            <a class="close-link">
                 <i class="fa fa-times"></i>
@@ -13,7 +13,7 @@
         </div>
         <div class="hr-line-solid" style=" margin-top: 0px;  margin-bottom: 0px;  border: 0px;  border-bottom: 1px solid #e5e6e7;height: 34px;"></div>
     </div>
-    <div class="ibox-content" style=" padding-top: 10px;border-top-width: 0px;padding-bottom: 0px;">
+    <div ms-if="showPanel" class="ibox-content" style=" padding-top: 10px;border-top-width: 0px;padding-bottom: 0px;">
 
     </div>
 </div>

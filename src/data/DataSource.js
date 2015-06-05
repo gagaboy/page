@@ -70,8 +70,8 @@ define(["./DataConstant"], function (Constant) {
                     else {
                         $this.options.data = result;
                     }
-                    $this._initData();
                     $this.fireEvent("afterUpdateRecord", [$this.options.data, true]);
+                    $this._initData();
                     if($this.setStatus){
                         $this.setStatus($this.options.model.notModify);
                     }

@@ -8,7 +8,13 @@ define(["../BaseLayout", "text!./Panel.html"], function (BaseLayout, panelTpl) {
         Extends: BaseLayout,
         options: {
             title:'',
-            showTitle: true
+            showTitle: true,
+            showPanel: true,
+
+            togglePanel: function(vid) {
+                var vm = avalon.vmodels[vid];
+                vm.showPanel = !vm.showPanel;
+            }
         },
         getTemplate: function () {
             return panelTpl;
