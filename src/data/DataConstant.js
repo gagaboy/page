@@ -4,7 +4,7 @@ define([], function (Constant) {
         notModify: "$notModify$",
         add: "add",
         update: "update",
-        remove: "remove",
+        remove: "delete",
         //pageSize:'pageSize',
         //pageNo:'pageNo',
         //totalSize:'totalSize',
