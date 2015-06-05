@@ -26,6 +26,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             dataSetId: null,    //数据集ID，设置了dataSetId则data无效
             //queryParams:null, //默认查询条件，目前不需要，请设置到ds中
             idField:"WID",  //主键属性
+            isMerge:false,
+            tdSpans:{},
             canSort:true,   //是否可排序
             showCheckbox:true,  //是否显示复选框
             checkboxWidth:"10%",    //复选框宽度
@@ -261,6 +263,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     that.setAttr("pageIndex",that.pagination.getAttr("pageIndex"),true);
                 }
                 that.setAttr("data",that._formatDatas(newDatas));
+
             });
         },
         /**
@@ -516,6 +519,49 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 });
             }
         },
+        _reSetTdSpans:function(){
+            if(this.options.isMerge){
+                var columns = this.getAttr("columns").$model;
+                var dataRows = this.getAttr("data").$model;
+                if(columns&&dataRows&&dataRows.length>0){
+                    var tdSpans = {};
+                    for(var i=0;i<dataRows.length;i++){
+                        for(var k=0;k<columns.length;k++){
+                            tdSpans[dataRows[i]._uuid+[columns[k].dataField]]= 1;
+                        }
+                    }
+                }
+                var formerName = "";
+                for(var k=0;k<columns.length;k++){
+                    var column = columns[k];
+                    var data_0 = dataRows[0];
+                    var rowKey = column.dataField;
+                    if(k>0){
+                        var formerCol = columns[k-1];
+                        formerName = formerCol.dataField;
+                    }
+                    for(var t=1;t<dataRows.length;t++){
+                        var dataRow = dataRows[t];
+                        if(data_0[column.dataField]==dataRow[column.dataField]){
+                            if(k>0){
+                                if(tdSpans[dataRow._uuid+formerName]==0){
+                                    tdSpans[data_0._uuid+rowKey]++;
+                                    tdSpans[dataRow._uuid+rowKey]--;
+                                }else{
+                                    data_0 = dataRow;
+                                }
+                            }else{
+                                tdSpans[data_0._uuid+rowKey]++;
+                                tdSpans[dataRow._uuid+rowKey]--;
+                            }
+                        }else{
+                            data_0 = dataRow;
+                        }
+                    }
+                }
+                this.setAttr("tdSpans",tdSpans);
+            }
+        },
         _getDataSet: function() {
             return Page.manager.components[this.getAttr("dataSetId")];
         },
@@ -632,10 +678,15 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 this.getAttr("afterSetData")(this.getAttr("data").$model);
             }
             this._renderEditComp();
+            this._reSetTdSpans();
         },
         _formatOptions:function(opts){
+            opts = opts||{};
             var d = opts.data||[];
             //是否默认全部勾选
+            if(opts.isMerge){
+                opts.canEdit = false;
+            }
             if(opts.allChecked){
                 for (var i = 0; i < d.length; i++) {
                     if (d[i]) {

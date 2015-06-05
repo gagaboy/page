@@ -37,7 +37,9 @@
                 ms-repeat-opcolumn="opColumnMap['op_front']" ms-html="getColTemplate(vid,rowdata,opcolumn)"
                 style="vertical-align:middle;">
             </td>
-            <td ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
+            <td ms-visible="!isMerge||col.isOpColumn||tdSpans[rowdata._uuid+col.dataField]>0"
+                ms-attr-rowspan="isMerge&&!col.isOpColumn?tdSpans[rowdata._uuid+col.dataField]:1"
+                ms-repeat-col="allColumns" ms-attr-xtype="col.xtype" style="vertical-align:middle;">
                 <div ms-if="col.isOpColumn" ms-html="getColTemplate(vid,rowdata,col)"></div>
                 <div ms-if="!col.isOpColumn">
                     <div ms-if="canEdit">
