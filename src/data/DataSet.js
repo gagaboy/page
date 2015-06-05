@@ -155,7 +155,18 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             }
             return o;
         },
-
+        getModifiedRows: function () {
+            var o = [];
+            var array = this.getValue();
+            for (var i = 0; i < array.length; i++) {
+                var value = array[i];
+                if (value[this.options.model.status]==this.options.model.notModify) {
+                    continue;
+                }
+                o.push(value);
+            }
+            return o;
+        },
         getId: function () {
             return this.options.$id;
         },
