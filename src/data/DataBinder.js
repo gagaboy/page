@@ -27,8 +27,7 @@ define([], function () {
             if ($this.options.fieldId) {
                 var value = v[$this.options.fieldId] ? v[$this.options.fieldId]:"";
                 var display = v[$this.options.fieldId+"_DISPLAY"];
-                widget.setValue({value: value, display: display});
-//                widget.setValue(v == undefined ? "": v);
+                widget.setValue({value: value, display: display},true);
             }
 
             this.widgetValueChangeCallback = function (value) {

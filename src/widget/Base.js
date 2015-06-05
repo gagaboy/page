@@ -55,7 +55,24 @@ define([], function () {
             var that = this;
             this.vmodel = avalon.define(this.options);
             this.vmodel.$watch("$all", function (name, newValue, oldValue) {
-                that.setAttr(name, newValue);
+                var notFire = false ;
+                //var n = newValue + "";
+                //if(n.slice(0,2) == '@F') {
+                //    notFire = true ;
+                //    newValue = newValue.slice(2);
+                //
+                //}
+                //that.setAttr(name, newValue, notFire);
+
+                if(this[name+"_fromInterface"]!=true) {
+                    this[name+"_fromWatch"]=true;
+                    that.setAttr(name, newValue);
+                }
+                else {
+                    this[name+"_fromInterface"]=false;
+                }
+
+
             });
         },
 
@@ -67,8 +84,20 @@ define([], function () {
         },
         setAttr: function (key, value, notFireEvent) {
             var oldValue = this.vmodel[key];
+            //if(typeOf(value) == 'string' || typeOf(value) == 'number') {
+            //    this.vmodel[key] = notFireEvent ? "@F"+ value : value;
+            //}else {
+            //    this.vmodel[key] = value;
+            //}
 
-            this.vmodel[key] = value;
+            if(this.vmodel[key+"_fromWatch"] != true) {
+                this.vmodel[key+"_fromInterface"] = true;
+                this.vmodel[key] = value;
+            }
+            else {
+                this.vmodel[key+"_fromWatch"] = false;
+            }
+
 
             if(notFireEvent)  {
 

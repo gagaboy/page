@@ -107,30 +107,30 @@
         }
     }
     require(["../../src/Bootstrap"], function () {
-        var inp = Page.create("maskedtextbox", {
-            $parentId: 'nameContainer',
-            value: '',
-            required: false,
-            glyphicon: 'glyphicon-ok',
-            message: '请输入2-5个汉字',
-            label: '您的姓名',
-            status:"disabled",
-            validationRules: {
-                required:true,//options中为false时，此处可重开启校验
-                length: {
-                    maxLen: 5,
-                    minLen: 2
-                },
-                regex: {
-                    regexStr: "/^[\u4e00-\u9fa5]+$/",
-                    customErrMsg:"只能输入汉字"
-                }
-            },
-            showErrorMessage:true,
-            $id: 'username',
-            mask:"(000)000000"
-        });
-        inp.render();
+//        var inp = Page.create("maskedtextbox", {
+//            $parentId: 'nameContainer',
+//            value: '',
+//            required: false,
+//            glyphicon: 'glyphicon-ok',
+//            message: '请输入2-5个汉字',
+//            label: '您的姓名',
+//            status:"disabled",
+//            validationRules: {
+//                required:true,//options中为false时，此处可重开启校验
+//                length: {
+//                    maxLen: 5,
+//                    minLen: 2
+//                },
+//                regex: {
+//                    regexStr: "/^[\u4e00-\u9fa5]+$/",
+//                    customErrMsg:"只能输入汉字"
+//                }
+//            },
+//            showErrorMessage:true,
+//            $id: 'username',
+//            mask:"(000)000000"
+//        });
+//        inp.render();
         var inq = Page.create("maskedtextbox", {
             $parentId: 'phoneContainer',
             value: '',

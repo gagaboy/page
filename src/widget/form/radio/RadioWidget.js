@@ -8,8 +8,8 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
             value:null,
 
             display: null,
-            $valueFiled: "value",//值字段
-            $textFiled: "display",//显示字段
+            $valueField: "value",//值字段
+            $textField: "display",//显示字段
             $split: ",",
             dataSetId: null,
             url: null,
@@ -25,7 +25,7 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
                 if(!el.checked){
                     el.checked = true;
                     vm._setOthersUnCheck(vid,el);
-                    vm.value = el[vm.$valueFiled];
+                    vm.value = el[vm.$valueField];
                     vm.display = el[vm.$textField];
                 }
             },
@@ -33,7 +33,7 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
                 var vm = avalon.vmodels[vid];
                 for (var i = 0; i < vm.items.length; i++) {
                     var itemi = vm.items[i];
-                    if (itemi.checked && itemi.value!= el.value) {
+                    if (itemi.checked && itemi[vm.$valueField]!= el[vm.$valueField]) {
                         itemi.checked = false;
                     }
                 }
@@ -49,7 +49,7 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
                             for(var i=0; i<data.length; i++) {
                                 var el = data[i];
                                 el.checked = false;
-                                if(vm.value && vm.value == el[vm.$valueFiled]) {
+                                if(vm.value && vm.value == el[vm.$valueField]) {
                                     el.checked = true;
                                 }
                             }
@@ -104,11 +104,11 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
             //重写
             if(value&&this.getAttr("items")){
                 var items = this.getAttr("items");
-                if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
+                //if(undefined == notFireFormValueChangeEvent) notFireFormValueChangeEvent = true;
                 this.setAttr("value",value, notFireFormValueChangeEvent);
                 //this._getCompVM().value = value;
                 for (var i = 0; i < items.length; i++) {//清楚原选项
-                    if(items[i]&&value==items[i].value){
+                    if(items[i]&&value==items[i][this.options.$valueField]){
                         items[i].checked = true;
                     }else{
                         items[i].checked = false;

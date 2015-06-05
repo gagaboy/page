@@ -87,6 +87,14 @@ define(["./DataConstant"], function (Constant) {
                 if (uploadString) {
                     params.data = JSON.stringify(params.data);
                 }
+
+                if("dataSet" === $this.options.$xtype) {
+                    //数据格式为： {操作数据集名称：JSON.stringify([]), $jsonType: 1}
+                }
+                else {
+                    params = params && params.data;
+                }
+
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
                     //TODO reset $status$ 返回ID ??
                     $this._initData(true);
