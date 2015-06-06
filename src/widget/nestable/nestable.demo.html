@@ -122,42 +122,20 @@
 <script>
     require(["../../../page/src/Bootstrap"], function () {
 
-//        var eDataTableAuto = Page.create('eNestable', {
-//            $parentId: 'gridContainer',
-//            $id: "ss1",
-//            autoTable:true,
-//            group: 1,
-//            columns: [
-//                { title: 'First Name', data: 'FirstName', width: 100 },
-//                { title: 'Last Name', data: 'LastName', width: 100 },
-//                { title: 'Product', data: 'Product', width: 180 },
-//                { title: 'Unit Price', data: 'Price', width: 90, align: 'right', cellsAlign: 'right', cellsFormat: 'c2' },
-//                { title: 'Quantity', data: 'Quantity', width: 80, align: 'right', cellsAlign: 'right' }
-//            ],
-//            data:[
-//                {"FirstName":"A1","LastName":"A2","Product":"A3","Price":"A4",Quantity:"A5"},
-//                {"FirstName":"B1","LastName":"B2","Product":"B3","Price":"B4",Quantity:"B5"},
-//                {"FirstName":"C1","LastName":"C2","Product":"C3","Price":"C4",Quantity:"C5"}
-//            ]
-//        });
-//        eDataTableAuto.render();
-        //eDataTableAuto.dataTableObj.fnAddData({});//点用dataTable对象即可
-
         var eDataTable = Page.create('eNestable', {
             $parentId: 'simContainer',
             $id: "ss2",
             group: 1,
-            autoTable:false
+            autoTable:true
         });
         eDataTable.render();
         var updateOutput = function (e) {
-            var list = e.length ? e : $(e.target);
-            var da = JSON.stringify(list.nestable('serialize'));
-            $("#simContainer-output").val(da);
+//            var list = e.length ? e : $(e.target);
+//            var da = JSON.stringify(list.nestable('serialize'));
+//            $("#simContainer-output").val(da);
+            alert("data:"+JSON.stringify(eDataTable.getData()));
         };
-        // activate Nestable for list 1
         $('#simContainer').on('change', updateOutput);
-        //eDataTableAuto.dataTableObj.fnAddData({});//点用dataTable对象即可
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
