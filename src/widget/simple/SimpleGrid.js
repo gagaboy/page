@@ -169,6 +169,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         render:function(){
             this.parent();
             var that = this;
+            if(!this.getAttr("data")||this.getAttr("data").length<1){
+                this.reloadData();
+            }else{
+                this._renderEditComp();
+            }
             if(this.getAttr("usePager")){
                 this.pagination = Page.create("pagination", {
                     $parentId: "pager_" + this.getAttr("vid"),
@@ -204,12 +209,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 });
                 this.pagination.render();
             }
-            if(!this.getAttr("data")||this.getAttr("data").length<1){
-                this.reloadData();
-            }else{
-                this._renderEditComp();
-            }
-
         },
         reloadData:function(){
             var ds = this._getDataSet();
