@@ -95,7 +95,15 @@
         window.dialog = dialog;
     });
     function openD(){
-        dialog.render();
+//        dialog.render();
+
+        Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
+            Page.dialog.confirm('子确认框1', function () {
+                Page.dialog.confirm('子确认框2', function () {
+                    Page.dialog.tips('执行确定操作');
+                });
+            });
+        });
     }
 
     function topFunc() {

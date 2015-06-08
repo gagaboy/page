@@ -47,3 +47,7 @@ end: function (event) {
 artDialog.source.js 源码有改动：	解决对话框按钮focus都设置为true时，都应该变成绿色
 1236行被注释掉
 
+artDialog.source.js 源码有改动：解决confirm, tips, alert, prompt可以创建多次
+id：类别+zIndex值，如 id: 'Alert'+_zIndex(),
+321行 343 372 409
+

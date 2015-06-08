@@ -82,13 +82,10 @@
 
         var ds = Page.create("dataSet", {
             $id: 'comboBoxDS',
-            fetchUrl: 'Data.demo.json',
-            onAfff: function(data) {
-                data = [{id:1, name:"a", sex:"ff"}]
-                data = [{id:1, name:"a+ff", sex:"ff"}]
-
-
-            }
+            fetchUrl: 'Data.demo.json'
+//            data: [
+//                {value:"1", display: "计算机学院qqqq"}
+//            ]
         });
 
         var combo1 = Page.create('combobox', {
@@ -99,8 +96,8 @@
             value: "1,3",
             display: "计算机学院,经管学院",
             $pageSize: 5,
-//            dataSetId: "comboBoxDS",
-            url: "Data.demo.json",
+            dataSetId: "comboBoxDS",
+//            url: "Data.demo.json",
             showErrorMessage:true,
             validationRules: {
                 required:true,//options中为false时，此处可重开启校验
@@ -128,9 +125,11 @@
             label: '学院（单选可搜索）',
             multi: false,
             searchable: true,
-            status: "readonly",
+//            status: "readonly",
+            searchKey: "aaa",
 //            showClear: false,
 //            panelCancel: false,
+            showDropIcon: false,
             url: "Data1.demo.json",
             valueField: "id",
             textField: "name",

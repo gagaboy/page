@@ -28,6 +28,7 @@
                 <div class="row">
                     我是子页面：<br/>
                     <button onclick="openD()" id="abc">取父页面参数</button>
+                    <button onclick="openCon()" id="bbb">测试confirm嵌套</button>
                     <div class="col-md-12" id="dialogContainer">
 
                     </div>
@@ -69,6 +70,33 @@
         alert("父页面全局变量："+(window.parent.topParam));
         alert("父页面对话框传参："+Page.dialog.data("topParam"));
         Page.dialog.data("topFunc")();
+    }
+    function openCon(){
+        Page.dialog.confirm('你确定要删除这掉消息吗？', function () {
+            Page.dialog.confirm('子确认框', function () {
+                Page.dialog.tips('执行确定操作');
+            }, function() {});
+
+            return false;
+        },function() {});
+//        Page.create('dialog', {
+//            $id: "dialog1",
+//            content: "你确定要删除这掉消息吗？",
+//            button: [{
+//                name: "是",
+//                callback: function(dialog, window, param) {
+//                    Page.dialog.confirm('子确认框', function () {
+//                        Page.dialog.tips('执行确定操作');
+//                    });
+//                },
+//                focus:true
+//            },{
+//                name: "否",
+//                callback: function() {
+//                },
+//                focus:false
+//            }]
+//        })
     }
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
