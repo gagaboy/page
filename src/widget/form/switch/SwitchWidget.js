@@ -12,9 +12,12 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
         switchObj:{},
         render: function (opts) {
             this.parent();
-            var inputObj = document.querySelector("#"+this.getId());
+            var inputObj = this.getParentElement().find(".e-switch")[0];
             if(inputObj){
                 this.switchObj = new Switchery(inputObj,this.options);
+                if(this.getAttr("checked")){
+                    this.switchObj.setPosition(true);
+                }
             }
         },
         getTemplate: function(){
