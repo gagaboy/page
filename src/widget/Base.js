@@ -91,7 +91,9 @@ define([], function () {
             //}
 
             if(this.vmodel[key+"_fromWatch"] != true) {
-                this.vmodel[key+"_fromInterface"] = true;
+                if(this.options[key] != value) {
+                    this.vmodel[key+"_fromInterface"] = true;
+                }
                 this.vmodel[key] = value;
             }
             else {

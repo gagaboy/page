@@ -1,7 +1,7 @@
 <div   ms-attr-name="ComboBoxWidget_{{vid}}" ms-if="status!='readonly'" class="form-group" style=" margin-bottom: 0px;">
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
         <!--多选区域-->
-        <div ms-if="multi" ms-class="div-focus: focused"
+        <div ms-if="multi" ms-class="div-focus: focused" ms-on-resize="resizeEvent(vid, $event)"
              style="border: 1px solid #CBD5DD;  border-radius: 2px;" title="" ms-click="comboBoxFocus(vid, this)">
             <ul class="chosen-choices" style="border: 0px;" ms-css-background-color="status=='disabled'?'#eee':''">
                 <li ms-repeat-item="selectedItems" class="search-choice" ms-css-background-color="status=='disabled'?'#eee':''">
@@ -17,8 +17,8 @@
         <!--单选可搜索-->
         <div ms-if="!multi && searchable" ms-class="div-focus: focused" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" >
             <input ms-duplex="display" style="outline: none;border: none;width: 100%"  ms-attr-disabled="status=='disabled'" ms-css-background-color="status=='disabled'?'#eee':''" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
-            <a ms-visible="showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
-            <div class="page-search-expand" ms-on-click="changePanelShow(vid, $event)">
+            <a ms-visible="$showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" ms-css-right="!$showDropIcon ? '5':''" data-option-array-index="105"></a>
+            <div ms-visible="$showDropIcon" class="page-search-expand" ms-on-click="changePanelShow(vid, $event)">
                 <i class="fa" ms-class-fa-caret-down="!showPanel" ms-class-fa-caret-up="showPanel" style=" line-height: 35px;"></i>
             </div>
             <!--<span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
@@ -27,8 +27,8 @@
         <!--单选不可搜索-->
         <div ms-if="!multi && !searchable" ms-class="div-focus: showPanel" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" style="cursor: pointer;"ms-on-click="changePanelShow(vid, $event)">
             <span ms-repeat-item="selectedItems" ms-text="item[$textField]"></span>
-            <a ms-visible="showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
-            <div class="page-search-expand">
+            <a ms-visible="$showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
+            <div ms-visible="$showDropIcon" class="page-search-expand">
                 <i class="fa" ms-class-fa-caret-down="!showPanel" ms-class-fa-caret-up="showPanel" style=" line-height: 35px;"></i>
             </div>
         </div>

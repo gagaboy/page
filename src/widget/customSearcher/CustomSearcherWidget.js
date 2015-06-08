@@ -47,6 +47,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             customSearchShow: false,
             clearShow: false,  //清空图标是否显示
 
+
             $objIdArr: [],   //组件中所创建的子组件Id集合，用于销毁
 
 
