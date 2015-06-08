@@ -108,29 +108,33 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                 }
             }
 
-            avalon.scan($this.getParentElement()[0]);
-            $this.fireEvent("afterRender", [this.vmodel]);
-            if (this["_afterRender"]) {
-                this["_afterRender"](this.vmodel);
-            }
-            if (this.options.bind != '') {
-                var bindField = this.options.bind;
-                if (bindField) {
-                    var f = bindField.split(".");
-                    if (f.length != 2) {
-                        throw new Error('bind error' + bindField);
-                    }
-                    var dsId = f[0];
-                    var dsField = f[1];
-                    var ds = {
-                        dataValueId: dsId,
-                        fieldId: dsField,
-                        widgetId: this.getId()
-                    };
-                    var dbinder = Page.create('dataBinder', ds);
-                    this.dataBind = dbinder;
+            avalon.nextTick(function(){
+                avalon.scan($this.getParentElement()[0]);
+                $this.fireEvent("afterRender", [$this.vmodel]);
+                if ($this["_afterRender"]) {
+                    $this["_afterRender"]($this.vmodel);
                 }
-            }
+                if ($this.options.bind != '') {
+                    var bindField = $this.options.bind;
+                    if (bindField) {
+                        var f = bindField.split(".");
+                        if (f.length != 2) {
+                            throw new Error('bind error' + bindField);
+                        }
+                        var dsId = f[0];
+                        var dsField = f[1];
+                        var ds = {
+                            dataValueId: dsId,
+                            fieldId: dsField,
+                            widgetId: $this.getId()
+                        };
+                        var dbinder = Page.create('dataBinder', ds);
+                        $this.dataBind = dbinder;
+                    }
+                }
+            });
+
+
 
             return this;
         },
