@@ -46,7 +46,8 @@ define([
     "./widget/customSearcher/CustomSearcherWidget",
     "./widget/form/tooltip/TooltipWidget",
     "./widget/form/my97date/My97DateWidget",
-    "./widget/progress/ProgressWidget"
+    "./widget/progress/ProgressWidget",
+    "./widget/tree/TreeWidget"
 ], function () {
     var allComps = arguments;
 

@@ -5,7 +5,7 @@ define(['../Base', '../../../lib/pace/pace','text!./ProgressWidget.html', 'css!.
         options: {
             $xtype: xtype,
             $opts:{
-                label:"已完成："
+                label:"当前已完成："
             }
         },
         progressObj:null,
