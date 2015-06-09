@@ -45,6 +45,7 @@ define(["./DataConstant"], function (Constant) {
                 var params = $this.getFetchParam();
                 if(!$this.options.fetchUrl) {
                     $this._initData();
+                    resolve();
                 }else {
                     Page.utils.ajax($this.options.fetchUrl, params, function (data) {
                         var result = data.result;

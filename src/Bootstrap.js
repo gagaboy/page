@@ -2,7 +2,8 @@ require.config({
     paths: {
         art: '../../../../page/lib/artdialog/artDialog.source',
         artIframe: '../../../../page/lib/artdialog/iframeTools.source',
-        my97DatePicker: "../../../../../../page/lib/My97DatePicker/WdatePicker"
+        my97DatePicker: "../../../../../../page/lib/My97DatePicker/WdatePicker",
+        zTree: "../../../../../../page/lib/zTree_v3/js/jquery.ztree.all-3.5.min"
     },
     shim: {
         art: {
@@ -14,6 +15,9 @@ require.config({
         },
         my97DatePicker: {
             exports: "my97DatePicker"
+        },
+        zTree: {
+            exports: "zTree"
         }
     }
 });
