@@ -3,12 +3,16 @@ define(['../Base', '../../../lib/pace/pace','text!./ProgressWidget.html', 'css!.
     var ProgressWidget = new Class({
         Extends: Base,
         options: {
-            $xtype: xtype
+            $xtype: xtype,
+            $opts:{
+                label:"已完成："
+            }
         },
         progressObj:null,
-        render: function () {
+        render: function (opts) {
+            var p = jQuery.extend({}, this.options, opts || {});
             this.fireEvent("beforeRender", [this.vmodel]);
-            this.progressObj = pace.start();
+            this.progressObj = pace.start(p.$opts);
             this.fireEvent("afterRender", [this.vmodel]);
             if (this["_afterRender"]) {
                 this["_afterRender"](this.vmodel);
