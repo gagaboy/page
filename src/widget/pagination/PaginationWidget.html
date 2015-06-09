@@ -2,17 +2,12 @@
     <tr ms-if="!showTipWhenNull||(totalNum&&totalNum>0)">
         <td class="col-md-6" ms-if="showPageDetail">
             <div class="dataTables_info" role="status" aria-live="polite">
-                <div ms-if="showPageIndexInput" style="display: inline-block;">
-                    <input class="emap_pagination_pageIndexInput" ms-attr-value="pageIndex" ms-on-keypress="inputPageIndex(event,vid,this)">
-                </div>
-                <div ms-if="!showPageIndexInput" style="display: inline-block;">
-                    {{pageIndex}}
-                </div>
-                /{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
+                {{pageIndex}}/{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
                 <div ms-if="showPageSizeInput" style="display: inline-block;">
                     每页
                     <div style="display: inline-block;">
-                        <input style="width:60px;height:25px;" class="form-control input-sm" aria-controls="editable" ms-attr-value="pageSize" ms-on-keypress="inputPageSize(event,vid,this)">
+                        <input style="width:50px;height:25px;" class="form-control input-sm" aria-controls="editable"
+                               ms-attr-value="pageSize" ms-on-keypress="inputPageSize(event,vid,this)">
                     </div>
                     条.
                 </div>
@@ -58,6 +53,18 @@
                         <a href="javascript:void(0);" ms-click="goPage(vid,totalPage)">
                             末页
                         </a>
+                    </li>
+                    <li ms-if="showPageIndexInput">
+                        <div style="display: inline-block;padding-left:5px;">
+                            第
+                            <input class="emap_pagination_pageIndexInput" ms-attr-value="pageIndex"
+                                   ms-on-keypress="inputPageIndex(event,vid,this)"
+                                   ms-on-change="changePageIndex(event,vid,this)">
+                            页
+                        </div>
+                        <div style="display: inline-block;padding-left:5px;">
+                            <a class="btn btn-xs btn-primary" href="javascript:void(0);" ms-click="setPageIndex(vid)">跳转</a>
+                        </div>
                     </li>
                 </ul>
             </div>
