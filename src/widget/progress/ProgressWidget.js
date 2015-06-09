@@ -11,6 +11,9 @@ define(['../Base', '../../../lib/pace/pace','text!./ProgressWidget.html', 'css!.
         progressObj:null,
         render: function (opts) {
             var p = jQuery.extend({}, this.options, opts || {});
+            if (this.options.$parentId != null) {
+                p.$opts["target"] = "#"+this.options.$parentId;
+            }
             this.fireEvent("beforeRender", [this.vmodel]);
             this.progressObj = pace.start(p.$opts);
             this.fireEvent("afterRender", [this.vmodel]);
