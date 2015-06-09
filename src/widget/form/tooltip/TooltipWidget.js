@@ -5,6 +5,7 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
         options: {
             $xtype: xtype,
             target:"", //绑定tip的对象id
+            parentDom:null,
             content:"",
             showAfter: 100,
             position: "right",
@@ -15,7 +16,7 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
         },
         tipObj:{},
         _getInputElement: function () {
-            if(this.options.target != ""){
+            if(this.options.target&&this.options.target != ""){
                 var input = jQuery("#"+this.options.target);
                 return input;
             }else{
@@ -23,15 +24,18 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.tooltip', 'css!./T
             }
         },
         render: function (opts) {
-            if(this.options.className && this.options.target != ""){
+            if(this.options.className && this.options.target&&this.options.target != ""){
                 this.options.show = function(){
                     jQuery("#"+this.options.target+"_tt_active").parent().addClass(this.options.className);
                 };
             }
             var p = jQuery.extend({}, this.options, opts || {});
-            if(this._getInputElement()){
+            if(this._getInputElement()) {
                 this._getInputElement().kendoTooltip(p);
                 this.tipObj = this._getInputElement().data("kendoTooltip");
+            }else if(this.options.parentDom){
+                $(this.options.parentDom).kendoTooltip(p);
+                this.tipObj = $(this.options.parentDom).data("kendoTooltip");
             }
         },
         destroy:function(){

@@ -101,6 +101,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                     this.toolTip = Page.create("tooltip", {
                         content: msgs,
                         target: this.options.$parentId,
+                        parentDom:this.getParentElement()||this.getElement(),
                         position: 'bottom',
                         autoHide: false
                     });
@@ -279,13 +280,13 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
         _showErrorMessageChange:function(){
             this._errorMessageChange();
         },
-        _errorMessageChange: function (errmsg) {
+        _errorMessageChange: function () {
             var msgs = "";
-            if (this.getAttr("showMessage")) {
-                msgs += this.getAttr("message");
-            }
+
             if (this.getAttr("showErrorMessage") && this.getAttr("errorMessage")) {
-                msgs += this.getAttr("errorMessage") + " ";
+                msgs = this.getAttr("errorMessage");
+            }else if(this.getAttr("showMessage")) {
+                msgs = this.getAttr("message");
             }
             if (msgs === "") {
                 if (this.toolTip) {
@@ -293,18 +294,13 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                     this.toolTip = null;
                 }
             } else if ("inline" == this.options.parentTpl && (this.getAttr("showMessage") || this.getAttr("showErrorMessage"))) {
-                if (this.toolTip) {
-                    if (errmsg && this.getAttr("showErrorMessage")) {
-                        this.toolTip.setAttr("content", errmsg);
-                    } else if (this.getAttr("showMessage")) {
-                        this.toolTip.setAttr("content", this.getAttr("message"));
-                    } else {
-                        this.toolTip.setAttr("content", "");
-                    }
-                } else {
+                if(this.toolTip) {
+                      this.toolTip.setAttr("content", msgs||"");
+                }else{
                     this.toolTip = Page.create("tooltip", {
                         content: msgs,
                         target: this.options.$parentId,
+                        parentDom:this.getElement(),
                         position: 'bottom',
                         autoHide: false
                     });
