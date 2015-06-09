@@ -43,46 +43,50 @@ define(["./DataConstant"], function (Constant) {
             return new Promise(function (resolve) {
                 $this.fireEvent("beforeFetch");
                 var params = $this.getFetchParam();
-                Page.utils.ajax($this.options.fetchUrl, params, function (data) {
-                    var result = data.result;
-
-                    ///***************wrap for emp start *****************************
-                    result = result[Constant.data];
-                    if ($this.options.model.mainAlias && $this.options.model.mainAlias != '') {
-                        if(result[$this.options.model.mainAlias]){
-                            result = result[$this.options.model.mainAlias];
-                        }
-                    }
-                    if ($this.options.model.childAlias && $this.options.model.childAlias.length > 0) {
-                        for (var i = 0; i < $this.options.model.childAlias.length; i++) {
-                            var calias = $this.options.model.childAlias[i];
-                            result[calias] = ((data.result)[Constant.data])[calias];
-                        }
-                    }
-                    ///***************wrap for emp end *****************************
-
-                    if("dataSet" === $this.options.$xtype) {
-                        $this.options.data = result[Constant.rows];
-                        $this.options.pageSize = result[Constant.pageSize];
-                        $this.options.pageNo = result[Constant.pageNo];
-                        $this.options.totalSize = result[Constant.totalSize];
-                    }
-                    else {
-                        $this.options.data = result;
-                    }
-                    $this.fireEvent("afterUpdateRecord", [$this.options.data, true]);
+                if(!$this.options.fetchUrl) {
                     $this._initData();
-                    if($this.setStatus){
-                        $this.setStatus($this.options.model.notModify);
-                    }
-                    resolve();
-                }, null);
+                }else {
+                    Page.utils.ajax($this.options.fetchUrl, params, function (data) {
+                        var result = data.result;
+
+                        ///***************wrap for emp start *****************************
+                        result = result[Constant.data];
+                        if ($this.options.model.mainAlias && $this.options.model.mainAlias != '') {
+                            if (result[$this.options.model.mainAlias]) {
+                                result = result[$this.options.model.mainAlias];
+                            }
+                        }
+                        if ($this.options.model.childAlias && $this.options.model.childAlias.length > 0) {
+                            for (var i = 0; i < $this.options.model.childAlias.length; i++) {
+                                var calias = $this.options.model.childAlias[i];
+                                result[calias] = ((data.result)[Constant.data])[calias];
+                            }
+                        }
+                        ///***************wrap for emp end *****************************
+
+                        if ("dataSet" === $this.options.$xtype) {
+                            $this.options.data = result[Constant.rows];
+                            $this.options.pageSize = result[Constant.pageSize];
+                            $this.options.pageNo = result[Constant.pageNo];
+                            $this.options.totalSize = result[Constant.totalSize];
+                        }
+                        else {
+                            $this.options.data = result;
+                        }
+                        $this.fireEvent("afterUpdateRecord", [$this.options.data, true]);
+                        $this._initData();
+                        if ($this.setStatus) {
+                            $this.setStatus($this.options.model.notModify);
+                        }
+                        resolve();
+                    }, null);
+                }
             });
 
         },
         sync: function (filterNotModify, uploadString) {
             var $this = this;
-            return new Promise(function (resolve) {
+            return new Promise(function (resolve,error) {
                 var params = $this.getSyncParam(filterNotModify);
                 if (uploadString) {
                     params.data = JSON.stringify(params.data);
@@ -100,7 +104,9 @@ define(["./DataConstant"], function (Constant) {
                     $this._initData(true);
                     resolve(data);
 
-                }, null);
+                }, function(){
+                    error();
+                });
             });
         },
         getAttr: function (key) {
