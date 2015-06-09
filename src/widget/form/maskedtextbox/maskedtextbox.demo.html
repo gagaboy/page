@@ -78,12 +78,12 @@
         //获取数据
         var comps = Page.manager.components;
         var formValues = {};
-        formValues.username = comps.username.getValue();
+//        formValues.username = comps.username.getValue();
         formValues.phone = comps.phone.getValue();
 
         //获取校验规则
         var formRules = {};
-        formRules.username =  comps.username.getAttr("validationRules");
+//        formRules.username =  comps.username.getAttr("validationRules");
         formRules.phone =  comps.phone.getAttr("validationRules");
         formRules._global = [//_global 为固定
             {
@@ -133,8 +133,7 @@
 //        inp.render();
         var inq = Page.create("maskedtextbox", {
             $parentId: 'phoneContainer',
-            value: '',
-            required: false,
+            required: true,
             glyphicon: 'glyphicon-ok',
             message: '请输入手机号',
             label: '联系方式',
@@ -143,7 +142,7 @@
                     fixLen: 11
                 },
                 required:true,//设置为false可关闭校验
-                mobilePhone:false
+                mobilePhone:true
             },
             showErrorMessage:true,
             $id: 'phone',

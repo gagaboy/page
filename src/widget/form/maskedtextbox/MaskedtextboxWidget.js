@@ -12,15 +12,48 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
             labelClick: function (vid) {
                 var cmp = Page.manager.components[vid];
                 cmp.fireEvent('labelClick', cmp);
+            },
+            change:function(){
+                var vid = this.options.vid;
+                var cmp = Page.manager.components[vid];
+                cmp._valueChange(this.value());
             }
         },
+        maskedObj:null,
         render: function (opts) {
             var p = jQuery.extend({}, this.options, opts || {});
             this.parent(opts);
             this._getInputElement().kendoMaskedTextBox(p);
+            this.maskedObj = this._getInputElement().data("kendoMaskedTextBox");
         },
         getTemplate: function () {
             return template;
+        },
+        getValue:function(){
+            var _value = "";
+            if(this.maskedObj){
+                _value = this.maskedObj.value();
+            }
+            return _value;
+        },
+        setValue: function (value, notFireFormValueChangeEvent) {
+            if (typeOf(value) == 'string' || typeOf(value) == 'number') {
+                this.maskedObj.value(value);
+                this.setAttr("display", value);
+                this.setAttr("valueChanged", true);
+            } else if (typeOf(value) == 'object') {
+                if (value['value'] != undefined) {
+                    this.maskedObj.value(value['value']);
+                    if (value['display']) {
+                        this.setAttr("display", value['display']);
+                    } else {
+                        this.setAttr("display", value['value']);
+                    }
+                }
+                this.setAttr("valueChanged", true);
+            } else {
+                window.console.log('set value error,unknown structure ...' + value);
+            }
         },
         _valueChange: function (value) {
             this.setAttr("display", value);
@@ -28,14 +61,12 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
         },
         _statusChange:function(value, oldValue, model){
             if(value !== oldValue){
-                var input = this._getInputElement();
-                var maskedObj = input.data("kendoMaskedTextBox");
                 if(value === "readonly"){
-                    maskedObj && maskedObj.readonly(true);
+                    this.maskedObj && this.maskedObj.readonly(true);
                 }else if(value === "edit"){
-                    maskedObj && maskedObj.readonly(false);
+                    this.maskedObj && this.maskedObj.readonly(false);
                 }else if(value === "disabled"){
-                    maskedObj && maskedObj.enable(false);
+                    this.maskedObj && this.maskedObj.enable(false);
                 }
             }
         },
@@ -43,7 +74,6 @@ define(['../BaseFormWidget','../../../../lib/kendoui/js/kendo.maskedtextbox', 't
             //var input = this.getElement()[0].getElement("input.form-widget-to-focus-class");
             var input = jQuery(this.getElement()).find("input.form-widget-to-focus-class");
             return input;
-
         },
         focus: function () {
             //console to invoke this method is not ok...
