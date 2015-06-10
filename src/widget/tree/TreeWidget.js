@@ -19,7 +19,7 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
             $dataSetId: null,  //数据源Id
             $mainAlias: null,  //数据源主实体别名
             $url: null,  //数据源url
-            $searchable: true,
+            $searchable: false,
             $searchKey: "searchValue",
             searchValue: "",
 

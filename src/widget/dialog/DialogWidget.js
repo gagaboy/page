@@ -59,6 +59,9 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
                 }
             }
         },
+        addButton: function() {
+            this.dialogObj.button.apply(this.dialogObj,arguments) ;
+        },
         close: function() {
             this.dialogObj.close();
         },
@@ -80,6 +83,7 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
         content: function(value) {
             this.dialogObj.content(value);
         },
+
         getTemplate: function(){
             return template;
         }
