@@ -2,31 +2,67 @@ define(['../Base'], function (Base) {
     var BaseLayout = new Class({
         Extends: Base,
         options: {
-            _addWrapDiv: false
+            _addWrapDiv: false,
+            isLazyLoad:false
         },
+        _rendered:false,
         initialize: function (opts) {
             this.parent(opts);
             this.itemsArr = [];
         },
         render: function (parent, formWidgetBag) {
-            if (this._beforLayoutRender) {
-                this._beforLayoutRender();
-            }
+            var goFlag = true;
             this.parent(parent);
-            if (this.options.items) {
-                for (var i = 0; i < this.options.items.length; i++) {
-                    var it = this.options.items[i];
-                    this._renderWidget(it, formWidgetBag);
+            if(this.options.isLazyLoad&&!this._rendered){
+                $w = $(window);
+                aparent = parent;
+                if(!aparent){
+                    aparent = $("#"+this.options.$parentId);
+                }
+                if(aparent&&aparent.offset&&aparent.offset()){
+                    var height = $w.scrollTop() + $w.height();
+                    if(height<(aparent.offset().top+aparent.height())) {
+                        (function(aparent,that,BaseLayout, formWidgetBag){
+                            $(window).on("scroll", function () {
+                                var height = $w.scrollTop() + $w.height();
+                                if(height >= (aparent.offset().top+aparent.height())&&!that._rendered) {
+                                    if (that.options.items) {
+                                        for (var i = 0; i < that.options.items.length; i++) {
+                                            var it = that.options.items[i];
+                                            that._renderWidget(it, formWidgetBag);
+                                        }
+                                    }
+                                    that._rendered = true;
+                                }
+                            });
+                        })(aparent,this,BaseLayout, formWidgetBag);
+                        goFlag = false;
+                    }
                 }
             }
-            if (this._afterLayoutRender) {
-                this._afterLayoutRender();
+            if(goFlag){
+                if (this._beforLayoutRender) {
+                    this._beforLayoutRender();
+                }
+                if (this.options.items) {
+                    for (var i = 0; i < this.options.items.length; i++) {
+                        var it = this.options.items[i];
+                        this._renderWidget(it, formWidgetBag);
+                    }
+                }
+                if (this._afterLayoutRender) {
+                    this._afterLayoutRender();
+                }
+                this._rendered = true;
             }
         },
         _renderWidget: function (it, formWidgetBag) {
 
             if (it['$xtype']) {
                 var config = {};
+//                if(this.options.isLazyLoad){
+//                    config.isLazyLoad = this.options.isLazyLoad;
+//                }
                 Object.merge(config, it);
                 delete config['$xtype'];
                 var widget = Page.create(it['$xtype'], config);

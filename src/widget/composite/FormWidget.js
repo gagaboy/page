@@ -16,7 +16,8 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
             $rowHeight: 51,
             $widgetHeight: 34,
             widgets: [], //组件列表
-            groupWidgets: null
+            groupWidgets: null,
+            isLazyLoad:false
         },
         getTemplate: function () {
             return formTpl;
@@ -74,7 +75,8 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
                 for(var attr in groupWidgets) {
                     var title = attr;
                     var widgets = groupWidgets[title];
-                    var panel = {$xtype: 'panel', title: title, showTitle: this.options.showTitle, items: []};
+                    var panel = {$xtype: 'panel', title: title, showTitle: this.options.showTitle,
+                        isLazyLoad:this.options.isLazyLoad, items: []};
                     for(var i=0; i<widgets.length; i++) {
                         if (i == 0 /* || i % cols == 0*/) {
                             currentRow = {$xtype: 'row', items: []};
@@ -91,6 +93,7 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
             this.fragment = Page.create("fragment", {
                 dataSources: ds,
                 items: items,
+                isLazyLoad:this.options.isLazyLoad,
                 dataSourcesIds: dsids
             });
             this.formWidgetBag = [];

@@ -18,25 +18,12 @@
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="height:800px;">
 <br>
+<div id="container1"></div>
 
-<div id="container" style="display: block;">
-
-</div>
-<div id="container2">
-
-</div>
-
-<div>
-    <button id="loadData">加载数据</button>
-    <button id="submitData">提交数据</button>
-</div>
-
-<div id="valArea">
-
-</div>
-
+<div id="container2"></div>
+</body>
 <script src="/page/bower_components/mootools/Source/Core/Core.js"></script>
 <script src="/page/bower_components/mootools/Source/Types/Array.js"></script>
 <script src="/page/bower_components/mootools/Source/Types/String.js"></script>
@@ -50,7 +37,6 @@
 
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
-
     require(["../../../page/src/Bootstrap"], function () {
         //console.log(inq);
         var ds = Page.create("dataValue", {
@@ -64,41 +50,103 @@
         var form = Page.create("form", {
             $id: 'f1',
             title: '',
-            $parentId: 'container',
+            $parentId: 'container1',
             cols: 3,
+            isLazyLoad:true,
             initData: false,
             dataSourcesIds: ['ds1'],
-//            dataSources: ['ds1'],
-
             groupWidgets: {
-                "":[
-//                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true},
-//                    {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
-//                    {$id: 'interest', $xtype: 'textarea', label: '兴趣', rowNum: 3, floatDirection: "right", bind: 'ds1.xq'},
-//                    {$id: 'phone', $xtype: 'input', colNum: 1, label: '电话', bind: 'ds1.dh'},
-//                    {$id: 'name1', $xtype: 'input', label: '您的姓名1', rowNum: 1, colNum: 1,floatDirection: "right",bind: 'ds1.xm', required: true},
-//                    {$id: 'name2', $xtype: 'input', label: '您的姓名2', rowNum: 1, bind: 'ds1.xm', required: true},
-//                    {$id: 'name3', $xtype: 'input', label: '您的姓名3', bind: 'ds1.xm', required: true},
-//                    {$id: 'name4', $xtype: 'input', label: '您的姓名4', colNum: 1,bind: 'ds1.xm', required: true},
-//                    {$id: 'name5', $xtype: 'input', label: '您的姓名5', bind: 'ds1.xm', required: true},
-//                    {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
+                "aaa":[
+                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
+                    {$id: 'interest', $xtype: 'textarea', label: '兴趣', rowNum: 3, floatDirection: "right", bind: 'ds1.xq'},
+                    {$id: 'phone', $xtype: 'input', colNum: 1, label: '电话', bind: 'ds1.dh'},
+                    {$id: 'name1', $xtype: 'input', label: '您的姓名1', rowNum: 1, colNum: 1,floatDirection: "right",bind: 'ds1.xm', required: true},
+                    {$id: 'name2', $xtype: 'input', label: '您的姓名2', rowNum: 1, bind: 'ds1.xm', required: true},
+                    {$id: 'name3', $xtype: 'input', label: '您的姓名3', bind: 'ds1.xm', required: true},
+                    {$id: 'name4', $xtype: 'input', label: '您的姓名4', colNum: 1,bind: 'ds1.xm', required: true},
+                    {$id: 'name5', $xtype: 'input', label: '您的姓名5', bind: 'ds1.xm', required: true},
+                    {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
+                    {$id: 'aa1', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa2', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa3', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa4', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa5', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa6', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa7', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa8', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa9', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa10', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa11', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+                    {$id: 'aa12', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
+
                     {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy", show: true, required: true }
 //                    {$id: 'name6', $xtype: 'textarea', label: '您的姓名6', rowNum: 2, colNum: 3,bind: 'ds1.xm', required: true}
                 ],
                 "bbb": [
-//                    {$id: 'name90', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true}
+                    {$id: 'name90', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'ee', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'ggg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'cc', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'aaaa', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sdfs', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'asdsdf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'fg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sdfdf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'jjk', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'ggfd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dfg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'asdfcc', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dddd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sdf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dffdfsf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true}
+                ],
+                "ccc": [
+                    {$id: 'ss11', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'jjk', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'ggfd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dfg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'asdfcc', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dddd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sdf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dffdfsf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true}
+                ],
+                "ddd": [
+                    {$id: 'ss22', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'jjk', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'ggfd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dfg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'asdfcc', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dddd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sdf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dffdfsf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true}
+                ],
+                "eee": [
+                    {$id: 'ss33', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'jjk', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'ggfd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dfg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dg', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'asdfcc', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dddd', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'sdf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'dffdfsf', $xtype: 'datepicker', label: '您的姓名', bind: 'ds1.xm', required: true}
                 ]
             }
         });
         form.render();
 
-        /*
-        var form2 = Page.create("form", {
+        /*var form2 = Page.create("form", {
             $id: 'f',
             $parentId: 'container2',
             cols: 2,
             initData: true,
             dataSourcesIds: ['ds1'],
+            isLazyLoad:true,
             widgets: [
                 {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
                 {$id: 'phone', $xtype: 'input', label: '电话', bind: 'ds1.dh'},
@@ -106,8 +154,7 @@
                 {$id: 'xy', $xtype: 'combobox', url: "../form/combobox/Data.demo.json", label: '学院', bind: "ds1.xy"}
             ]
         });
-        form2.render();
-        */
+        form2.render();*/
 
         Page.manager.components["ds1"].addEvent("recordUpdated", function (v) {
             $("#valArea").html(JSON.stringify(v));
@@ -126,5 +173,4 @@
         });
     });
 </script>
-</body>
 </html>
