@@ -22,7 +22,7 @@
 
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-6" id="radioContainer">
+                    <div class="col-md-12" id="radioContainer">
 
                     </div>
                 </div>
@@ -56,8 +56,9 @@
         var radio = Page.create('radio', {
             $parentId: 'radioContainer',
             $id: "radio",
+            parentTpl: "inline",
             label: '性别',
-            cols: 4,
+//            cols: 4,
             value: "2",
             display: "台球",
             required:true,

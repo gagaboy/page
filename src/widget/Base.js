@@ -91,7 +91,8 @@ define([], function () {
             //}
 
             if(this.vmodel[key+"_fromWatch"] != true) {
-                if(this.options[key] != value) {
+                //if(this.options[key] != value) {
+                if(this.vmodel[key] != value) {
                     this.vmodel[key+"_fromInterface"] = true;
                 }
                 this.vmodel[key] = value;
@@ -126,9 +127,7 @@ define([], function () {
             }
             //var element = this.getElement();
             var $this = this;
-
             var tmp = this.getTemplate();
-
 
             var e = jQuery("<div></div>");
             if (!this.options._addWrapDiv) {

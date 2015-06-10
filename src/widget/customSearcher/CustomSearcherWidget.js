@@ -709,6 +709,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 return this.dataSet;
             }
         },
+        getSearchValue: function() {
+            return this._getCompVM().getSearchValue();
+        },
         getTemplate: function () {
             return template;
         },

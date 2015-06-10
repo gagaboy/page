@@ -26,6 +26,8 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             hidePagerWhenNull:false,
             noDataTip:"没有找到数据！",
             pageChangeEvent: null,
+
+            toPageIndex:1,
             goFirstPage: function (vid) {
                 var vm = avalon.vmodels[vid];
                 vm.goPage(vid, 1);
@@ -53,19 +55,46 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
                 }
             },
             inputPageIndex:function(event,vid,dom){
+                var vm = avalon.vmodels[vid];
                 if(event.keyCode == "13")
                 {
                     if(dom&&dom.value){
-                        var vm = avalon.vmodels[vid];
                         var pIndex = parseInt(dom.value);
-                        if(pIndex&&pIndex>0&&pIndex<(vm.totalPage+1)){
-                            vm.pageIndex = pIndex;
-                        }else if(!pIndex){
-                            vm.pageIndex = 1;
-                        }else{
-                            vm.pageIndex = vm.totalPage;
-                            dom.value = vm.totalPage;
-                        }
+                        vm.setPageIndex(vid,dom,pIndex);
+                    }
+                }else{
+                    if(dom&&dom.value) {
+                        var pIndex = parseInt(dom.value);
+                        vm.toPageIndex = pIndex;
+                    }
+                }
+            },
+            changePageIndex:function(event,vid,dom){
+                var vm = avalon.vmodels[vid];
+                if(dom&&dom.value) {
+                    var pIndex = parseInt(dom.value);
+                    if(pIndex>0&&pIndex<(vm.totalPage+1)){
+                        vm.toPageIndex = pIndex;
+                    }else if(pIndex>vm.totalPage){
+                        vm.toPageIndex = vm.totalPage;
+                        dom.value = vm.totalPage;
+                    }
+                }
+            },
+            setPageIndex:function(vid,dom,pIndex){
+
+                var vm = avalon.vmodels[vid];
+                if(!pIndex){
+                    pIndex = vm.toPageIndex;
+                }
+                if(pIndex&&pIndex>0&&pIndex<(vm.totalPage+1)){
+                    vm.pageIndex = pIndex;
+                }else if(!pIndex){
+                    vm.pageIndex = 1;
+                }else{
+                    vm.pageIndex = vm.totalPage;
+                    if(dom){
+                        dom.value = vm.totalPage;
                     }
                 }
             },

@@ -487,7 +487,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             value: data[fieldName]||"",
                                             showLabel: false,
                                             bindField:fieldName,
-                                            disabledEdit:col.disabledEdit,
+                                            disabledEdit:col.disabledEdit||col.readonly,
                                             validationRules:col.validationRules,
                                             showErrorMessage:true,
                                             bind:that._getDataValueIdByDataId(data[keyField]).getId()+"."+fieldName,

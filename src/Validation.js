@@ -246,7 +246,7 @@ define([], function () {
                                 valRes = valRule.validateFunc(value,valRules[p]);
                             }
                         }else if(valRule.regex){
-                            valRes = this.checkRegex(value,valRule.regex,valRule.customErrMsg);
+                            valRes = this.checkRegex(value,valRule.regex,valRule.errorMsg);
                         }
                     }
                     if(valRes&&!valRes.result){
