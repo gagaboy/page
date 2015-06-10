@@ -1,5 +1,5 @@
 .pace .pace-progress {
-      left: 0;
+      left: 0 !important;
       height: 5px !important;
       top:25px !important;
       position: absolute !important;
