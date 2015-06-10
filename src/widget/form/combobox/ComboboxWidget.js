@@ -600,7 +600,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             this._renderPanel();
         },
 
-        //设置值，参数为{value|display}
+        //设置值，参数为{value: "", display: ""}
         setValue: function(value , notFireFormValueChangeEvent) {
             if(!value) return;
             this.parent(value, notFireFormValueChangeEvent);

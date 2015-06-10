@@ -1269,6 +1269,17 @@ button.dim:active:before {
   padding: 3px 20px 3px 5px;
   position: relative;
 }
+.ampS-chosen .chosen-container-single .chosen-single div b {
+  background-position: 0 7px;
+}
+.ampS-chosen .chosen-container .chosen-results li.highlighted {
+  background-image: none;
+  background: #f5f5f5;
+  color: #676a6c;
+}
+.ampS-chosen .chosen-container-active.chosen-with-drop .chosen-single {
+  background-image: none;
+}
 /* PAGINATIN */
 .pagination > .active > a,
 .pagination > .active > span,
@@ -2282,7 +2293,7 @@ table.dataTable thead .sorting:after {
   float: left;
   width: 25px;
   height: 20px;
-  margin: 5px 0;
+  margin: 1px 0;
   padding: 0;
   text-indent: 100%;
   white-space: nowrap;
@@ -2305,16 +2316,16 @@ table.dataTable thead .sorting:after {
 .dd-item > button[data-action="collapse"]:before {
   content: '-';
 }
-#nestable2 .dd-item > button {
+.nestable .dd-item > button {
   font-family: FontAwesome;
-  height: 34px;
+  height: 30px;
   width: 33px;
   color: #c1c1c1;
 }
-#nestable2 .dd-item > button:before {
+.nestable .dd-item > button:before {
   content: "\f067";
 }
-#nestable2 .dd-item > button[data-action="collapse"]:before {
+.nestable .dd-item > button[data-action="collapse"]:before {
   content: "\f068";
 }
 .dd-placeholder,
@@ -2349,6 +2360,16 @@ table.dataTable thead .sorting:after {
   -webkit-box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
 }
+.nestable .dd-item.add .dd-handle {
+  background: none;
+}
+.nestable .dd-item.add .dd-handle span.label {
+  background: none;
+}
+.nestable .dd-item.add .dd-handle span.label .fa {
+  font-size: 14px;
+  color: #c1c1c1;
+}
 /**
 * Nestable Extras
 */
@@ -2375,17 +2396,21 @@ table.dataTable thead .sorting:after {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-#nestable2 .dd-handle {
+.nestable .dd-handle {
   color: inherit;
   border: 1px dashed #e7eaec;
   background: #f3f3f4;
-  padding: 10px;
+  padding: 4px 10px;
 }
-#nestable2 .dd-handle:hover {
+.nestable .dd-handle.ampS-nestable-clicked {
+  background: #d6d6d6;
+}
+.nestable .dd-handle:hover {
   /*background: #bbb;*/
 }
-#nestable2 span.label {
+.nestable span.label {
   margin-right: 10px;
+  padding: 4px 5px;
 }
 #nestable-output,
 #nestable2-output {
@@ -6961,6 +6986,10 @@ body.skin-3 {
   border-top: 10px solid #f04b4b;
   border-right: 10px solid transparent;
 }
+.ampS-required-asterisk {
+  margin-right: 3px;
+  color: #f04b4b;
+}
 .form-horizontal .ampS-triangle-topleft {
   margin: -9px 0 0 -2px;
 }
@@ -7009,17 +7038,62 @@ body.skin-3 {
   background-position: 0 -63px;
 }
 .ampS-form-xs.form-horizontal .iradio_square-green {
-  background-position: 0 -131px;
+  background-position: 0 -146px;
 }
 .ampS-form-xs.form-horizontal .iradio_square-green:hover {
-  background-position: 0 -215px;
+  background-position: 0 -230px;
 }
 .ampS-form-xs.form-horizontal .iradio_square-green.checked {
-  background-position: 0 -152px;
+  background-position: 0 -167px;
 }
 .ampS-form-xs.form-horizontal .iradio_square-green.checked.disabled {
-  background-position: 0 -173px;
+  background-position: 0 -188px;
 }
 .ampS-form-xs.form-horizontal .iradio_square-green.disabled {
-  background-position: 0 -194px;
+  background-position: 0 -209px;
+}
+.ampS-select-dropdown-icon {
+  background: url("patterns/ampS/selectIcon.png") no-repeat;
+  background-position: right center;
+}
+.ampS-select-search-icon {
+  float: right;
+  margin: -32px 0 0 0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+  color: #999999;
+}
+.ampS-select-body {
+  border: 1px solid #cacaca;
+  margin-top: 4px;
+  border-radius: 3px;
+  box-shadow: 0 0 1px rgba(86, 96, 117, 0.7);
+  padding: 4px;
+}
+.jstree-default .jstree-checkbox.jstree-icon:empty {
+  margin: 4px;
+  width: 16px;
+  height: 16px;
+  background: url(patterns/ampS/icheck-sm.png) no-repeat;
+}
+.jstree-default .jstree-checkbox.jstree-icon:empty {
+  background-position: 0 0;
+}
+.jstree-default .jstree-hovered .jstree-checkbox.jstree-icon:empty {
+  background-position: 0 -84px;
+}
+.jstree-default .jstree-clicked .jstree-checkbox.jstree-icon:empty {
+  background-position: 0 -21px;
+}
+.jstree-default .jstree-checkbox.jstree-icon.jstree-undetermined:empty {
+  background-position: 0 -125px;
+}
+.jstree-default .jstree-anchor.jstree-clicked {
+  background: #f5f5f5;
+}
+.jstree-default .jstree-anchor.jstree-hovered {
+  background: #f5f5f5;
 }
