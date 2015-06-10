@@ -22,7 +22,7 @@ require.config({
     }
 });
 
-define(["./Factory"], function (factory) {
+define(["./Factory", "../lib/mmPromise"], function (factory) {
 
     var named = "Page";
 
