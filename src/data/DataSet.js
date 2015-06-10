@@ -39,6 +39,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             model: {
                 id: '_uuid',
                 mainAlias: '',
+                operationId: null,
                 status: Constant.status,
                 notModify: Constant.notModify,
                 add: Constant.add,
