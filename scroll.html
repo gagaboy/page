@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/animate.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/style.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="/page/bower_components/pure/grids.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/page/bower_components/pure/grids-responsive-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/page/bower_components/pure/grids-responsive.css">
+
+    <link href="src/css/page.css" rel="stylesheet">
+</head>
+<body>
+<br>
+
+
+<div id="container1" style="background-color: #fff">
+
+</div>
+<div id="container2" style="background-color: #fff">
+
+</div>
+<br>
+<div id="container3" style="background-color: #fff">
+
+</div>
+<br>
+<div id="container4" style="background-color: #fff">
+
+</div>
+
+
+<script src="bower_components/mootools/Source/Core/Core.js"></script>
+<script src="bower_components/mootools/Source/Types/Array.js"></script>
+<script src="bower_components/mootools/Source/Types/String.js"></script>
+<script src="bower_components/mootools/Source/Types/Object.js"></script>
+<script src="bower_components/mootools/Source/Types/Number.js"></script>
+<script src="bower_components/mootools/Source/Types/Function.js"></script>
+<script src="bower_components/mootools/Source/Class/Class.js"></script>
+<script src="bower_components/mootools/Source/Class/Class.Extras.js"></script>
+<script src="thirdpart/products-WB0R5L90S/Static_Full_Version/js/jquery-2.1.1.js"></script>
+<script src="thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
+<script src="bower_components/avalon/avalon.js"></script>
+
+<script>
+    var shadow = $("<div style='background-color: red'>&nbsp;</div>");
+    shadow.height($(window).height())
+    //    $("body").append(shadow)
+    require(["../../../page/src/Bootstrap"], function () {
+
+//        $(window).on("scroll", function () {
+//            window.console.log(11);
+//        })
+
+        var items = [];
+        for (var i = 0; i < 40; i++) {
+            items.push({$xtype: 'checkbox', label: '您的姓名', items: [{value: '1', display: '足球', checked: false}]});
+        }
+
+
+        var form = Page.create("form", {
+            title: 'aaa',
+            $parentId: 'container1',
+            cols: 3,
+            initData: false,
+            groupWidgets: {
+                "aaa": items
+            }
+        });
+        form.render();
+
+
+        var form2 = Page.create("form", {
+            title: 'bbb',
+            $parentId: 'container2',
+            cols: 3,
+            initData: false,
+            groupWidgets: {
+                "aaa": items
+            }
+        });
+        var form3 = Page.create("form", {
+            title: 'ccc',
+            $parentId: 'container3',
+            cols: 3,
+            initData: false,
+            groupWidgets: {
+                "aaa": items
+            }
+        });
+        var form4 = Page.create("form", {
+            title: 'ddd',
+            $parentId: 'container4',
+            cols: 3,
+            initData: false,
+            groupWidgets: {
+                "aaa": items
+            }
+        });
+        setTimeout(function(){
+            avalon.scan();
+        })
+
+
+        $w = $(window)
+        $(window).on("scroll", function () {
+            window.console.log($w.scrollTop() + $w.height());
+            var height = $w.scrollTop() + $w.height();
+            if(height >= $("#container2").offset().top) {
+//                form2.render();
+            }
+        });
+
+    });
+
+
+</script>
+</body>
+</html>
