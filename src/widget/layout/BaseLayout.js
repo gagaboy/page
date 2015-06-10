@@ -3,7 +3,8 @@ define(['../Base'], function (Base) {
         Extends: Base,
         options: {
             _addWrapDiv: false,
-            isLazyLoad:false
+            isLazyLoad:false,//是否懒加载，即滚动条拖动的位置时再渲染
+            lazyDistance:5//渲染距离（时机），滚动条距离容器一定距离触发渲染
         },
         _rendered:false,
         initialize: function (opts) {
@@ -21,11 +22,11 @@ define(['../Base'], function (Base) {
                 }
                 if(aparent&&aparent.offset&&aparent.offset()){
                     var height = $w.scrollTop() + $w.height();
-                    if(height<(aparent.offset().top+aparent.height())) {
+                    if(height<(aparent.offset().top+aparent.height()+this.options.lazyDistance)) {
                         (function(aparent,that,BaseLayout, formWidgetBag){
                             $(window).on("scroll", function () {
                                 var height = $w.scrollTop() + $w.height();
-                                if(height >= (aparent.offset().top+aparent.height())&&!that._rendered) {
+                                if(height >= (aparent.offset().top+aparent.height()-+that.options.lazyDistance)&&!that._rendered) {
                                     if (that.options.items) {
                                         for (var i = 0; i < that.options.items.length; i++) {
                                             var it = that.options.items[i];
