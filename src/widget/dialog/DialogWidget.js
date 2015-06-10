@@ -49,6 +49,16 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
             }
             return this;
         },
+        removeButton: function(btnName) {
+            if(btnName) {
+                var listenerObj = this.dialogObj._listeners;
+                var btn = listenerObj[btnName];
+                if(btn) {
+                    btn.elem.remove();
+                    delete this.dialogObj._listeners[btnName];
+                }
+            }
+        },
         close: function() {
             this.dialogObj.close();
         },
