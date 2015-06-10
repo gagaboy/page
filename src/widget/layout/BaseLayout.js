@@ -8,7 +8,7 @@ define(['../Base'], function (Base) {
             this.parent(opts);
             this.itemsArr = [];
         },
-        render: function (parent, formWidgetBag) {
+        render: function (parent, formWidgetBag, parentLayoutWidgetId) {
             if (this._beforLayoutRender) {
                 this._beforLayoutRender();
             }
@@ -16,14 +16,14 @@ define(['../Base'], function (Base) {
             if (this.options.items) {
                 for (var i = 0; i < this.options.items.length; i++) {
                     var it = this.options.items[i];
-                    this._renderWidget(it, formWidgetBag);
+                    this._renderWidget(it, formWidgetBag, parentLayoutWidgetId);
                 }
             }
             if (this._afterLayoutRender) {
                 this._afterLayoutRender();
             }
         },
-        _renderWidget: function (it, formWidgetBag) {
+        _renderWidget: function (it, formWidgetBag, parentLayoutWidgetId) {
 
             if (it['$xtype']) {
                 var config = {};
@@ -32,8 +32,11 @@ define(['../Base'], function (Base) {
                 var widget = Page.create(it['$xtype'], config);
                 if (widget.isFormWidget && widget.isFormWidget()) {
                     formWidgetBag && formWidgetBag.push(widget);
+                    if(parentLayoutWidgetId){
+                        widget.setAttr("parentLayoutWidgetId",parentLayoutWidgetId)
+                    }
                 }
-                widget.render(this.getElementToAppend(), formWidgetBag);
+                widget.render(this.getElementToAppend(), formWidgetBag, this.getId());
                 this.itemsArr.push(widget.getId());
                 return widget;
             }

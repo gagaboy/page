@@ -188,9 +188,23 @@ define([], function () {
         },
         show: function () {
             this.setAttr("show", true);
+            var pw = this.getAttr("parentLayoutWidgetId");
+            if(pw){
+                var widget = Page.manager.components[pw];
+                if(widget){
+                    widget.show();
+                }
+            }
         },
         hide: function () {
             this.setAttr("show", false);
+            var pw = this.getAttr("parentLayoutWidgetId");
+            if(pw){
+                var widget = Page.manager.components[pw];
+                if(widget){
+                    widget.hide();
+                }
+            }
         },
         destroy: function () {
             if(this.$element){

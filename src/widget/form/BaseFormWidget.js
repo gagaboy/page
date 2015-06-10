@@ -47,7 +47,9 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
             controlPadding: '0',
 
             //data binding
-            bind: ''
+            bind: '',
+
+            parentLayoutWidgetId:''//在表单布局的时候使用
 
         },
         initialize: function (opts) {
