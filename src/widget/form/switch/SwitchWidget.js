@@ -12,8 +12,7 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             unCheckValue:0// 默认为0
         },
         switchObj:{},
-        render: function (opts) {
-            this.parent();
+        _afterRender:function(){
             var inputObj = this.getParentElement().find(".e-switch")[0];
             if(inputObj){
                 this.switchObj = new Switchery(inputObj,this.options);
