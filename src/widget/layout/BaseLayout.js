@@ -3,45 +3,45 @@ define(['../Base'], function (Base) {
         Extends: Base,
         options: {
             _addWrapDiv: false,
-            isLazyLoad:false,//是否懒加载，即滚动条拖动的位置时再渲染
-            lazyDistance:5//渲染距离（时机），滚动条距离容器一定距离触发渲染
+            isLazyLoad: false,//是否懒加载，即滚动条拖动的位置时再渲染
+            lazyDistance: 5//渲染距离（时机），滚动条距离容器一定距离触发渲染
         },
-        _rendered:false,
+        _rendered: false,
         initialize: function (opts) {
             this.parent(opts);
             this.itemsArr = [];
         },
-        render: function (parent, formWidgetBag) {
+        render: function (parent, formWidgetBag, parentLayoutWidgetId) {
             var goFlag = true;
             this.parent(parent);
-            if(this.options.isLazyLoad&&!this._rendered){
+            if (this.options.isLazyLoad && !this._rendered) {
                 $w = $(window);
                 aparent = parent;
-                if(!aparent){
-                    aparent = $("#"+this.options.$parentId);
+                if (!aparent) {
+                    aparent = $("#" + this.options.$parentId);
                 }
-                if(aparent&&aparent.offset&&aparent.offset()){
+                if (aparent && aparent.offset && aparent.offset()) {
                     var height = $w.scrollTop() + $w.height();
-                    if(height<(aparent.offset().top+aparent.height()+this.options.lazyDistance)) {
-                        (function(aparent,that,BaseLayout, formWidgetBag){
+                    if (height < (aparent.offset().top + aparent.height() + this.options.lazyDistance)) {
+                        (function (aparent, that, BaseLayout, formWidgetBag, parentLayoutWidgetId) {
                             $(window).on("scroll", function () {
                                 var height = $w.scrollTop() + $w.height();
-                                if(height >= (aparent.offset().top+aparent.height()-+that.options.lazyDistance)&&!that._rendered) {
+                                if (height >= (aparent.offset().top + aparent.height() - +that.options.lazyDistance) && !that._rendered) {
                                     if (that.options.items) {
                                         for (var i = 0; i < that.options.items.length; i++) {
                                             var it = that.options.items[i];
-                                            that._renderWidget(it, formWidgetBag);
+                                            that._renderWidget(it, formWidgetBag, parentLayoutWidgetId);
                                         }
                                     }
                                     that._rendered = true;
                                 }
                             });
-                        })(aparent,this,BaseLayout, formWidgetBag);
+                        })(aparent, this, BaseLayout, formWidgetBag, parentLayoutWidgetId);
                         goFlag = false;
                     }
                 }
             }
-            if(goFlag){
+            if (goFlag) {
                 if (this._beforLayoutRender) {
                     this._beforLayoutRender();
                 }
@@ -57,7 +57,7 @@ define(['../Base'], function (Base) {
                 this._rendered = true;
             }
         },
-        _renderWidget: function (it, formWidgetBag) {
+        _renderWidget: function (it, formWidgetBag, parentLayoutWidgetId) {
 
             if (it['$xtype']) {
                 var config = {};
@@ -69,8 +69,11 @@ define(['../Base'], function (Base) {
                 var widget = Page.create(it['$xtype'], config);
                 if (widget.isFormWidget && widget.isFormWidget()) {
                     formWidgetBag && formWidgetBag.push(widget);
+                    if (parentLayoutWidgetId) {
+                        widget.setAttr("parentLayoutWidgetId", parentLayoutWidgetId)
+                    }
                 }
-                widget.render(this.getElementToAppend(), formWidgetBag);
+                widget.render(this.getElementToAppend(), formWidgetBag, widget.getId());
                 this.itemsArr.push(widget.getId());
                 return widget;
             }
@@ -80,7 +83,7 @@ define(['../Base'], function (Base) {
 
         },
         addItem: function (config) {
-           return this._renderWidget(config);
+            return this._renderWidget(config);
         },
         removeItem: function (index) {
             var widgetId = this.itemsArr.splice(index, 1)[0];
