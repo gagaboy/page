@@ -8,8 +8,14 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             color: '#1AB394',
             checked:false,
             disabled: false,
+            value:null,
+            display:null,
             checkValue:1,// 默认为1,
-            unCheckValue:0// 默认为0
+            unCheckValue:0,// 默认为0
+            checkDisplay:"是",// 默认为1,
+            unCheckDisplay:"否",// 默认为0
+            valueField:"value",//value为对象时，值的key
+            textField:"display"//value为对象时，显示值的key
         },
         switchObj:{},
         _afterRender:function(){
@@ -37,10 +43,21 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
         getValue:function(){
             return this.switchObj.isChecked()?this.options.checkValue:this.options.unCheckValue;
         },
+        getDisplay:function(){
+            return this.switchObj.isChecked()?this.options.checkDisplay:this.options.unCheckDisplay;
+        },
         setValue:function(value){
             if(value!=undefined){
+                var val = null;
+                if(typeof(value)=="object"){
+                    val = value[this.options.valueField];
+                    this.options.value = value[this.options.valueField];
+                    this.options.display = value[this.options.textField];
+                }else{
+                    val = value;
+                }
                 var checked = false;
-                if(value==this.options.checkValue){
+                if(val==this.options.checkValue){
                     checked = true;
                 }
                 if(checked!=this.switchObj.isChecked()){
