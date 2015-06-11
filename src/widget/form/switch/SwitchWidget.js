@@ -10,12 +10,12 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             disabled: false,
             value:null,
             display:null,
-            checkValue:1,// 默认为1,
-            unCheckValue:0,// 默认为0
-            checkDisplay:"是",// 默认为1,
-            unCheckDisplay:"否",// 默认为0
-            valueField:"value",//value为对象时，值的key
-            textField:"display"//value为对象时，显示值的key
+            checkValue:1,// 选中的值，默认为1,
+            unCheckValue:0,// 未选中的值，默认为0
+            checkDisplay:"是",// 选中的显示（readonly时显示），默认为‘是’,
+            unCheckDisplay:"否",//选中的显示（readonly时显示），默认为‘否’,
+            valueField:"value",//调用setValue方法，value为对象时，值的key
+            textField:"display"//调用setValue方法，value为对象时，显示值的key
         },
         switchObj:{},
         _afterRender:function(){
