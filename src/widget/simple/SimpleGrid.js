@@ -30,6 +30,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             tdSpans:{},
             canSort:true,   //是否可排序
             showCheckbox:true,  //是否显示复选框
+            multiCheck:true,  //是否显示复选框
             checkboxWidth:"10%",    //复选框宽度
             allChecked: false,  //设置为true，则默认全部选中
             //分页信息
@@ -95,6 +96,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             },
             checkRow: function (vid,row) {
                 var vm = avalon.vmodels[vid];
+                var grid = Page.manager.components[vid];
+                if(!vm.multiCheck&&!row.checked&&grid.getCheckedRows().length>0){
+                    Page.dialog.alert("只允许勾选一行！");
+                    return false;
+                }
                 if(vm.beforeCheckRow&&row.checked){
                     vm.beforeCheckRow(row);//选中后事件
                 }
@@ -707,8 +713,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
             }
+            opts.allColumns = this._calAllColumns(opts.columns,opts.opColumns);
+            return opts;
+        },
+        _columnsChange:function(){
+            this.setAttr("allColumns",this._calAllColumns(this.options.columns,this.options.opColumns),true);
+        },
+        _calAllColumns:function(cols,opCols){
             //列信息
-            var cols = opts.columns;
             if(cols&&cols.length>0){
                 for (var i = 0; i < cols.length; i++) {
                     if (cols[i]) {
@@ -742,7 +754,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
             }
-            var opCols = opts.opColumns;
             if(opCols&&opCols.length>0){
                 var opColumnMap = {};
                 for(var t=0;t<opCols.length;t++){
@@ -775,10 +786,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         opColumnMap['op_'+positioni].push(opCols[t]);
                     }
                 }
-                opts.opColumnMap = opColumnMap;
+                this.options.opColumnMap = opColumnMap;
             }
-            opts.allColumns = allColumns;
-            return opts;
+            return allColumns;
         },
         _formatDatas:function(datas){
             //是否默认全部勾选
