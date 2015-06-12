@@ -30,7 +30,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             tdSpans:{},
             canSort:true,   //是否可排序
             showCheckbox:true,  //是否显示复选框
-            multiCheck:true,  //是否显示复选框
+            multiCheck:true,  //是否多选
             checkboxWidth:"10%",    //复选框宽度
             allChecked: false,  //设置为true，则默认全部选中
             //分页信息

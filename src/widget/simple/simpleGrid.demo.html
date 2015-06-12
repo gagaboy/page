@@ -13,6 +13,11 @@
     <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
+    <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <!-- Switchery -->
+    <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/switchery/switchery.js"></script>
+</head>
 </head>
 <body>
 <br>
@@ -62,7 +67,7 @@
             $parentId: 'simpleGrid',
             idField:"wid",
             $id:"simpleGrid",
-            isMerge:true,
+            //isMerge:true,
             //tableClass:"table table-striped table-bordered table-hover dataTables-example dataTable dtr-inline",
             totalNum:200,
             showCheckbox:true,
@@ -80,7 +85,7 @@
                     xtype:"checkbox",editParams:{"url":""},
                     templateGenerator:"genTest"},
                     //template:"<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>{{rowdata.sexDisplay}}</B></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
-                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"datepicker",hidden:true},
+                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"switch",hidden:false},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true},
                 {title:"所在班级",dataField:"className",editParams:{url:"",labelName:""},
