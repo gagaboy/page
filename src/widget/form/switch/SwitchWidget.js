@@ -15,12 +15,17 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             checkDisplay:"是",// 选中的显示（readonly时显示），默认为‘是’,
             unCheckDisplay:"否",//选中的显示（readonly时显示），默认为‘否’,
             valueField:"value",//调用setValue方法，value为对象时，值的key
-            textField:"display"//调用setValue方法，value为对象时，显示值的key
+            textField:"display",//调用setValue方法，value为对象时，显示值的key
+            getChecked:function(vid){
+                var swi = Page.manager.components[vid];
+                return swi.switchObj.isChecked();
+            }
         },
         switchObj:{},
         _afterRender:function(){
             var inputObj = this.getParentElement().find(".e-switch")[0];
             if(inputObj){
+                var that = this;
                 this.switchObj = new Switchery(inputObj,this.options);
                 if(this.getAttr("checked")){
                     this.switchObj.setPosition(true);
@@ -65,6 +70,11 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
                     this.setAttr("checked",checked,true);
                 }
             }
+        },
+        switchStatus: function (status) {
+            this.parent(status);
+            this.setAttr("value",this.getValue());
+            this.setAttr("display",this.getDisplay());
         },
         isChecked:function(){
             return this.switchObj.isChecked();
