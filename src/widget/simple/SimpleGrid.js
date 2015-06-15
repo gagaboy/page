@@ -98,8 +98,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var vm = avalon.vmodels[vid];
                 var grid = Page.manager.components[vid];
                 if(!vm.multiCheck&&!row.checked&&grid.getCheckedRows().length>0){
-                    Page.dialog.alert("只允许勾选一行！");
-                    return false;
+                    for (var i = 0; i < vm.data.$model.length; i++) {
+                        if (vm.data[i]) {
+                            vm.data[i]['checked'] = false;
+                        }
+                    }
                 }
                 if(vm.beforeCheckRow&&row.checked){
                     vm.beforeCheckRow(row);//选中后事件
