@@ -29,6 +29,7 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
             canSort:true,   //是否可排序
             canExpand:true,
             showCheckbox:true,  //是否显示复选框
+            multiCheck:true,//是否多选
             checkboxWidth:"10%",    //复选框宽度
             allChecked: false,  //设置为true，则默认全部选中
             //分页信息
@@ -85,6 +86,14 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
             },
             checkRow: function (vid,row) {
                 var vm = avalon.vmodels[vid];
+                var grid = Page.manager.components[vid];
+                if(!vm.multiCheck&&!row.checked&&grid.getCheckedRows().length>0){
+                    for (var i = 0; i < vm.data.$model.length; i++) {
+                        if (vm.data[i]) {
+                            vm.data[i]['checked'] = false;
+                        }
+                    }
+                }
                 if(vm.beforeCheckRow&&row.checked){
                     vm.beforeCheckRow(row);//选中后事件
                 }

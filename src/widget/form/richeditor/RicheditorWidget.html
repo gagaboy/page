@@ -1,0 +1,8 @@
+<div ms-visible="show">
+    <div ms-visible="status!='readonly'">
+        <textarea ms-attr-id="vid" ms-attr-width="width" ms-attr-width="height" class="e-richEditor"/>
+    </div>
+    <div ms-if="status=='readonly'" ms-attr-width="width" ms-attr-width="height" class="e-richEditorShowCon">
+       {{value|html}}
+    </div>
+</div>
