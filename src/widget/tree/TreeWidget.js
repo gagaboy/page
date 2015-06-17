@@ -41,22 +41,22 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
             beforeRemove: avalon.noop(),
             beforeRename: avalon.noop(),
             beforeRightClick: avalon.noop(),
-            onAsyncError: avalon.noop(),
-            onAsyncSuccess: avalon.noop(),
-            onCheck: avalon.noop(),
-            onClick: avalon.noop(),
-            onCollapse: avalon.noop(),
-            onDblClick: avalon.noop(),
-            onDrag: avalon.noop(),
-            onDragMove: avalon.noop(),
-            onDrop: avalon.noop(),
-            onExpand: avalon.noop(),
-            onMouseDown: avalon.noop(),
-            onMouseUp: avalon.noop(),
-            onNodeCreated: avalon.noop(),
-            onRemove: avalon.noop(),
-            onRename: avalon.noop(),
-            onRightClick: avalon.noop(),
+            _onAsyncError: avalon.noop(),
+            _onAsyncSuccess: avalon.noop(),
+            _onCheck: avalon.noop(),
+            _onClick: avalon.noop(),
+            _onCollapse: avalon.noop(),
+            _onDblClick: avalon.noop(),
+            _onDrag: avalon.noop(),
+            _onDragMove: avalon.noop(),
+            _onDrop: avalon.noop(),
+            _onExpand: avalon.noop(),
+            _onMouseDown: avalon.noop(),
+            _onMouseUp: avalon.noop(),
+            _onNodeCreated: avalon.noop(),
+            _onRemove: avalon.noop(),
+            _onRename: avalon.noop(),
+            _onRightClick: avalon.noop(),
 
 
             searchTreeData: function(vid, event) {
@@ -114,16 +114,21 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                     dataFilter: function (treeId, parentNode, responseData) {
                         var res = [];
                         if(responseData) {
-                            res = responseData.result.datas[options.$mainAlias].rows;
+                            if(options.$mainAlias) {
+                                res = responseData.result.datas[options.$mainAlias].rows;
+                            }
+                            else {
+                                res = responseData.result.datas.rows;
+                            }
                         }
                         return res;
                     }
                 },
                 check: {
                     enable: options.$showCheckBox,
-                    chkStyle: "checkbox",
+                    //chkStyle: "checkbox",
                     chkboxType: { "Y": "ps", "N": "ps" },
-                    autoCheckTrigger: true
+                    autoCheckTrigger: false
                 },
                 data: {
                     key:{
@@ -164,19 +169,19 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                     beforeRightClick: options.beforeRightClick,
                     onAsyncError: options.onAsyncError,
                     onAsyncSuccess: options.onAsyncSuccess,
-                    onCheck: options.onCheck,
-                    onClick: options.onClick,
-                    onCollapse: options.onCollapse,
-                    onDblClick: options.onDblClick,
-                    onDrag: options.onDrag,
-                    onDragMove: options.onDragMove,
-                    onDrop: options.onDrop,
-                    onExpand: options.onExpand,
-                    onMouseDown: options.onMouseDown,
-                    onMouseUp: options.onMouseUp,
-                    onNodeCreated: options.onNodeCreated,
-                    onRemove: options.onRemove,
-                    onRename: options.onRename
+                    onCheck: options._onCheck,
+                    onClick: options._onClick,
+                    onCollapse: options._onCollapse,
+                    onDblClick: options._onDblClick,
+                    onDrag: options._onDrag,
+                    onDragMove: options._onDragMove,
+                    onDrop: options._onDrop,
+                    onExpand: options._onExpand,
+                    onMouseDown: options._onMouseDown,
+                    onMouseUp: options._onMouseUp,
+                    onNodeCreated: options._onNodeCreated,
+                    onRemove: options._onRemove,
+                    onRename: options._onRename
                 }
             };
         },
@@ -270,8 +275,145 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                 return this.dataSet;
             }
         },
-        destroy: function () {
+        /*zTree方法*/
+        addNodes:function (parentNode, newNodes, isSilent){
+            return this.zTreeObj.addNodes(parentNode, newNodes, isSilent);
+        },
+        /*zTree方法：*/
+        cancelEditName:function (newName){
+            this.zTreeObj.cancelEditName(newName);
+        },
+        /*zTree方法：*/
+        cancelSelectedNode:function (node){
+            this.zTreeObj.cancelSelectedNode(node);
+        },
+        /*zTree方法：*/
+        checkAllNodes:function (checked){
+            this.zTreeObj.checkAllNodes(checked);
+        },
+        /*zTree方法：*/
+        checkNode:function (node, checked, checkTypeFlag, callbackFlag){
+            this.zTreeObj.checkNode(node, checked, checkTypeFlag, callbackFlag);
+        },
+        /*zTree方法：*/
+        copyNode:function (targetNode, node, moveType, isSilent){
+            return this.zTreeObj.copyNode(targetNode, node, moveType, isSilent);
+        },
+        /*zTree方法：*/
+        destroy:function (){
             this.parent();
+            this.zTreeObj.destroy();
+        },
+        /*zTree方法：*/
+        editName:function (node){
+            this.zTreeObj.editName(node);
+        },
+        /*zTree方法：*/
+        expandAll:function (expandFlag){
+            this.zTreeObj.expandAll(expandFlag);
+        },
+        /*zTree方法：*/
+        expandNode:function (node, expandFlag, sonSign, focus, callbackFlag){
+            return this.zTreeObj.expandNode(node, expandFlag, sonSign, focus, callbackFlag);
+        },
+        /*zTree方法：*/
+        getChangeCheckedNodes:function (){
+            return  this.zTreeObj.getChangeCheckedNodes();
+        },
+        /*zTree方法：*/
+        getCheckedNodes:function (checked){
+            return  this.zTreeObj.getCheckedNodes(checked);
+        },
+        /*zTree方法：*/
+        getNodeByParam:function (key, value, parentNode){
+            return  this.zTreeObj.getNodeByParam(key, value, parentNode);
+        },
+        /*zTree方法：*/
+        getNodeByTId:function (tId){
+            return  this.zTreeObj.getNodeByTId(tId);
+        },
+        /*zTree方法：*/
+        getNodeIndex:function (node){
+            return  this.zTreeObj.getNodeIndex(node);
+        },
+        /*zTree方法：*/
+        getNodes:function (){
+            return  this.zTreeObj.getNodes();
+        },
+        /*zTree方法：*/
+        getNodesByFilter:function (filter, isSingle, parentNode, invokeParam){
+            return  this.zTreeObj.getNodesByFilter(filter, isSingle, parentNode, invokeParam);
+        },
+        /*zTree方法：*/
+        getNodesByParam:function (key, value, parentNode){
+            return  this.zTreeObj.getNodesByParam(key, value, parentNode);
+        },
+        /*zTree方法：*/
+        getNodesByParamFuzzy:function (key, value, parentNode){
+            return  this.zTreeObj.getNodesByParamFuzzy(key, value, parentNode);
+        },
+        /*zTree方法：*/
+        getSelectedNodes:function (){
+            return  this.zTreeObj.getSelectedNodes();
+        },
+        /*zTree方法：*/
+        hideNode:function (node){
+            this.zTreeObj.hideNode(node);
+        },
+        /*zTree方法：*/
+        hideNodes:function (nodes){
+            this.zTreeObj.hideNodes(nodes);
+        },
+        /*zTree方法：*/
+        moveNode:function (targetNode, node, moveType, isSilent){
+            return this.zTreeObj.moveNode(targetNode, node, moveType, isSilent);
+        },
+
+        reAsyncChildNodes: function(parentNode, reloadType, isSilent) {
+            this.zTreeObj.reAsyncChildNodes(parentNode, reloadType, isSilent);
+        },
+        refresh: function() {
+            this.zTreeObj.refresh();
+        },
+        /*zTree方法：*/
+        removeChildNodes:function (parentNode){
+            return this.zTreeObj.removeChildNodes(parentNode);
+        },
+        /*zTree方法：*/
+        removeNode:function (node, callbackFlag){
+            this.zTreeObj.removeNode(node, callbackFlag);
+        },
+        /*zTree方法：*/
+        selectNode:function (node, addFlag){
+            this.zTreeObj.selectNode(node, addFlag);
+        },
+        /*zTree方法：*/
+        setChkDisabled:function (node, disabled, inheritParent, inheritChildren){
+            this.zTreeObj.setChkDisabled(node, disabled, inheritParent, inheritChildren);
+        },
+        /*zTree方法：*/
+        setEditable:function (editable){
+            this.zTreeObj.setEditable(editable);
+        },
+        /*zTree方法：*/
+        showNode:function (node){
+            this.zTreeObj.showNode(node);
+        },
+        /*zTree方法：*/
+        showNodes:function (nodes){
+            this.zTreeObj.showNodes(nodes);
+        },
+        /*zTree方法：*/
+        transformToArray:function (nodes){
+            return this.zTreeObj.transformToArray(nodes);
+        },
+        /*zTree方法：*/
+        transformTozTreeNodes:function (simpleNodes){
+            return this.zTreeObj.transformTozTreeNodes(simpleNodes);
+        },
+        /*zTree方法：*/
+        updateNode:function (node, checkTypeFlag){
+            this.zTreeObj.updateNode(node, checkTypeFlag);
         }
     });
     Tree.xtype = xtype;

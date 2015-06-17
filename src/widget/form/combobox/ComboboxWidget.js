@@ -30,6 +30,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             selectedEvent: null,
             beforeOpenEvent: null,
 
+
+            //下拉树组件的模型属性
+            $pIdKey: "pId",  //父节点id
+            $treeLine: true,  //是否显示连线
+            $async: true,  //是否异步加载数据
+
+
             $pagination: null,
             downShow: true,
             clearShow: false, //控制清空图标是否显示
@@ -182,6 +189,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
 
                 vm.focused = true;
+                if(!vm.showPanel)
                 vm.showPanel = !vm.showPanel;
                 vm.panelLeft = offset.left;
                 //有可能出现滚动条，宽度最后设置
@@ -236,7 +244,21 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     }
                 }
             },
-            initGridItem: function() {},
+            initTreeItem: function() {
+                var vm = this;
+                var treeObj = vm.getCmpMgr().tree;
+                treeObj.checkAllNodes(false)
+                for(var j=0; j<vm.selectedItems.length; j++) {
+                    var selectedId = vm.selectedItems[j][vm.$valueField];
+                    var node = treeObj.getNodesByParam(vm.$valueField, selectedId, null);
+                    if(vm.multi) {
+                        treeObj.checkNode(node[0], true, true);
+                    }
+                    else {
+                        treeObj.selectNode(node[0], false);
+                    }
+                }
+            },
             toggleItemSelect: function(vid, el, index, event) {
                 var vm = avalon.vmodels[vid];
                 var cmpMgr = vm.getCmpMgr();
@@ -282,8 +304,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         }
                     }
                 }
+
+                //重新计算下拉面板的位置
+                if(vm.multi) {
+                    vm.judgePanelPosition(vm);
+                }
             },
-            removeItem: function(vid, item, index, evnet) {
+            removeItem: function(vid, item, index, event) {
                 var vm = avalon.vmodels[vid];
                 if(vm.isDisabled()) return;
                 var el = vm.selectedItems[index];
@@ -296,13 +323,29 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         return;
                     }
                 }
-                vm.selectedItems.removeAt(index);
+                var removeItem = vm.selectedItems.removeAt(index);
                 if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
                     var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], cmpMgr);
                     if(res == false) {
                         return;
                     }
                 }
+                vm.judgePanelPosition(vm, event);
+
+                if("tree" == vm.model) {
+                    var treeObj = vm.getCmpMgr().tree;
+                    var selectedId = removeItem[0][vm.$valueField];
+                    var node = treeObj.getNodesByParam(vm.$valueField, selectedId, null);
+                    if(vm.multi) {
+                        treeObj.checkNode(node[0], false, false);
+                    }
+                    else {
+                        treeObj.cancelSelectedNode(node[0], false);
+                    }
+                    vm.clearCheckedOldNodes();
+
+                }
+
                 event.stopPropagation();
             },
             removeAll: function(vid, event) {
@@ -331,6 +374,13 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
 
             },
+            clearCheckedOldNodes: function() {
+                var treeObj = this.getCmpMgr().tree;
+                var nodes = treeObj.getChangeCheckedNodes();
+                for (var i=0, l=nodes.length; i<l; i++) {
+                    nodes[i].checkedOld = nodes[i].checked;
+                }
+            },
             getCmpMgr: function() {
                 return Page.manager.components[this.vid];
             }
@@ -357,10 +407,12 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
             this.parent(opts);
             var that = this;
+            var name = "ComboBoxWidget_"+that.options.vid;
             //点击其它区域，隐藏掉下拉面板
             jQuery(document).click(function(event) {
-                var name = "ComboBoxWidget_"+that.options.vid;
-                if(!jQuery(event.target).closest("[name='"+name+"']").length) {
+
+                //if(!jQuery(event.target).closest("[name='"+name+"']").length) {
+                if(!jQuery(event.target).closest("[name='"+name+"']").length && !jQuery(event.target).closest("#comboBox_panel_"+that.options.vid).length) {
                     var vm = that._getCompVM();
                     if(!vm) return;
                     vm.showPanel = false;
@@ -368,6 +420,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.searchValue = "";
                 }
             });
+
             this._watchSelectedItems(this.vmodel);
             this._watchSearchValue(this.vmodel);
 
@@ -380,6 +433,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     //重新渲染下拉面板中的选中项
                     vm.initNormalItem();
                 }
+
                 //更新组件值
                 var value = "";
                 var display = "";
@@ -429,8 +483,85 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             }else if("grid" == options.model) {
 
             }else if("tree" == options.model) {
-
+                this._creatTree();
             }
+        },
+        _creatTree: function() {
+            if(!this.tree) {
+                var that = this;
+                var vm = that._getCompVM();
+                var options = that.options;
+                that.tree = Page.create("tree", {
+                    $parentId: "comboBox_panel_tree_"+options.vid,
+                    idKey: options.$valueField,  //节点id Key
+                    nodeName: options.$textField,  //节点文本key
+                    pIdKey: options.$pIdKey,  //父节点id
+                    treeLine: options.$treeLine,  //是否显示连线
+                    multi: options.multi,  //是否支持多选
+                    showCheckBox: options.multi,  //是否显示checkbox
+                    async: options.$async,  //是否异步加载数据
+                    mainAlias: options.mainAlias,  //数据源主实体别名
+                    url: options.url,  //数据源url
+
+                    //beforeExpand: function(treeId, treeNode) {
+                    //    event.stopPropagation();
+                    //},
+                    //beforeCollapse: function(treeId, treeNode) {
+                    //    event.stopPropagation();
+                    //},
+                    beforeClick: function(treeId, treeNode, clickFlag) {
+                        if(vm.multi) return false;
+                        var el = {};
+                        el.checked = treeNode.checked;
+                        el[vm.$valueField] = treeNode[vm.$valueField];
+                        el[vm.$textField] = treeNode[vm.$textField];
+                        el.$model = treeNode;
+
+                        vm.toggleItemSelect(vm.vid, el, null, event);
+
+                        treeNode.checked = !treeNode.checked;
+                        if(vm.$panelCancel && !treeNode.checked ) {
+                            var treeObj = this.getZTreeObj(treeId);
+                            treeObj.cancelSelectedNode(treeNode);
+                            event.stopPropagation();
+                            return false;
+                        }
+                        event.stopPropagation();
+                    },
+                    beforeCheck: function(treeId, treeNode) {
+                        if(!vm.$panelCancel && treeNode.checked) {
+                            event.stopPropagation();
+                            return false;
+                        }
+                        return true;
+                    },
+                    _onCheck: function(event, treeId, treeNode) {
+                        var that = this;
+                        var treeObj = that.getZTreeObj(treeId);
+                        var nodes = treeObj.getChangeCheckedNodes();
+                        for(var i=0; i<nodes.length; i++) {
+                            var treeNode = nodes[i];
+                            var el = {};
+                            el.checked = !treeNode.checked;
+                            el[vm.$valueField] = treeNode[vm.$valueField];
+                            el[vm.$textField] = treeNode[vm.$textField];
+                            el.$model = treeNode;
+
+                            vm.toggleItemSelect(vm.vid, el, null, event);
+                        }
+
+                        vm.clearCheckedOldNodes();
+                        event.stopPropagation();
+
+                    }
+                });
+                that.tree.render();
+                vm.judgePanelPosition(vm, event);
+                vm.$firstLoad = false;
+            }
+        },
+        _getTreeData: function(searchValue, event) {
+
         },
         _getSelectData: function(page, searchValue, event) {
             var vm = this._getCompVM();
@@ -610,7 +741,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             if(true) {
                 var splitChar = this.options.$split;
                 var valueArr = value.value ? value.value.split(splitChar) : [];
-                var displayArr = value.display ? value.display.split(splitChar) : [];
+                var displayArr = value.display ? value.display.split(splitChar) : valueArr;
                 //vm.selectedItems.clear();
                 var array = [];
                 for(var i=0; i<valueArr.length; i++) {

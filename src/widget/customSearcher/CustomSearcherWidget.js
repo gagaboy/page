@@ -40,7 +40,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             saveViewPanel: true,  //控制保存视图区域面板
 
             searchValue: "", //查询输入值
-            inputWidth: 25, //查询输入框的宽度
+            inputWidth: 80, //查询输入框的宽度
             iconShowIndex: null,  //删除图标显示控制
             viewIconShowIndex: null,
             QuickSearchShow: false,
@@ -119,7 +119,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     maxWidth = maxWidth - selected[i].offsetWidth - 8;
                 }
 
-                var inputWidth = jQuery(this).val().length * 7 + 25;
+                //var inputWidth = jQuery(this).val().length * 7 + 25;
+                var inputWidth = vm.searchValue && vm.searchValue.length * 7 + 25;
+                console.log(vm.searchValue)
                 if (inputWidth > maxWidth) {
                     inputWidth = maxWidth;
                 }
@@ -364,7 +366,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var vm = this;
                 var views = ds.getValue();
                 var viewData;
-                if(views) {
+                if(views && views.length>0) {
                     //处理defaultView
                     for(var i=0; i<views.length; i++) {
                         //处理defaultView
@@ -386,7 +388,14 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     }*/
 
                 }
+                //是否有初始条件
+                else {
+                    vm.renderInitFilter();
+                }
 
+            },
+            renderInitFilter: function() {
+                this.customSearchArr = this.value;
             },
             addCustomFilter: function(vid, initData) {
                 var vm = vid ? avalon.vmodels[vid] : this;

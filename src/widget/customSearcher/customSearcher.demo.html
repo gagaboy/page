@@ -68,18 +68,28 @@
 <script>
     require(["../../../page/src/Bootstrap"], function () {
 
-//        var ds = Page.create("dataSet", {
-//            $id: 'customSearchDS',
-//            fetchUrl: 'Data.demo.json',
-//            syncUrl: "Update.demo.json",
-//            model: {
-//                id: 'viewId'
-//            }
-//        });
+        var ds = Page.create("dataSet", {
+            $id: 'customSearchDS',
+            fetchUrl: 'Data.demo.json',
+            syncUrl: "Update.demo.json",
+            model: {
+                id: 'viewId'
+            }
+        });
 
         var customSearcher = Page.create('customSearcher', {
             $id: "customSearcher",
             $parentId: "container",
+            dataSetId: "customSearchDS",
+            value: [{
+                "linkOpt":"and",
+                "name":"stuSex",
+                "nameDisplay":"性别",
+                "value":"dd",
+                "valueDisplay":"dd",
+                "builder":"m_value_include",
+                "builderDisplay":"多值包含"
+            }],
             controls: [{
                 id: "stuName",
                 $xtype: "datepicker",
@@ -112,7 +122,7 @@
         });
         customSearcher.render();
 
-        var customSearcher2 = Page.create('customSearcher', {
+        /*var customSearcher2 = Page.create('customSearcher', {
             $id: "customSearcher2",
             $parentId: "container2",
             controls: [{
@@ -145,7 +155,7 @@
 
 
         });
-        customSearcher2.render();
+        customSearcher2.render();*/
 
 
        /* {viewId: "testView1", viewName: "查询方案（默认）", defaultView: "0", viewValue: [
