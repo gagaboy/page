@@ -1,6 +1,6 @@
 <table class="form-horizontal-table" ms-visible="show&&((hidePagerWhenNull&&totalNum&&totalNum>0)||!hidePagerWhenNull)">
     <tr ms-if="!showTipWhenNull||(totalNum&&totalNum>0)">
-        <td class="col-md-6" ms-if="showPageDetail">
+        <td class="col-md-5" ms-if="showPageDetail">
             <div class="dataTables_info" role="status" aria-live="polite">
                 {{pageIndex}}/{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
                 <div ms-if="showPageSizeInput" style="display: inline-block;">
@@ -13,7 +13,7 @@
                 </div>
             </div>
         </td>
-        <td class="col-md-6">
+        <td class="col-md-7">
             <div class="dataTables_paginate paging_simple_numbers" style="float:right">
                 <ul class="pagination" style="margin:3px;">
                     <li ms-if="showFirstPage&&pageIndex!=1" class="paginate_button previous emap_pagination_pageNoLink" aria-controls="DataTables_Table_0" tabindex="0">
