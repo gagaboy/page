@@ -28,6 +28,9 @@ define(['../BaseFormWidget','text!./RicheditorWidget.html','css!./RicheditorWidg
                 }
                 KindEditor.ready(function(K) {
                     that.editorObj = K.create(inputObj,that.options);
+                    if(that.options.value){
+                        that.editorObj.html(that.options.value);
+                    }
                 });
             }
         },
@@ -49,10 +52,21 @@ define(['../BaseFormWidget','text!./RicheditorWidget.html','css!./RicheditorWidg
             this.setAttr("value",this.getValue());
         },
         getValue:function(){
-            return this.editorObj.html();
+            if(this.editorObj&&this.editorObj.html){
+                return this.editorObj.html();
+            }
+            return "";
         },
         setValue:function(htmlCon){
-            this.editorObj.html(htmlCon);
+            var value = null;
+            if(typeof(htmlCon)=="object"){
+                value = htmlCon.value;
+            }else{
+                value = htmlCon;
+            }
+            if(this.editorObj&&this.editorObj.html&&value){
+                this.editorObj.html(htmlCon);
+            }
         }
     });
     TooltipWidget.xtype = xtype;
