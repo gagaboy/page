@@ -92,7 +92,7 @@ define([], function () {
 
             if(this.vmodel[key+"_fromWatch"] != true) {
                 //if(this.options[key] != value) {
-                if(this.vmodel[key] != value) {
+                if(this.vmodel[key] !== value) {
                     this.vmodel[key+"_fromInterface"] = true;
                 }
                 this.vmodel[key] = value;

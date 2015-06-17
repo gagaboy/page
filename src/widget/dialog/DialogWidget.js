@@ -14,6 +14,8 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
             content:'',
             width:'',
             height:'',
+            icon: null,
+            skin: null,
             button:[],
             params:""
 
@@ -31,6 +33,8 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
                 title: options.title,
                 url: options.url,
                 button: options.button,
+                icon: options.icon,
+                skin: options.skin,
                 width: options.width!=""?options.width:undefined,
                 height: options.height!=""?options.height:undefined
             }

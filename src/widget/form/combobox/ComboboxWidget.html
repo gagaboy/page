@@ -2,7 +2,7 @@
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
         <!--多选区域-->
         <div ms-if="multi" ms-class="div-focus: focused" ms-on-resize="resizeEvent(vid, $event)"
-             style="border: 1px solid #CBD5DD;  border-radius: 2px;" title="" ms-click="comboBoxFocus(vid, this)">
+             style="border: 1px solid #CBD5DD;  border-radius: 2px;min-height: 34px;" title="" ms-click="comboBoxFocus(vid, this)">
             <ul class="chosen-choices" style="border: 0px;" ms-css-background-color="status=='disabled'?'#eee':''">
                 <li ms-repeat-item="selectedItems" class="search-choice" ms-css-background-color="status=='disabled'?'#eee':''">
                     <span ms-text="item[$textField]"></span>
@@ -40,6 +40,8 @@
                     <li class="active-result" style="width: 100%;" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index, $event)"><span ms-repeat-item="el['displayArr']" ms-class-matchSearch="(multi || searchable ) && (item == searchValue || (!multi && item == display))">{{item}}</span></li>
                 </ul>
                 <div ms-attr-id="page_{{vid}}" ms-visible="showPager"></div>
+            </div>
+            <div ms-if="model=='tree'" ms-attr-id="comboBox_panel_tree_{{vid}}" style="height: 200px">
             </div>
         </div>
     </div>

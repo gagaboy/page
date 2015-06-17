@@ -57,7 +57,7 @@
 //            dataSetId: "ds1",
             url: "Data.demo.json",
             mainAlias: "treeData",
-            showCheckBox: false,
+            showCheckBox: true,
             treeLine: true,
             multi: false,      //ctrl
             showIcon: false,
@@ -66,6 +66,9 @@
             beforeExpand: function(treeId, treeNode) {
                 console.log(1)
                 return true;
+            },
+            _onCheck: function() {
+                alert(1)
             }
         });
         tree.render();

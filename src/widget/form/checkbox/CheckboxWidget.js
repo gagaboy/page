@@ -49,7 +49,13 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                                 var el = data[i];
                                 el.checked = false;
                                 if(vm.value) {
-                                    var valueArr = vm.value.split(vm.$split);
+                                    var valueArr;
+                                    if(Object.prototype.toString.call(vm.value) == "[object Array]") {
+                                        valueArr = vm.value;
+                                    }
+                                    else {
+                                        valueArr = vm.value.split(vm.$split);
+                                    }
                                     for(var j=0; j<valueArr.length; j++) {
                                         if(el[vm.$valueField] == valueArr[j]) {
                                             el.checked = true;

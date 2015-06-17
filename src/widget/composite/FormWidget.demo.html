@@ -17,6 +17,29 @@
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+
+    <style>
+        @media (min-width: 992px)
+        {
+            .label-2-4 {
+                width: 16.666666665%;
+            }
+        }
+        @media (min-width: 992px)
+        {
+            .labelFloatRigth {
+                float: right;
+            }
+        }
+        @media (min-width: 768px)
+        {
+            .labelFloatRigth {
+                float: left;
+            }
+        }
+
+    </style>
+
 </head>
 <body style="height:800px;">
 <br>
@@ -51,13 +74,13 @@
             $id: 'f1',
             title: '',
             $parentId: 'container1',
-            cols: 3,
+            cols: 4,
             isLazyLoad:true,
             initData: false,
             dataSourcesIds: ['ds1'],
             groupWidgets: {
                 "aaa":[
-                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', required: true},
+                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', show: false, required: true},
                     {$id: 'sex', $xtype: 'input', label: '性别', bind: 'ds1.xb'},
                     {$id: 'interest', $xtype: 'textarea', label: '兴趣', rowNum: 3, floatDirection: "right", bind: 'ds1.xq'},
                     {$id: 'phone', $xtype: 'input', colNum: 1, label: '电话', bind: 'ds1.dh'},
@@ -65,7 +88,7 @@
                     {$id: 'name2', $xtype: 'input', label: '您的姓名2', rowNum: 1, bind: 'ds1.xm', required: true},
                     {$id: 'name3', $xtype: 'input', label: '您的姓名3', bind: 'ds1.xm', required: true},
                     {$id: 'name4', $xtype: 'input', label: '您的姓名4', colNum: 1,bind: 'ds1.xm', required: true},
-                    {$id: 'name5', $xtype: 'input', label: '您的姓名5', bind: 'ds1.xm', required: true},
+                    {$id: 'name5', $xtype: 'input', label: '您的姓名5', colNum: 2, bind: 'ds1.xm', required: true},
                     {$id: 'grjj', $xtype: 'input', label: '个人简介', bind: "ds1.grjj", show: false},
                     {$id: 'aa1', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},
                     {$id: 'aa2', $xtype: 'input', label: '您的姓名1', bind: 'ds1.xm', required: true},

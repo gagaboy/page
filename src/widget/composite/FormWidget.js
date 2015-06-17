@@ -42,6 +42,7 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
             else if(undefined == colNum) {
                 colNum = 1;
             }
+            //col.md = 12 *colNum/ this.options.cols; //列
             col.xs = col.sm = col.lg = col.md = 12 *colNum/ this.options.cols; //列 //暂时不设计成响应式布局
             //计算跨行: 1、行高计算；2、浮动计算
             var rowNum = c.rowNum;
