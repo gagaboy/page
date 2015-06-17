@@ -50,7 +50,7 @@
                     <input type="text" ms-duplex="searchValue" ms-attr-readonly="customSearchArr.length>0" autocomplete="off" tabindex="4" ms-css-width="inputWidth" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
                 </li>
             </ul>
-            <div ms-click="toggleViewPanel(vid, $event)" class="page-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'" style=" line-height: 30px;"></i></div>
+            <div ms-if="$showDropIcon" ms-click="toggleViewPanel(vid, $event)" class="page-search-expand"><i class="fa" ms-class-1="fa-caret-down: showPanel!='viewPanel'" ms-class-2="fa-caret-up: showPanel=='viewPanel'" style=" line-height: 30px;"></i></div>
         </div>
 
         <!--快速查询面板区域-->
@@ -97,7 +97,7 @@
                 </div>
                 <div ms-if="customSearchPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
                     <div>
-                        <div ms-repeat-fragment="fragmentArr" class="row" >
+                        <div ms-repeat-fragment="fragmentArr" class="row" style="margin-left: 0px">
                             <div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" style=" width: 5.333333%;margin-top: 15px;padding:0px">
                                 <span >
                                     {{$index==0 ? " ":(groupOper=='or' ? "或":"和")}}
@@ -130,8 +130,8 @@
                         </div>
                         <div  ms-if="saveViewPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
                             <div class="row" style=" margin-top: 10px;">
-                                <div class="col-md-8" ms-attr-id="viewName_{{vid}}"></div>
-                                <div class="col-md-4" style="margin-top: 3px;">
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" ms-attr-id="viewName_{{vid}}"></div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top: 3px;">
                                     <a class="btn btn-primary" type="button" ms-click="saveView(vid, $event)">保存</a>
                                 </div>
                             </div>
