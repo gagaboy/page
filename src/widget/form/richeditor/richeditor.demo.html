@@ -25,6 +25,8 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div id="switchCon" style="width:800px;height:300px;"/>
+                ==================sss+++++++=============================
+                <div id="switchCon2" style="width:800px;height:300px;"/>
             </div>
         </div>
     </div>
@@ -51,13 +53,16 @@
         alert("hi");
         switchObj = Page.create("richeditor", {
             $parentId: 'switchCon',
-            value:"<b>heihei</b>"
+            value:"<b>heihei</b>",
+            simple:true
         });
         switchObj.render();
-
-//        var elem = document.querySelector('.js-switch');
-//        var switchery = new Switchery(elem, { color: '#1AB394' });
-       // $("#switchCon2").kendoMobileSwitch({});
+        switchObj2 = Page.create("richeditor", {
+            $parentId: 'switchCon2',
+            value:"<b>oo</b>",
+            simple:true
+        });
+        switchObj2.render();
     });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->

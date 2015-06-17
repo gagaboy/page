@@ -77,6 +77,7 @@
             allChecked:false,
             dataSetId: ds.getId(),
             showPageDetail:true,
+            showPageIndexInput:true,
             editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:false},
@@ -206,6 +207,7 @@
                         bindField:fieldName,
                         validationRules:coli.validationRules,
                         showErrorMessage:true,
+
                         valueChange:function(){
                             row[fieldName] = editField.getValue();
                         },

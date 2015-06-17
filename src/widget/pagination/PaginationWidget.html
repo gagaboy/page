@@ -26,7 +26,7 @@
                             上一页
                         </a>
                     </li>
-                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="pageIndex>3" aria-controls="DataTables_Table_0" tabindex="0"><a
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="pageIndex>3&&totalPage>6" aria-controls="DataTables_Table_0" tabindex="0"><a
                             href="javascript:void(0);" ms-click="goPage(vid,pageIndex-3)">{{pageIndex-3}}</a></li>
                     <li class="paginate_button emap_pagination_pageNoLink" ms-if="pageIndex>2" aria-controls="DataTables_Table_0" tabindex="0"><a
                             href="javascript:void(0);" ms-click="goPage(vid,pageIndex-2)">{{pageIndex-2}}</a></li>
@@ -40,7 +40,7 @@
                     <li class="paginate_button emap_pagination_pageNoLink" ms-if="totalPage>pageIndex+1" aria-controls="DataTables_Table_0"
                         tabindex="0"><a href="javascript:void(0);"
                                         ms-click="goPage(vid,pageIndex+2)">{{pageIndex+2}}</a></li>
-                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="totalPage>pageIndex+2" aria-controls="DataTables_Table_0"
+                    <li class="paginate_button emap_pagination_pageNoLink" ms-if="totalPage>pageIndex+2&&totalPage>6" aria-controls="DataTables_Table_0"
                         tabindex="0"><a href="javascript:void(0);"
                                         ms-click="goPage(vid,pageIndex+3)">{{pageIndex+3}}</a></li>
                     <li ms-if="showPreviousAndNextPage" class="paginate_button next emap_pagination_pageNoLink disabled:pageIndex>totalPage-1" aria-controls="DataTables_Table_0" tabindex="0">
@@ -54,7 +54,7 @@
                             末页
                         </a>
                     </li>
-                    <li ms-if="showPageIndexInput">
+                    <li ms-if="showPageIndexInput&&totalPage>6">
                         <div style="display: inline-block;padding-left:5px;">
                             第
                             <input class="emap_pagination_pageIndexInput" ms-attr-value="pageIndex"

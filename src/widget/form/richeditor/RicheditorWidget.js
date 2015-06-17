@@ -30,7 +30,7 @@ define(['../BaseFormWidget','text!./RicheditorWidget.html','css!./RicheditorWidg
                         this.sync();
                     };
                 }
-                that.editorObj = KindEditor.create("#"+that.getId(),that.options);
+                that.editorObj = KindEditor.create("#tex_"+that.getId(),that.options);
                 if(that.options.value){
                     that.editorObj.html(that.options.value);
                 }
