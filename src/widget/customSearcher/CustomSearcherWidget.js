@@ -13,13 +13,15 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             dataSetId: null,
             groupOper: "and", //条件分组之间的连接符
             matchAllFields: false,//查询条件是否匹配所有字段
+            $showDropIcon: true,  //是否显示下拉小图标
             controls: [],
             builderLists: null,
             dataSetId: null,
             $fetchUrl: null,
             $syncUrl: null,
             $dsModel: {
-                id: 'viewId'
+                id: 'viewId',
+                operationId: "data"
             },
             autoSubmit: true, //自动提交查询条件
             searchSubmit: null,
@@ -207,8 +209,11 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         value: [searchValue]
                     });
                 }
-
                 vm.callSubmit();
+                vm.showPanel = "";
+                vm.focused = false;
+                vm.inputWidth = 25;
+                vm.searchValue = "";
             },
 
             removeItem: function(vid, type, event, item, index) {
@@ -330,8 +335,8 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var ds = vm._getDataSet();
                 ds.addRecord(param);
                 Promise.all([ds.sync(true, true)]).then(function(data) {
-                    if(data) {
-                        var viewId = data;
+                    if(data && data.length>0) {
+                        var viewId = data[0];
                         param.viewId = viewId;
                         param.viewValue = viewValue;
                         vm.viewsArr.push(param);
