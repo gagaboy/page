@@ -14,8 +14,8 @@ define(['../BaseFormWidget','text!./RicheditorWidget.html','css!./RicheditorWidg
         },
         editorObj:{},
         _afterRender:function(){
-            var inputObj = this.getParentElement().find(".e-richEditor")[0];
-            if(inputObj){
+            //var inputObj = this.getParentElement().find(".e-richEditor")[0];
+            //if(inputObj){
                 var that = this;
                 if(!window.contextPath){
                     window.contextPath = this.options.contextPath;
@@ -24,15 +24,17 @@ define(['../BaseFormWidget','text!./RicheditorWidget.html','css!./RicheditorWidg
                     that.options.items = [
                         'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
                         'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-                        'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+                        'insertunorderedlist', '|', 'emoticons', 'image', 'link'];
+                    //关键  同步KindEditor的值到textarea文本框   解决了多个editor的取值问题
+                    that.options.afterBlur = function(){
+                        this.sync();
+                    };
                 }
-                KindEditor.ready(function(K) {
-                    that.editorObj = K.create(inputObj,that.options);
-                    if(that.options.value){
-                        that.editorObj.html(that.options.value);
-                    }
-                });
-            }
+                that.editorObj = KindEditor.create("#"+that.getId(),that.options);
+                if(that.options.value){
+                    that.editorObj.html(that.options.value);
+                }
+            //}
         },
         getTemplate: function(){
             return template;
