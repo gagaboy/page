@@ -75,7 +75,7 @@ define([], function () {
             return {"result":true};
         },
         checkRegex: function(value,regexStr,customErrMsg){
-            if(regexStr){
+            if(value&&value!=""&&regexStr){
                 var regPattern = eval(regexStr);
                 if (!regPattern.test(value)) {
                     return {"result":false,"errorMsg":customErrMsg?customErrMsg:this._getErrMsg("regex")};
