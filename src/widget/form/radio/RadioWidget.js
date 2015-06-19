@@ -110,6 +110,10 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     if(items[i]&&value==items[i][this.options.$valueField]){
                         items[i].checked = true;
+                        var display = items[i][this.options.$textField];
+                        if(display) {
+                            this.setAttr("display",display, true);
+                        }
                     }else{
                         items[i].checked = false;
                     }

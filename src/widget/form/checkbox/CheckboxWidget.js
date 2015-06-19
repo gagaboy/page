@@ -120,13 +120,18 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                 for (var i = 0; i < items.length; i++) {//清楚原选项
                     items[i].checked = false;
                 }
+                var displayArr = [];
                 for (var t = 0; t < valueArr.length; t++) {//设置新的值
                     var valueT = valueArr[t];
                     for (var i = 0; i < items.length; i++) {
                         if (valueT==items[i][this.options.$valueField]) {
                             items[i].checked = true;
+                            displayArr.push(items[i][this.options.$textField]);
                         }
                     }
+                }
+                if(displayArr.length>0) {
+                    this.setAttr("display",displayArr.join(this.options.$split), true);
                 }
             }
         },
