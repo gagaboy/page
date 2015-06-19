@@ -78,11 +78,17 @@
 
     </div>
 </div>
-<script src="/page/bower_components/mootools/dist/mootools-core.js"></script>
-<script src="/page/bower_components/jquery/dist/jquery.js"></script>
-<script>
-    $.noConflict();
-</script>
+<script src="/page/bower_components/mootools/Source/Core/Core.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Array.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/String.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Object.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Number.js"></script>
+<script src="/page/bower_components/mootools/Source/Types/Function.js"></script>
+<script src="/page/bower_components/mootools/Source/Class/Class.js"></script>
+<script src="/page/bower_components/mootools/Source/Class/Class.Extras.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/jquery-2.1.1.js"></script>
+<script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
+
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script>
     require(["../../src/Bootstrap"], function () {
@@ -95,7 +101,7 @@
 //            ]
         });
 
-        var combo1 = Page.create('combobox', {
+     /*   var combo1 = Page.create('combobox', {
             $parentId: 'multi',
             $id: 'sex1',
             label: '学院（多选）',
@@ -144,7 +150,7 @@
             display: "计算机学院"
 
         })
-        combo2.render();
+        combo2.render();*/
 
         var combo3 = Page.create('combobox', {
             $parentId: 'single',
@@ -168,7 +174,9 @@
             $id: 'sex4',
             label: '下拉树',
             multi: true,
-            searchable: false,
+//            searchable: false,
+            value: "102",
+            display: "最简单的树 --  简单 JSON 数据",
             model: "tree",
             mainAlias: "treeData",  //数据源主实体别名
             url: "treeData.demo.json",

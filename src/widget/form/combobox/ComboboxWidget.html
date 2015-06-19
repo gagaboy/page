@@ -1,7 +1,7 @@
 <div   ms-attr-name="ComboBoxWidget_{{vid}}" ms-if="status!='readonly'" class="form-group" style=" margin-bottom: 0px;">
     <div ms-on-mouseover="showClearIcon(vid, $event)" ms-on-mouseout="displayClearIcon(vid, $event)" class="input-group chosen-container chosen-with-drop chosen-container-multi"  style="width: 100%;" >
         <!--多选区域-->
-        <div ms-if="multi" ms-class="div-focus: focused" ms-on-resize="resizeEvent(vid, $event)"
+        <div ms-if="multi" ms-class="div-focus: focused"
              style="border: 1px solid #CBD5DD;  border-radius: 2px;min-height: 34px;" title="" ms-click="comboBoxFocus(vid, this)">
             <ul class="chosen-choices" style="border: 0px;" ms-css-background-color="status=='disabled'?'#eee':''">
                 <li ms-repeat-item="selectedItems" class="search-choice" ms-css-background-color="status=='disabled'?'#eee':''">
