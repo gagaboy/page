@@ -16,7 +16,8 @@ module.exports = function(grunt) {
                         "art": 'lib/artdialog/artDialog.source',
                         "artIframe": 'lib/artdialog/iframeTools.source',
                         "my97DatePicker": "lib/My97DatePicker/WdatePicker",
-                        "zTree": "lib/zTree_v3/js/jquery.ztree.all-3.5.min"
+                        "zTree": "lib/zTree_v3/js/jquery.ztree.all-3.5.min",
+                        "kindeditor": "/lib/kindeditor-4.1.10/kindeditor"
                     },
                     optimize: 'none',
                     preserveLicenseComments:false,

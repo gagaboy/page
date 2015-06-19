@@ -1,4 +1,6 @@
-define(['../BaseFormWidget','text!./RicheditorWidget.html','css!./RicheditorWidget.css'], function (BaseFormWidget,template) {
+define(['../BaseFormWidget','text!./RicheditorWidget.html','kindeditor','css!./RicheditorWidget.css',
+    'css!./../../../../lib/kindeditor-4.1.10/themes/default/default.css',
+    'css!./../../../../lib/kindeditor-4.1.10/plugins/code/prettify.css'], function (BaseFormWidget,template,kindEditor) {
     var xtype = "richeditor";//
     var TooltipWidget = new Class({
         Extends: BaseFormWidget,
