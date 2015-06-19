@@ -15,7 +15,8 @@ module.exports = function(grunt) {
                         "avalon": "bower_components/oniui/avalon",
                         "art": 'lib/artdialog/artDialog.source',
                         "artIframe": 'lib/artdialog/iframeTools.source',
-                        my97DatePicker: "lib/My97DatePicker/WdatePicker"
+                        "my97DatePicker": "lib/My97DatePicker/WdatePicker",
+                        "zTree": "lib/zTree_v3/js/jquery.ztree.all-3.5.min"
                     },
                     optimize: 'none',
                     preserveLicenseComments:false,
