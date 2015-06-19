@@ -88,14 +88,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 if(vm.isDisabled()) return;
                 vm.clearShow = false;
             },
-            keyDown: function (vid, e) {
+            keyDown: function (vid, event) {
                 var vm = avalon.vmodels[vid];
                 if(vm.isDisabled()) return;
                 //如果是多选，则需要动态改变输入区域的宽度
                 if (vm.multi) {
                     var maxWidth = jQuery(this).parent().parent().width();
                     //删除已选项（如果是删除且输入区域为空字符串）
-                    if (e.keyCode == 8 && jQuery(this).val() == "") {
+                    if (event.keyCode == 8 && jQuery(this).val() == "") {
                         var cmpMgr = vm.getCmpMgr();
                         if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
                             var el = vm.selectedItems[vm.selectedItems.length-1];
@@ -111,6 +111,10 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                                 return;
                             }
                         }
+                        vm.initTreeWhenRemove(el);
+                        if(vm.multi) {
+                            vm.judgePanelPosition(vm, event);
+                        }
                     }
                     var selected = jQuery(this).parent().find("div");
                     for (var i = 0, len = selected.length; i < len; i++) {
@@ -123,9 +127,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     }
                     vm.inputWidth = inputWidth;
                 }
-            },
-            resizeEvent:function(vid, event) {
-                alert(1)
+                event.stopPropagation();
             },
             changePanelShow: function(vid, event) {
                 var vm = avalon.vmodels[vid];
@@ -139,11 +141,14 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         }
                     }
                 }
+                //不是第一次加载时，计算面板位置展现即可
                 if(!vm.$firstLoad) {
                     vm.judgePanelPosition(vm, event);
                 }
-                if(vm.$firstLoad) {
+                //第一次加载时，需要渲染面板
+                else {
                     vm.getCmpMgr()._renderPanel(event);
+                    vm.focused = true;
                 }
             },
             judgePanelPosition: function(vm, event) {
@@ -189,8 +194,10 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 }
 
                 vm.focused = true;
-                if(!vm.showPanel)
-                vm.showPanel = !vm.showPanel;
+                //if(!vm.showPanel)
+                //多选时，选中节点后，有时选项跨行，需要重新计算位置，但面板仍显示
+                if(!vm.multi || !vm.showPanel)
+                    vm.showPanel = !vm.showPanel;
                 vm.panelLeft = offset.left;
                 //有可能出现滚动条，宽度最后设置
                 if(!existScroll && document.body.scrollHeight > document.body.clientHeight) {
@@ -247,16 +254,37 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             initTreeItem: function() {
                 var vm = this;
                 var treeObj = vm.getCmpMgr().tree;
+                if(!treeObj) return;
                 treeObj.checkAllNodes(false)
                 for(var j=0; j<vm.selectedItems.length; j++) {
                     var selectedId = vm.selectedItems[j][vm.$valueField];
                     var node = treeObj.getNodesByParam(vm.$valueField, selectedId, null);
+                    for(var i=0; i<node.length; i++) {
+                        if(vm.multi) {
+                            treeObj.checkNode(node[i], true, false);
+                        }
+                        else {
+                            treeObj.selectNode(node[i], false);
+                            node[i].checked = true;
+                        }
+                    }
+                }
+                this.clearCheckedOldNodes();
+            },
+            initTreeWhenRemove: function(removeItem) {
+                var vm = this;
+                if("tree" == vm.model) {
+                    var treeObj = vm.getCmpMgr().tree;
+                    var selectedId = removeItem[vm.$valueField];
+                    var node = treeObj.getNodesByParam(vm.$valueField, selectedId, null);
                     if(vm.multi) {
-                        treeObj.checkNode(node[0], true, true);
+                        treeObj.checkNode(node[0], false, false);
                     }
                     else {
-                        treeObj.selectNode(node[0], false);
+                        treeObj.cancelSelectedNode(node[0], false);
                     }
+                    vm.clearCheckedOldNodes();
+
                 }
             },
             toggleItemSelect: function(vid, el, index, event) {
@@ -289,10 +317,10 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                 item[vm.$textField] = el[vm.$textField];
                 //增加选中项
                 if(addFlag) {
+                    vm.clickItem = true;            //单选模式下，选中后，不再发送查询请求
                     if(!vm.multi) {
                         vm.selectedItems.clear();   //单选模式下，先删除，再插入，才能监控到selecetedItems数据的变化
                     }
-                    vm.clickItem = true;            //单选模式下，选中后，不再发送查询请求
                     vm.selectedItems.push(item);
                 }
                 //删除选中项
@@ -330,21 +358,11 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         return;
                     }
                 }
-                vm.judgePanelPosition(vm, event);
-
-                if("tree" == vm.model) {
-                    var treeObj = vm.getCmpMgr().tree;
-                    var selectedId = removeItem[0][vm.$valueField];
-                    var node = treeObj.getNodesByParam(vm.$valueField, selectedId, null);
-                    if(vm.multi) {
-                        treeObj.checkNode(node[0], false, false);
-                    }
-                    else {
-                        treeObj.cancelSelectedNode(node[0], false);
-                    }
-                    vm.clearCheckedOldNodes();
-
+                if(vm.multi) {
+                    vm.judgePanelPosition(vm, event);
                 }
+                vm.initTreeWhenRemove(removeItem[0]);
+
 
                 event.stopPropagation();
             },
@@ -427,16 +445,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _watchSelectedItems: function(vm) {
             vm.selectedItems.$watch("length", function (newValue, oldValue) {
+                //疑为BUG,不应该再次清除
+                if(0 == newValue)   vm.selectedItems.clear();
                 if("normal" == vm.model) {
-                    //疑为BUG,不应该再次清除
-                    if(0 == newValue)   vm.selectedItems.clear();
                     //重新渲染下拉面板中的选中项
                     vm.initNormalItem();
                 }
 
                 //更新组件值
-                var value = "";
-                var display = "";
+                var value = "", display = "";
                 for(var i=0; i<vm.selectedItems.length; i++) {
                     var item = vm.selectedItems[i];
                     value += item[vm.$valueField];
@@ -464,11 +481,24 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
         },
         _handleSearch: function(newValue){
             if(!newValue || newValue.length>1) {
-                var page = {
-                    pageNo: "1",
-                    pageSize: this.options.usePager ? this.options.$pageSize : "10000"
-                };
-                this._getSelectData(page, newValue);
+                if("normal" == this.options.model) {
+                    var page = {
+                        pageNo: "1",
+                        pageSize: this.options.usePager ? this.options.$pageSize : "10000"
+                    };
+                    this._getSelectData(page, newValue);
+                }
+                else if("tree" == this.options.model) {
+                    var that = this;
+                    Promise.all([this.tree._getCompVM().searchTreeData(newValue, true)]).then(function() {
+                        if(that.options.multi) {
+                            that._getCompVM().initTreeItem();
+                        }
+                        that.asyncData = true;
+                    });
+                    ;
+
+                }
             }
         },
         _renderPanel: function(event) {
@@ -502,25 +532,24 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     async: options.$async,  //是否异步加载数据
                     mainAlias: options.mainAlias,  //数据源主实体别名
                     url: options.url,  //数据源url
+                    searchKey: options.searchKey,
 
-                    //beforeExpand: function(treeId, treeNode) {
-                    //    event.stopPropagation();
-                    //},
-                    //beforeCollapse: function(treeId, treeNode) {
-                    //    event.stopPropagation();
-                    //},
                     beforeClick: function(treeId, treeNode, clickFlag) {
                         if(vm.multi) return false;
+
                         var el = {};
-                        el.checked = treeNode.checked;
+                        var selectedArr = this.getZTreeObj(treeId).getSelectedNodes();
+                        //el.checked = treeNode.checked;    //不能用此方法，重新选中其它节点后，不会对前一个选中节点的checked=false
+                        el.checked = (that.asyncData || selectedArr.length==0 || selectedArr[0]!=treeNode) ? false:true;
                         el[vm.$valueField] = treeNode[vm.$valueField];
                         el[vm.$textField] = treeNode[vm.$textField];
                         el.$model = treeNode;
 
                         vm.toggleItemSelect(vm.vid, el, null, event);
 
-                        treeNode.checked = !treeNode.checked;
-                        if(vm.$panelCancel && !treeNode.checked ) {
+                        that.asyncData = false;
+                        //面板允许点击取消，则取消节点选中状态
+                        if(vm.$panelCancel && el.checked ) {
                             var treeObj = this.getZTreeObj(treeId);
                             treeObj.cancelSelectedNode(treeNode);
                             event.stopPropagation();
@@ -552,11 +581,15 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
 
                         vm.clearCheckedOldNodes();
                         event.stopPropagation();
-
+                    },
+                    _onAsyncSuccess: function(event, treeId, treeNode, msg) {
+                        vm.initTreeItem();
+                        //that.asyncData = true;    //是否是刚刚加载后，用于判断选中的节点是匹配searchValue,还是selected
                     }
                 });
                 that.tree.render();
                 vm.judgePanelPosition(vm, event);
+                //vm.initTreeItem();
                 vm.$firstLoad = false;
             }
         },
@@ -751,6 +784,9 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     array.push(item);
                 }
                 vm.selectedItems = array;
+            }
+            if("tree" == vm.model) {
+                vm.initTreeItem();
             }
             if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
                 var res = vm.selectedEvent(this.getValue(), this.getDisplay(), this);
