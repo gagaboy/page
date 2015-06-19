@@ -59,10 +59,10 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
             _onRightClick: avalon.noop(),
 
 
-            searchTreeData: function(vid, event) {
-                var vm = avalon.vmodels[vid];
+            searchTreeData: function(valueParam, matchSearchValue, vid, event) {
+                var vm = vid ? avalon.vmodels[vid] : this;
                 var obj = vm.getCmpMgr();
-                var searchValue = vm.searchValue;
+                var searchValue = valueParam || vm.searchValue;
                 //重新搜索所有数据
                 if("" === searchValue) {
                     obj.zTreeObj.setting.view.selectedMulti = false;
@@ -80,12 +80,13 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                     data: dataParam,
                     type:'POST',
                     dataType: 'json',
+                    async: false,
                     cache: false
                 }).done(function(res) {
                     if (res) {
                         var data = res.result.datas[obj.options.$mainAlias].rows;
                         jQuery.fn.zTree.init(obj._getTreeDom(), obj.setting, data);
-                        if(searchValue != ""){
+                        if(searchValue != "" && matchSearchValue){
                             var selectedNodes = obj.zTreeObj.getNodesByParamFuzzy(obj.options.$nodeName, searchValue, null);
                             for( var i=0, l=selectedNodes.length; i<l; i++) {
                                 obj.zTreeObj.selectNode(selectedNodes[i], true);
@@ -167,8 +168,8 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                     beforeRemove: options.beforeRemove,
                     beforeRename: options.beforeRename,
                     beforeRightClick: options.beforeRightClick,
-                    onAsyncError: options.onAsyncError,
-                    onAsyncSuccess: options.onAsyncSuccess,
+                    onAsyncError: options._onAsyncError,
+                    onAsyncSuccess: options._onAsyncSuccess,
                     onCheck: options._onCheck,
                     onClick: options._onClick,
                     onCollapse: options._onCollapse,
@@ -239,6 +240,10 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
         },
         _getTreeDom: function() {
             return this.treeDom;
+        },
+        _getCompVM: function() {
+            var vid = this.options.vid;
+            return avalon.vmodels[vid]
         },
         _extendExpandEvent: function( treeId, treeNode) {
             var zTree = this.getZTreeObj(treeId);
