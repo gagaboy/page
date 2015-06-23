@@ -85,7 +85,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     for (var i = 0; i < datas.length; i++) {
                         datas[i]['checked'] = vm.allChecked;
                     }
-                    vm.data = datas;
+                    //vm.data = datas;
                 }
             },
             activeRow:function(vid,row,rowObj){
