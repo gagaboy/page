@@ -79,12 +79,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             activedRowDom:null, //行编辑Dom
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
-                vm.allChecked = !vm.allChecked;
-                var datas = vm.data;
-                for (var i = 0; i < datas.length; i++) {
-                    datas[i]['checked'] = vm.allChecked;
+                if(vm&&vm.multiCheck){
+                    vm.allChecked = !vm.allChecked;
+                    var datas = vm.data;
+                    for (var i = 0; i < datas.length; i++) {
+                        datas[i]['checked'] = vm.allChecked;
+                    }
+                    vm.data = datas;
                 }
-                vm.data = datas;
             },
             activeRow:function(vid,row,rowObj){
                 var vm = avalon.vmodels[vid];
