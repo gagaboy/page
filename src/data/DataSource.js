@@ -89,9 +89,9 @@ define(["./DataConstant"], function (Constant) {
             var $this = this;
             return new Promise(function (resolve,error) {
                 var params = $this.getSyncParam(filterNotModify);
-                if (uploadString) {
-                    params.data = JSON.stringify(params.data);
-                }
+                //if (uploadString) {
+                //    params.data = JSON.stringify(params.data);
+                //}
 
                 if("dataSet" === $this.options.$xtype) {
                     //数据格式为： {操作数据集名称：JSON.stringify([]), $jsonType: 1}
@@ -99,11 +99,17 @@ define(["./DataConstant"], function (Constant) {
                         throw new error("数据源没有设置操作集Id，无法进行同步操作！");
                     }
                     var val = {$jsonType: 1};
-                    val[$this.options.model.operationId] = JSON.stringify(params.data);
+                    val[$this.options.model.operationId] = JSON.stringify(params.data);    //operationId不能为data啊！
+                    avalon.mix(val, params);
+                    delete val.data;
                     params = val;
                 }
                 else {
-                    params = params && params.data;
+                    if(params) {
+                        avalon.mix(params, params.data);
+                        delete params.data;
+                    }
+
                 }
 
                 Page.utils.ajax($this.options.syncUrl, params, function (data) {
