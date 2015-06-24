@@ -191,7 +191,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         required: true,
                         showRequired: true,
                         showLabel: false,
-                        showErrorMessage: true
+                        showErrorMessage: true,
+                        validationRules: {
+                            length: {
+                                maxLen: 15
+                            }
+                        }
                     }).render();
                     Page.create('checkbox', {
                         $parentId: 'defaultView_'+vm.vid,
@@ -349,11 +354,24 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     defaultView = "1";
                 }
                 var viewValue = vm._getCustomFilter();
+                if(!viewValue) return;
+                var viewStr = JSON.stringify(viewValue);
+                //判断是否有相同条件的方案存在
+                if(vm.viewsArr) {
+                    for(var i=0; i<vm.viewsArr.length; i++) {
+                        var tempArr = vm.viewsArr[i].$model.viewValue;
+                        if(JSON.stringify(tempArr) === viewStr) {
+                            Page.dialog.alert("已存在相同条件的查询方案，不予保存！");
+                            return;
+                        }
+                    }
+                }
+
 
                 var param = {
                     viewName: viewName,
                     defaultView: defaultView,
-                    viewValue: JSON.stringify(viewValue),
+                    viewValue: viewStr,
                     searchId: vid
                 };
                 var ds = vm._getDataSet();
