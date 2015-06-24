@@ -21,10 +21,11 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             $syncUrl: null,
             $dsModel: {
                 id: 'viewId',
-                operationId: "data"
+                operationId: "searchView"
             },
             autoSubmit: true, //自动提交查询条件
             searchSubmit: null,
+            $showGroupOper: true,
 
             focused: false,
             quickSearchArr: [],  //快速查询的选中项
@@ -35,6 +36,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             viewsArr: [], //查询视图的数据
             viewSelectedIndex: null,
 
+
             showPanel: "",   // quickPanel | viewPanel
             $firstLoad: true,
             showTips: false,  //查询条件详情面板显示控制
@@ -42,7 +44,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             saveViewPanel: true,  //控制保存视图区域面板
 
             searchValue: "", //查询输入值
-            inputWidth: 80, //查询输入框的宽度
+            inputWidth: 25, //查询输入框的宽度
             iconShowIndex: null,  //删除图标显示控制
             viewIconShowIndex: null,
             QuickSearchShow: false,
@@ -96,7 +98,6 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             },
             keyDown: function (vid, e) {
                 var vm = avalon.vmodels[vid];
-                var maxWidth = jQuery(this).parent().parent().width();
                 //删除已选项（如果是删除且输入区域为字符串长度为1）  键按下触发优先于值改变 vm.searchValue.length==1
                 if (e.keyCode == 8 && vm.searchValue=="" ) {
                     var cmpMgr = vm.getCmpMgr();
@@ -113,23 +114,38 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     vm.showPanel = "";
                 }
                 else {
-                    vm.showPanel = "quickPanel";
+                    if(vm.customSearchArr.length == 0) {
+                        vm.showPanel = "quickPanel";
+                    }
                 }
                 vm.showTips = false;
-                var selected = jQuery(this).parent().find("div");
+                //var selected = jQuery(this).parent().find("div");
+                //var maxWidth = jQuery(this).parent().parent().width();
+                //for (var i = 0, len = selected.length; i < len; i++) {
+                //    maxWidth = maxWidth - selected[i].offsetWidth - 8;
+                //}
+                //
+                ////var inputWidth = jQuery(this).val().length * 7 + 25;
+                //var inputWidth = vm.searchValue && vm.searchValue.length * 15 + 25;
+                //if (inputWidth > maxWidth) {
+                //    inputWidth = maxWidth;
+                //}
+                //vm.inputWidth = inputWidth;
+            },
+            changeInputWidth: function() {
+                var vm = this;
+                var selected = jQuery(event.target).parent().find("div");
+                var maxWidth = jQuery(event.target).parent().parent().width();
                 for (var i = 0, len = selected.length; i < len; i++) {
                     maxWidth = maxWidth - selected[i].offsetWidth - 8;
                 }
 
                 //var inputWidth = jQuery(this).val().length * 7 + 25;
-                var inputWidth = vm.searchValue && vm.searchValue.length * 7 + 25;
-                console.log(vm.searchValue)
+                var inputWidth = vm.searchValue && vm.searchValue.length * 12 + 25;
                 if (inputWidth > maxWidth) {
                     inputWidth = maxWidth;
                 }
                 vm.inputWidth = inputWidth;
-
-
             },
             toggleViewPanel: function(vid, event) {
                 var vm = avalon.vmodels[vid];
@@ -335,8 +351,15 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 var ds = vm._getDataSet();
                 ds.addRecord(param);
                 Promise.all([ds.sync(true, true)]).then(function(data) {
-                    if(data && data.length>0) {
+                    if(data && data.length>0 && data[0].code!="500") {
                         var viewId = data[0];
+                        //修改ds中对应行数据的dataMap中key,以及状态和viewId;因为删除时，readRecord从dataMap中获取
+                        ds.options._dataMap[viewId] = ds.options._dataMap[param.viewId];
+                        delete ds.options._dataMap[param.viewId];
+                        ds.options._dataMap[viewId].options.data.$status$ = "$notModify$";
+                        ds.options._dataMap[viewId].options.data.viewId = viewId;
+                        //param与ds中的行数据共享引用，修改其，便可修改ds行数据。添加多条数据时initData会根据options.data修改_dataMap
+                        param.$status$ = "$notModify$";
                         param.viewId = viewId;
                         param.viewValue = viewValue;
                         vm.viewsArr.push(param);
@@ -652,6 +675,14 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     vm.showTips = false;
                     vm.searchValue = "";
                 }
+            });
+
+            this._watchSearchValue(this.vmodel);
+        },
+
+        _watchSearchValue: function(vm) {
+            vm.$watch("searchValue", function (newValue, oldValue)  {
+                vm.changeInputWidth();
             });
         },
         _setUrl: function(opts){

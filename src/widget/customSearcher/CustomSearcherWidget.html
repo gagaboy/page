@@ -87,23 +87,24 @@
             </ul>
             <!--自定义查询区域-->
             <div  class="ibox float-e-margins" style="margin-bottom: 5px;">
-                <div ms-click="toggleCustomPanel(vid, 'customPanel', $event)" class="ibox-title" style="padding-top: 0px;background-color: #dfe5e9; min-height: 26px;border: 0px;  cursor: pointer;">
-                    <h5 style=" margin-top: 6px;">自定义查询</h5>
-                    <div style=" margin-top: 4px;" class="ibox-tools">
+                <div ms-click="toggleCustomPanel(vid, 'customPanel', $event)" class="ibox-title" style="border-top-width: 0px; padding-left: 0px; padding-top: 0px; display: block;cursor: pointer;">
+                    <h5 style="margin-top: 10px;margin-bottom: 0px; border-bottom: 5px solid #1ab394;padding-left: 10px;padding-right: 10px;padding-bottom: 5px;font-weight: normal;font-size: 13px;">自定义查询</h5>
+                    <div style=" margin-top: 11px;" class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa" ms-class-1="fa-chevron-up: customSearchPanel" ms-class-2="fa-chevron-down: !customSearchPanel"></i>
                         </a>
                     </div>
+                    <div class="hr-line-solid" style=" margin-top: 0px;  margin-bottom: 0px;  border: 0px;  border-bottom: 1px solid #e5e6e7;height: 34px;"></div>
                 </div>
                 <div ms-if="customSearchPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
                     <div>
                         <div ms-repeat-fragment="fragmentArr" class="row" style="margin-left: 0px">
-                            <div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" style=" width: 5.333333%;margin-top: 15px;padding:0px">
+                            <div ms-if="$showGroupOper" class="col-md-1 col-sm-1 col-xs-1 col-lg-1" style=" width: 5.333333%;margin-top: 15px;padding:0px">
                                 <span >
                                     {{$index==0 ? " ":(groupOper=='or' ? "或":"和")}}
                                 </span>
                             </div>
-                            <div class="form-group col-md-10 col-sm-10 col-xs-10 col-lg-10" style="margin-bottom: 0px">
+                            <div class="form-group col-md-10 col-sm-10 col-xs-10 col-lg-10">
                                 <div class="row" ms-attr-id="fragment" style=" margin-top: 5px;"></div>
                             </div>
                             <div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" style=" margin-top: 15px;">
@@ -116,20 +117,21 @@
                             <i class="fa fa-plus"></i>&nbsp;添加条件
                         </span>
                         <a ms-click="addCustomSearch(vid, $event)" class="btn btn-primary page-search-btn" style="display: block;" type="button">查询</a>
-                        <br style="clear:both;" />
+                        <!--<br style="clear:both;" />-->
                     </div>
 
                     <div class="ibox float-e-margins" style="margin-bottom: 5px;">
-                        <div ms-click="toggleCustomPanel(vid, 'saveViewPanel', $event)"class="ibox-title" style="padding-top: 0px;background-color: #dfe5e9; min-height: 26px;border: 0px;  cursor: pointer;">
-                            <h5 style=" margin-top: 6px;">保存为查询方案</h5>
-                            <div style=" margin-top: 4px;" class="ibox-tools">
+                        <div ms-click="toggleCustomPanel(vid, 'saveViewPanel', $event)"class="ibox-title" style="border-top-width: 0px; padding-left: 0px; padding-top: 0px; display: block;cursor: pointer;">
+                            <h5 style="margin-top: 10px;margin-bottom: 0px; border-bottom: 5px solid #1ab394;padding-left: 10px;padding-right: 10px;padding-bottom: 5px;font-weight: normal;font-size: 13px;">保存为查询方案</h5>
+                            <div style=" margin-top: 11px;" class="ibox-tools">
                                 <a  class="collapse-link">
                                     <i class="fa"  ms-class-1="fa-chevron-up: saveViewPanel" ms-class-2="fa-chevron-down: !saveViewPanel"></i>
                                 </a>
                             </div>
+                            <div class="hr-line-solid" style=" margin-top: 0px;  margin-bottom: 0px;  border: 0px;  border-bottom: 1px solid #e5e6e7;height: 34px;"></div>
                         </div>
                         <div  ms-if="saveViewPanel" class="ibox-content" style="border-width: 0px;padding: 0px;">
-                            <div class="row" style=" margin-top: 10px;">
+                            <div class="row" style=" margin-top: 0px;">
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" ms-attr-id="viewName_{{vid}}"></div>
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-top: 3px;">
                                     <a class="btn btn-primary" type="button" ms-click="saveView(vid, $event)">保存</a>
