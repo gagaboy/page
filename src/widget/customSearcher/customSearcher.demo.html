@@ -80,22 +80,24 @@
         var customSearcher = Page.create('customSearcher', {
             $id: "customSearcher",
             $parentId: "container",
+            fetchUrl: 'Data.demo.json',
 //            showDropIcon: false,
-            value: [{
-                "linkOpt":"and",
-                "name":"stuSex",
-                "nameDisplay":"性别",
-                "value":"dd",
-                "valueDisplay":"dd",
-                "builder":"m_value_include",
-                "builderDisplay":"多值包含"
-            }],
+//            value: [{
+//                "linkOpt":"and",
+//                "name":"stuSex",
+//                "nameDisplay":"性别",
+//                "value":"1",
+//                "valueDisplay":"男   ",
+//                "builder":"m_value_include",
+//                "builderDisplay":"多值包含"
+//            }],
             controls: [{
                 id: "stuName",
                 $xtype: "datepicker",
                 label: "姓名",
                 parentTpl: "inline",
                 requier: true,
+                initShow: true,
                 filterName: "stuName",
                 bindField: "stuName",
                 builderList: "nameOpers"
@@ -104,6 +106,7 @@
                 $xtype: "combobox",
                 label: "性别",
                 parentTpl: "inline",
+                initShow: true,
                 filterName: "stuSex",
                 bindField: "stuSex",
                 url:'SexData.demo.json',

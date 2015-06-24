@@ -9,7 +9,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
         Extends: Base,
         options: {
             $xtype: xtype,
-            value: null,
+            $value: null,
             dataSetId: null,
             groupOper: "and", //条件分组之间的连接符
             matchAllFields: false,//查询条件是否匹配所有字段
@@ -160,12 +160,20 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 //第一次展开视图查询面板时加载
                 if(vm.$firstLoad) {
                     vm.saveViewPanel = false;
-                    //渲染视图面板
+                    //渲染自定义条件区域
                     var viewData = vm.viewData;
+                    var customFilterArr = [];
                     if(viewData && viewData.viewValue) {
-                        for(var i=0; i<viewData.viewValue.length; i++) {
-                            vm.addCustomFilter(vm.vid, viewData.viewValue[i]);
-                        }
+                        customFilterArr = viewData.viewValue;
+                    }
+                    else if(vm.$value) {
+                        customFilterArr = vm.$value;
+                    }
+                    else if(vm.$initShowArr) {
+                        customFilterArr = vm.$initShowArr;
+                    }
+                    for(var i=0; i<customFilterArr.length; i++) {
+                        vm.addCustomFilter(vm.vid, customFilterArr[i]);
                     }
                     //创建字段选择的下拉框DS
                     Page.create("dataSet", {
@@ -423,7 +431,10 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
 
             },
             renderInitFilter: function() {
-                this.customSearchArr = this.value;
+                if(this.$value) {
+                    this.customSearchArr = this.$value;
+                    this.callSubmit();
+                }
             },
             addCustomFilter: function(vid, initData) {
                 var vm = vid ? avalon.vmodels[vid] : this;
@@ -502,7 +513,24 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             textField: "caption",
                             dataSetId: operDSId,
                             showErrorMessage:true,
-                            required:true
+                            required:true,
+                            selectedEvent: function(value, display, obj) {
+                                var valueObj = Page.manager.components[valueObjId];
+                                var xtype = valueObj.options.$xtype;
+                                if("combobox" === xtype) {
+                                    var multi = valueObj._getCompVM().multi;
+                                    if("m_value_include" == value || "m_value_equal" === value) {
+                                        if(!multi) {
+                                            valueObj._getCompVM().multi = true;
+                                        }
+                                    }
+                                    else{
+                                        if(multi) {
+                                            valueObj._getCompVM().multi = false;
+                                        }
+                                    }
+                                }
+                            }
                         }]
                     },{
                         $xtype: 'col',
@@ -615,7 +643,6 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     res = vm.customSearchArr.$model;
                 }
                 else {
-                    vm.quickSearchArr;
                     if(vm.viewSearchArr.length>0) {
                         res.push(vm.viewSearchArr[0].viewValue.$model);
                     }
@@ -634,6 +661,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     }
                 }
                 return res;
+            },
+            emptySearchValue: function(vid) {
+                var vm = vid ? avalon.vmodels[vid] : this;
+                vm.customSearchArr.clear();
+                vm.viewSearchArr.clear();
+                vm.quickSearchArr.clear();
             },
             _getDataSet: function() {
                 var cmpMgr = this.getCmpMgr();
@@ -709,19 +742,30 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             if(opts.controls) {
                 var quickType = ["input", "textarea", "slider"];
                 opts.$fieldMap = {};
-                opts.$fieldSelectData = [];
+                opts.$fieldSelectData = [];     //vm.$fieldSelectData直接调用
+                opts.$initShowArr = [];   //初始化时，如果没有查询方案或者初始条件，则默认创建自定义条件项
                 for(var i=0; i<opts.controls.length; i++) {
                     var fieldModel = opts.controls[i];
+                    //过滤隐藏字段
                     if(fieldModel.hidden) {
                         continue;
                     }
+                    //没有设定xtype的，则默认为input显示类型
                     if(undefined == Page.classMap[fieldModel.$xtype]) {
                         fieldModel.$xtype = 'input';
                     }
+                    //判断哪些字段可用于快速查询
                     if(undefined == fieldModel.quickSearch) {
                         if(quickType.contains(fieldModel.$xtype)) {
                             fieldModel.quickSearch = true;
                         }
+                    }
+                    //判断哪些字段是初始化时默认加入自定义条件项中
+                    if(fieldModel.initShow) {
+                        opts.$initShowArr.push({
+                            "name": fieldModel["bindField"],
+                            "nameDisplay": fieldModel["label"]
+                        });
                     }
                     var bindField = fieldModel.bindField;
                     var label = fieldModel.label;
@@ -756,6 +800,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
         },
         getSearchValue: function() {
             return this._getCompVM().getSearchValue();
+        },
+        emptySearchValue: function() {
+            return this._getCompVM().emptySearchValue();
         },
         getTemplate: function () {
             return template;
