@@ -6598,6 +6598,7 @@ body.skin-3 {
     position: inherit;
     margin: 0 0 0 220px;
     min-height: 1200px;
+    z-index: 1002;
   }
   .navbar-static-side {
     z-index: 1000;
@@ -6615,6 +6616,7 @@ body.skin-3 {
     position: inherit;
     margin: 0 0 0 0px;
     min-height: 1000px;
+    z-index: 1002;
   }
   .body-small .navbar-static-side {
     display: none;
@@ -7104,6 +7106,11 @@ body.skin-3 {
   width: 44px;
   padding-left: 0;
   padding-right: 0;
+}
+@media (min-width: 768px) {
+  td.form-label .control-label {
+    margin-bottom: 0;
+  }
 }
 .jstree-default .jstree-checkbox.jstree-icon:empty {
   margin: 4px;

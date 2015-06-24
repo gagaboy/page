@@ -109,17 +109,21 @@
 }
 .page-search-addoptions {
     color: #1ab394;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     cursor: pointer;
     display: inline-block;
 }
 
 .page-search-btn {
-    width: 80px;
-    height: 30px;
+    width: 90px;
+    height: 34px;
     padding: 0;
-    line-height: 27px;
+    line-height: 30px;
+    font-size: 14px;
 }
+
+
+
 .page-seach-jx .fgroup {
     position: relative;
 }

@@ -241,6 +241,7 @@ define(["./DataConstant", "./DataSource"], function (Constant, DataSource) {
             });
             this.options._dataMap[rid] = dv;
             this.options._dataArray.push(dv);
+            this.options.data.push(record);
             this.fireEvent("afterAddRecord", [record]);
             this._valueChanged();
             //} else {
