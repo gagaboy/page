@@ -108,6 +108,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                         autoHide: false
                     });
                     this.toolTip.render();
+                    this.toolTip.show();
                 }
             }
 
@@ -307,6 +308,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                         autoHide: false
                     });
                     this.toolTip.render();
+                    this.toolTip.show();
                 }
             } else if (this.toolTip) {
                 this.toolTip.destroy();
