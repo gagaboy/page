@@ -133,8 +133,10 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
 
         isValid: function () {
             for (var i = 0; i < this.formWidgetBag.length; i++) {
-                var widget = this.formWidgetBag[i]
-                if (!widget.isValid()) {
+                var widget = this.formWidgetBag[i];
+                var status = widget.options.status;
+                var show = widget.options.show;
+                if (show && status=="edit" && !widget.isValid()) {
                     return false;
                 }
             }
