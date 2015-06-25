@@ -30,6 +30,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
 
             errorMessage: '',
             showErrorMessage: false,
+            tipPosition:"bottom",
 
             glyphicon: '',//eg:glyphicon-ok
             showGlyphicon: false,
@@ -104,7 +105,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                         content: msgs,
                         target: this.options.$parentId,
                         parentDom:this.getParentElement()||this.getElement(),
-                        position: 'bottom',
+                        position: this.options.tipPosition,
                         autoHide: false
                     });
                     this.toolTip.render();
@@ -304,7 +305,7 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
                         content: msgs,
                         target: this.options.$parentId,
                         parentDom:this.getElement(),
-                        position: 'bottom',
+                        position:this.options.tipPosition,
                         autoHide: false
                     });
                     this.toolTip.render();
