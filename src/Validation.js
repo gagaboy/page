@@ -89,7 +89,10 @@ define([], function () {
         },
         checkLimit: function(value,min,max,customErrMsg){
             var errMsg = "";
-            if(value&&typeof(value)=="number"&&(min||max)){
+            if(typeof(value)!="number"){
+                value = eval(value);
+            }
+            if(value&&(min||max)){
                 if(min&&typeof(min)!="number"){
                     min = eval(min);
                 }
