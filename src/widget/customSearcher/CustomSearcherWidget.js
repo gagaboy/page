@@ -25,7 +25,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             },
             autoSubmit: true, //自动提交查询条件
             searchSubmit: null,
-            $showGroupOper: true,
+            $showGroupOper: false,
 
             focused: false,
             quickSearchArr: [],  //快速查询的选中项
@@ -159,7 +159,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 }
                 //第一次展开视图查询面板时加载
                 if(vm.$firstLoad) {
-                    vm.saveViewPanel = false;
+                    //vm.saveViewPanel = false;
                     //渲染自定义条件区域
                     var viewData = vm.viewData;
                     var customFilterArr = [];

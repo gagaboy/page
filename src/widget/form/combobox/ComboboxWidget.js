@@ -833,6 +833,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             if(this.dataSet) {
                 this.dataSet.destroy();
             }
+            jQuery("#comboBox_panel_"+this.options.vid).remove();
             this.parent();
         },
         switchStatus: function(status) {
