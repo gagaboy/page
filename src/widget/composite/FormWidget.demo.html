@@ -19,11 +19,10 @@
     <link href="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="/page/lib/kindeditor-4.1.10/themes/default/default.css" />
-    <link rel="stylesheet" href="/page/lib/kindeditor-4.1.10/plugins/code/prettify.css" />
-    <script charset="utf-8" src="/page/lib/kindeditor-4.1.10/kindeditor.js"></script>
-    <script charset="utf-8" src="/page/lib/kindeditor-4.1.10/lang/zh_CN.js"></script>
-    <script charset="utf-8" src="/page/lib/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+    <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.dataviz.default.min.css" />
     <style>
         @media (min-width: 992px)
         {
@@ -81,12 +80,24 @@
             title: '',
             $parentId: 'container1',
             cols: 4,
-            isLazyLoad:false,
+            isLazyLoad:true,
             initData: false,
             dataSourcesIds: ['ds1'],
             groupWidgets: {
                 "aaa":[
-                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', show: false, required: true},
+                    {$id: 'name', $xtype: 'input', label: '您的姓名', bind: 'ds1.xm', show: true, required: true,
+                     parentTpl: "inline",
+                     validationRules: {
+                            required:true,//options中为false时，此处可重开启校验
+                            length: {
+                                maxLen: 5,
+                                minLen: 2
+                            },
+                            regex: {
+                                regexStr: "/^[\u4e00-\u9fa5]+$/",
+                                customErrMsg:"只能输入汉字"
+                            }
+                        }},
                     {$id: 'sex', $xtype: 'input', label: '性别', labelSpan: 2, bind: 'ds1.xb',value:"ss"},
                     {$id: 'interest', $xtype: 'input', label: '兴趣', rowNum: 3, floatDirection: "right", bind: 'ds1.xq',value:"qq"},
                     {$id: 'phone', $xtype: 'input', colNum: 1, label: '电话', bind: 'ds1.dh'},
