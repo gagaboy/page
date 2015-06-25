@@ -62,6 +62,10 @@ define([], function () {
             }
             return {"result":true};
         },
+        checkOracleLength: function (value,minLen,maxLen,customErrMsg) {
+            var oracleValue = value.replace(/[^\x00-\xff]/g,"123");
+            return this.checkLength(oracleValue,minLen,maxLen,customErrMsg);
+        },
         checkLengthFix: function (value,fixLen,customErrMsg) {
             var fieldLength = this._getLength(value);
             if(fixLen&&typeof(fixLen)!="number"){
@@ -400,6 +404,12 @@ define([], function () {
             }
             return {"result":true};
         },
+        _valOracleLength:function(value,params){
+            if(value&&(params.minLen||params.maxLen)){
+                return this.checkOracleLength(value,params.minLen,params.maxLen,params.customErrMsg);
+            }
+            return {"result":true};
+        },
         _valLengthFix:function(value,params){
             if(value&&params.fixLen){
                 return this.checkLengthFix(value,params.fixLen,params.customErrMsg);
@@ -514,6 +524,14 @@ define([], function () {
                 },
                 "length": {
                     "validateFunc": "_valLength",
+                    "errorMsg_min": "长度必须大于",
+                    "errorMsg_max": "长度必须小于",
+                    "errorMsg_bt1": "长度必须在 ",
+                    "errorMsg_bt2": "－",
+                    "errorMsg_bt3": " 之间"
+                },
+                "oracleLength": {
+                    "validateFunc": "_valOracleLength",
                     "errorMsg_min": "长度必须大于",
                     "errorMsg_max": "长度必须小于",
                     "errorMsg_bt1": "长度必须在 ",
