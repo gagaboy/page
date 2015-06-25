@@ -490,6 +490,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             dataSetId: 'fieldSelectDs_'+vm.vid,
                             showErrorMessage:true,
                             required:true,
+                            tipPosition:"top",
                             selectedEvent: function(value, display, obj) {
                                 //重新刷新操作符的下拉面板数据
                                 var fieldModel = vm.$fieldMap[value];
@@ -507,6 +508,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
 
                                 fieldModel.$id = valueObjId;
                                 fieldModel.parentTpl = 'inline';
+                                fieldModel.tipPosition = 'top';
                                 if(undefined == Page.classMap[fieldModel.$xtype]) {
                                     fieldModel.$xtype = 'input';
                                 }
@@ -532,6 +534,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                             dataSetId: operDSId,
                             showErrorMessage:true,
                             required:true,
+                            tipPosition:"top",
                             selectedEvent: function(value, display, obj) {
                                 var valueObj = Page.manager.components[valueObjId];
                                 var xtype = valueObj.options.$xtype;
@@ -559,6 +562,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                         items: initData ? [] : [{
                             $id: valueObjId,
                             $xtype: 'input',
+                            tipPosition:"top",
                             parentTpl: "inline"}]
                     }]
                 }).render();
