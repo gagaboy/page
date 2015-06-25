@@ -48,7 +48,7 @@ define(['../Base'], function (Base) {
                 if (this.options.items) {
                     for (var i = 0; i < this.options.items.length; i++) {
                         var it = this.options.items[i];
-                        this._renderWidget(it, formWidgetBag);
+                        this._renderWidget(it, formWidgetBag, parentLayoutWidgetId);
                     }
                 }
                 if (this._afterLayoutRender) {

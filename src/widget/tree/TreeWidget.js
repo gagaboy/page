@@ -107,11 +107,16 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
          */
         _geneSetting: function(){
             var options = this.options;
-
+            var otherParam = {};
+            if(options.$async) {
+                otherParam[options.$pIdKey] = null;
+            }
             return {
                 async: {
                     enable: true,
                     url: options.$url,
+                    autoParam: [options.$idKey+"="+options.$pIdKey],
+                    otherParam: otherParam,
                     dataFilter: function (treeId, parentNode, responseData) {
                         var res = [];
                         if(responseData) {
@@ -122,6 +127,8 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                                 res = responseData.result.datas.rows;
                             }
                         }
+                        //去掉otherParam
+                        this.getZTreeObj(treeId).setting.async.otherParam = null;
                         return res;
                     }
                 },
