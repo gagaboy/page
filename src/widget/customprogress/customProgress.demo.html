@@ -13,6 +13,29 @@
     <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.default.min.css" />
     <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.dataviz.min.css" />
     <link rel="stylesheet" href="/page/lib/kendoui/styles/kendo.dataviz.default.min.css" />
+    <style>
+        .k-state-selected,
+        .k-state-selected:link,
+        .k-state-selected:visited,
+        .k-list>.k-state-selected,
+        .k-list>.k-state-highlight,
+        .k-panel>.k-state-selected,
+        .k-ghost-splitbar-vertical,
+        .k-ghost-splitbar-horizontal,
+        .k-draghandle.k-state-selected:hover,
+        .k-scheduler .k-scheduler-toolbar .k-state-selected,
+        .k-scheduler .k-today.k-state-selected,
+        .k-marquee-color {
+            color: #fff;
+            background-color: #1ab394;
+            border-width: 0px;
+            border-color: #1ab394;
+        }
+        .k-progressbar>.k-reset {
+            left: 0px;
+            top: 0px;
+        }
+    </style>
 </head>
 </head>
 <body>
@@ -21,7 +44,7 @@
     <div class="row">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
-                基础功能+样式
+                ==========================蓝色主题：==========================
                 <div class="row">
                     <div class="col-md-12" id="ops" style="padding-bottom: 30px;">
                         <a class="btn btn-primary" href="javascript:alert(simpleProgress.getValue());">当前进度</a>
@@ -37,18 +60,22 @@
                     <div class="col-md-10" id="simpleProgress">
                     </div>
                 </div>
+                ==========================条纹主题：==========================
                 <div class="row" style="width:800px;">
                     <div class="col-md-10" id="simpleProgress1">
                     </div>
                 </div>
+                ==========================middle大小:==========================
                 <div class="row" style="width:800px;">
                     <div class="col-md-10" id="simpleProgress2">
                     </div>
                 </div>
+                ==========================small大小:==========================
                 <div class="row" style="width:800px;">
                     <div class="col-md-10" id="simpleProgress3">
                     </div>
                 </div>
+                ==========================分段进度条(自动均分):==========================
                 <div class="row" style="width:800px;">
                     <div class="col-md-10" id="simpleProgress4">
                     </div>
@@ -99,8 +126,8 @@
             type: "percent",//percent,chunk
             sceneType:"large",//large:20px;middle:10px;small:5px;
             themeType:"stripe",
-            showStatus:true,
-            showDetail:true,
+            showStatus:false,
+            //showDetail:true,
             //reverse: true,//反向
             complete: function(e){
                 alert("完成了,OK！");
@@ -112,7 +139,7 @@
             value:40,//默认
             type: "percent",//percent,chunk
             sceneType:"middle",
-            showDetail:true,
+            //showDetail:true,
             complete: function(e){
                 alert("完成了,OK！");
             },
@@ -124,8 +151,8 @@
             value:30,//默认
             type: "percent",//percent,chunk
             sceneType:"small",//large:20px;middle:10px;small:5px;
-            showStatus:true,
-            showDetail:true,
+            //showStatus:true,
+            //showDetail:true,
             complete: function(e){
                 alert("完成了,OK！");
             }
@@ -140,7 +167,7 @@
             chunkCount: 5,//type为chunk时
             min: 0,//type为chunk时
             max: 5,//type为chunk时
-            sceneType:"middle",
+            sceneType:"large",
             showDetail:true,
             complete: function(e){
                 alert("完成了,OK！");
