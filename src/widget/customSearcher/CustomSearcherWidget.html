@@ -88,7 +88,7 @@
                 </div>
             </div>
             <!--自定义查询区域-->
-            <div  class="ibox">
+            <div  class="ibox" ms-class-1="ibox-border-bottom: !customSearchPanel">
                 <div class="ibox-title">
                     <div class="group-ibox-title">自定义查询</div>
                     <div class="ibox-tools">
@@ -105,10 +105,10 @@
                                     {{$index==0 ? " ":(groupOper=='or' ? "或":"和")}}
                                 </span>
                             </div>-->
-                            <div class="form-group col-md-11 col-sm-11 col-xs-11 col-lg-11">
-                                <div class="row" ms-attr-id="fragment" style=" margin-top: 5px;"></div>
+                            <div class="form-group col-md-11 col-sm-11 col-xs-11 col-lg-11" style=" margin: 0px;">
+                                <div class="row" ms-attr-id="fragment" ></div>
                             </div>
-                            <div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" style=" margin-top: 15px;">
+                            <div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" style=" margin-top: 12px;">
                                 <span ms-click="removeCustomFilter(vid, fragment, $index, $event)" class="page-option-minus">
                                     <i class="fa fa-minus"></i>
                                 </span>
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <!--自保存为查询方案区域-->
-            <div class="ibox">
+            <div class="ibox" ms-class-1="ibox-border-bottom: !saveViewPanel">
                 <div class="ibox-title" >
                     <div class="group-ibox-title">保存为查询方案</div>
                     <div class="ibox-tools">
