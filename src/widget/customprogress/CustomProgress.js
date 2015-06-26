@@ -128,7 +128,8 @@ define(['../Base','text!./CustomProgressWidget.html', 'css!./CustomProgressWidge
             return this.progressObj.enable(true);
         },
         destroy: function() {
-            return this.progressObj.destroy();
+            this.progressObj.destroy();
+            this.parent();
         },
         setProgressWrapperCss:function(cssDetail){//{"background-image": "none","border-image": "none"}格式
             if(cssDetail){
