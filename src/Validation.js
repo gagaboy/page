@@ -89,10 +89,14 @@ define([], function () {
         },
         checkLimit: function(value,min,max,customErrMsg){
             var errMsg = "";
-            if(typeof(value)!="number"){
-                value = eval(value);
+            if(value!=null&&typeof(value)!="number"){
+                try{
+                    value = eval(value);
+                }catch (e){
+                    return {"result":true};
+                }
             }
-            if(value&&(min||max)){
+            if(value!=null&&(min||max)){
                 if(min&&typeof(min)!="number"){
                     min = eval(min);
                 }
@@ -420,7 +424,7 @@ define([], function () {
             return {"result":true};
         },
         _valLimit:function(value,params){
-            if(value&&params&&(params.min||params.max)){
+            if(value!=null&&value!=""&&params&&(params.min||params.max)){
                 return this.checkLimit(value,params.min,params.max,params.customErrMsg);
             }
             return {"result":true};
