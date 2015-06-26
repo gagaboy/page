@@ -44,11 +44,29 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-md-4" id="nameContainer">
-                        <input type="button" id="btn1" value="测试按钮" title="从左边出来tip"/>
+                        <input type="" id="btn1" value="测试按钮" title="从左边出来tip"/>
                     </div>
                     <div class="col-md-4" id="widgetContainer1">
                         <input type="button" id="btn2" value="测试按钮" title="从右边出来tip"/>
                     </div>
+                    <div class="col-md-1" id="widgetContainer2">
+                        <div id="btn3">
+                            来自来自来自来自来自来自来自来自
+                            来自来自来自来自来自来自来自来自
+                            来自来自来自来自来自来自来自来自
+                            来自来自来自来自来自来自来自来自
+                            来自来自来自来自来自来自来自来自
+                            来自来自来自来自来自来自来自来自
+
+
+
+                        </div>
+                        ==============
+                        <div id="btn5" style="width:30px;height:20px;">
+                            来自来自来自来自来自来自来自来自
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -78,7 +96,7 @@
            content: '从左边出提示信息内容<br />111111',
             $id: 'tip1',
             target:'btn1',
-            position:'left',
+            position:'right',
             autoHide:true,
             className:"whitetip"
         });
@@ -86,7 +104,7 @@
         tip2 = Page.create("tooltip", {
             content: '从右边出提示信息内容',
             $id: 'tip2',
-            target:'btn2',
+            target:'btn3',
             position:'right',
             autoHide:false
         });

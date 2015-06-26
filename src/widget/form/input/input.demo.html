@@ -112,19 +112,15 @@
             value: '',
             required: false,
             glyphicon: 'glyphicon-ok',
-            status:"readonly",
+            status:"edit",
             message: '请输入2-5个汉字',
             label: '您的姓名',
             labelSpan: 2,
             validationRules: {
                 required:true,//options中为false时，此处可重开启校验
-                length: {
+                oracleLength: {
                     maxLen: 5,
                     minLen: 2
-                },
-                regex: {
-                    regexStr: "/^[\u4e00-\u9fa5]+$/",
-                    customErrMsg:"只能输入汉字"
                 }
             },
             showErrorMessage:true,
@@ -143,10 +139,12 @@
                 alert("value:"+val);
             },
             validationRules: {
-                lengthFix: {
-                    fixLen: 11
+                limit: {
+                    max: 11,
+                    min:1
                 },
                 required:true,//设置为false可关闭校验
+                onlyInteger:true,
                 mobilePhone:false
             },
             showErrorMessage:true,
