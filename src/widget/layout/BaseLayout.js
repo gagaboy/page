@@ -14,6 +14,23 @@ define(['../Base'], function (Base) {
         render: function (parent, formWidgetBag, parentLayoutWidgetId) {
             var goFlag = true;
             this.parent(parent);
+            if (this.options.showProgress) {
+                this.progressBar = Page.create("customProgress", {
+                    value: false,//默认
+                    type: "percent",//percent,chunk
+                    sceneType: "large",//large:20px;middle:10px;small:5px;
+                    themeType: "blue",
+                    showStatus: true,
+                    showDetail: false
+                });
+                var progressCon = this.$element.find(".ibox-progress");
+                if(progressCon&&progressCon[0]){
+                    this.progressBar.render(progressCon);
+                }else{
+                    this.progressBar = null;
+                    this.setAttr("showProgress",false);
+                }
+            }
             if (this.options.isLazyLoad && !this._rendered) {
                 $w = $(window);
                 aparent = parent;
@@ -27,13 +44,7 @@ define(['../Base'], function (Base) {
                             $(window).on("scroll", function () {
                                 var height = $w.scrollTop() + $w.height();
                                 if (height >= (aparent.offset().top + aparent.height() - +that.options.lazyDistance) && !that._rendered) {
-                                    if (that.options.items) {
-                                        for (var i = 0; i < that.options.items.length; i++) {
-                                            var it = that.options.items[i];
-                                            that._renderWidget(it, formWidgetBag, parentLayoutWidgetId);
-                                        }
-                                    }
-                                    that._rendered = true;
+                                    that._renderWidgets(formWidgetBag, parentLayoutWidgetId);
                                 }
                             });
                         })(aparent, this, BaseLayout, formWidgetBag, parentLayoutWidgetId);
@@ -42,20 +53,23 @@ define(['../Base'], function (Base) {
                 }
             }
             if (goFlag) {
-                if (this._beforLayoutRender) {
-                    this._beforLayoutRender();
-                }
-                if (this.options.items) {
-                    for (var i = 0; i < this.options.items.length; i++) {
-                        var it = this.options.items[i];
-                        this._renderWidget(it, formWidgetBag, parentLayoutWidgetId);
-                    }
-                }
-                if (this._afterLayoutRender) {
-                    this._afterLayoutRender();
-                }
-                this._rendered = true;
+                this._renderWidgets(formWidgetBag, parentLayoutWidgetId);
             }
+        },
+        _renderWidgets: function (formWidgetBag, parentLayoutWidgetId) {
+            if (this._beforLayoutRender) {
+                this._beforLayoutRender();
+            }
+            if (this.options.items) {
+                for (var i = 0; i < this.options.items.length; i++) {
+                    var it = this.options.items[i];
+                    this._renderWidget(it, formWidgetBag, parentLayoutWidgetId);
+                }
+            }
+            if (this._afterLayoutRender) {
+                this._afterLayoutRender();
+            }
+            this._rendered = true;
         },
         _renderWidget: function (it, formWidgetBag, parentLayoutWidgetId) {
 
@@ -82,6 +96,7 @@ define(['../Base'], function (Base) {
 
 
         },
+
         addItem: function (config) {
             return this._renderWidget(config);
         },

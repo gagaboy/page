@@ -10,10 +10,18 @@ define(["../BaseLayout", "text!./Panel.html"], function (BaseLayout, panelTpl) {
             title:'',
             showTitle: true,
             showPanel: true,
-
+            showProgress:true,
             togglePanel: function(vid) {
                 var vm = avalon.vmodels[vid];
                 vm.showPanel = !vm.showPanel;
+            }
+        },
+        _afterLayoutRender: function () {
+            if (this.progressBar) {
+                this.progressBar.destroy();
+                this.progressBar = null;
+                //this.options.showProgress = false;
+                this.setAttr("showProgress",false);
             }
         },
         getTemplate: function () {
