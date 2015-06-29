@@ -501,7 +501,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             disabledEdit:col.disabledEdit||col.readonly,
                                             validationRules:col.validationRules,
                                             showErrorMessage:true,
-                                            bind:that._getDataValueIdByDataId(data[keyField]).getId()+"."+fieldName,
+                                            bind:that._getDataSet()?that._getDataValueIdByDataId(data[keyField]).getId()+"."+fieldName:null,
                                             status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
                                         };
                                         var allParams = jQuery.extend(baseParams,editParams);
@@ -591,7 +591,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         _getDataValueIdByDataId:function(did){
             var dataSet = this._getDataSet();
-            if(dataSet.getAttr("_dataMap")){
+            if(dataSet&&dataSet.getAttr("_dataMap")){
                 return dataSet.getAttr("_dataMap")[did];
             }
             return null;
@@ -709,8 +709,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }else{
                 for (var i = 0; i < d.length; i++) {
-                    if (d[i].checked == undefined) {
-                        d[i].checked = false;//未设置，默认不选中
+                    if (d[i]) {
+                        d[i].checked = d[i].checked||false;//未设置，默认不选中
                         d[i].state = d[i].state?d[i].state:'readonly';
                         if(!d[i][this.options._idField]){
                             d[i][this.options._idField] = String.uniqueID();

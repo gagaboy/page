@@ -67,43 +67,51 @@
             $parentId: 'simpleGrid',
             idField:"wid",
             $id:"simpleGrid",
-            //isMerge:true,
-            //tableClass:"table table-striped table-bordered table-hover dataTables-example dataTable dtr-inline",
-            totalNum:200,
+
             showCheckbox:true,
             usePager:true,
-            multiCheck:false,
-            canSort:true,
-            allChecked:false,
-            dataSetId: ds.getId(),
-            showPageDetail:true,
-            showPageIndexInput:true,
-            editComps:[],
+            //multiCheck:false,
+            //canSort:true,
+            //allChecked:false,
+            //dataSetId: ds.getId(),
+            data:[
+                {
+                    "wid":"001",
+                    "name": "李肉肉",
+                    "sex": "002",
+                    "sexDisplay": "女",
+                    "birthDate": "1989-11-03",
+                    "rxDate": "2007-09-02",
+                    "isParty": "是",
+                    "className": "信息0701班",
+                    "checked":"false",
+                    "notes": ""
+                },
+                {
+                    "wid":"002",
+                    "name": "李肉肉",
+                    "sex": "002",
+                    "sexDisplay": "女",
+                    "birthDate": "1987-03-19",
+                    "rxDate": "2007-09-02",
+                    "isParty": "是",
+                    "isParty_DISPLAY":"shi",
+                    "className": "信息0701班",
+                    "checked":"true",
+                    "notes": ""
+                }],
+            //showPageDetail:true,
+            //showPageIndexInput:true,
+            //editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:false},
-                {title:"性别",dataField:"sex",width:"8%",showDisplay:true,disabledEdit:true,
-                    sortDisabled:true,xtype:"combobox",isOpColumn:true,
-                    xtype:"checkbox",editParams:{"url":""},
-                    templateGenerator:"genTest"},
-                    //template:"<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>{{rowdata.sexDisplay}}</B></div>"},//showDisplay：显示Display字段，isOpColumn，自定义显示，template：自定义显示的内容
                 {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"switch",hidden:false},
                 {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker"},
                 {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true},
-                {title:"所在班级",dataField:"className",editParams:{url:"",labelName:""},
-                    validationRules: {
-                        required:true,//options中为false时，此处可重开启校验
-                        length: {
-                            maxLen: 5,
-                            minLen: 2
-                        },
-                        regex: {
-                            regexStr: "/^[\u4e00-\u9fa5]+$/",
-                            customErrMsg:"只能输入汉字"
-                        }
-                    }},
+
                 {title:"备注",dataField:"notes",hidden:true,sortDisabled:true}
             ],
-            opColumns:[{title:"自定义操作",
+            /*opColumns:[{title:"自定义操作",
                 width:'15%',
                 position:2,
                 template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
@@ -112,11 +120,11 @@
                     width:'12%',
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
-            //行编辑
+            //行编辑*/
             canEdit:true,
             dbClickToEditRow:true,
-            clickToEditField:false,
-            editMultiRow:false, //同时编辑多行
+            //clickToEditField:false,
+            //editMultiRow:false, //同时编辑多行
             genTest:function(rowData,col){
                 if(rowData) {
                     if (rowData.sex ==2) {
