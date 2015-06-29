@@ -18,8 +18,8 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
             skin: null,
             showCloseIcon: true,
             button:[],
-            params:""
-
+            params:"",
+            opacity: .5
         },
         dialogObj:null,
         render: function () {
@@ -36,10 +36,11 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
                 button: options.button,
                 icon: options.icon,
                 skin: options.skin,
+                opacity: options.opacity,
                 showCloseIcon: options.showCloseIcon,
                 width: options.width!=""?options.width:undefined,
                 height: options.height!=""?options.height:undefined
-            }
+            };
 
             if(options.url){
                 this.dialogObj = artDialog.open(url, dialogParams);
