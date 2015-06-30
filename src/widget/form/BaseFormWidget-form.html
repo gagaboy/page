@@ -1,9 +1,9 @@
-<div ms-visible="show">
+<div ms-if="show">
     <table class="form-horizontal-table">
         <tr>
             <td class="form-label" ms-css-width="$colNum>1 ? 33.33333333/$colNum+'%' : ''" ms-class="col-md-{{labelSpan}} col-xs-{{labelSpan}} col-sm-{{labelSpan}} col-lg-{{labelSpan}}" ms-if="showLabel">
 
-                <span class="ampS-required-asterisk" ms-visible="required && showRequired" >
+                <span class="ampS-required-asterisk" ms-if="required && showRequired" >
                     *
                 </span>
 
@@ -15,15 +15,15 @@
                 {{TEMPLATEVALUE}}
             </td>
             <td class="form-icon-container  col-xs-1 col-sm-1 col-md-1 col-lg-1" ms-css-width="$colNum>1 ? 8.33333333/$colNum+'%':''">
-                <span ms-class="glyphicon {{glyphicon}}" ms-visible="showGlyphicon"></span>
+                <span ms-class="glyphicon {{glyphicon}}" ms-if="showGlyphicon"></span>
             </td>
         </tr>
-        <tr class="form-horizontal-message" ms-visible="hasMessageBar">
+        <tr class="form-horizontal-message" ms-if="hasMessageBar">
             <td ms-if="showLabel"></td>
             <td class="text-muted" ms-class="form-error-message:showErrorMessage&&errorMessage" colspan="2"
                 ms-css-padding="controlPadding">
-                <span ms-visible="showMessage"> {{message}} </span>
-                <span ms-visible="showErrorMessage">{{errorMessage}}</span>
+                <span ms-if="showMessage"> {{message}} </span>
+                <span ms-if="showErrorMessage">{{errorMessage}}</span>
             </td>
         </tr>
     </table>
