@@ -37,6 +37,7 @@ define([
     "./widget/dataTable/DataTableWidget",
     "./widget/simple/SimpleGrid",
     "./widget/simple/expandGrid/ExpandGrid",
+    "./widget/customcolumns/CustomColumns",
     "./widget/nestable/NestableWidget",
     "./widget/form/switch/SwitchWidget",
     "./widget/form/checkbox/CheckboxWidget",
