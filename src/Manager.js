@@ -23,6 +23,9 @@ define([], function () {
         },
         remove:function(id){
             delete this.components[id];
+        },
+        get: function(id){
+            return this.components[id];
         }
     });
     Manager.xtype = xtype;
