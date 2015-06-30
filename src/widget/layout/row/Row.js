@@ -7,6 +7,7 @@ define(["../BaseLayout", "text!./Row.html"], function (BaseLayout, rowTpl) {
     var Row = new Class({
         Extends: BaseLayout,
         options: {
+            $xtype: xtype
 
         },
         getTemplate: function () {

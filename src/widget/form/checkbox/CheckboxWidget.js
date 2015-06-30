@@ -13,6 +13,8 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             dataSetId: null,
             url: null,
             mainAlias: null,
+            beforeSelectEvent: null,
+            selectedEvent: null,
             //showAllcheckBtn: false,//提供全选按钮
 
             items: [],//选项
@@ -22,6 +24,13 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                 if(vm.status == 'readonly' || vm.status == 'disabled'){
                     return;
                 }
+                if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
+                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], el.$model);
+                    if(res == false) {
+                        return;
+                    }
+                }
+
                 el.checked = !el.checked;
                 var values = [];
                 var display = "";
@@ -36,6 +45,13 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
                 }
                 vm.value = values;
                 vm.display = display;
+
+                if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
+                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], el.$model);
+                    if(res == false) {
+                        return;
+                    }
+                }
             },
             _preProcessData: function() {
                 var vm = this;
