@@ -76,6 +76,9 @@ define([
             var id = instance.getId();
             this.manager.add(id, instance);
             return instance;
+        },
+        getCmpObj: function(vid) {
+            return this.manager.get(vid);
         }
     });
     //**********************************
