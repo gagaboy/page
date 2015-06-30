@@ -2,6 +2,7 @@ define(['../Base'], function (Base) {
     var BaseLayout = new Class({
         Extends: Base,
         options: {
+            $skipArray: ["items"],
             _addWrapDiv: false,
             isLazyLoad: false,//是否懒加载，即滚动条拖动的位置时再渲染
             lazyDistance: 5//渲染距离（时机），滚动条距离容器一定距离触发渲染
