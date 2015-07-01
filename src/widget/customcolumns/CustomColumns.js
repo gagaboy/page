@@ -13,6 +13,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             value:[],
             $textField:"text",
             $valueField:"value",
+            showAllCheck:false,
             $split: ",",
             onSave:null,
             beforeOpenDialog:null,
@@ -28,7 +29,13 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 }
                 vm.value = values;
             },
-            allClick: function (vid, element) {
+            allCheck: function (vid, element) {
+                var vm = avalon.vmodels[vid];
+                if(vm){
+
+                }
+            },
+            allUnCheck: function (vid, element) {
                 var vm = avalon.vmodels[vid];
                 if(vm){
 
