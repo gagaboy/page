@@ -54,11 +54,8 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                     name: "保存",
                     focus:true,
                     callback: function(dialog, window, param) {
-                        alert("子页面参数："+that.options.value);
-                        // tod saveToServer
-                        //afterSave
                         if(that.options.afterSave){
-                            that.options.afterSave(that,that.options.value);
+                            return that.options.afterSave(that,that.options.value);
                         }
                         return false;
                     }
