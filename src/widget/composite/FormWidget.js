@@ -73,11 +73,15 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
                 groupWidgets[this.options.title] = widgets;
             }
             if(groupWidgets) {
+                //var show = true;
                 for(var attr in groupWidgets) {
+
                     var title = attr;
                     var widgets = groupWidgets[title];
                     var panel = {$xtype: 'panel', title: title, showTitle: this.options.showTitle,
                         isLazyLoad:this.options.isLazyLoad, items: []};
+                    //show = false;
+                    //showPanel: show,
                     for(var i=0; i<widgets.length; i++) {
                         if (i == 0 /* || i % cols == 0*/) {
                             currentRow = {$xtype: 'row', items: []};

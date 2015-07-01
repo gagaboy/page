@@ -68,7 +68,14 @@
 //            dataSetId: "radioDS",
             url: "radio.data.json",
             onValueChange: function(value, oldValue) {
-                alert(value);
+//                alert(value);
+            },
+            beforeSelectEvent: function(value, display, el) {
+                alert(value+" "+display);
+//                return false;     //这样可以阻止选中事件， 默认不需要
+            },
+            selectedEvent: function(value, display, el) {
+                alert(value+" "+display);
             }
         });
         radio.render();

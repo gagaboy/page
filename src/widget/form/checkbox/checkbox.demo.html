@@ -71,9 +71,16 @@
                     customErrMsg:"请选择2-5个兴趣"
                 }
             },
-            onValueChange: function(value, aa, bb) {
+            onValueChange: function(value, oldValue, vm) {
 
                 alert(value)
+            },
+            beforeSelectEvent: function(value, display, el) {
+                alert(value+" "+display);
+//                return false;     //这样可以阻止选中事件， 默认不需要
+            },
+            selectedEvent: function(value, display, el) {
+                alert(value+" "+display);
             }
         });
         checkbox.render();

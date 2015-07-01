@@ -1,8 +1,7 @@
 /**
  * Created by BIKUI on 15/4/23.
  */
-define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'
-    ,'css!../../../../lib/bootstrap/css/plugins/chosen/chosen.css'], function (BaseFormWidget, template) {
+define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget.css'], function (BaseFormWidget, template) {
     var xtype = "combobox";
     var ComboBoxWidget = new Class({
         Extends: BaseFormWidget,
@@ -35,6 +34,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             $pIdKey: "pId",  //父节点id
             $treeLine: true,  //是否显示连线
             $async: true,  //是否异步加载数据
+            $parent: true,
 
 
             $pagination: null,
@@ -526,6 +526,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     idKey: options.$valueField,  //节点id Key
                     nodeName: options.$textField,  //节点文本key
                     pIdKey: options.$pIdKey,  //父节点id
+                    parent: options.$parent,
                     treeLine: options.$treeLine,  //是否显示连线
                     multi: options.multi,  //是否支持多选
                     showCheckBox: options.multi,  //是否显示checkbox

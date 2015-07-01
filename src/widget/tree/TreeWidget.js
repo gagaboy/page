@@ -13,6 +13,7 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
             $idKey: "id",  //节点id Key
             $nodeName: "name",  //节点文本key
             $pIdKey: "pId",  //父节点id
+            $parent: false,  //是否节点保持为父节点状态
             $treeLine: true,  //是否显示连线
             $multi: false,  //是否支持多选
             $async: true,  //是否异步加载数据
@@ -146,6 +147,9 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                         enable: true,// 默认使用简单数据
                         idKey: options.$idKey,
                         pIdKey: options.$pIdKey
+                    },
+                    keep: {
+                        parent: options.$parent
                     }
                 },
                 edit:{
@@ -159,6 +163,7 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                     selectedMulti: options.$multi,
                     dblClickExpand: false
                 },
+
                 callback:{
                     beforeAsync: options.beforeAsync,
                     beforeCheck: options.beforeCheck,

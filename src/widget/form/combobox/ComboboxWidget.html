@@ -17,8 +17,8 @@
         <!--单选可搜索-->
         <div ms-if="!multi && searchable" ms-class="div-focus: focused" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" >
             <input ms-duplex="display" style="outline: none;border: none;width: 100%;text-overflow: ellipsis;"  ms-attr-disabled="status=='disabled'" ms-css-background-color="status=='disabled'?'#eee':''" ms-on-keydown="keyDown(vid, $event)" ms-on-focus="inputFocus(vid, $event)">
-            <a ms-visible="$showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" ms-css-right="!$showDropIcon ? '5':''" data-option-array-index="105"></a>
-            <div ms-visible="$showDropIcon" class="page-search-expand" ms-on-click="changePanelShow(vid, $event)">
+            <a ms-if="$showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" ms-css-right="!$showDropIcon ? '5':''" data-option-array-index="105"></a>
+            <div ms-if="$showDropIcon" class="page-search-expand" ms-on-click="changePanelShow(vid, $event)">
                 <i class="fa" ms-class-fa-caret-down="!showPanel" ms-class-fa-caret-up="showPanel" style=" line-height: 35px;"></i>
             </div>
             <!--<span class="glyphicon form-control-feedback" ms-class-glyphicon-menu-down="!showPanel" ms-class-glyphicon-menu-up="showPanel" aria-hidden="true"
@@ -27,19 +27,19 @@
         <!--单选不可搜索-->
         <div ms-if="!multi && !searchable" ms-class="div-focus: showPanel" ms-css-background-color="status=='disabled'?'#eee':''" class="form-control" style="cursor: pointer;"ms-on-click="changePanelShow(vid, $event)">
             <span ms-repeat-item="selectedItems" ms-text="item[$textField]"></span>
-            <a ms-visible="$showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
-            <div ms-visible="$showDropIcon" class="page-search-expand">
+            <a ms-if="$showClear && clearShow" ms-click="removeAll(vid, $event)" class="clearBtn" data-option-array-index="105"></a>
+            <div ms-if="$showDropIcon" class="page-search-expand">
                 <i class="fa" ms-class-fa-caret-down="!showPanel" ms-class-fa-caret-up="showPanel" style=" line-height: 35px;"></i>
             </div>
         </div>
 
         <!--下拉面板区域-->
-        <div ms-attr-id="comboBox_panel_{{vid}}"  ms-css-left="panelLeft" ms-css-top="panelTop" class="chosen-drop" ms-visible="showPanel" >
+        <div ms-attr-id="comboBox_panel_{{vid}}"  ms-css-left="panelLeft" ms-css-top="panelTop" class="chosen-drop" ms-if="showPanel" style="display: none">
             <div ms-if="model=='normal'">
                 <ul class="chosen-results" ms-each-el="data" ms-css-height="showPager ? '150px':'100%'">
                     <li class="active-result" style="width: 100%;" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index, $event)"><span ms-repeat-item="el['displayArr']" ms-class-matchSearch="(multi || searchable ) && (item == searchValue || (!multi && item == display))">{{item}}</span></li>
                 </ul>
-                <div ms-attr-id="page_{{vid}}" ms-visible="showPager"></div>
+                <div ms-attr-id="page_{{vid}}" ms-if="showPager"></div>
             </div>
             <div ms-if="model=='tree'" ms-attr-id="comboBox_panel_tree_{{vid}}" style="height: 200px">
             </div>

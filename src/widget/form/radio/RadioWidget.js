@@ -14,6 +14,8 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
             dataSetId: null,
             url: null,
             mainAlias: null,
+            beforeSelectEvent: null,
+            selectedEvent: null,
             //showAllcheckBtn: false,//提供全选按钮
             items: [],//选项
 
@@ -22,11 +24,26 @@ define(['../BaseFormWidget', 'text!./RadioWidget.html', 'css!./RadioWidget.css']
                 if(vm.status == 'readonly' || vm.status == 'disabled'){
                     return;
                 }
+
+                if(vm.beforeSelectEvent && "function"==typeof vm.beforeSelectEvent) {
+                    var res = vm.beforeSelectEvent(el[vm.$valueField], el[vm.$textField], el.$model);
+                    if(res == false) {
+                        return;
+                    }
+                }
+
                 if(!el.checked){
                     el.checked = true;
                     vm._setOthersUnCheck(vid,el);
                     vm.value = el[vm.$valueField];
                     vm.display = el[vm.$textField];
+                }
+
+                if(vm.selectedEvent && "function"==typeof vm.selectedEvent) {
+                    var res = vm.selectedEvent(el[vm.$valueField], el[vm.$textField], el.$model);
+                    if(res == false) {
+                        return;
+                    }
                 }
             },
             _setOthersUnCheck:function(vid,el){
