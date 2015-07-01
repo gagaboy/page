@@ -15,7 +15,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             $valueField:"value",
             showAllCheck:false,
             $split: ",",
-            onSave:null,
+            afterSave:null,//param:customcolumn,value
             beforeOpenDialog:null,
             afterOpenDialog:null,
             itemCheck: function (vid,el) {
@@ -55,6 +55,11 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                     focus:true,
                     callback: function(dialog, window, param) {
                         alert("子页面参数："+that.options.value);
+                        //TODO saveToServer
+                        //afterSave
+                        if(that.options.afterSave){
+                            that.options.afterSave(that,that.options.value);
+                        }
                         return false;
                     }
                 },{
