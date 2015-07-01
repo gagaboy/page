@@ -55,7 +55,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                     focus:true,
                     callback: function(dialog, window, param) {
                         alert("子页面参数："+that.options.value);
-                        //TODO saveToServer
+                        // tod saveToServer
                         //afterSave
                         if(that.options.afterSave){
                             that.options.afterSave(that,that.options.value);
