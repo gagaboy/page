@@ -11,10 +11,14 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             items: [],
             fixItems: [],
             value:[],
+            metaDataObj:null,
             $textField:"text",
             $valueField:"value",
+            fetchUrl:null,
+            syncUrl:null,
             showAllCheck:false,
             $split: ",",
+            onSave:null,//param:customcolumn,value
             afterSave:null,//param:customcolumn,value
             beforeOpenDialog:null,
             afterOpenDialog:null,
@@ -29,31 +33,32 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 }
                 vm.value = values;
             },
-            allCheck: function (vid, element) {
+            allCheck: function (vid, element,checked) {
                 var vm = avalon.vmodels[vid];
                 if(vm){
-
-                }
-            },
-            allUnCheck: function (vid, element) {
-                var vm = avalon.vmodels[vid];
-                if(vm){
-
+                    //
                 }
             }
         },
         initialize: function (opts) {
             this.parent(this._formatOptions(opts));
+            this.formatOptions();
         },
         render:function(){
             var that = this;
             this.dialog = Page.create('dialog', {
                 width: "650px",
                 title:"自定义显示列",
+                content:"",
                 button: [{
                     name: "保存",
                     focus:true,
                     callback: function(dialog, window, param) {
+                        if(that.options.onSave) {
+                            that.options.onSave(that, that.options.value);
+                        }else{
+                            that.defaultSave(that, that.options.value);
+                        }
                         if(that.options.afterSave){
                             return that.options.afterSave(that,that.options.value);
                         }
@@ -62,9 +67,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 },{
                     name: "关闭",
                     focus:false,
-                    callback: function(dialog) {
-                        dialog.close();
-                    }
+                    callback: function(dialog) {}
                 }]
             });
             this.dialog.render();
@@ -86,6 +89,59 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             var tem = this.getTemplate();
             return tem;
         },
+        defaultSave:function(comp,value){
+            if(comp.options.metaDataObj){
+                if(this.options.syncUrl){
+                    var path = document.location.pathname;
+                    var contentPath = path.split("/")[1];
+                    this.options.syncUrl = "/"+contentPath+"/sys/common/customPage/ymzjdz/update.do";
+                }
+                var metaData = comp.options.metaDataObj;
+                var params = {};
+                params.userId = metaData.getUserId();//userId
+                params.roleId = metaData.getRoleId();//roleId
+                params.pageId = metaData.getPage();//pageId
+                params.componentId = this.getId;//componentId
+                params.setting = this.value();//列表显示列配置
+                var syncRes = Page.utils.syncAjax(this.options.syncUrl, params);
+                if(!syncRes){
+                    alert("保存失败！");
+                    return false;
+                }
+            }
+        },
+        formatOptions:function () {
+            var value = this.options.value;
+            if(value) {
+                var valueArr;
+                if (Object.prototype.toString.call(value) == "[object Array]") {
+                    valueArr = value;
+                } else {
+                    valueArr = value.split(this.options.$split);
+                    this.setAttr("value",valueArr);
+                }
+                this.setItemCheckByValue();
+            }
+            return true;
+        },
+        setItemCheckByValue:function(){
+            var items = this.getAttr("items");
+            var valueArr = this.getAttr("value");
+            var fixItems = this.getAttr("fixItems");
+            if (items&& items.length>0&&valueArr) {
+                for (var t = 0; t < items.length; t++) {
+                    var item = items[t];
+                    if (item) {
+                       if (valueArr.contains(item[this.options.$valueField])) {
+                           item.checked = true;
+                       }else if(fixItems&&fixItems.contains(item[this.options.$valueField])){
+                           item.checked = true;
+                           valueArr.push(item[this.options.$valueField]);
+                       }
+                    }
+                }
+            }
+        },
         _formatOptions: function (opts) {
             if(opts){
                 if(opts.items&&opts.items.length){
@@ -93,25 +149,14 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                         var item = opts.items[t];
                         if(item){
                             item.checked = false;
-                            if(opts.value) {
-                                var valueArr;
-                                if(Object.prototype.toString.call(vm.value) == "[object Array]") {
-                                    valueArr = vm.value;
-                                }else{
-                                    valueArr = vm.value.split(vm.$split);
-                                }
-                                for(var j=0; j<valueArr.length; j++) {
-                                    if(item[this.option.$valueField] == valueArr[j]) {
-                                        item.checked = true;
-                                        break;
-                                    }
-                                }
-                            }
                         }
                     }
                 }
             }
-            return opts
+            return opts;
+        },
+        _valueChange:function(){
+            this.setItemCheckByValue();
         }
     });
     CustomColumnsWidget.xtype = xtype;

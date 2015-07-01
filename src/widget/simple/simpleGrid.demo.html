@@ -9,7 +9,7 @@
     <link href="/page/lib/bootstrap/css/animate.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/style.css" rel="stylesheet">
     <link href="/page/src/css/page.css" rel="stylesheet">
-
+    <link href="/page/src/css/base.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green.png" rel="stylesheet">
     <link href="/page/lib/bootstrap/css/plugins/iCheck/green@2x.png" rel="stylesheet">
@@ -33,7 +33,7 @@
                         <a class="btn btn-primary" href="javascript:simpleGrid.checkRowsByDataId(['001','002'],true);">勾选前两行</a>
                         <a class="btn btn-primary" href="javascript:simpleGrid.checkRowsByDataId(['001','002'],false);">取消勾选前两行</a>
                         <a class="btn btn-primary" href="javascript:cancelAllChecked();">取消全部勾选</a>
-                        <a class="btn btn-primary" href="javascript:customTest();">自定义测试</a>
+                        <a class="btn btn-primary" href="javascript:customColumns();">自定义显示列</a>
                     </div>
                 </div>
 
@@ -73,55 +73,28 @@
             //multiCheck:false,
             //canSort:true,
             //allChecked:false,
-            //dataSetId: ds.getId(),
-            data:[
-                {
-                    "wid":"001",
-                    "name": "李肉肉",
-                    "sex": "002",
-                    "sexDisplay": "女",
-                    "birthDate": "1989-11-03",
-                    "rxDate": "2007-09-02",
-                    "isParty": "是",
-                    "className": "信息0701班",
-                    "checked":"false",
-                    "notes": ""
-                },
-                {
-                    "wid":"002",
-                    "name": "李肉肉",
-                    "sex": "002",
-                    "sexDisplay": "女",
-                    "birthDate": "1987-03-19",
-                    "rxDate": "2007-09-02",
-                    "isParty": "是",
-                    "isParty_DISPLAY":"shi",
-                    "className": "信息0701班",
-                    "checked":"true",
-                    "notes": ""
-                }],
-            //showPageDetail:true,
-            //showPageIndexInput:true,
-            //editComps:[],
+            dataSetId: ds.getId(),
+
+            editComps:[],
             columns:[
-                {title:"姓名",dataField:"name",width:"8%",orderType:"asc",disabledEdit:false},
-                {title:"出生年月",dataField:"birthDate",width:"12%",orderType:"desc",xtype:"switch",hidden:false},
-                {title:"入学时间",dataField:"rxDate",width:"12%",xtype:"datepicker"},
-                {title:"是否党员",dataField:"isParty",xtype:"combobox",showDisplay:true},
+                {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false},
+                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"input",hidden:false},
+                {title:"入学时间",dataField:"rxDate",xtype:"datepicker"},
+                {title:"是否党员",dataField:"isParty",xtype:"switch",showDisplay:true},
 
                 {title:"备注",dataField:"notes",hidden:true,sortDisabled:true}
             ],
-            /*opColumns:[{title:"自定义操作",
+            opColumns:[{title:"自定义操作",
                 width:'15%',
                 position:2,
-                template:"<a href='javascript:alert(1)'>Say Hi</a> | " +
-                "<a href='javascript:deleteActive();'>Delete This Row</a>"},
-                {title:"编辑",
+                template:"<a href='javascript:alert(1)'>位置随意</a> | " +
+                "<a href='javascript:deleteActive();'>Delete</a>"},
+                {title:"自定义列",
                     width:'12%',
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
-            //行编辑*/
-            canEdit:true,
+            //行编辑
+            //canEdit:true,
             dbClickToEditRow:true,
             //clickToEditField:false,
             //editMultiRow:false, //同时编辑多行
@@ -231,6 +204,50 @@
                 vm.setAttr("editComps",editComps);
             }
         }
+    }
+    function customColumns(){
+        var allColumns = [];
+        var checkColumns = [];
+        var colValues = [];
+        var fixColumns = [];
+        if(simpleGrid&&simpleGrid.options.columns){
+            var cols = simpleGrid.options.columns;
+            for(var s=0;s<cols.length;s++){
+                var col = cols[s];
+                var colObj = {};
+                colObj.text = col.title;
+                colObj.value = col.dataField;
+                allColumns.push(colObj);
+                if(!col.hidden){
+                    checkColumns.push(colObj);
+                    colValues.push(col.dataField);
+                }
+            }
+        }
+        var cusCols = Page.create("customColumns", {
+            items:allColumns,
+            value:colValues,
+            afterSave:function(cus){
+                alert(cus.options.value);
+                var checkedCols = cus.options.value;
+                if(checkedCols&&simpleGrid&&simpleGrid.options.columns){
+                    var cols =  simpleGrid.getAttr("columns");
+                    for(var s=0;s<cols.length;s++){
+                        var col = cols[s];
+                        if(checkedCols.contains(col.dataField)){
+                            //col.dataField;
+                            col.hidden = false;
+                        }else{
+                            col.hidden = true;
+                        }
+                    }
+                    //simpleGrid.setAttr("columns",cols);
+                    simpleGrid.setAttr("allColumns",simpleGrid._calAllColumns(cols,simpleGrid.options.opColumns),true);
+                }
+                return;
+            }
+        });
+        cusCols.render();
     }
 </script>
 </body>
