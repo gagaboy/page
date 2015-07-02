@@ -96,6 +96,7 @@
             //行编辑
             //canEdit:true,
             dbClickToEditRow:true,
+            multiSort:true,//复合排序
             //clickToEditField:false,
             //editMultiRow:false, //同时编辑多行
             genTest:function(rowData,col){
@@ -106,8 +107,8 @@
                         return "<div style='color:#F0F;' ms-if='1==1' ms-attr-onload='mm(rowdata)' ms-click='showSex(rowdata.sexDisplay,this)'><B>hi,帅{{rowdata.sexDisplay}}</B></div>";
                     }
                 }
-            },
-            beforeChangePageNo:function(pager,grid){
+            }
+            /*beforeChangePageNo:function(pager,grid){
                 //alert("要改页码了： "+pager.getAttr("pageIndex"));
             },
             beforeChangeOrder:function(){
@@ -121,7 +122,7 @@
 //                        }
 //                    }
 //                }
-            }
+            }*/
             //编辑单属性事件
         });
         simpleGrid.render();

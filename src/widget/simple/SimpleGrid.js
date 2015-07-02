@@ -28,6 +28,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             isMerge:false,
             tdSpans:{},
             canSort:true,   //是否可排序
+            multiSort:false,//复合排序
             showCheckbox:true,  //是否显示复选框
             multiCheck:true,  //是否多选
             checkboxWidth:"10%",    //复选框宽度
@@ -69,7 +70,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             afterSetData:null,  //设置数据后，参数：已经设置的数据datas
             beforeCheckRow:null,    //勾选行事件
             afterCheckRow:null, //勾选行后事件
-            beforeChangeOrder:null, //改变排序前事件
+            onChangeOrder:null, //改变排序前事件
             beforeChangePageNo:null,    //改变页码前事件
 
             //中间参数，不可初始化
@@ -134,11 +135,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
                 col.orderType = orderType;
-                if(vm.beforeChangeOrder){
-                    vm.beforeChangeOrder(vm,col,orderType);
+                if(vm.onChangeOrder){
+                    vm.onChangeOrder(vm,col,orderType);
                 }else{
                     var grid = Page.manager.components[vid];
-                    grid.reloadData();// 调用dataset接口进行查询
+                    grid.reloadData(col.dataField,orderType);// 调用dataset接口进行查询
                 }
             },
             getColTemplate:function(vid,row,col){
@@ -179,6 +180,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         pagination:null,//分页条对象
         initialize: function (opts) {
             this.parent(this._formatOptions(opts));
+        },
+        _beforeRender:function(){
+            if(this.options.canCustomCols){
+                //后台取数据，更新columns显示列
+            }
         },
         render:function(){
             this.parent();
@@ -224,7 +230,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 this.pagination.render();
             }
         },
-        reloadData:function(){
+        reloadData:function(colName,orderType){
             var ds = this._getDataSet();
             if(!ds) return;
             //配置分页信息
@@ -245,13 +251,17 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             var columns = this.getAttr("columns");
             if(columns&&columns.length>0){
                 var orders = "";
-                for(var k=0;k<columns.length;k++){
-                    if(columns[k].orderType){
-                        if(orders!=""){
-                            orders += ",";
+                if(this.options.multiSort){
+                    for(var k=0;k<columns.length;k++){
+                        if(columns[k].orderType){
+                            if(orders!=""){
+                                orders += ",";
+                            }
+                            orders += columns[k].orderType=="desc"?"-"+columns[k].dataField:"+"+columns[k].dataField;
                         }
-                        orders += columns[k].orderType=="desc"?"-"+columns[k].dataField:"+"+columns[k].dataField;
                     }
+                }else if(colName&&orderType){
+                    orders += (orderType=="desc"?"-"+colName:"+"+colName);
                 }
                 if(orders!=""){
                     fetchParams.order = orders;
@@ -876,7 +886,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }
             return arr;
         },
-        _defaultCustom:function(obj){
+        _defaultCustom:function(obj,metaData){
             if(obj.options.canCustomCols){
                 var allColumns = [];
                 var checkColumns = [];
@@ -899,6 +909,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var cusCols = Page.create("customColumns", {
                     items:allColumns,
                     value:colValues,
+                    metaDataObj:metaData,
+                    componentId:obj.getId(),
                     afterSave:function(cus){
                         alert(cus.options.value);
                         var checkedCols = cus.options.value;

@@ -54,10 +54,12 @@
     require(["../../src/Bootstrap"], function () {
         switchObj = Page.create("switch", {
             $parentId: 'switchCon',
-            checked:true,
-            show:true,
-            checkValue:"变态",// 默认为1,
-            unCheckValue:"神经"// 默认为0
+            //checked:true,
+            value:false,
+            //show:true,
+            status:"readonly",
+            checkValue:true,// 默认为1,
+            unCheckValue:false// 默认为0
         });
         switchObj.render();
 
