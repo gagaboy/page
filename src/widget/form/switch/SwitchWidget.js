@@ -26,10 +26,17 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             var inputObj = this.getParentElement().find(".e-switch")[0];
             if(inputObj){
                 var that = this;
-                this.switchObj = new Switchery(inputObj,this.options);
-                if(this.getAttr("checked")){
-                    this.switchObj.setPosition(true);
+                if(this.options.value!=undefined&&this.options.value==this.options.checkValue){
+                    this.setAttr("checked",true);
+                    this.setAttr("display",this.options.checkDisplay);
+                }else{
+                    if(this.getAttr("checked")){
+                        this.switchObj.setPosition(true);
+                    }else{
+                        this.setAttr("display",this.options.unCheckDisplay);
+                    }
                 }
+                this.switchObj = new Switchery(inputObj,this.options);
             }
         },
         getTemplate: function(){
