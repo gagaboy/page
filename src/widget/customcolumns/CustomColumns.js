@@ -12,6 +12,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             fixItems: [],
             value:[],
             metaDataObj:null,
+            componentId:null,
             $textField:"text",
             $valueField:"value",
             fetchUrl:null,
@@ -46,10 +47,18 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
         },
         render:function(){
             var that = this;
+            var tmp = this.getTemplate();
+            var e = jQuery("<div></div>");
+            if (!this.options._addWrapDiv) {
+                e = jQuery(tmp);
+            }else{
+                e.append(tmp);
+            }
+            e.addClass("page_" + this.getAttr('$xtype')).attr("ms-controller", this.getId());
             this.dialog = Page.create('dialog', {
                 width: "650px",
                 title:"自定义显示列",
-                content:"",
+                content:e[0],
                 button: [{
                     name: "保存",
                     focus:true,
@@ -71,16 +80,8 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 }]
             });
             this.dialog.render();
-            var tmp = this.getTemplate();
-            var e = jQuery("<div></div>");
-            if (!this.options._addWrapDiv) {
-                e = jQuery(tmp);
-            }else{
-                e.append(tmp);
-            }
-            e.addClass("page_" + this.getAttr('$xtype')).attr("ms-controller", this.getId());
             avalon.scan(e[0]);
-            this.dialog.content(e[0]);
+            //this.dialog.content(e[0]);
         },
         getTemplate: function () {
             return template;
@@ -101,7 +102,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 //params.userId = metaData.getUserId();//userId
                 //params.roleId = metaData.getRoleId();//roleId
                 params.pageId = metaData.getPage();//pageId
-                params.componentId = this.getId();//componentId
+                params.componentId = this.options.componentId;//componentId
                 params.setting = this.getAttr("value").$model;//列表显示列配置
                 var syncRes = Page.utils.syncAjax(this.options.syncUrl, params);
                 if(!syncRes){
