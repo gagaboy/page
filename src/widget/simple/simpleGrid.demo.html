@@ -74,7 +74,7 @@
             //canSort:true,
             //allChecked:false,
             dataSetId: ds.getId(),
-
+            canCustomCols:true,
             editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false},
@@ -206,48 +206,7 @@
         }
     }
     function customColumns(){
-        var allColumns = [];
-        var checkColumns = [];
-        var colValues = [];
-        var fixColumns = [];
-        if(simpleGrid&&simpleGrid.options.columns){
-            var cols = simpleGrid.options.columns;
-            for(var s=0;s<cols.length;s++){
-                var col = cols[s];
-                var colObj = {};
-                colObj.text = col.title;
-                colObj.value = col.dataField;
-                allColumns.push(colObj);
-                if(!col.hidden){
-                    checkColumns.push(colObj);
-                    colValues.push(col.dataField);
-                }
-            }
-        }
-        var cusCols = Page.create("customColumns", {
-            items:allColumns,
-            value:colValues,
-            afterSave:function(cus){
-                alert(cus.options.value);
-                var checkedCols = cus.options.value;
-                if(checkedCols&&simpleGrid&&simpleGrid.options.columns){
-                    var cols =  simpleGrid.getAttr("columns");
-                    for(var s=0;s<cols.length;s++){
-                        var col = cols[s];
-                        if(checkedCols.contains(col.dataField)){
-                            //col.dataField;
-                            col.hidden = false;
-                        }else{
-                            col.hidden = true;
-                        }
-                    }
-                    //simpleGrid.setAttr("columns",cols);
-                    simpleGrid.setAttr("allColumns",simpleGrid._calAllColumns(cols,simpleGrid.options.opColumns),true);
-                }
-                return;
-            }
-        });
-        cusCols.render();
+        simpleGrid.options.customColFunc(simpleGrid);
     }
 </script>
 </body>

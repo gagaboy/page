@@ -24,7 +24,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                          */
             data: [],    //静态数据
             dataSetId: null,    //数据集ID，设置了dataSetId则data无效
-            //queryParams:null, //默认查询条件，目前不需要，请设置到ds中
             idField:"WID",  //主键属性
             isMerge:false,
             tdSpans:{},
@@ -60,6 +59,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editMultiRow:true, //同时编辑多行
             editRowFunc:null,   //编辑行事件
             editFieldFunc:null, //编辑单属性事件
+            //自定义显示列
+            canCustomCols:false,
+            fixedCols:[],
+            customColFunc:null,
             //事件
             onClickRow:null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
             beforeSetData:null, //设置数据前，参数：即将设置的数据datas
@@ -693,10 +696,17 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         _formatOptions:function(opts){
             opts = opts||{};
             var d = opts.data||[];
-            //是否默认全部勾选
+            //是否合并
             if(opts.isMerge){
                 opts.canEdit = false;
             }
+            if(opts.canCustomCols){
+                opts.canEdit = false;
+            }
+            if(!opts.customColFunc){
+                opts.customColFunc = this._defaultCustom;
+            }
+            //是否默认全部勾选
             if(opts.allChecked){
                 for (var i = 0; i < d.length; i++) {
                     if (d[i]) {
@@ -719,6 +729,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
             }
             opts.allColumns = this._calAllColumns(opts.columns,opts.opColumns);
+
             return opts;
         },
         _columnsChange:function(){
@@ -864,6 +875,52 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 return nArr;
             }
             return arr;
+        },
+        _defaultCustom:function(obj){
+            if(obj.options.canCustomCols){
+                var allColumns = [];
+                var checkColumns = [];
+                var colValues = [];
+                var fixColumns = [];
+                if(obj.options.columns){
+                    var cols = obj.options.columns;
+                    for(var s=0;s<cols.length;s++){
+                        var col = cols[s];
+                        var colObj = {};
+                        colObj.text = col.title;
+                        colObj.value = col.dataField;
+                        allColumns.push(colObj);
+                        if(!col.hidden){
+                            checkColumns.push(colObj);
+                            colValues.push(col.dataField);
+                        }
+                    }
+                }
+                var cusCols = Page.create("customColumns", {
+                    items:allColumns,
+                    value:colValues,
+                    afterSave:function(cus){
+                        alert(cus.options.value);
+                        var checkedCols = cus.options.value;
+                        if(checkedCols&&obj.options.columns){
+                            var cols =  obj.getAttr("columns");
+                            for(var s=0;s<cols.length;s++){
+                                var col = cols[s];
+                                if(checkedCols.contains(col.dataField)){
+                                    //col.dataField;
+                                    col.hidden = false;
+                                }else{
+                                    col.hidden = true;
+                                }
+                            }
+                            //simpleGrid.setAttr("columns",cols);
+                            obj.setAttr("allColumns",obj._calAllColumns(cols,obj.options.opColumns),true);
+                        }
+                        return;
+                    }
+                });
+                cusCols.render();
+            }
         }
     });
     SimpleGridWidget.xtype = xtype;

@@ -91,18 +91,18 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
         },
         defaultSave:function(comp,value){
             if(comp.options.metaDataObj){
-                if(this.options.syncUrl){
+                if(!this.options.syncUrl){
                     var path = document.location.pathname;
                     var contentPath = path.split("/")[1];
                     this.options.syncUrl = "/"+contentPath+"/sys/common/customPage/ymzjdz/update.do";
                 }
                 var metaData = comp.options.metaDataObj;
                 var params = {};
-                params.userId = metaData.getUserId();//userId
-                params.roleId = metaData.getRoleId();//roleId
+                //params.userId = metaData.getUserId();//userId
+                //params.roleId = metaData.getRoleId();//roleId
                 params.pageId = metaData.getPage();//pageId
-                params.componentId = this.getId;//componentId
-                params.setting = this.value();//列表显示列配置
+                params.componentId = this.getId();//componentId
+                params.setting = this.getAttr("value").$model;//列表显示列配置
                 var syncRes = Page.utils.syncAjax(this.options.syncUrl, params);
                 if(!syncRes){
                     alert("保存失败！");
