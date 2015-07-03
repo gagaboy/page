@@ -38,10 +38,18 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 }
                 vm.value = values;
             },
-            allCheck: function (vid, element,checked) {
+            allCheck: function (vid,checked) {
                 var vm = avalon.vmodels[vid];
                 if(vm){
-                    //
+                    var fixItems = vm.fixItems||[];
+                    for (var i = 0; i < vm.items.length; i++) {
+                        var item = vm.items[i];
+                        if(!checked&&fixItems.contains(item[vm.$valueField])){
+                            item.checked = true;
+                        }else{
+                            item.checked = checked||false;
+                        }
+                    }
                 }
             }
         },
@@ -110,7 +118,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 params.setting = this.getAttr("value").$model;//列表显示列配置
                 var syncRes = Page.utils.syncAjax(this.options.syncUrl, params);
                 if(!syncRes){
-                    alert("保存失败！");
+                    Page.dialog.alert("保存到服务器失败！");
                     return false;
                 }
             }

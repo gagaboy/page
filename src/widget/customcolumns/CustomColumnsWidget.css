@@ -1,3 +1,18 @@
 .aui_content{
     padding:0px;
 }
+.divbordertop{
+    border-top: 1px solid #e7eaec;
+}
+.divborderleft{
+    border-left: 1px solid #e7eaec;
+}
+.divborderright{
+    border-right: 1px solid #e7eaec;
+}
+.divborderbottom{
+    border-bottom: 1px solid #e7eaec;
+}
+.oddback{
+    background-color:#f9f9f9;
+}

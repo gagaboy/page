@@ -64,6 +64,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             canCustomCols:false,
             fixedCols:[],
             customColFunc:null,
+            showCustomAllCheck:false,
+            fetchUrl:null,
+            metaDataObj:null,
             //事件
             onClickRow:null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
             beforeSetData:null, //设置数据前，参数：即将设置的数据datas
@@ -182,8 +185,47 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             this.parent(this._formatOptions(opts));
         },
         _beforeRender:function(){
-            if(this.options.canCustomCols){
+            var that = this;
+            if(this.options.canCustomCols&&this.options.metaDataObj){
                 //后台取数据，更新columns显示列
+                if(!this.options.fetchUrl){
+                    var path = document.location.pathname;
+                    var contentPath = path.split("/")[1];
+                    this.options.fetchUrl = "/"+contentPath+"/sys/common/customPage/ymzjdz/select.do";
+                }
+                var metaData = this.options.metaDataObj;
+                var params = {};
+                params.PAGEID = metaData.getPage();//pageId
+                params.COMPONENTID = this.getId();//componentId
+                var syncRes = Page.utils.syncAjax(this.options.fetchUrl, params);
+                if(syncRes&&syncRes.result&&syncRes.result.datas
+                    &&syncRes.result.datas.select.rows
+                    &&syncRes.result.datas.select.rows.length>0){
+                    var rowData = syncRes.result.datas.select.rows[0];
+                    var setting = rowData.SETTING;
+                    if(setting){
+                        try{
+                            var settingObj = JSON.parse(setting);
+                            if(settingObj.columns&&settingObj.columns.length>0){
+                                var columns = that.options.columns;
+                                var settingCols = settingObj.columns;
+                                if(columns&&columns.length>0){
+                                    for (var i = 0; i < columns.length; i++) {
+                                        var coli = columns[i];
+                                        if(coli&&settingCols.contains(coli.dataField)){
+                                            coli.hidden = false;
+                                        }else if(coli){
+                                            coli.hidden = true;
+                                        }
+                                    }
+                                    that.setAttr("allColumns",that._calAllColumns(columns,that.options.opColumns),true);
+                                }
+                            }
+                        }catch(e){
+                            return false;
+                        }
+                    }
+                }
             }
         },
         render:function(){
@@ -229,6 +271,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 });
                 this.pagination.render();
             }
+            this.customColFunc = this.options.customColFunc;
         },
         reloadData:function(colName,orderType){
             var ds = this._getDataSet();
@@ -894,8 +937,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }
             return arr;
         },
-        _defaultCustom:function(obj,metaData){
-            if(obj.options.canCustomCols){
+        _defaultCustom:function(obj){
+            if(obj.options.canCustomCols&&obj.options.metaDataObj){
                 var allColumns = [];
                 var checkColumns = [];
                 var colValues = [];
@@ -917,11 +960,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var cusCols = Page.create("customColumns", {
                     items:allColumns,
                     value:colValues,
-                    metaDataObj:metaData,
+                    metaDataObj:obj.options.metaDataObj,
+                    showAllCheck:obj.options.showCustomAllCheck,
                     fixItems:obj.options.fixedCols,
                     componentId:obj.getId(),
                     afterSave:function(cus){
-                        alert(cus.options.value);
                         var checkedCols = cus.options.value;
                         if(checkedCols&&obj.options.columns){
                             var cols =  obj.getAttr("columns");

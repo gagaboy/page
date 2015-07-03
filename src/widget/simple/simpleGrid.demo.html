@@ -62,7 +62,7 @@
             syncUrl: '',
             model:{mainAlias:'ds1'}
         });
-
+        var metaData = null;
         simpleGrid = Page.create("simpleGrid", {
             $parentId: 'simpleGrid',
             idField:"wid",
@@ -74,9 +74,12 @@
             //canSort:true,
             //allChecked:false,
             dataSetId: ds.getId(),
+
             canCustomCols:true,
-            editComps:[],
+            metaDataObj:metaData,
             fixedCols:['name','birthDate'],
+
+            editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false},
                 {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"input",hidden:false},
