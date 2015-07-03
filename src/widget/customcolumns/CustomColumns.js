@@ -25,7 +25,11 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             afterOpenDialog:null,
             itemCheck: function (vid,el) {
                 var vm = avalon.vmodels[vid];
-                el.checked = !el.checked;
+                if(vm.fixItems&&vm.fixItems.contains(el[vm.$valueField])){
+                    el.checked = true;
+                }else{
+                    el.checked = !el.checked;
+                }
                 var values = [];
                 for (var i = 0; i < vm.items.length; i++) {
                     if (vm.items[i].checked) {

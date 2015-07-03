@@ -706,6 +706,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         _formatOptions:function(opts){
             opts = opts||{};
             var d = opts.data||[];
+            var columns = opts.columns||[];
             //是否合并
             if(opts.isMerge){
                 opts.canEdit = false;
@@ -738,6 +739,13 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
             }
+            if(columns&&columns.length>0){
+                for (var i = 0; i < columns.length; i++) {
+                    var coli = columns[i];
+                    coli.hidden = coli.hidden||false;
+                }
+            }
+            opts.columns = columns;
             opts.allColumns = this._calAllColumns(opts.columns,opts.opColumns);
 
             return opts;
@@ -910,6 +918,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     items:allColumns,
                     value:colValues,
                     metaDataObj:metaData,
+                    fixItems:obj.options.fixedCols,
                     componentId:obj.getId(),
                     afterSave:function(cus){
                         alert(cus.options.value);
@@ -925,7 +934,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                     col.hidden = true;
                                 }
                             }
-                            //simpleGrid.setAttr("columns",cols);
+                            //obj.setAttr("columns",cols);
                             obj.setAttr("allColumns",obj._calAllColumns(cols,obj.options.opColumns),true);
                         }
                         return;
