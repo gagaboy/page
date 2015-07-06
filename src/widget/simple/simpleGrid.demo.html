@@ -17,6 +17,11 @@
 
     <!-- Switchery -->
     <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/switchery/switchery.js"></script>
+    <style>
+        .form-horizontal-table .form-text {
+            text-align: left;
+        }
+    </style>
 </head>
 </head>
 <body>
@@ -75,7 +80,7 @@
             //allChecked:false,
             dataSetId: ds.getId(),
 
-            canCustomCols:true,
+            //canCustomCols:true,
             metaDataObj:metaData,
             fixedCols:['name','birthDate'],
 
@@ -98,7 +103,7 @@
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
-            //canEdit:true,
+            canEdit:true,
             dbClickToEditRow:true,
             multiSort:true,//复合排序
             //clickToEditField:false,
