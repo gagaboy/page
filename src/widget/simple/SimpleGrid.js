@@ -197,7 +197,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 var metaData = this.options.metaDataObj;
                 var params = {};
-                params.PAGEID = metaData.getFormId();//pageId
+                params.PAGEID = metaData.geFormId();//pageId
                 params.COMPONENTID = this.getId();//componentId
                 var syncRes = Page.utils.syncAjax(this.options.fetchUrl, params);
                 if(syncRes&&syncRes.result&&syncRes.result.datas
