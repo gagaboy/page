@@ -21,13 +21,22 @@
                     <div ms-if="!col.sortDisabled&&!col.orderType" ms-click="sortByCol(vid,col,'asc')">{{col.title}} <div class="fa fa-unsorted"></div></div>
                     <div ms-if="col.sortDisabled"> {{col.title}} </div>
                 </div>
+                <div ms-if="($index==allColumns.length-1)&&!opColumnMap['op_end']&&canCustomCols"
+                     class="simpleGrid_customSettingIcon simpleGrid_customSettingIcon_margin">
+                    <i class="fa fa-cogs fa-spin" ms-click="customColFunc(vid)"></i>
+                </div>
             </th>
             <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-attr-width="opcolumn.width">
-                {{opcolumn.title}}
+                <div>
+                    {{opcolumn.title}}
+                    <div ms-if="canCustomCols" class="simpleGrid_customSettingIcon">
+                        <i class="fa fa-cogs fa-spin" ms-click="customColFunc(vid)"></i>
+                    </div>
+                </div>
             </th>
         </tr>
         </thead>
-        <tr ms-repeat-rowdata="data" ms-attr-id="rowdata._uuid" ms-click="activeRow(vid,rowdata,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,rowdata,this):''">
+        <tr ms-repeat-rowdata="data" ms-attr-id="rowdata._uuid" ms-mouseover="mouseoverToActive?activeRow(vid,rowdata,this):''" ms-click="activeRow(vid,rowdata,this)" ms-on-dblclick="canEdit&&dbClickToEditRow?editRow(vid,rowdata,this):''">
             <td ms-if="showCheckbox">
                 <div class="icheckbox_square-green"
                      ms-class-checked="rowdata['checked']" ms-click="checkRow(vid,rowdata)">
