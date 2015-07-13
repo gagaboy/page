@@ -82,6 +82,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editCompMap:{},
             allColumns:[],
             activedRow:null,    //激活的行
+            mouseoverToActive:false,
+            clickToActive:true,
             editComp:null,  //行编辑对象
             activedRowDom:null, //行编辑Dom
             allClick: function (vid, element) {
@@ -195,7 +197,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 var metaData = this.options.metaDataObj;
                 var params = {};
-                params.PAGEID = metaData.getPage();//pageId
+                params.PAGEID = metaData.geFormId();//pageId
                 params.COMPONENTID = this.getId();//componentId
                 var syncRes = Page.utils.syncAjax(this.options.fetchUrl, params);
                 if(syncRes&&syncRes.result&&syncRes.result.datas
@@ -937,8 +939,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }
             return arr;
         },
-        _defaultCustom:function(obj){
-            if(obj.options.canCustomCols&&obj.options.metaDataObj){
+        _defaultCustom:function(objId){
+            var obj = null;
+            if(objId&&typeof(objId)=='string'){
+                obj = Page.manager.components[objId];
+            }else{
+                obj = objId;
+            }
+            if(obj&&obj.options.canCustomCols&&obj.options.metaDataObj){
                 var allColumns = [];
                 var checkColumns = [];
                 var colValues = [];
