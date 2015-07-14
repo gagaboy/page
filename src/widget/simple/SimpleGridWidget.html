@@ -1,4 +1,5 @@
 <div ms-visible="show" style="vertical-align: middle;">
+    <div class="simpleGrid_tableCon">
     <table ms-attr-class="tableClass">
         <thead>
         <tr>
@@ -8,10 +9,10 @@
                 </div>
             </th>
             <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']"
-                ms-attr-width="opcolumn.width">
+                ms-css-width="opcolumn.width">
                 {{opcolumn.title}}
             </th>
-            <th ms-repeat-col="allColumns" ms-attr-width="col.width">
+            <th ms-repeat-col="allColumns" ms-css-width="col.width">
                 <div ms-if="col.isOpColumn||!canSort">
                     {{col.title}}
                 </div>
@@ -26,7 +27,7 @@
                     <i class="fa fa-cogs fa-spin" ms-click="customColFunc(vid)"></i>
                 </div>
             </th>
-            <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-attr-width="opcolumn.width">
+            <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-css-width="opcolumn.width">
                 <div>
                     {{opcolumn.title}}
                     <div ms-if="canCustomCols" class="simpleGrid_customSettingIcon">
@@ -77,6 +78,7 @@
             <td colspan="100"><div class="simpleGrid_noDataTip">{{noDataTip}}</div></td>
         </tr>
     </table>
+    </div>
     <nav ms-if="usePager">
         <div ms-attr-id="'pager_'+vid"></div>
     </nav>

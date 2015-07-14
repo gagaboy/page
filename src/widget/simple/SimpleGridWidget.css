@@ -11,3 +11,7 @@
 .simpleGrid_customSettingIcon_margin{
     margin-top:-15px;
 }
+.simpleGrid_tableCon{
+    overflow-x: auto;
+    overflow-y: hidden;
+}
