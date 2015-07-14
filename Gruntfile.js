@@ -1,5 +1,6 @@
 /*global module*/
 module.exports = function(grunt) {
+    var jsConcatList = grunt.file.readJSON('jsConcatList.json');
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         requirejs: {
@@ -39,14 +40,29 @@ module.exports = function(grunt) {
                 files: {//任务二：不添加banner
                     'dist/page-build-min.js': 'dist/page-build.js'
                 }
+            },
+            dependence:{
+                files:{
+                    'dist/dependence-min.js':'dist/dependence.js'
+                }
             }
         },
+
         clean:["!dist/*.ignore" ,'dist/*.js','dist/*.map']
     });
 
+    var concatTask = {};
+    var concatExtJs = {};
+    concatExtJs.src = jsConcatList["extJsList"];
+    concatExtJs.dest = 'dist/dependence.js';
+    concatTask["concatExtJs"] = concatExtJs;
+    grunt.config("concat", concatTask);
+
     require('load-grunt-tasks')(grunt);
     // 注册任务
-    grunt.registerTask('default', ['clean','requirejs:build','uglify:builda']);
+    grunt.registerTask('default', ['clean','requirejs:build','uglify:builda','concat:concatExtJs','uglify:dependence']);
     //不支持Source Map
     grunt.registerTask('buildNoMap', ['clean','requirejs','uglify:buildb']);
+    // 合并所有外部依赖的组件js
+    grunt.registerTask('concatExtJs', ['concat:concatExtJs','uglify:dependence']);
 };

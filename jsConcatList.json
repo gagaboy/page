@@ -1,0 +1,19 @@
+{"extJsList":[
+    "lib/artdialog/artDialog.source.js",
+    "lib/artdialog/iframeTools.source.js",
+    "lib/My97DatePicker/WdatePicker.js",
+    "lib/zTree_v3/js/jquery.ztree.all-3.5.js",
+    "lib/kindeditor-4.1.10/kindeditor-all.js",
+    "lib/pace/pace.js",
+    "lib/kendoui/js/kendo.core.js",
+    "lib/kendoui/js/kendo.userevents.js",
+    "lib/kendoui/js/kendo.draganddrop.js",
+    "lib/kendoui/js/kendo.popup.js",
+    "lib/kendoui/js/kendo.progressbar.js",
+    "lib/kendoui/js/kendo.maskedtextbox.js",
+    "lib/kendoui/js/kendo.slider.js",
+    "lib/kendoui/js/kendo.tooltip.js",
+    "lib/mmPromise.js",
+    "thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/nestable/jquery.nestable.js",
+    "thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/switchery/switchery.js"
+]}
