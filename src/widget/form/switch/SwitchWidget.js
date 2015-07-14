@@ -50,10 +50,6 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
         getTemplate: function(){
             return template;
         },
-        destroy:function(){
-            this.switchObj.destroy()
-            this.parent();
-        },
         show:function(){
             this.switchObj.show();
         },
