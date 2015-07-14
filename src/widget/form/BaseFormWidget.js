@@ -273,10 +273,10 @@ define(['../Base', 'text!./BaseFormWidget-form.html', 'text!./BaseFormWidget-inl
         },
 
         destroy: function () {
-            this.parent();
             if (this.dataBind) {
                 this.dataBind.destroy();
             }
+            this.parent();
         },
         _showMessageChange:function(){
             this._errorMessageChange();

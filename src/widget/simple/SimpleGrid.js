@@ -546,37 +546,36 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                             if(col.dataField&&col.xtype&&!col.isOpColumn&&!col.hidden){
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
-                                if(!$("#con_"+fieldName+"_"+data[this.options._idField])||!Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]){
-                                    (function(that,xtype,keyField,fieldName,data,rowEditComps){
-                                        var editParams = col.editParams?col.editParams.$model:{};
-                                        var baseParams = {
-                                            $parentId: 'con_'+fieldName+"_"+data[that.options._idField],
-                                            $id:'comp_'+fieldName+"_"+data[that.options._idField],
-                                            parentTpl:"inline",
-                                            value: data[fieldName]||"",
-                                            showLabel: false,
-                                            bindField:fieldName,
-                                            disabledEdit:col.disabledEdit||col.readonly,
-                                            validationRules:col.validationRules,
-                                            showErrorMessage:true,
-                                            bind:that._getDataSet()?that._getDataValueIdByDataId(data[keyField]).getId()+"."+fieldName:null,
-                                            status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
-                                        };
-                                        var allParams = jQuery.extend(baseParams,editParams);
-                                        var editField = Page.create(xtype,allParams);
-
-                                        editField.bindField = fieldName;
-                                        //在属性中写displayChange无效，暂时用以下写法代替，TODO
-                                        editField._displayChange = function(){
-                                            data[fieldName] = editField.getValue();
-                                        };
-                                        rowEditComps.push(editField);
-
-                                        editField.render();
-                                    }(this,xtype,this.options._idField,fieldName,data,rowEditComps));
-                                }else{
-                                    rowEditComps.push(Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]);
+                                if(Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]) {
+                                    Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]].destroy();
                                 }
+                                (function(that,xtype,keyField,fieldName,data,rowEditComps){
+                                    var editParams = col.editParams?col.editParams.$model:{};
+                                    var baseParams = {
+                                        $parentId: 'con_'+fieldName+"_"+data[that.options._idField],
+                                        $id:'comp_'+fieldName+"_"+data[that.options._idField],
+                                        parentTpl:"inline",
+                                        value: data[fieldName]||"",
+                                        showLabel: false,
+                                        bindField:fieldName,
+                                        disabledEdit:col.disabledEdit||col.readonly,
+                                        validationRules:col.validationRules,
+                                        showErrorMessage:true,
+                                        bind:that._getDataSet()?that._getDataValueIdByDataId(data[keyField]).getId()+"."+fieldName:null,
+                                        status:(data.state=='edit'&&!col.disabledEdit)?"edit":"readonly"
+                                    };
+                                    var allParams = jQuery.extend(baseParams,editParams);
+                                    var editField = Page.create(xtype,allParams);
+
+                                    editField.bindField = fieldName;
+                                    //在属性中写displayChange无效，暂时用以下写法代替，TODO
+                                    editField._displayChange = function(){
+                                        data[fieldName] = editField.getValue();
+                                    };
+                                    rowEditComps.push(editField);
+
+                                    editField.render();
+                                }(this,xtype,this.options._idField,fieldName,data,rowEditComps));
                             }
                         }
                         editCompMap[data[this.options._idField]] = rowEditComps;
