@@ -5,8 +5,8 @@
                 {{pageIndex}}/{{totalPage}}页,从{{recordBegin}}到{{recordTo}},共{{totalNum}}条记录.
                 <div ms-if="showPageSizeInput" style="display: inline-block;">
                     每页
-                    <div style="display: inline-block;">
-                        <input style="width:50px;height:25px;" class="form-control input-sm" aria-controls="editable"
+                    <div style="display: inline-block;vertical-align: middle;">
+                        <input style="width:50px;height:25px;padding:0px;" class="form-control input-sm" aria-controls="editable"
                                ms-attr-value="pageSize" ms-on-keypress="inputPageSize(event,vid,this)">
                     </div>
                     条.
