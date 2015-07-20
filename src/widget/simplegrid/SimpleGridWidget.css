@@ -32,3 +32,6 @@
 .simpleGrid_opColumnCon{
     vertical-align:middle;
 }
+.simpleGrid_customColCon{
+    background-color: transparent !important;
+}

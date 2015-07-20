@@ -1,6 +1,21 @@
 /**
- * Created by qianqianyi on 15/5/8.
- *
+ *  Created by hhxu on 15/5/8.
+ *  属性说明
+ *  1. columns:数组，列信息
+ *      每列可配置属性如下：
+     *｛title:"性别",
+     * dataField:"sex",
+     * width:"4%",
+     * showDisplay:true,//showDisplay：显示Display字段，
+     * disabledEdit:true,
+     * sortDisabled:true,
+     * xtype:"combobox",
+     * editParams:编辑组件属性
+     * isOpColumn:true,//isOpColumn，自定义显示，
+     * template:""} //template：自定义显示的内容（html，可以是avalon片段），内容中可通过avalon访问grid信息，如，rowdata，行数据，col，列模型
+    2. opColumns:数组， 操作列信息
+     * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
+     * position支持值为front、end和具体数字
  */
 define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'css!./SimpleGridWidget.css'], function (Base,Constant,template) {
     var xtype = "simpleGrid";
@@ -8,31 +23,23 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         Extends: Base,
         options: {
             $xtype: xtype,
+            /** ====================基础配置信息====================== */
             $tableClass:"table table-bordered table-hover table-striped",
             width:"100%",
-            columns: [],/**
-                         * 列信息,每列可配置属性如下：
-                         *｛title:"性别",
-                         * dataField:"sex",
-                         * width:"4%",
-                         * showDisplay:true,//showDisplay：显示Display字段，
-                         * disabledEdit:true,
-                         * sortDisabled:true,
-                         * xtype:"combobox",
-                         * editParams:编辑组件属性
-                         * isOpColumn:true,//isOpColumn，自定义显示，
-                         * template:""} //template：自定义显示的内容（html，可以是avalon片段），内容中可通过avalon访问grid信息，如，rowdata，行数据，col，列模型
-                         */
+            columns: [],//列信息
             data: [],    //静态数据
             $dataSetId: null,    //数据集ID，设置了dataSetId则data无效
             $idField:"WID",  //主键属性
             $isMerge:false,
             $canSort:true,   //是否可排序
             $multiSort:false,//复合排序
+            $showIndex:true,  //是否显示序号
             $showCheckbox:true,  //是否显示复选框
             $multiCheck:true,  //是否多选
             allChecked: false,  //设置为true，则默认全部选中
-            //分页信息
+            $mouseoverToActive:false,//鼠标经过时激活行，通过getActiveRow获取
+            $clickToActive:true,//点击激活行，通过getActiveRow获取
+            /** ====================分页配置信息====================== */
             $usePager:true,  //是否分页
             pageIndex:1,    //默认当前页
             pageSize:15,    //默认每页条数
@@ -48,46 +55,43 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             $showTipWhenNull:false,//没有数据时显示分页提示
             $hidePagerWhenNull:true,//没有数据时隐藏提示
             $noDataTip:"暂无数据",//无数据时分页区的提示信息
-            //操作列
-            opColumns:[],/**操作列信息
-                         * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
-                         * position支持值为front、end和具体数字
-                         */
-            //行编辑
+            /** ====================操作列与扩展====================== */
+            opColumns:[],   /**操作列信息,
+                             * 每列配置属性{title:"操作",width:'10%',position:2,template:''}
+                             * position支持值为front、end和具体数字
+                             */
+            /** ====================行编辑====================== */
             $canEdit:false,  //是否可编辑
             $dbClickToEditRow:false, //双击编辑行
             $clickToEditField:false, //双击编辑行
             $editMultiRow:true, //同时编辑多行
             editRowFunc:null,   //编辑行事件
             editFieldFunc:null, //编辑单属性事件
-            //自定义显示列
+            /** ====================自定义显示列====================== */
             $canCustomCols:false,
             fixedCols:[],
             customColFunc:null,
             $showCustomAllCheck:false,
             $fetchUrl:null,
             $metaDataObj:null,
-            //事件
+            /** ====================事件====================== */
             clickRowFunc:null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
             dbClickRowFunc:null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
+            clickFieldFunc:null,//点击属性回调
             beforeSetData:null, //设置数据前，参数：即将设置的数据datas
             afterSetData:null,  //设置数据后，参数：已经设置的数据datas
-            beforeCheckRow:null,    //勾选行事件
+            beforeCheckRow:null, //勾选行事件
             afterCheckRow:null, //勾选行后事件
             changeOrderFunc:null, //改变排序前事件
-            beforeChangePageNo:null,    //改变页码前事件
+            beforeChangePageNo:null,//改变页码前事件
+            /** ====================中间参数，不提供使用者初始化====================== */
 
-            //中间参数，不可初始化
-            _idField:"_uuid",
-            opColumnMap:{},
-            editCompMap:{},
-            allColumns:[],
-            tdSpans:{},
-            activedRow:null,    //激活的行
-            editFieldNow:null,
-            $mouseoverToActive:false,
-            $clickToActive:true,
-            editComp:null,  //行编辑对象
+            editFieldNow:null,//当前编辑的属性
+            opColumnMap:{},//操作列
+            editCompMap:{},//编辑组件
+            allColumns:[],//全部列（columns+opColumns）
+            tdSpans:{},//跨列数（isMerge为true时）
+            activedRow:null,//激活的行
             activedRowDom:null, //行编辑Dom
             allClick: function (vid, element) {
                 var vm = avalon.vmodels[vid];
@@ -114,6 +118,15 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 vm.activedRowDom = rowObj;
                 if(vm.clickRowFunc){
                     vm.clickRowFunc(vm,row,rowObj);
+                }
+            },
+            clickField:function(vid,row,col,tdDom){
+                var vm = avalon.vmodels[vid];
+                if(vm.clickFieldFunc){
+                    vm.clickFieldFunc(vm,row,tdDom);
+                }
+                if(vm.$canEdit&&!col.disabledEdit&&vm.$clickToEditField&&!vm.$dbClickToEditRow){
+                    vm.editField(vid,row,col.dataField,col.xtype,tdDom);
                 }
             },
             activeRow:function(vid,row,rowObj){
@@ -195,17 +208,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             resetEditState:function(vid){
                 var grid = Page.manager.components[vid];
                 grid._resetDataState();
-            },
-            deleteRow: function (vid,row,real) {
-                //删除行，remove掉
-                var vm = avalon.vmodels[vid];
-                var grid = Page.manager.components[vid];
-                if(grid){
-                    grid.deleteRow(row,real);
-                }
             }
         },
         pagination:null,//分页条对象
+        _idField:"_uuid",//前端唯一索引字段
         initialize: function (opts) {
             this.parent(this._formatOptions(opts));
         },
@@ -275,6 +281,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     showPageDetail: this.getAttr("$showPageDetail"),//显示分页详情
                     showTipWhenNull: this.getAttr("$showTipWhenNull"),//无数据时显示提示信息
                     hidePagerWhenNull:this.getAttr("$hidePagerWhenNull"),
+                    showPageBeforeAfterCount:this.getAttr("$showPageBeforeAfterCount"),
                     noDataTip: this.getAttr("$noDataTip"),//无数据时显示提示信息
 
                     pageChangeEvent: function (pager) {
@@ -283,7 +290,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         }
                         that.reloadData()// 调用dataset接口进行查询
                     },
-                    //TODO 以下未生效
                     totalNumChange:function(totalNum){
                         that.setAttr("totalNum",totalNum);//参数为分页对象,grid对象
                     },
@@ -304,7 +310,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //配置分页信息
             if(this.getAttr("$usePager")){
                 ds.setAttr(Constant.pageNo,this.pagination?this.pagination.getAttr("pageIndex"):this.getAttr("pageIndex"));
-                //到底叫什么名字？待删除
                 ds.setAttr("pageNo",this.pagination?this.pagination.getAttr("pageIndex"):this.getAttr("pageIndex"));
                 ds.setAttr(Constant.pageSize,this.pagination?this.pagination.getAttr("pageSize"):this.getAttr("pageSize"));
             }
@@ -346,13 +351,11 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 if(that.pagination){
                     that.pagination.setAttr("totalNum",ds.getTotalSize());
-
                     that.setAttr("totalNum",that.pagination.getAttr("totalNum"),true);
                     that.setAttr("pageSize",that.pagination.getAttr("pageSize"),true);
                     that.setAttr("pageIndex",that.pagination.getAttr("pageIndex"),true);
                 }
                 that.setAttr("data",that._formatDatas(newDatas));
-
             });
         },
         /**
@@ -374,14 +377,33 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         getActiveRow:function(){
             return this.getAttr("activedRow");
         },
+        /**
+         * 获取当前激活的行，鼠标点击的行
+         */
         getActiveRowDom:function(){
             return this.getAttr("activedRowDom");
         },
+        /**
+         * 获取全部数据，删除的数据没有
+         * 通过dataSet获取的数据有删除的数据，状态为delete
+         */
         getData:function(){
             return this.getAttr("data").$model;
         },
         /**
-         * 选中某些行
+         * 根据索引号获取数据
+         */
+        getDataByIndex:function(index){
+            if(index){
+                var datas = this.getAttr("data");
+                if(datas&&datas[index]){
+                    return datas[index].$model;
+                }
+            }
+            return null;
+        },
+        /**
+         * 选中（取消选中）某些行
          */
         checkRows: function (rows,checked) {
             if(checked==undefined){
@@ -425,15 +447,16 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
          * 新增一行数据
          */
         addRow:function(rowData,pos){//{}则表示新增空行,pos指新增位置，表示放到第几行，默认表示最后一行
+            if(!rowData){
+                rowData = {};
+            }
             var datas = this.getAttr("data");
             var pSize = datas.length;
             var formatData = this._formatData(rowData);
-            //if(this.getAttr("canEdit")){
-                var ds = this._getDataSet();
-                if(ds){
-                    ds.addRecord(formatData);
-                }
-            //}
+            var ds = this._getDataSet();
+            if(ds){
+                ds.addRecord(formatData);
+            }
             if(pos&&pos>0&&pos<(pSize+2)){
                 var newDataArr = [];
                 if(pSize<1){
@@ -466,7 +489,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //删除行，remove掉
             var ds = this._getDataSet();
             if(ds){
-                ds.deleteRecord(row[this.options._idField],real);
+                ds.deleteRecord(row[this._idField],real);
             }
             row = null;
             var upFlag = false;
@@ -486,7 +509,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     &&datas[i][idField]==dataId){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[i][this.options._idField],real);
+                            ds.deleteRecord(datas[i][this._idField],real);
                         }
                         datas[i] = null;
 
@@ -507,7 +530,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if(datas[s]&&acRow==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options._idField],real);
+                            ds.deleteRecord(datas[s][this._idField],real);
                         }
                         datas[s] = null;
                         this.setAttr("data",this._formArr(datas));
@@ -529,7 +552,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
                         var ds = this._getDataSet();
                         if(ds){
-                            ds.deleteRecord(datas[s][this.options._idField],real);
+                            ds.deleteRecord(datas[s][this._idField],real);
                         }
                         datas[s] = null;
                     }
@@ -537,6 +560,37 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }
             this.setAttr("data",this._formArr(datas));
             this._updateAllCheckedByDatas();
+        },
+        /**
+         * 批量为全部行设置数据:某列为统一的值
+         */
+        setAttrOfAll:function(fieldName,value){
+            if(fieldName){
+                var datas = this.getAttr("data")||[];
+                for(var s=0;s<datas.length;s++){
+                    if(datas[s]){
+                        datas[s][fieldName] = value;
+                    }
+                }
+                this.setAttr("data",this._formArr(datas));
+            }
+        },
+        /**
+         * 批量为选择的行设置数据:某列为统一的值
+         */
+        setAttrOfChecedRows:function(fieldName,value){
+            if(fieldName){
+                var datas = this.getAttr("data");
+                var cdatas = this.getCheckedRows();
+                for(var s=0;s<datas.length;s++){
+                    for (var i = 0; i < cdatas.length; i++) {
+                        if(datas[s]&&cdatas[i]&&cdatas[i]==datas[s]){
+                            datas[s][fieldName] = value;
+                        }
+                    }
+                }
+                this.setAttr("data",this._formArr(datas));
+            }
         },
         /**
          * 跳转到某页
@@ -558,23 +612,23 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 var dsId = "ds_"+this.getAttr("vid");
                 for (var i = 0; i < datas.length; i++) {
                     var data = datas[i];
-                    if(data&&data[this.options._idField]&&data.state!='readonly'){
+                    if(data&&data[this._idField]&&data.state!='readonly'){
                         var rowEditComps = [];
                         for(var t=0;t<cols.length;t++){
                             var col = cols[t];
                             if(col.dataField&&col.xtype&&!col.isOpColumn&&!col.hidden){
                                 var fieldName = col.dataField;
                                 var xtype = col.xtype || "input";
-                                if(Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]) {
-                                    Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]].destroy();
+                                if(Page.manager.components['comp_'+fieldName+"_"+data[this._idField]]) {
+                                    Page.manager.components['comp_'+fieldName+"_"+data[this._idField]].destroy();
                                 }
                                 if(that.options.$dbClickToEditRow||(that.getAttr("editFieldNow")==fieldName)){
-                                    var keyField = this.options._idField;
+                                    var keyField = this._idField;
                                     (function(that,xtype,keyField,fieldName,data,rowEditComps){
                                         var editParams = col.editParams?col.editParams.$model:{};
                                         var baseParams = {
-                                            $parentId: 'con_'+fieldName+"_"+data[that.options._idField],
-                                            $id:'comp_'+fieldName+"_"+data[that.options._idField],
+                                            $parentId: 'con_'+fieldName+"_"+data[that._idField],
+                                            $id:'comp_'+fieldName+"_"+data[that._idField],
                                             parentTpl:"inline",
                                             value: data[fieldName]||"",
                                             showLabel: false,
@@ -614,18 +668,18 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                         rowEditComps.push(editField);
 
                                         editField.render();
-                                    }(this,xtype,this.options._idField,fieldName,data,rowEditComps));
+                                    }(this,xtype,this._idField,fieldName,data,rowEditComps));
                                 }
                             }
                         }
-                        editCompMap[data[this.options._idField]] = rowEditComps;
+                        editCompMap[data[this._idField]] = rowEditComps;
                     }else{
                         for(var t=0;t<cols.length;t++){
                             var col = cols[t];
                             if(col.dataField&&col.xtype&&!col.isOpColumn&&!col.hidden){
                                 var fieldName = col.dataField;
-                                if(Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]]) {
-                                    Page.manager.components['comp_'+fieldName+"_"+data[this.options._idField]].destroy();
+                                if(Page.manager.components['comp_'+fieldName+"_"+data[this._idField]]) {
+                                    Page.manager.components['comp_'+fieldName+"_"+data[this._idField]].destroy();
                                 }
                             }
                         }
@@ -713,7 +767,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     //校验，将其他编辑设置为只读,校验不通过不更改状态
                     var datas = this.getAttr("data");
                     for (var i = 0; i < datas.length; i++) {
-                        if (datas[i]&&datas[i][this.options._idField]!=row[this.options._idField]) {
+                        if (datas[i]&&datas[i][this._idField]!=row[this._idField]) {
                             if(false){//校验不通过
                                 return null;//直接返回，不再进行后续逻辑
                             }
@@ -735,7 +789,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             //校验，将其他编辑设置为只读,校验不通过不更改状态
             var datas = this.getAttr("data");
             for (var i = 0; i < datas.length; i++) {
-                if (datas[i]&&datas[i][this.options._idField]!=row[this.options._idField]) {
+                if (datas[i]&&datas[i][this._idField]!=row[this._idField]) {
                     if(false){//校验不通过
                         return null;//直接返回，不再进行后续逻辑
                     }
@@ -746,7 +800,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             row.state = "edit";
             this.setAttr("data",this._formArr(this.getAttr("data").$model));
             var editCompMap = this.getAttr("editCompMap");
-            var editComps = editCompMap?editCompMap[row[this.options._idField]]:null;
+            var editComps = editCompMap?editCompMap[row[this._idField]]||[]:[];
             for(var t=0;t<editComps.length;t++){
                 if(editComps[t]&&editComps[t].bindField!=fieldName){
                     //editComps[t].switchStatus(otherToStatus);
@@ -800,7 +854,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             if(opts.isMerge){
                 opts.canEdit = false;
             }
-            if(opts.$canCustomCols){
+            if(opts.canCustomCols){
                 opts.canEdit = false;
             }
             if(!opts.customColFunc){
@@ -813,8 +867,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         d[i].checked = true;
                         d[i].state = d[i].state?d[i].state:'readonly';
                         d[i].dataChanged = d[i].dataChanged||false;
-                        if(!d[i][this.options._idField]){
-                            d[i][this.options._idField] = String.uniqueID();
+                        if(!d[i][this._idField]){
+                            d[i][this._idField] = String.uniqueID();
                         }
                     }
                 }
@@ -824,8 +878,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         d[i].checked = d[i].checked||false;//未设置，默认不选中
                         d[i].state = d[i].state?d[i].state:'readonly';
                         d[i].dataChanged = d[i].dataChanged||false;
-                        if(!d[i][this.options._idField]){
-                            d[i][this.options._idField] = String.uniqueID();
+                        if(!d[i][this._idField]){
+                            d[i][this._idField] = String.uniqueID();
                         }
                     }
                 }
@@ -923,8 +977,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if (datas[i]) {
                             datas[i].checked = true;
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i][this.options._idField]){
-                                datas[i][this.options._idField] = String.uniqueID();
+                            if(!datas[i][this._idField]){
+                                datas[i][this._idField] = String.uniqueID();
                             }
                         }
                     }
@@ -933,8 +987,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         if(datas[i]){
                             datas[i].checked = (datas[i].checked==true||datas[i].checked=="true")?true:false;//未设置，默认不选中
                             datas[i].state = datas[i].state?datas[i].state:'readonly';
-                            if(!datas[i][this.options._idField]){
-                                datas[i][this.options._idField] = String.uniqueID();
+                            if(!datas[i][this._idField]){
+                                datas[i][this._idField] = String.uniqueID();
                             }
                         }
                     }
@@ -952,8 +1006,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 data.state = data.state?data.state:'readonly';
                 //TODO widgetContainer必须wid的处理，后续会删除
-                if(!data[this.options._idField]){
-                    data[this.options._idField] = String.uniqueID();
+                if(!data[this._idField]){
+                    data[this._idField] = String.uniqueID();
                 }
             }
             return data;
