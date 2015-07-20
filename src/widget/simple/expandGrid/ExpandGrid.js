@@ -113,6 +113,9 @@ define(['../../Base',"../../../data/DataConstant", 'text!./ExpandGridWidget.html
                 vm.allChecked = all;
             },
             sortByCol:function(vid,col,orderType){
+                if(orderType&&orderType=="unsort"){
+                    orderType = null;
+                }
                 var vm = avalon.vmodels[vid];
                 var cols = vm.columns;
                 for(var s=0;s<cols.length;s++){

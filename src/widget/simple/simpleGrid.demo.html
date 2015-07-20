@@ -43,10 +43,10 @@
                 </div>
 
                 <div class="row" style="" width="200px">
-                    <div class="col-md-12" id="simpleGrid">
+                <div class="col-md-12" id="simpleGrid">
 
-                    </div>
                 </div>
+            </div>
 
             </div>
         </div>
@@ -67,47 +67,47 @@
             syncUrl: '',
             model:{mainAlias:'ds1'}
         });
-        var metaData = null;
+        var metaData = metaData;
         simpleGrid = Page.create("simpleGrid", {
             $parentId: 'simpleGrid',
             idField:"wid",
             $id:"simpleGrid",
-
             showCheckbox:true,
             usePager:true,
+            showPageBeforeAfterCount:4,
             //multiCheck:false,
             //canSort:true,
             //allChecked:false,
             dataSetId: ds.getId(),
             mouseoverToActive:true,
-            //canCustomCols:true,
-            metaDataObj:metaData,
+            canCustomCols:true,
+            //metaDataObj:metaData,
             fixedCols:['name','birthDate'],
 
             editComps:[],
             columns:[
-                {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false},
-                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"input",hidden:false},
-                {title:"入学时间",dataField:"rxDate",xtype:"datepicker"},
-                {title:"是否党员",dataField:"isParty",xtype:"switch",showDisplay:true},
+                {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false,width:"280px"},
+                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"input",hidden:false,width:"280px"},
+                {title:"入学时间",dataField:"rxDate",xtype:"datepicker",width:"280px"},
+                {title:"是否党员",dataField:"isParty",xtype:"switch",showDisplay:true,width:"280px"},
 
-                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true}
+                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true,width:"280px"}
             ],
             opColumns:[{title:"自定义操作",
-                width:'15%',
+                width:'200px',
                 position:2,
                 template:"<a href='javascript:alert(1)'>位置随意</a> | " +
                 "<a href='javascript:deleteActive();'>Delete</a>"},
                 {title:"自定义列",
-                    width:'12%',
+                    width:'200px',
                     position:'end',
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
             canEdit:true,
-            dbClickToEditRow:true,
+            //dbClickToEditRow:true,
             multiSort:true,//复合排序
-            //clickToEditField:false,
-            //editMultiRow:false, //同时编辑多行
+            clickToEditField:true,
+            editMultiRow:true, //同时编辑多行
             genTest:function(rowData,col){
                 if(rowData) {
                     if (rowData.sex ==2) {
@@ -188,26 +188,26 @@
             for(var s=0;s<cols.length;s++){
                 var coli = cols[s];
                 if(coli&&coli.dataField) {
-                    var fieldName = coli.dataField;
-                    var xtype = coli.xtype || "input";
-                    var editField = Page.create(xtype, {
-                        $parentId: '__currentEditField_'+fieldName,
-                        parentTpl:"inline",
-                        value: row[fieldName],
-                        showLabel: false,
-                        bindField:fieldName,
-                        validationRules:coli.validationRules,
-                        showErrorMessage:true,
+                var fieldName = coli.dataField;
+                var xtype = coli.xtype || "input";
+                var editField = Page.create(xtype, {
+                    $parentId: '__currentEditField_'+fieldName,
+                    parentTpl:"inline",
+                    value: row[fieldName],
+                    showLabel: false,
+                    bindField:fieldName,
+                    validationRules:coli.validationRules,
+                    showErrorMessage:true,
 
-                        valueChange:function(){
-                            row[fieldName] = editField.getValue();
-                        },
-                        status:"readonly"
-                    });
-                    editComps.push(editField);
-                    editField.render();
-                }
+                    valueChange:function(){
+                        row[fieldName] = editField.getValue();
+                    },
+                    status:"readonly"
+                });
+                editComps.push(editField);
+                editField.render();
             }
+        }
             if(vm.editComps){
                 vm.editComps = editComps;
             }else{

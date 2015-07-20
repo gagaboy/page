@@ -11,7 +11,27 @@
 .simpleGrid_customSettingIcon_margin{
     margin-top:-15px;
 }
+.simplegrid_datachange{
+    background-color:#FAC1C3 !important;
+}
 .simpleGrid_tableCon{
     overflow-x: auto;
     overflow-y: hidden;
+}
+.simpleGrid_tdStyle{
+    vertical-align:middle;
+}
+.simpleGrid_fullCon{
+    width:100%;
+    height:100%;
+    padding:0px;
+}
+.simpleGrid_checkboxCon{
+    width:20px !important;
+}
+.simpleGrid_opColumnCon{
+    vertical-align:middle;
+}
+.simpleGrid_customColCon{
+    background-color: transparent !important;
 }

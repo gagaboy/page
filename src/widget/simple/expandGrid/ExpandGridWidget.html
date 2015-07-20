@@ -1,4 +1,5 @@
 <div ms-visible="show" style="vertical-align: middle;">
+    <div class="simpleGrid_tableCon">
     <table ms-attr-class="tableClass">
         <thead>
         <tr>
@@ -8,21 +9,21 @@
                 </div>
             </th>
             <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']"
-                ms-attr-width="opcolumn.width">
+                ms-css-width="opcolumn.width">
                 {{opcolumn.title}}
             </th>
-            <th ms-repeat-col="allColumns" ms-attr-width="col.width">
+            <th ms-repeat-col="allColumns" ms-css-width="col.width">
                 <div ms-if="col.isOpColumn||!canSort">
                     {{col.title}}
                 </div>
                 <div ms-if="!col.isOpColumn&&canSort">
                     <div ms-if="!col.sortDisabled&&col.orderType=='asc'" ms-click="sortByCol(vid,col,'desc')">{{col.title}} <div class="fa fa-caret-down"></div></div>
-                    <div ms-if="!col.sortDisabled&&col.orderType=='desc'" ms-click="sortByCol(vid,col,'asc')">{{col.title}} <div class="fa fa-caret-up"></div></div>
+                    <div ms-if="!col.sortDisabled&&col.orderType=='desc'" ms-click="sortByCol(vid,col,'unsort')">{{col.title}} <div class="fa fa-caret-up"></div></div>
                     <div ms-if="!col.sortDisabled&&!col.orderType" ms-click="sortByCol(vid,col,'asc')">{{col.title}} <div class="fa fa-unsorted"></div></div>
                     <div ms-if="col.sortDisabled"> {{col.title}} </div>
                 </div>
             </th>
-            <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-attr-width="opcolumn.width">
+            <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-css-width="opcolumn.width">
                 {{opcolumn.title}}
             </th>
         </tr>
@@ -65,6 +66,7 @@
             <td colspan="100"><div class="expandGrid_noDataTip">{{noDataTip}}</div></td>
         </tr>
     </table>
+    </div>
     <nav ms-if="usePager">
         <div ms-attr-id="'pager_'+vid"></div>
     </nav>
