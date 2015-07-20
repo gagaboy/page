@@ -16,15 +16,16 @@ define(['../Base', 'text!./PaginationWidget.html', 'css!./PaginationWidget.css']
             recordBegin:0,//显示从第几条开始,计算所得，设置无效
             recordTo: 0,//显示到第几条,计算所得，设置无效
 
-            showPageIndexInput: false,//显示跳转到某页输入框
-            showPageSizeInput: false,//显示每页条数输入框
-            showFirstPage: false,//显示第一页按钮
-            showLastPage: false,//显示最后一页按钮
-            showPreviousAndNextPage: true,//显示上一页和下一页按钮
-            showPageDetail: true,//显示分页详情
-            showTipWhenNull: true,//无数据时显示提示信息
-            hidePagerWhenNull:false,
-            noDataTip:"没有找到数据！",
+            $showPageIndexInput: false,//显示跳转到某页输入框
+            $showPageSizeInput: false,//显示每页条数输入框
+            $showFirstPage: false,//显示第一页按钮
+            $showLastPage: false,//显示最后一页按钮
+            $showPageBeforeAfterCount: 3, //显示当前页的前后几页
+            $showPreviousAndNextPage: true,//显示上一页和下一页按钮
+            $showPageDetail: true,//显示分页详情
+            $showTipWhenNull: true,//无数据时显示提示信息
+            $hidePagerWhenNull:false,
+            $noDataTip:"没有找到数据！",
             pageChangeEvent: null,
 
             toPageIndex:1,
