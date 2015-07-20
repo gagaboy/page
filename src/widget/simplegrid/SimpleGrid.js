@@ -239,7 +239,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             if(!this.getAttr("data")||this.getAttr("data").length<1){
                 this.reloadData();
             }else{
-                this._renderEditComp();
+                //this._renderEditComp();
             }
             if(this.getAttr("usePager")){
                 this.pagination = Page.create("pagination", {
@@ -706,7 +706,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 row.state = "readonly";
             }
             this.setAttr("data",this._formArr(this.getAttr("data").$model));
-            this._renderEditComp();
+            //this._renderEditComp();
         },
         _defaultEditField:function(vm,row,fieldName,fieldXtype,tdDom){
             this._renderEditComp();
