@@ -23,7 +23,8 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             }
         },
         switchObj:{},
-        _afterRender:function(){
+        render:function(){
+            this.parent();
             var inputObj = this.getParentElement().find(".e-switch")[0];
             if(inputObj){
                 var that = this;
@@ -42,6 +43,8 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
                 var switcheryDom = this.getParentElement().find(".switchery");
                 if(switcheryDom&&switcheryDom[0]&&that.options.valueChangeFunc){
                     switcheryDom[0].onclick = function(){
+                        that.setAttr("value",that.getValue());
+                        that.setAttr("display",that.getDisplay());
                         that.options.valueChangeFunc(that,that.switchObj);
                     }
                 }
@@ -57,13 +60,15 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
             this.switchObj.hide();
         },
         getValue:function(){
-            return this.switchObj.isChecked()?this.options.checkValue:this.options.unCheckValue;
+            this.options.value = this.switchObj.isChecked()?this.options.checkValue:this.options.unCheckValue;
+            return this.options.value;
         },
         getDisplay:function(){
-            return this.switchObj.isChecked()?this.options.checkDisplay:this.options.unCheckDisplay;
+            this.options.display = this.switchObj.isChecked()?this.options.checkDisplay:this.options.unCheckDisplay;
+            return this.options.display;
         },
         setValue:function(value){
-            if(value!=undefined){
+            if(value!=undefined&&this.switchObj&&this.switchObj.isChecked){
                 var val = null;
                 if(typeof(value)=="object"){
                     val = value[this.options.valueField];
