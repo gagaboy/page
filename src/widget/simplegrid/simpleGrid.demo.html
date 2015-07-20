@@ -43,10 +43,10 @@
                 </div>
 
                 <div class="row" style="" width="200px">
-                    <div class="col-md-12" id="simpleGrid">
+                <div class="col-md-12" id="simpleGrid">
 
-                    </div>
                 </div>
+            </div>
 
             </div>
         </div>
@@ -74,6 +74,7 @@
             $id:"simpleGrid",
             showCheckbox:true,
             usePager:true,
+            showPageBeforeAfterCount: 0,
             //multiCheck:false,
             //canSort:true,
             //allChecked:false,
@@ -103,10 +104,10 @@
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
             canEdit:true,
-            dbClickToEditRow:true,
+            //dbClickToEditRow:true,
             multiSort:true,//复合排序
-            //clickToEditField:false,
-            editMultiRow:false, //同时编辑多行
+            clickToEditField:true,
+            editMultiRow:true, //同时编辑多行
             genTest:function(rowData,col){
                 if(rowData) {
                     if (rowData.sex ==2) {
