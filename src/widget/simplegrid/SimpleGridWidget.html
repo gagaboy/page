@@ -1,11 +1,10 @@
-<div ms-visible="show" style="vertical-align: middle;">
+<div ms-visible="show">
     <div class="simpleGrid_tableCon">
     <table ms-attr-class="$tableClass" ms-css-width="width">
         <thead>
         <tr>
-            <th style="width:20px" ms-if="$showCheckbox">
-                <div class="icheckbox_square-green" style="position: relative;"
-                     ms-class-checked="allChecked" ms-click="allClick(vid, this)">
+            <th ms-if="$showCheckbox" ms-class="simpleGrid_checkboxCon">
+                <div class="icheckbox_square-green" ms-class-checked="allChecked" ms-click="allClick(vid, this)">
                 </div>
             </th>
             <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']"
@@ -43,7 +42,7 @@
             </td>
             <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_front']"
                 ms-repeat-opcolumn="opColumnMap['op_front']" ms-html="getColTemplate(vid,rowdata,opcolumn)"
-                style="vertical-align:middle;">
+                class="simpleGrid_opColumnCon">
             </td>
             <td ms-visible="!$isMerge||col.isOpColumn||tdSpans[rowdata._uuid+col.dataField]>0"
                 ms-attr-rowspan="$isMerge&&!col.isOpColumn?tdSpans[rowdata._uuid+col.dataField]:1"
@@ -79,7 +78,7 @@
             <td ms-attr-rowIndex="$index" ms-if="opColumnMap['op_end']"
                 ms-repeat-opcolumn="opColumnMap['op_end']"
                 ms-html="getColTemplate(vid,rowdata,opcolumn)"
-                style="vertical-align:middle;">
+                class="simpleGrid_opColumnCon">
             </td>
         </tr>
         <tr ms-if="(!totalNum||totalNum<1)&&(!data||data.length<1)">
