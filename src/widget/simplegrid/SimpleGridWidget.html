@@ -36,8 +36,7 @@
             <tr ms-repeat-rowdata="data" ms-attr-id="rowdata._uuid"
                 ms-mouseover="$mouseoverToActive?activeRow(vid,rowdata,this):''"
                 ms-click="clickRow(vid,rowdata,this)"
-                ms-on-dblclick="dbClickRow(vid,rowdata,this)"
-                ms-class-simplegrid_datachange="rowdata.dataChanged">
+                ms-on-dblclick="dbClickRow(vid,rowdata,this)">
                 <td ms-if="$showIndex">
                     {{$index+1}}
                 </td>
@@ -54,7 +53,8 @@
                     ms-attr-rowspan="$isMerge&&!col.isOpColumn?tdSpans[rowdata._uuid+col.dataField]:1"
                     ms-repeat-col="allColumns" ms-attr-xtype="col.xtype"
                     ms-click="clickField(vid,rowdata,col,this)"
-                    class="simpleGrid_tdStyle">
+                    class="simpleGrid_tdStyle"
+                    ms-class-simplegrid_datachange="dataChangedField.contains(rowdata._uuid+col.dataField)">
                     <div ms-if="col.isOpColumn" ms-html="getColTemplate(vid,rowdata,col)"></div>
                     <div ms-if="!col.isOpColumn" class="simpleGrid_fullCon">
                         <div ms-if="$canEdit" class="simpleGrid_fullCon">

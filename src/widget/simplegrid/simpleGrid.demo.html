@@ -73,6 +73,7 @@
             idField:"wid",
             $id:"simpleGrid",
             showCheckbox:true,
+            showIndex:false,
             usePager:true,
             showPageBeforeAfterCount:4,
             //multiCheck:false,
@@ -83,7 +84,7 @@
             //canCustomCols:true,
             //metaDataObj:metaData,
             fixedCols:['name','birthDate'],
-
+            //isMerge:true,
             editComps:[],
             columns:[
                 {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false,width:"280px"},
@@ -107,7 +108,7 @@
             //dbClickToEditRow:true,
             //multiSort:true,//复合排序
             clickToEditField:true,
-            editMultiRow:true, //同时编辑多行
+            editMultiRow:false, //同时编辑多行
             genTest:function(rowData,col){
                 if(rowData) {
                     if (rowData.sex ==2) {

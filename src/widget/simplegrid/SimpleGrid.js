@@ -91,6 +91,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editCompMap:{},//编辑组件
             allColumns:[],//全部列（columns+opColumns）
             tdSpans:{},//跨列数（isMerge为true时）
+            dataChangedField:['a','b'],
             activedRow:null,//激活的行
             activedRowDom:null, //行编辑Dom
             allClick: function (vid, element) {
@@ -396,8 +397,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         getDataByIndex:function(index){
             if(index){
                 var datas = this.getAttr("data");
-                if(datas&&datas[index]){
-                    return datas[index].$model;
+                if(datas&&index<datas.length&&datas[index+1]){
+                    return datas[index+1].$model;
                 }
             }
             return null;
@@ -643,7 +644,10 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                                     data[fieldName+"_DISPLAY"] = editField.getDisplay();
                                                     data.dataChanged = true;
                                                 }
-                                                //that.setAttr("data",that._formArr(that.getAttr("data").$model));
+                                                //行背景，ms-class-simplegrid_datachange="rowdata.dataChanged"
+                                                //属性背景
+                                                that.getAttr("dataChangedField").push(data._uuid+fieldName);
+                                                //$('con_'+fieldName+"_"+data[that._idField]).addClass("simplegrid_datachange");
                                             },
                                             status:"edit"
                                         };
@@ -654,14 +658,13 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                                 if(editField.getDisplay){
                                                     data[fieldName+"_DISPLAY"] = editField.getDisplay();
                                                 }
-                                                //that.setAttr("data",that._formArr(that.getAttr("data").$model));
                                             };
                                         }
                                         var allParams = jQuery.extend(baseParams,editParams);
                                         var editField = Page.create(xtype,allParams);
 
                                         editField.bindField = fieldName;
-                                        //在属性中写displayChange无效，暂时用以下写法代替，TODO
+                                        //在属性中写displayChange无效，暂时用以下写法代替
                                         editField._displayChange = function(){
                                             data[fieldName] = editField.getValue();
                                         };
@@ -784,6 +787,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         },
         //editMultiRow不生效，不允许多个组件同时编辑
         _defaultEditField:function(vm,row,fieldName,fieldXtype,tdDom){
+            if(row.state=='edit'&&fieldName==this.getAttr("editFieldNow")){
+                return;
+            }
             this.setAttr("editFieldNow",fieldName);
             var toStatus = (row.state&&row.state=="readonly")?"edit":"readonly";
             //校验，将其他编辑设置为只读,校验不通过不更改状态
