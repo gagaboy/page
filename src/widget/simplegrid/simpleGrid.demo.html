@@ -75,9 +75,13 @@
             showCheckbox:true,
             showIndex:false,
             usePager:true,
+            width:"1000px",
             showPageBeforeAfterCount:4,
+            defaultAlign:"left",
+            canSort:true,
+            multiSort:false,//复合排序
+            canMoveDataUpandDown:false,
             //multiCheck:false,
-            //canSort:true,
             //allChecked:false,
             dataSetId: ds.getId(),
             mouseoverToActive:true,
@@ -87,27 +91,63 @@
             //isMerge:true,
             editComps:[],
             columns:[
-                {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false,width:"280px"},
-                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"input",hidden:false,width:"280px"},
-                {title:"入学时间",dataField:"rxDate",xtype:"datepicker",width:"280px"},
-                {title:"是否党员",dataField:"isParty",xtype:"switch",showDisplay:true,width:"280px"},
-
-                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true,width:"280px"}
+                {title:"出生年月",dataField:"birthDate",orderType:"desc",xtype:"input",hidden:false,width:"380px",
+                    titleAlign:"center",textAlign:"center"},
+                {title:"入学时间",dataField:"rxDate",xtype:"datepicker",width:"380px",
+                    titleAlign:"center",textAlign:"center"},
+                {title:"是否党员",dataField:"isParty",xtype:"switch",showDisplay:true,width:"380px",
+                    titleAlign:"center",textAlign:"center"},
+                {title:"备注",dataField:"notes",hidden:true,sortDisabled:true,width:"380px",
+                    titleAlign:"center"},
+                {title:"姓名",dataField:"name",orderType:"asc",disabledEdit:false,width:"380px",
+                    titleAlign:"center"}
             ],
-            opColumns:[{title:"自定义操作",
-                width:'200px',
-                position:2,
-                template:"<a href='javascript:alert(1)'>位置随意</a> | " +
-                "<a href='javascript:deleteActive();'>Delete</a>"},
-                {title:"自定义列",
-                    width:'200px',
+           /* data: [
+                {
+                    "wid":"001",
+                    "name": "李肉肉",
+                    "sex": "002",
+                    "sexDisplay": "女",
+                    "birthDate": "1989-11-03",
+                    "rxDate": "2007-09-02",
+                    "isParty": 0,
+                    "isParty_DISPLAY":"no",
+                    "className": "信息0701班",
+                    "checked":"false",
+                    "notes": "",
+                    "state":"edit"
+                },
+                {
+                    "wid":"002",
+                    "name": "李肉肉",
+                    "sex": "002",
+                    "sexDisplay": "女",
+                    "birthDate": "1987-03-19",
+                    "rxDate": "2007-09-02",
+                    "isParty": 1,
+                    "isParty_DISPLAY":"是",
+                    "className": "信息0701班",
+                    "checked":"true",
+                    "state":"edit",
+                    "notes": ""
+                }],*/
+            opColumns:[{title:"自定义操作A",
+                    width:'300px',
+                    position:2,
+                    textAlign:"center",
+                    titleAlign:"center",
+                    template:"<a href='javascript:alert(1)'>位置随意</a> | " +
+                    "<a href='javascript:deleteActive();'>Delete</a>"},
+                     {title:"自定义列B",
+                    width:'300px',
                     position:'end',
+                    textAlign:"center",
+                    titleAlign:"center",
                     template:"<a ms-click='editMyRow(vid,rowdata,this);'>编辑／完成</a>"}],
             //行编辑
             canEdit:true,
-            //dbClickToEditRow:true,
-            //multiSort:true,//复合排序
-            clickToEditField:true,
+            dbClickToEditRow:true,
+            //clickToEditField:true,
             editMultiRow:false, //同时编辑多行
             genTest:function(rowData,col){
                 if(rowData) {

@@ -6,6 +6,8 @@
      *｛title:"性别",
      * dataField:"sex",
      * width:"4%",
+     * titleAlign:'center',
+     * textAlign:'left',
      * showDisplay:true,//showDisplay：显示Display字段，
      * disabledEdit:true,
      * sortDisabled:true,
@@ -25,7 +27,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             $xtype: xtype,
             /** ====================基础配置信息====================== */
             $tableClass:"table table-bordered table-hover table-striped",
-            width:"100%",
+            width:null,
             columns: [],//列信息
             data: [],    //静态数据
             $dataSetId: null,    //数据集ID，设置了dataSetId则data无效
@@ -39,6 +41,12 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             allChecked: false,  //设置为true，则默认全部选中
             $mouseoverToActive:false,//鼠标经过时激活行，通过getActiveRow获取
             $clickToActive:true,//点击激活行，通过getActiveRow获取
+            $canMoveDataUpandDown:true,//提供行排序
+            /** ====================样式相关====================== */
+            titleNoWrap:false,//标题不换行
+            contentNoWrap:false,//内容不换行
+            lineHeight:40,//行高，与全局样式有关，目前最小40
+            defaultAlign:"left",//默认对齐方式，若column中未设置则采用默认
             /** ====================分页配置信息====================== */
             $usePager:true,  //是否分页
             pageIndex:1,    //默认当前页
@@ -63,8 +71,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             /** ====================行编辑====================== */
             $canEdit:false,  //是否可编辑
             $dbClickToEditRow:false, //双击编辑行
-            $clickToEditField:false, //双击编辑行
-            $editMultiRow:true, //同时编辑多行
+            $clickToEditField:true, //单击编辑属性
+            $editMultiRow:false, //同时编辑多行
             editRowFunc:null,   //编辑行事件
             editFieldFunc:null, //编辑单属性事件
             /** ====================自定义显示列====================== */
@@ -91,7 +99,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             editCompMap:{},//编辑组件
             allColumns:[],//全部列（columns+opColumns）
             tdSpans:{},//跨列数（isMerge为true时）
-            dataChangedField:['a','b'],
+            dataChangedField:[],
             activedRow:null,//激活的行
             activedRowDom:null, //行编辑Dom
             allClick: function (vid, element) {
@@ -106,8 +114,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             },
             dbClickRow:function(vid,row,rowObj){
                 var vm = avalon.vmodels[vid];
-                if(vm.$dbClickRowFunc){
-                    vm.$dbClickRowFunc(vm,row,rowObj);
+                if(vm.dbClickRowFunc){
+                    vm.dbClickRowFunc(vm,row,rowObj);
                 }
                 if(vm.$canEdit&&vm.$dbClickToEditRow){
                     vm.editRow(vid,row,rowObj);
@@ -161,22 +169,25 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 }
                 vm.allChecked = all;
             },
-            sortByCol:function(vid,col,orderType){
+            sortByCol:function(vid,col,orderType,cols){
                 if(orderType&&orderType=="unsort"){
                     orderType = "";
                 }
                 var vm = avalon.vmodels[vid];
-                var cols = vm.columns;
-                for(var s=0;s<cols.length;s++){
-                    if(cols[s]==col||cols[s].dataField==col.dataField){
-                        cols[s].orderType = orderType;
+                var grid = Page.manager.components[vid];
+                if(cols&&cols.length>0){
+                    for(var s=0;s<cols.length;s++){
+                        if(cols[s]==col||cols[s].dataField==col.dataField){
+                            cols[s].orderType = orderType;
+                        }else if(!vm.$multiSort&&cols[s]){//其他字段恢复无排序状态
+                            cols[s].orderType = "";
+                        }
                     }
                 }
                 col.orderType = orderType;
                 if(vm.changeOrderFunc){
                     vm.changeOrderFunc(vm,col,orderType);
                 }else{
-                    var grid = Page.manager.components[vid];
                     grid.reloadData(col.dataField,orderType);// 调用dataset接口进行查询
                 }
             },
@@ -214,22 +225,22 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
         pagination:null,//分页条对象
         _idField:"_uuid",//前端唯一索引字段
         initialize: function (opts) {
+            this.options.$multiSort = opts.multiSort;
             this.parent(this._formatOptions(opts));
         },
-        _beforeRender:function(){
-            var that = this;
-            if(this.options.$canCustomCols&&this.options.$metaDataObj){
+        _beforeInit:function(opts,columns){
+            if(opts.canCustomCols&&opts.metaDataObj){
                 //后台取数据，更新columns显示列
-                if(!this.options.$fetchUrl){
+                if(opts.fetchUrl){
                     var path = document.location.pathname;
                     var contentPath = path.split("/")[1];
-                    this.options.fetchUrl = "/"+contentPath+"/sys/common/customPage/ymzjdz/select.do";
+                    opts.fetchUrl = "/"+contentPath+"/sys/common/customPage/ymzjdz/select.do";
                 }
-                var metaData = this.options.$metaDataObj;
+                var metaData = opts.metaDataObj;
                 var params = {};
                 params.PAGEID = metaData.geFormId();//pageId
-                params.COMPONENTID = this.getId();//componentId
-                var syncRes = Page.utils.syncAjax(this.options.fetchUrl, params);
+                params.COMPONENTID = opts.id||opts.$id;//componentId
+                var syncRes = Page.utils.syncAjax(opts.fetchUrl, params);
                 if(syncRes&&syncRes.result&&syncRes.result.datas
                     &&syncRes.result.datas.select.rows
                     &&syncRes.result.datas.select.rows.length>0){
@@ -239,7 +250,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                         try{
                             var settingObj = JSON.parse(setting);
                             if(settingObj.columns&&settingObj.columns.length>0){
-                                var columns = that.options.columns;
                                 var settingCols = settingObj.columns;
                                 if(columns&&columns.length>0){
                                     for (var i = 0; i < columns.length; i++) {
@@ -250,7 +260,6 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             coli.hidden = true;
                                         }
                                     }
-                                    that.setAttr("allColumns",that._calAllColumns(columns,that.options.opColumns),true);
                                 }
                             }
                         }catch(e){
@@ -259,6 +268,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     }
                 }
             }
+            return columns;
         },
         render:function(){
             this.parent();
@@ -266,7 +276,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             if(!this.getAttr("data")||this.getAttr("data").length<1){
                 this.reloadData();
             }else{
-                //this._renderEditComp();
+                this._renderEditComp();
             }
             if(this.getAttr("$usePager")){
                 this.pagination = Page.create("pagination", {
@@ -625,13 +635,14 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                 }
                                 if(that.options.$dbClickToEditRow||(that.getAttr("editFieldNow")==fieldName)){
                                     var keyField = this._idField;
-                                    (function(that,xtype,keyField,fieldName,data,rowEditComps){
+                                    (function(that,col,xtype,keyField,fieldName,data,rowEditComps){
                                         var editParams = col.editParams?col.editParams.$model:{};
                                         var baseParams = {
                                             $parentId: 'con_'+fieldName+"_"+data[that._idField],
                                             $id:'comp_'+fieldName+"_"+data[that._idField],
                                             parentTpl:"inline",
                                             value: data[fieldName]||"",
+                                            display: data[fieldName+"_DISPLAY"]||data[fieldName],
                                             showLabel: false,
                                             bindField:fieldName,
                                             disabledEdit:col.disabledEdit||col.readonly,
@@ -647,17 +658,38 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                                 //行背景，ms-class-simplegrid_datachange="rowdata.dataChanged"
                                                 //属性背景
                                                 that.getAttr("dataChangedField").push(data._uuid+fieldName);
-                                                //$('con_'+fieldName+"_"+data[that._idField]).addClass("simplegrid_datachange");
                                             },
                                             status:"edit"
                                         };
-                                        if(xtype=="switch"){
-                                            baseParams.checked = (data[fieldName]==1);
-                                            baseParams.valueChangeFunc = function(){//针对switch
+                                        if(!col.width){
+                                            baseParams.width="200px";
+                                            $('#con_'+fieldName+"_"+data[that._idField]).css("width","200px");
+                                        }
+                                        if(xtype=="combobox"){
+                                            baseParams.selectedEvent = function(){//针对switch
                                                 data[fieldName] = editField.getValue();
                                                 if(editField.getDisplay){
                                                     data[fieldName+"_DISPLAY"] = editField.getDisplay();
                                                 }
+                                            };
+                                        }
+                                        if(xtype=="switch"){
+                                            baseParams.checked = (data[fieldName]==1);
+                                            baseParams.onValueChange = function(){//针对大部分属性
+                                                data[fieldName] = editField.getValue();
+                                                if(editField.getDisplay){
+                                                    data[fieldName+"_DISPLAY"] = editField.getDisplay();
+                                                }
+                                            },
+                                            baseParams.valueChangeFunc = function(){//针对switch
+                                                data[fieldName] = editField.getValue();
+                                                if(editField.getDisplay){
+                                                    data[fieldName+"_DISPLAY"] = editField.getDisplay();
+                                                    data.dataChanged = true;
+                                                }
+                                                //行背景，ms-class-simplegrid_datachange="rowdata.dataChanged"
+                                                //属性背景
+                                                that.getAttr("dataChangedField").push(data._uuid+fieldName);
                                             };
                                         }
                                         var allParams = jQuery.extend(baseParams,editParams);
@@ -669,9 +701,15 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                             data[fieldName] = editField.getValue();
                                         };
                                         rowEditComps.push(editField);
-
-                                        editField.render();
-                                    }(this,xtype,this._idField,fieldName,data,rowEditComps));
+                                        new Promise(function(){
+                                            editField.render();
+                                        }).then(function(){
+                                            if(xtype=="combobox"){
+                                                //dataBinder异常
+                                                editField.setAttr("display",data[fieldName+"_DISPLAY"],true);
+                                            }
+                                         });
+                                    }(this,col,xtype,this._idField,fieldName,data,rowEditComps));
                                 }
                             }
                         }
@@ -896,9 +934,33 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     coli.hidden = coli.hidden||false;
                 }
             }
+            columns = this._beforeInit(opts,columns);
             opts.columns = columns;
             opts.allColumns = this._calAllColumns(opts.columns,opts.opColumns);
-
+            //如果全部设置了像素宽度则将总宽度设置为列宽度之和
+            if(opts.allColumns&&opts.allColumns.length>0&&!opts.width){
+                var widthCount = 0;
+                var allColumns = opts.allColumns;
+                var allPxFlag = true;
+                for(var s=0;s<allColumns.length;s++){
+                   if(allColumns[s]&&allColumns[s].width&&allColumns[s].width.contains("px")){
+                       try{
+                           var widthStr = allColumns[s].width;
+                           var widC = parseInt(widthStr.split("px")[0]);
+                           widthCount += widC;
+                       }catch(e){
+                           allPxFlag = false;
+                           break;
+                       }
+                   }else{
+                       allPxFlag = false;
+                       break;
+                   }
+               }
+               if(allPxFlag&&widthCount>0){
+                   opts.width=(widthCount+40)+"px";
+               }
+            }
             return opts;
         },
         _columnsChange:function(){
@@ -910,7 +972,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 for (var i = 0; i < cols.length; i++) {
                     if (cols[i]) {
                         var coli = cols[i];
-                        if(!coli.orderType){
+                        if(!coli.orderType||!this.options.$multiSort){
                             coli.orderType = "";
                         }
                         if(!coli.xtype){

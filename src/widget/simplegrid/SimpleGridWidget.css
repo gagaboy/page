@@ -29,9 +29,26 @@
 .simpleGrid_checkboxCon{
     width:20px !important;
 }
-.simpleGrid_opColumnCon{
+.simpleGrid_vertivalAlign{
     vertical-align:middle;
 }
 .simpleGrid_customColCon{
     background-color: transparent !important;
+    width:20px !important;
+}
+.simplegrid_nowrap{
+    word-break: keep-all;white-space:nowrap;
+}
+.simpleGrid_displayInline{
+    display: inline-block !important;
+}
+.simpleGrid_noPadding{
+    padding:0px !important;
+    margin:0px !important;
+}
+.simpleGrid_moveBtn{
+    padding:5px !important;
+}
+.simpleGrid_pagerCon{
+    margin-top:-10px !important;
 }
