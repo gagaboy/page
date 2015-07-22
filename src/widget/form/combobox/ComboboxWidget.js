@@ -437,6 +437,7 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                     vm.focused = false;
                     vm.searchValue = "";
                 }
+                event.stopPropagation();
             });
 
             this._watchSelectedItems(this.vmodel);
@@ -463,8 +464,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
                         display += vm.$split;
                     }
                 }
-                vm.value = value;
                 vm.display = display;
+                vm.value = value;
             });
         },
         _watchSearchValue: function(vm) {
