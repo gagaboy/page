@@ -32,11 +32,15 @@ define([], function () {
 
             this.widgetValueChangeCallback = function (value) {
                 var fieldId = $this.options.fieldId;
+                var widgetId = $this.options.widgetId;
                 var val = {};
                 if (fieldId) {
                     val[fieldId] = value;
                 } else {
                     val = value;
+                }
+                if(fieldId&&widgetId&&Page.manager.components[widgetId]&&Page.manager.components[widgetId].getDisplay){
+                    val[fieldId+"_DISPLAY"] = Page.manager.components[widgetId].getDisplay();
                 }
                 dataValue.updateRecord(val, true);
             }
