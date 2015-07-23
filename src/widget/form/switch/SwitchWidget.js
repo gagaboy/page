@@ -48,6 +48,7 @@ define(['../BaseFormWidget','text!./SwitchWidget.html','css!./SwitchWidget.css']
                         that.options.valueChangeFunc(that,that.switchObj);
                     }
                 }
+                this.setAttr("value",this.getValue());
             }
         },
         getTemplate: function(){
