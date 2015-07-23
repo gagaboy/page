@@ -41,7 +41,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             allChecked: false,  //设置为true，则默认全部选中
             $mouseoverToActive:false,//鼠标经过时激活行，通过getActiveRow获取
             $clickToActive:true,//点击激活行，通过getActiveRow获取
-            $canMoveDataUpandDown:true,//提供行排序
+            $canMoveDataUpandDown:false,//提供行排序
             /** ====================样式相关====================== */
             titleNoWrap:false,//标题不换行
             contentNoWrap:false,//内容不换行
