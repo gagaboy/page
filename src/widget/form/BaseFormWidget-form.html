@@ -18,7 +18,7 @@
                 <span ms-class="glyphicon {{glyphicon}}" ms-if="showGlyphicon"></span>
             </td>
         </tr>
-        <tr class="form-horizontal-message" ms-if="hasMessageBar">
+        <tr class="form-horizontal-message" ms-if="(showMessage && message) || (showErrorMessage && errorMessage)">
             <td ms-if="showLabel"></td>
             <td class="text-muted" ms-class="form-error-message:showErrorMessage&&errorMessage" colspan="2"
                 ms-css-padding="controlPadding">
