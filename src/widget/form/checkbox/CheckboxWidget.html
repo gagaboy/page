@@ -5,7 +5,7 @@
         </div>
         {{el[$textField]}} &nbsp;&nbsp;&nbsp;
     </label>
-    <div ms-if="/^\d+$/.test(cols) && (cols!=0) && ($index+1)%cols==0" style="margin-bottom: 10px;"></div>
+    <div ms-if="/^\d+$/.test($cols) && ($cols!=0) && ($index+1)%$cols==0" style="margin-bottom: 10px;"></div>
 </div>
 
 <input ms-if="status=='readonly'" class="form-control form-widget-to-focus-class form-text" ms-duplex="display"  readonly/>

@@ -6,9 +6,7 @@ require(["../../../page/src/Bootstrap"], function () {
         parentId: 'input',
         value: '张三',
         required: false,
-        status:"eidt",
         glyphicon: 'glyphicon-ok',
-        parentTpl:"inline",
         showMessage:true,
         message: '请输入2-5个汉字',
         label: '您的姓名',
@@ -17,9 +15,6 @@ require(["../../../page/src/Bootstrap"], function () {
             length: {
                 maxLen: 5,
                 minLen: 2
-            },
-            regex: {
-                regexStr: "/^[\u4e00-\u9fa5]+$/"
             }
         },
         showErrorMessage: true,
@@ -207,10 +202,11 @@ require(["../../../page/src/Bootstrap"], function () {
     form.push(textarea);
 
     //slider
-    var slider = Page.create("slider", {
+/*    var slider = Page.create("slider", {
         $parentId: 'slider',
         value: '',
         required: true,
+        multi: false,
         glyphicon: 'glyphicon-ok',
         message: '请拖动滑块选择年龄',
         value: '22',
@@ -223,7 +219,68 @@ require(["../../../page/src/Bootstrap"], function () {
         showButtons: false
     });
     slider.render();
-    form.push(slider);
+    form.push(slider);*/
+
+    var customSearcher = Page.create('customSearcher', {
+        $id: "customSearcher",
+        $parentId: "customSearch",
+        fetchUrl: 'customSearchData.demo.json',
+//            showDropIcon: false,
+//            value: [{
+//                "linkOpt":"and",
+//                "name":"stuSex",
+//                "nameDisplay":"性别",
+//                "value":"1",
+//                "valueDisplay":"男   ",
+//                "builder":"m_value_include",
+//                "builderDisplay":"多值包含"
+//            }],
+        controls: [{
+            id: "stuName",
+            $xtype: "input",
+            label: "姓名",
+            parentTpl: "inline",
+            requier: true,
+            initShow: true,
+            filterName: "stuName",
+            bindField: "stuName",
+            builderList: "nameOpers"
+        },{
+            id: "stuSex",
+            $xtype: "combobox",
+            label: "性别",
+            parentTpl: "inline",
+            filterName: "stuSex",
+            bindField: "stuSex",
+            url:'SexData.demo.json',
+            builderList: "sexOpers",
+            quickSearch: true
+        },{
+            id: "stuClass",
+            $xtype: "combobox",
+            parentTpl: "inline",
+            label: "班级",
+            filterName: "stuClass",
+            bindField: "stuClass",
+            builderList: "sexOpers",
+            model: "tree",
+            mainAlias: "treeData",  //数据源主实体别名
+            url: "treeData.demo.json",
+            valueField: "id",
+            textField: "name"
+        }],
+        builderLists: {
+            nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "qual", caption: "等于"}, {name: "equal", caption: "等于"}],
+            sexOpers: [{name: "contain", caption: "包含"}]
+        },
+        searchSubmit: function(searchValue) {
+            console.log(JSON.stringify(searchValue));
+        }
+
+
+    });
+    customSearcher.render();
+
 
     function printFormValue() {
 

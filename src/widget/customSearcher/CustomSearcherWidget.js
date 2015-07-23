@@ -26,6 +26,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             autoSubmit: true, //自动提交查询条件
             searchSubmit: null,
             $showGroupOper: false,
+            $defaultQuickSearch: true,
 
             focused: false,
             quickSearchArr: [],  //快速查询的选中项
@@ -115,7 +116,9 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 }
                 else {
                     if(vm.customSearchArr.length == 0) {
-                        vm.showPanel = "quickPanel";
+                        if(!((e.keyCode>=9 && e.keyCode<=27) || (e.keyCode>=33 && e.keyCode<=47)|| (e.keyCode>=112 && e.keyCode<=126))) {
+                            vm.showPanel = "quickPanel";
+                        }
                     }
                 }
                 vm.showTips = false;
@@ -241,8 +244,8 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 vm.callSubmit();
                 vm.showPanel = "";
                 vm.focused = false;
-                vm.inputWidth = 25;
                 vm.searchValue = "";
+                vm.inputWidth = 25;
             },
 
             removeItem: function(vid, type, event, item, index) {
@@ -596,6 +599,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 vm.customSearchArr = res;
 
                 vm.callSubmit();
+                vm.showPanel = "";
             },
             _getCustomFilter: function() {
                 var result = [];
@@ -718,6 +722,23 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             jQuery(document).click(function(event) {
                 var name = "CustomSearcherWidget_"+that.options.vid;
                 if(!jQuery(event.target).closest("[name='"+name+"']").length) {
+                    /*var panelObj = jQuery("[name='"+name+"']").find(".page-seach-jx");
+                    if(panelObj.length>0) {
+                        var clientx = event.clientX;
+                        var clienty = event.clientY;
+                        if(clientx>=panelObj.offset().left && clientx<=panelObj.offset().left+panelObj.outerWidth()
+                            && clienty>=panelObj.offset().top && clienty<=panelObj.offset().top+panelObj.outerHeight()) {
+                            return;
+                        }
+                    }*/
+                    var hasCombox = false;
+                    $('[id^="comboBox_panel_value"]').each(function() {
+                        if(this.style.display == "block") {
+                            hasCombox = true;
+                        }
+                    });
+                    if(hasCombox) return;
+
                     var vm = that._getCompVM();
 //                    if(!vm || vm.removeFilter) {
 //                        vm.removeFilter = false;
@@ -776,10 +797,12 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                     if(undefined == Page.classMap[fieldModel.$xtype]) {
                         fieldModel.$xtype = 'input';
                     }
-                    //判断哪些字段可用于快速查询
+                    //判断哪些字段可用于快速查询,  默认设置为false
                     if(undefined == fieldModel.quickSearch) {
                         if(quickType.contains(fieldModel.$xtype)) {
-                            fieldModel.quickSearch = true;
+                            if(opts.defaultQuickSearch !== false) {
+                                fieldModel.quickSearch = true;
+                            }
                         }
                     }
                     //判断哪些字段是初始化时默认加入自定义条件项中

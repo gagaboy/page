@@ -27,7 +27,7 @@
             <div class="ibox-content">
                 <div class="row">
                     我是一个自定义查询组件1：<br/>
-                    <div class="col-md-5" id="container">
+                    <div class="col-md-12" id="container">
 
                     </div>
                 </div>
@@ -53,13 +53,6 @@
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/jquery-2.1.1.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
 
-<!-- Dialog -->
-<!--<script src="/page/lib/artdialog/artDialog.source.js"></script>-->
-<!--<script src="/page/lib/artdialog/iframeTools.source.js"></script>-->
-<!--<link href="/page/lib/artdialog/skins/blue.css" rel="stylesheet">-->
-<!--<link href="/page/lib/artdialog/css/ui-dialog.css" rel="stylesheet">-->
-<!-- Dialog End -->
-
 <script src="/page/bower_components/avalon/avalon.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
@@ -81,6 +74,7 @@
             $id: "customSearcher",
             $parentId: "container",
             fetchUrl: 'Data.demo.json',
+            defaultQuickSearch: false,
 //            showDropIcon: false,
 //            value: [{
 //                "linkOpt":"and",
@@ -93,7 +87,7 @@
 //            }],
             controls: [{
                 id: "stuName",
-                $xtype: "datepicker",
+                $xtype: "input",
                 label: "姓名",
                 parentTpl: "inline",
                 requier: true,
@@ -111,6 +105,19 @@
                 url:'SexData.demo.json',
                 builderList: "sexOpers",
                 quickSearch: true
+            },{
+                id: "stuClass",
+                $xtype: "combobox",
+                parentTpl: "inline",
+                label: "班级",
+                filterName: "stuClass",
+                bindField: "stuClass",
+                builderList: "sexOpers",
+                model: "tree",
+                mainAlias: "treeData",  //数据源主实体别名
+                url: "treeData.demo.json",
+                valueField: "id",
+                textField: "name"
             }],
             builderLists: {
                 nameOpers: [{name: "equal", caption: "等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "notequal", caption: "不等于"}, {name: "qual", caption: "等于"}, {name: "equal", caption: "等于"}],
@@ -175,7 +182,5 @@
 
     });
 </script>
-<!--<script src="bower_components/avalon/avalon.js" ></script>-->
-<!--<script src="dist/page-build.js" data-main="demo.js"></script>-->
 </body>
 </html>
