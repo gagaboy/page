@@ -21,13 +21,15 @@ define([
     "./data/DataSet",
     "./data/DataBinder",
     "./widget/Base",
-    "./widget/WidgetContainer",
+
     "./widget/form/BaseFormWidget",
     "./widget/form/input/InputWidget",
-    "./widget/form/maskedtextbox/MaskedtextboxWidget",
     "./widget/form/combobox/ComboboxWidget",
+    "./widget/form/my97date/My97DateWidget",
+    "./widget/form/maskedtextbox/MaskedtextboxWidget",
     "./widget/customprogress/CustomProgress",
     "./widget/pagination/PaginationWidget",
+    "./widget/WidgetContainer",
     "./widget/layout/BaseLayout",
     "./widget/layout/panel/Panel",
     "./widget/layout/row/Row",
@@ -48,7 +50,7 @@ define([
     "./widget/dialog/DialogWidget",
     "./widget/customSearcher/CustomSearcherWidget",
     "./widget/form/tooltip/TooltipWidget",
-    "./widget/form/my97date/My97DateWidget",
+
     "./widget/progress/ProgressWidget",
     "./widget/tree/TreeWidget"
 ], function () {
