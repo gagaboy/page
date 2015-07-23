@@ -13,7 +13,7 @@
 <body>
 <br>
 
-<div class="container">
+<div class="container" ms-skip>
     <div class="row">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
@@ -64,8 +64,12 @@
     $.noConflict();
 </script>
 <script src="/page/bower_components/avalon/avalon.js"></script>
+<script src="/page/dist/page-build.js"></script>
 <script>
-    require(["../../src/Bootstrap"], function () {
+//    require(["../../src/Bootstrap"], function () {
+for(var i=0; i<50; i++) {
+
+
         var inp = Page.create("datepicker", {
             $parentId: 'nameContainer',
             $id: 'begintime',
@@ -82,7 +86,8 @@
             dateFmt:'yyyy-MM-dd'          //yyyy-MM
         });
         inp.render();
-    });
+}
+//    });
 </script>
 <!--<script src="bower_components/avalon/avalon.js" ></script>-->
 <!--<script src="dist/page-build.js" data-main="demo.js"></script>-->
