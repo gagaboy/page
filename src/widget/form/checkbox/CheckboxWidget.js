@@ -4,15 +4,15 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         Extends: BaseFormWidget,
         options: {
             $xtype: xtype,
-            cols: null,//布局列数
+            $cols: null,//布局列数
             value: null,
             display: null,
             $valueField: "value",//值字段
             $textField: "display",//显示字段
             $split: ",",
-            dataSetId: null,
-            url: null,
-            mainAlias: null,
+            $dataSetId: null,
+            $url: null,
+            $mainAlias: null,
             beforeSelectEvent: null,
             selectedEvent: null,
             //showAllcheckBtn: false,//提供全选按钮
@@ -109,15 +109,15 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             return avalon.vmodels[vid]
         },
         _getDataSet: function() {
-            if(this.options.dataSetId) {
-                return Page.manager.components[this.options.dataSetId];
+            if(this.options.$dataSetId) {
+                return Page.manager.components[this.options.$dataSetId];
             }
-            else if(this.options.url) {
+            else if(this.options.$url) {
                 if(!this.dataSet) {
                     this.dataSet = Page.create("dataSet", {
-                        fetchUrl: this.options.url,
+                        fetchUrl: this.options.$url,
                         model: {
-                            mainAlias: this.options.mainAlias
+                            mainAlias: this.options.$mainAlias
                         }
                     });
                 }
@@ -126,6 +126,13 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
         },
         getTemplate: function () {
             return template;
+        },
+        getValue: function () {
+            var value =  this.parent();
+            if("string" == typeof value) {
+                value = value.split(this.options.$split);
+            }
+            return value;
         },
         setValue: function (valueArr, notFireFormValueChangeEvent) {
             //重写
