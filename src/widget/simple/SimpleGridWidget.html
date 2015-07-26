@@ -2,20 +2,38 @@
     <div class="simpleGrid_tableCon">
         <table ms-attr-class="$tableClass" ms-css-width="width" ms-css-text-align="defaultAlign">
             <thead>
-            <tr>
-                <th ms-if="$showIndex" class="simpleGrid_checkboxCon" ms-class-simplegrid_nowrap="titleNoWrap">
+            <tr ms-if="hasGroupTitle" ms-css-text-align="defaultTitleAlign">
+                <th ms-if="$showIndex" class="simpleGrid_checkboxCon" ms-class-simplegrid_nowrap="titleNoWrap"
+                    ms-attr-rowspan="2" ms-css-text-align="defaultTitleAlign">
                     #
                 </th>
-                <th ms-if="$showCheckbox" class="simpleGrid_checkboxCon" ms-class-simplegrid_nowrap="titleNoWrap">
+                <th ms-if="$showCheckbox" class="simpleGrid_checkboxCon" ms-class-simplegrid_nowrap="titleNoWrap" ms-attr-rowspan="2">
+                    <div class="icheckbox_square-green" ms-class-checked="allChecked" ms-click="allClick(vid, this)">
+                    </div>
+                </th>
+                <th ms-repeat-grouptitle="groupTitleSpans" ms-attr-colspan="grouptitle.tdSpan"
+                    ms-css-text-align="defaultTitleAlign">
+                    {{grouptitle.title}}
+                </th>
+                <th ms-if="$canCustomCols" class="simpleGrid_customColCon" ms-class-simplegrid_nowrap="titleNoWrap" ms-attr-rowspan="2">
+                    <i class="fa fa-cogs fa-spin" ms-click="customColFunc(vid)"></i>
+                </th>
+            </tr>
+            <tr>
+                <th ms-if="$showIndex&&!hasGroupTitle" class="simpleGrid_checkboxCon" ms-class-simplegrid_nowrap="titleNoWrap"
+                    ms-css-text-align="defaultTitleAlign">
+                    #
+                </th>
+                <th ms-if="$showCheckbox&&!hasGroupTitle" class="simpleGrid_checkboxCon" ms-class-simplegrid_nowrap="titleNoWrap">
                     <div class="icheckbox_square-green" ms-class-checked="allChecked" ms-click="allClick(vid, this)">
                     </div>
                 </th>
                 <th ms-if="opColumnMap['op_front']" ms-repeat-opcolumn="opColumnMap['op_front']"
-                    ms-css-width="opcolumn.width" ms-css-text-align="opcolumn.titleAlign">
+                    ms-css-width="opcolumn.width" ms-css-text-align="opcolumn.titleAlign||defaultTitleAlign">
                     {{opcolumn.title}}
                 </th>
                 <th ms-repeat-col="allColumns" ms-css-width="col.width" ms-class-simplegrid_nowrap="titleNoWrap"
-                    ms-css-text-align="col.titleAlign">
+                    ms-css-text-align="col.titleAlign||defaultTitleAlign">
                     <div ms-if="(col.isOpColumn&&(!$canSortOpColumn||!col.dataField))||!$canSort">
                         {{col.title}}
                     </div>
@@ -31,10 +49,10 @@
                     </div>
                 </th>
                 <th ms-if="opColumnMap['op_end']" ms-repeat-opcolumn="opColumnMap['op_end']" ms-css-width="opcolumn.width"
-                    ms-class-simplegrid_nowrap="titleNoWrap" ms-css-text-align="opcolumn.titleAlign">
+                    ms-class-simplegrid_nowrap="titleNoWrap" ms-css-text-align="opcolumn.titleAlign||defaultTitleAlign">
                     {{opcolumn.title}}
                 </th>
-                <th ms-if="$canCustomCols" class="simpleGrid_customColCon" ms-class-simplegrid_nowrap="titleNoWrap">
+                <th ms-if="$canCustomCols&&!hasGroupTitle" class="simpleGrid_customColCon" ms-class-simplegrid_nowrap="titleNoWrap">
                     <i class="fa fa-cogs fa-spin" ms-click="customColFunc(vid)"></i>
                 </th>
             </tr>
