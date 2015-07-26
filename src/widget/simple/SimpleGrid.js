@@ -221,6 +221,39 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     grid._defaultEditField(vm, row, fieldName, fieldXtype, tdDom);
                 }
             },
+            moveDataUpAndDown: function (vid,upFlag) {
+                var grid = Page.manager.components[vid];
+                var row = null;
+                if(grid.getCheckedRows()){
+                    var cRows = grid.getCheckedRows();
+                    if(cRows&&cRows.length>1){
+                        Page.dialog.alert("只能勾选一条记录！");
+                        return;
+                    }
+                    row =  grid.getCheckedRows()[0];
+                }else{
+                    Page.dialog.alert("只能勾选一条记录！");
+                    return;
+                }
+                if (row && grid.getAttr("$idField")) {
+                    var idField = grid.getAttr("$idField");
+                    var datas = grid.getAttr("data");
+                    for (var i = 0; i < datas.length; i++) {
+                        if (datas[i] && datas[i][idField]
+                            && datas[i][idField] == row[idField]) {
+                            if(upFlag&&i>0){
+                                datas[i] = datas[i-1];
+                                datas[i-1] = row;
+                            }else if(i<datas.length-1){
+                                datas[i] = datas[i+1];
+                                datas[i+1] = row;
+                            }
+                            break;
+                        }
+                    }
+                    grid.setAttr("data", grid._formArr(datas));
+                }
+            },
             resetEditState: function (vid) {
                 var grid = Page.manager.components[vid];
                 grid._resetDataState();
@@ -530,7 +563,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
 
                     }
                 }
-                this._formArr(datas);
+                this.setAttr("data", this._formArr(datas));
             }
         },
         /**
