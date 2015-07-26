@@ -19,6 +19,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             syncUrl:null,
             showAllCheck:false,
             $split: ",",
+            allChecked:false,
             onSave:null,//param:customcolumn,value
             afterSave:null,//param:customcolumn,value
             beforeOpenDialog:null,
@@ -38,9 +39,16 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 }
                 vm.value = values;
             },
-            allCheck: function (vid,checked) {
+            allCheck: function (vid) {
                 var vm = avalon.vmodels[vid];
+                if(vm.allChecked){
+                    vm.allChecked = false;
+                }else{
+                    vm.allChecked = true;
+                }
+                var checked = vm.allChecked;
                 if(vm){
+                    var values = [];
                     var fixItems = vm.fixItems||[];
                     for (var i = 0; i < vm.items.length; i++) {
                         var item = vm.items[i];
@@ -49,7 +57,11 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                         }else{
                             item.checked = checked||false;
                         }
+                        if(item.checked){
+                            values.push(item[vm.$valueField]);
+                        }
                     }
+                    vm.value = values;
                 }
             }
         },

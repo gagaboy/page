@@ -34,20 +34,19 @@
 <script>
     var simpleGrid = null;
     require(["../../../page/src/Bootstrap"], function () {
-        var customColumns = Page.create("customColumns", {
+        customColumns = Page.create("customColumns", {
             showAllCheck:true,
             items:[{value:1,text:'ss',checked:false},
                 {value:2,text:'dd',checked:false},
                 {value:3,text:'dd',checked:true},
                 {value:4,text:'dd',checked:false},
                 {value:5,text:'dd',checked:false},
-                {value:6,text:'dd',checked:false},
-                {value:7,text:'dd',checked:false},
 
-                {value:6,text:'dd',checked:false},
-                {value:7,text:'dd',checked:false},
+
                 {value:8,text:'dd',checked:false},
-                {value:9,text:'ssss',checked:false}
+                {value:9,text:'dd',checked:false},
+                {value:10,text:'dd',checked:false},
+                {value:11,text:'ssss',checked:false}
                 ]
         });
         customColumns.render();
