@@ -244,7 +244,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                             if(upFlag&&i>0){
                                 datas[i] = datas[i-1];
                                 datas[i-1] = row;
-                            }else if(i<datas.length-1){
+                            }else if(!upFlag&i<datas.length-1){
                                 datas[i] = datas[i+1];
                                 datas[i+1] = row;
                             }
