@@ -46,7 +46,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             /** ====================样式相关====================== */
             titleNoWrap: false,//标题不换行
             contentNoWrap: false,//内容不换行
-            lineHeight: 40,//行高，与全局样式有关，目前最小40
+            lineHeight: '40px',//行高，与全局样式有关，目前最小40
             defaultAlign: "left",//默认对齐方式，若column中未设置则采用默认
             defaultTitleAlign: "center",//默认对齐方式，若column中未设置则采用默认
             /** ====================分页配置信息====================== */
@@ -136,7 +136,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             clickField: function (vid, row, col, tdDom) {
                 var vm = avalon.vmodels[vid];
                 if (vm.clickFieldFunc) {
-                    vm.clickFieldFunc(vm, row, tdDom);
+                    vm.clickFieldFunc(vm, row,col,tdDom);
                 }
                 if (vm.$canEdit && !col.disabledEdit && vm.$clickToEditField && !vm.$dbClickToEditRow) {
                     vm.editField(vid, row, col.dataField, col.xtype, tdDom);
