@@ -16,9 +16,13 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
             height:'',
             icon: null,
             skin: null,
+            dbClickHide: true,
             showCloseIcon: true,
+            left: '50%',				// X轴坐标
+            top: '38.2%',				// Y轴坐标
             button:[],
             params:"",
+            cancel: null,
             opacity: .5
         },
         dialogObj:null,
@@ -37,7 +41,11 @@ define(['../Base','text!./DialogWidget.html', 'art','artIframe','css!./DialogWid
                 icon: options.icon,
                 skin: options.skin,
                 opacity: options.opacity,
+                dbClickHide: options.dbClickHide,
                 showCloseIcon: options.showCloseIcon,
+                cancel: options.cancel,
+                left: options.left,				// X轴坐标
+                top: options.top,				// Y轴坐标
                 width: options.width!=""?options.width:undefined,
                 height: options.height!=""?options.height:undefined
             };

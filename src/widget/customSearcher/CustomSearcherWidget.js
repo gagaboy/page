@@ -596,10 +596,11 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
                 vm.viewSearchArr.clear();
                 vm.quickSearchArr.clear();
                 var res = vm._getCustomFilter();
-                vm.customSearchArr = res;
-
-                vm.callSubmit();
-                vm.showPanel = "";
+                if(res) {
+                    vm.customSearchArr = res;
+                    vm.callSubmit();
+                    vm.showPanel = "";
+                }
             },
             _getCustomFilter: function() {
                 var result = [];

@@ -89,3 +89,11 @@ _$window.bind('load', function () {
 		artDialog({left: '-9999em',time: 0.0001,fixed: false,lock: false,focus: false});
 	}, 150);
 });
+
+
+1417行，解决双击关闭对话框问题，增加属性dbClickHide（默认值为true）控制该功能
+bind('dblclick', function () {
+	if(that.config.dbClickHide) {
+		that._click(that.config.cancelVal);
+	}
+});

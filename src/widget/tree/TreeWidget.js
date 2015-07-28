@@ -72,7 +72,7 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                 //此处可限制字符长度, 按值搜索数据
                 else if(true) {
                     obj.zTreeObj.setting.view.selectedMulti = true;
-                    obj.zTreeObj.setting.async.enable = false;
+                    obj.zTreeObj.setting.async.enable = true;
                 }
                 var dataParam = {};
                 dataParam[obj.options.$searchKey] = searchValue;
@@ -117,7 +117,7 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                     enable: true,
                     url: options.$url,
                     autoParam: [options.$idKey+"="+options.$pIdKey],
-                    otherParam: otherParam,
+                    //otherParam: otherParam,
                     dataFilter: function (treeId, parentNode, responseData) {
                         var res = [];
                         if(responseData) {

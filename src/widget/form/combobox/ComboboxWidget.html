@@ -34,12 +34,12 @@
         </div>
 
         <!--下拉面板区域-->
-        <div ms-attr-id="comboBox_panel_{{vid}}"  ms-css-left="panelLeft" ms-css-top="panelTop" class="chosen-drop" ms-if="showPanel" style="display: none">
+        <div ms-attr-id="comboBox_panel_{{vid}}"  ms-css-left="panelLeft" ms-css-top="panelTop" class="chosen-drop" ms-visible="showPanel" >
             <div ms-if="model=='normal'">
                 <ul class="chosen-results" ms-each-el="data" ms-css-height="showPager ? '150px':'100%'">
                     <li class="active-result" style="width: 100%;" ms-class-itemSelected="el.checked" ms-hover="itemover" ms-on-click="toggleItemSelect(vid, el, $index, $event)"><span ms-repeat-item="el['displayArr']" ms-class-matchSearch="(multi || searchable ) && (item == searchValue || (!multi && item == display))">{{item}}</span></li>
                 </ul>
-                <div ms-attr-id="page_{{vid}}" ms-if="showPager"></div>
+                <div ms-attr-id="page_{{vid}}" ms-visible="showPager"></div>
             </div>
             <div ms-if="model=='tree'" ms-attr-id="comboBox_panel_tree_{{vid}}" style="height: 200px">
             </div>

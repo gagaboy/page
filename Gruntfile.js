@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
     // 注册任务
-    grunt.registerTask('default', ['clean','requirejs:build','uglify:builda','concat:concatExtJs','uglify:dependence']);
+    grunt.registerTask('default', ['clean','requirejs:build','uglify:builda']);
     //不支持Source Map
     grunt.registerTask('buildNoMap', ['clean','requirejs','uglify:buildb']);
     // 合并所有外部依赖的组件js

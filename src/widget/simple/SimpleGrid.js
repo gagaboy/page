@@ -84,6 +84,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             $showCustomAllCheck: false,
             $fetchUrl: null,
             $metaDataObj: null,
+            /** ====================表头分组控制====================== */
+            grouping: false,
             /** ====================事件====================== */
             clickRowFunc: null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
             dbClickRowFunc: null,//内置参数未：vm－grid模型,rowdata－行数据,rowObj－行dom
@@ -973,7 +975,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             }
             columns = this._beforeInit(opts, columns);
             opts.columns = columns;
-            opts.allColumns = this._calAllColumns(opts.columns, opts.opColumns);
+            opts.allColumns = this._calAllColumns(opts.columns, opts.opColumns, opts.grouping);
             //如果全部设置了像素宽度则将总宽度设置为列宽度之和
             if (opts.allColumns && opts.allColumns.length > 0 && !opts.width) {
                 var widthCount = 0;
@@ -1001,9 +1003,9 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             return opts;
         },
         _columnsChange: function () {
-            this.setAttr("allColumns", this._calAllColumns(this.options.columns, this.options.opColumns), true);
+            this.setAttr("allColumns", this._calAllColumns(this.options.columns, this.options.opColumns, this.options.grouping), true);
         },
-        _calAllColumns: function (cols, opCols) {
+        _calAllColumns: function (cols, opCols, grouping) {
             //列信息
             if (cols && cols.length > 0) {
                 for (var i = 0; i < cols.length; i++) {
@@ -1073,7 +1075,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                 this.options.opColumnMap = opColumnMap;
             }
             var hasGroupTitle = false;
-            if (allColumns) {
+            if (allColumns && grouping) {
                 var groupMap = [];
                 if(this.options.opColumnMap&&this.options.opColumnMap['op_front']){
                     var frontGroup = {};
@@ -1246,7 +1248,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                                 }
                             }
                             //obj.setAttr("columns",cols);
-                            obj.setAttr("allColumns", obj._calAllColumns(cols, obj.options.opColumns), true);
+                            obj.setAttr("allColumns", obj._calAllColumns(cols, obj.options.opColumns, obj.options.grouping), true);
                         }
                         return;
                     }

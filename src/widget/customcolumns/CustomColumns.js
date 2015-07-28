@@ -79,6 +79,9 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 e.append(tmp);
             }
             e.addClass("page_" + this.getAttr('$xtype')).attr("ms-controller", this.getId());
+            if(this.options.items.length>20) {
+                //height =
+            }
             this.dialog = Page.create('dialog', {
                 width: "650px",
                 title:"自定义显示列",
@@ -106,6 +109,11 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             this.dialog.render();
             avalon.scan(e[0]);
             //this.dialog.content(e[0]);
+            var clientHeight = window.top.document.body.clientHeight;
+            if(clientHeight*0.6 < e.height()) {
+                this.dialog.dialogObj.size(650, "100%");
+                this.dialog.dialogObj.position("50%", "0%");
+            }
         },
         getTemplate: function () {
             return template;

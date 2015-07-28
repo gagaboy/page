@@ -1,7 +1,7 @@
 /**
  * Created by qianqianyi on 15/4/23.
  */
-define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget.css'], function (BaseFormWidget, template) {
+define(['../BaseFormWidget', 'text!./TextareaWidget.html', 'css!./TextareaWidget.css', "art"], function (BaseFormWidget, template) {
     var xtype = "textarea";
     var TextareaWidget = new Class({
         Extends: BaseFormWidget,

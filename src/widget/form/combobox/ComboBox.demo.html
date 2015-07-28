@@ -18,7 +18,7 @@
         #glideDiv0{position:fixed; bottom:0;left:0; width:100%; background:#F00;}
     </style>
 </head>
-<body>
+<body ms-skip>
 <br>
 
 <div class="container">
@@ -90,6 +90,7 @@
 <script src="/page/thirdpart/products-WB0R5L90S/Static_Full_Version/js/bootstrap.js"></script>
 
 <script src="/page/bower_components/avalon/avalon.js"></script>
+<!--<script src="/page/dist/page-build.js"></script>-->
 <script>
     require(["../../src/Bootstrap"], function () {
 
@@ -151,7 +152,7 @@
 
         })
         combo2.render();
-for(var i=0; i<100; i++) {
+for(var i=0; i<1; i++) {
 
 
         var combo3 = Page.create('combobox', {
@@ -159,6 +160,7 @@ for(var i=0; i<100; i++) {
 //            $id: 'sex3',
             label: '学院（单选）',
             multi: false,
+//            parentTpl: "inline",
             searchable: false,
 //            value: "1",
 //            display: "计算机学院",
@@ -177,8 +179,8 @@ for(var i=0; i<100; i++) {
             label: '下拉树',
             multi: true,
 //            searchable: false,
-            value: "102",
-            display: "最简单的树 --  简单 JSON 数据",
+//            value: "102",
+//            display: "最简单的树 --  简单 JSON 数据",
             model: "tree",
             mainAlias: "treeData",  //数据源主实体别名
             url: "treeData.demo.json",
@@ -193,6 +195,7 @@ for(var i=0; i<100; i++) {
             }
         })
         combo4.render();
+//avalon.scan($(".container")[0]);
 //        Page.manager.components.sex1.focus()
     });
 </script>

@@ -15,24 +15,9 @@ define(['../Base'], function (Base) {
         render: function (parent, formWidgetBag, parentLayoutWidgetId) {
             var goFlag = true;
             this.parent(parent);
-            if (this.options.showProgress) {
-                this.progressBar = Page.create("customProgress", {
-                    value: false,//默认
-                    type: "percent",//percent,chunk
-                    sceneType: "large",//large:20px;middle:10px;small:5px;
-                    themeType: "blue",
-                    showStatus: true,
-                    showDetail: false
-                });
-                var progressCon = this.$element.find(".ibox-progress");
-                if(progressCon&&progressCon[0]){
-                    this.progressBar.render(progressCon);
-                }else{
-                    this.progressBar = null;
-                    this.setAttr("showProgress",false);
-                }
-            }
+
             if (this.options.isLazyLoad && !this._rendered) {
+                var that = this;
                 $w = $(window);
                 aparent = parent;
                 if (!aparent) {
@@ -81,6 +66,7 @@ define(['../Base'], function (Base) {
 //                }
                 Object.merge(config, it);
                 delete config['$xtype'];
+                config.parentTpl="inline";
                 var widget = Page.create(it['$xtype'], config);
                 if (widget.isFormWidget && widget.isFormWidget()) {
                     formWidgetBag && formWidgetBag.push(widget);

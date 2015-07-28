@@ -2,7 +2,7 @@
  * Created by JKYANG on 15/5/18.
  */
 
-define(["../BaseLayout", "text!./Col.html"], function (BaseLayout, colTpl) {
+define(["../BaseLayout", "text!./Col.html", "css!./Col.css"], function (BaseLayout, colTpl) {
     var xtype = "col";
     var Col = new Class({
         Extends: BaseLayout,
