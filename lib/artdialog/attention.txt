@@ -97,3 +97,8 @@ bind('dblclick', function () {
 		that._click(that.config.cancelVal);
 	}
 });
+
+artDialog.source.js 源码有改动：解决IE11内容超长，不出滚动条的问题
+1146行：DOM.content[0].style.height = Math.max(that.config.minHeight, height) + 'px';
+1149行DOM.content[0].style.height = height;
+
