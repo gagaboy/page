@@ -64,17 +64,18 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                 var vm = vid ? avalon.vmodels[vid] : this;
                 var obj = vm.getCmpMgr();
                 var searchValue = valueParam || vm.searchValue;
+                var dataParam = {};
                 //重新搜索所有数据
                 if("" === searchValue) {
+                    dataParam[vm.$pIdKey] = null;   //如果搜索值为空，则说明要重新搜索树，pid=null异步搜索整个树
                     obj.zTreeObj.setting.view.selectedMulti = false;
                     obj.zTreeObj.setting.async.enable = obj.options.$async;
                 }
                 //此处可限制字符长度, 按值搜索数据
                 else if(true) {
                     obj.zTreeObj.setting.view.selectedMulti = true;
-                    obj.zTreeObj.setting.async.enable = true;
+                    obj.zTreeObj.setting.async.enable = false;   //有时搜索结果为空，则调用init时会使用异步url再次发请求，需要先关闭
                 }
-                var dataParam = {};
                 dataParam[obj.options.$searchKey] = searchValue;
                 jQuery.ajax({
                     url: obj.options.$url,
@@ -86,7 +87,8 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
                 }).done(function(res) {
                     if (res) {
                         var data = res.result.datas[obj.options.$mainAlias].rows;
-                        jQuery.fn.zTree.init(obj._getTreeDom(), obj.setting, data);
+                        obj.zTreeObj = jQuery.fn.zTree.init(obj._getTreeDom(), obj.zTreeObj.setting, data);
+                        obj.zTreeObj.setting.async.enable = obj.options.$async;
                         if(searchValue != "" && matchSearchValue){
                             var selectedNodes = obj.zTreeObj.getNodesByParamFuzzy(obj.options.$nodeName, searchValue, null);
                             for( var i=0, l=selectedNodes.length; i<l; i++) {
@@ -110,14 +112,14 @@ define(['../Base','text!./TreeWidget.html', 'zTree',
             var options = this.options;
             var otherParam = {};
             if(options.$async) {
-                otherParam[options.$pIdKey] = null;
+                otherParam[options.$pIdKey] = null;     //树异步加载时，后端需要pid=null
             }
             return {
                 async: {
                     enable: true,
                     url: options.$url,
+                    otherParam: otherParam,
                     autoParam: [options.$idKey+"="+options.$pIdKey],
-                    //otherParam: otherParam,
                     dataFilter: function (treeId, parentNode, responseData) {
                         var res = [];
                         if(responseData) {

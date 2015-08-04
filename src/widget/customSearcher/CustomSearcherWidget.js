@@ -11,6 +11,7 @@ define(['../Base', 'text!./CustomSearcherWidget.html', 'css!./CustomSearcherWidg
             $xtype: xtype,
             $value: null,
             dataSetId: null,
+            $placeholder: null,
             groupOper: "and", //条件分组之间的连接符
             matchAllFields: false,//查询条件是否匹配所有字段
             $showDropIcon: true,  //是否显示下拉小图标

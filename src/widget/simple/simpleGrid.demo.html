@@ -61,7 +61,7 @@
 <script>
     var simpleGrid = null;
     require(["../../../page/src/Bootstrap"], function () {
-        var ds = Page.create("dataSet", {
+        ds = Page.create("dataSet", {
             $id: 'sampleGridDataSet',
             fetchUrl: 'simpleGrid.demo.json',
             syncUrl: '',
@@ -81,7 +81,8 @@
             //defaultTitleAlign:"center",
             canSort:true,
             canSortOpColumn:true,
-            multiSort:false,//复合排序
+            multiSort:true,//复合排序
+            pageArr: [10, 25 , 45],
             canMoveDataUpandDown:true,
             //multiCheck:false,
             //allChecked:false,

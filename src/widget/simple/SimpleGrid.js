@@ -52,7 +52,8 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
             /** ====================分页配置信息====================== */
             $usePager: true,  //是否分页
             pageIndex: 1,    //默认当前页
-            pageSize: 15,    //默认每页条数
+            pageSize: 10,    //默认每页条数
+            $pageArr: [10, 20, 30, 50],
             totalNum: 0, //总数据条数
             totalPage: 0,    //总页数
             $showPageIndexInput: true,   //显示跳转到某页输入框
@@ -323,6 +324,7 @@ define(['../Base',"../../data/DataConstant", 'text!./SimpleGridWidget.html', 'cs
                     totalNum: this.getAttr("totalNum"),
                     pageIndex: this.getAttr("pageIndex"),
                     pageSize: this.getAttr("pageSize"),
+                    pageArr: this.getAttr("$pageArr"),
                     showPageIndexInput: this.getAttr("$showPageIndexInput"),//显示跳转到某页输入框
                     showPageSizeInput: this.getAttr("$showPageSizeInput"),//显示每页条数输入框]
                     showFirstPage: this.getAttr("$showFirstPage"),//显示第一页按钮

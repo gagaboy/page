@@ -481,7 +481,8 @@ define(['../BaseFormWidget', 'text!./ComboboxWidget.html', 'css!./ComboboxWidget
             });
         },
         _handleSearch: function(newValue){
-            if(!newValue || newValue.length>1) {
+            //if(!newValue || newValue.length>1) {
+            if(true) {
                 if("normal" == this.options.model) {
                     var page = {
                         pageNo: "1",

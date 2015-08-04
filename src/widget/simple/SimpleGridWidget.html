@@ -53,7 +53,7 @@
                     {{opcolumn.title}}
                 </th>
                 <th ms-if="$canCustomCols&&!hasGroupTitle" class="simpleGrid_customColCon" ms-class-simplegrid_nowrap="titleNoWrap">
-                    <i class="fa fa-cogs fa-spin" ms-click="customColFunc(vid)"></i>
+                    <i class="fa fa-cogs" ms-click="customColFunc(vid)"></i>
                 </th>
             </tr>
             </thead>
@@ -132,6 +132,6 @@
     </div>
     <div ms-if="$usePager" class="simpleGrid_pagerCon" ms-css-max-width="width">
         <div ms-attr-id="'pager_'+vid"
-                 ms-click="$canEdit&&$clickToEditField?resetEditState(vid):resetEditState(vid)"></div>
+                 ms-click="$canEdit&&$clickToEditField?resetEditState(vid):''"></div>
     </div>
 </div>

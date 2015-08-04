@@ -111,7 +111,7 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
             //this.dialog.content(e[0]);
             var clientHeight = window.top.document.body.clientHeight;
             if(clientHeight*0.6 < e.height()) {
-                this.dialog.dialogObj.size(650, clientHeight-190);
+                this.dialog.dialogObj.size(650, clientHeight-250);
                 this.dialog.dialogObj.position("50%", "0%");
             }
         },
@@ -140,6 +140,9 @@ define(['../Base','text!./CustomColumnsWidget.html', 'css!./CustomColumnsWidget.
                 if(!syncRes){
                     Page.dialog.alert("保存到服务器失败！");
                     return false;
+                }
+                else {
+                    Page.dialog.tips("保存成功！");
                 }
             }
         },

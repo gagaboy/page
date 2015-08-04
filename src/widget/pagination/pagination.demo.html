@@ -36,9 +36,11 @@
     require(["../../../page/src/Bootstrap"], function () {
         var pagination = Page.create("pagination", {
             $parentId: 'simplePager',
-            totalNum:20,
+            totalNum:50,
             pageIndex:1,
             pageSize:10,
+            pageArr: [15, 25, 35],
+            showPageSizeInput: true,
             showTipWhenNull:true,//无数据时显示提示信息
             noDataTip:"没有找到数据2！",
             pageChangeEvent:function(pager){

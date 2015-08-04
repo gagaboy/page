@@ -13,7 +13,7 @@ define(["../Base", "text!./FormWidget.html", "css!./FormWidget.css"], function (
             dataSources: {},
             dataSourcesIds: [],
             cols: 2, //每行多少列
-            $rowHeight: 51,
+            $rowHeight: 44,
             $widgetHeight: 34,
             widgets: [], //组件列表
             groupWidgets: null,
