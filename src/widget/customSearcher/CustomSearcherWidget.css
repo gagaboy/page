@@ -205,3 +205,6 @@
 .page_fragment .col-md-4{
     padding: 0px 5px 0px 0px;
 }
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    font-family: 'Microsoft YaHei' !important;
+}
