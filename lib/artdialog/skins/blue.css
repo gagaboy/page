@@ -83,7 +83,7 @@ button.aui_state_highlight:active{
 .aui_w { background-position:left top; _png:blue/ie6/w.png; }
 .aui_e { background-position: right bottom; _png:blue/ie6/e.png; }
 .aui_icon{ padding-top:0px; }
-
+.tipsDialogContent{color:white;font-size: 14px;}
 @media screen and (min-width:0) {
 	.aui_outer { border-radius:8px; box-shadow:0 5px 15px rgba(2, 37, 69, .4); -moz-transition:-moz-box-shadow linear .2s; -webkit-transition: -webkit-box-shadow linear .2s; transition: -webkit-box-shadow linear .2s; }
 	.aui_state_drag .aui_outer { box-shadow:none; }
