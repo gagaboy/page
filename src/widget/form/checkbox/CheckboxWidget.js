@@ -134,10 +134,15 @@ define(['../BaseFormWidget', 'text!./CheckboxWidget.html', 'css!./CheckboxWidget
             }
             return value;
         },
+        //[{value|display}]
         setValue: function (valueArr, notFireFormValueChangeEvent) {
             //重写
+
             if(valueArr&&this.getAttr("items")){
                 var items = this.getAttr("items");
+                if(Object.prototype.toString.call(valueArr) == "[object Object]") {
+                    valueArr = valueArr.value.split(this.options.$split);
+                }
                 this.setAttr("value",valueArr, notFireFormValueChangeEvent);
                 //this._getCompVM().value = valueArr;
                 for (var i = 0; i < items.length; i++) {//清楚原选项
